@@ -276,3 +276,17 @@ Earlier attempts and corrections:
 Verification: [CI run 43754511937](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754511937), **56 passed in 0.20s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.
 
 Explicit reset/replay recovery after the fatal conversion failure remains untested. This test establishes failure behaviour only; it does not implement recovery.
+
+
+## 10. Corrected-data replay recovery
+
+Extended [`test_funding_fx_conversion.py`](test_funding_fx_conversion.py) with a second deterministic run:
+
+- The failure scenario removes BTC/USD after the inverse BTCJPY position is opened and raises a fatal funding settlement error.
+- The corrected replay creates a fresh engine and retains the valid BTC/USD quote through the funding boundary.
+- The same inverse BTCJPY position opens, the mark price remains available, the funding boundary is crossed, and settlement completes.
+- The test asserts one fill, one open position and a USD account balance below the initial 100,000 USD, proving that the funding debit was applied.
+
+This demonstrates a **fresh replay using corrected FX data**, not an in-place recovery of the failed engine. The original failed engine run remains terminal. Same-engine `reset()` followed by reloading corrected data is still untested.
+
+Final test-only suite: [CI run 43754898908](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754898908), **57 passed in 0.31s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.
