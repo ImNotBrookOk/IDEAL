@@ -514,3 +514,33 @@ Pinned source boundaries:
 **IDEAL design implication (proposal, not an approved decision):** preserve native-currency balances and funding/fee events in the canonical ledger. For portfolio-level risk limits, compute a deterministic reporting-currency equity view from timestamped, side-aware FX marks with explicit freshness and missing-rate handling. Do not sum unlike currency amounts or treat a multi-currency account as having a single USD equity value. This test does not establish venue-specific collateral haircuts, cross-currency margin offsets, liquidation rules or exchange parity.
 
 Verification: [CI run 43760637330](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760637330), **79 passed on x86_64 and ARM64**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.10.
+
+
+## 16. Multi-currency collateral and liquidation boundary
+
+Added `test_multi_currency_collateral_liquidation.py` to test whether the pinned simulated exchange pools BTC collateral into the maintenance-equity calculation for a USDT-settled linear perpetual.
+
+### Deterministic fixture and observed result
+
+- Margin account uses `base_currency=None` with starting balances of **2 BTC** and **1,000 USDT**.
+- Opens a **0.1 BTCUSDT long** at the 60,000 USDT ask.
+- The next quote has a 49,999.5 USDT bid; the close-side move realises **-1,000.05 USDT**.
+- The simulator triggers liquidation against the USDT settlement-currency balance and maintenance margin.
+- The 2 BTC balance remains unchanged; it is not converted or applied to the USDT maintenance-equity check.
+- The synthetic liquidation close leaves the USDT balance at **-0.05 USDT**. This is the observed half-tick residual, not a guaranteed bankruptcy-price cap or insurance-fund recovery.
+- The replay test confirms deterministic outcomes.
+
+Verification: [CI run 43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953), **81 passed on x86_64 and ARM64**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.10. Research PR [#26](https://github.com/ImNotBrookOk/IDEAL/pull/26) was squash-merged as [b440d3815b296ee62ce21dd7f55d929b8600e011](https://github.com/ImNotBrookOk/IDEAL/commit/b440d3815b296ee62ce21dd7f55d929b8600e011).
+
+### Exact pinned source behaviour
+
+- [Simulated exchange liquidation path, `exchange.rs`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/exchange.rs#L2020-L2088) buckets open positions by `settlement_currency`. It loops through the account's currencies, reads the balance for that currency, sums unrealized PnL only for positions in that same settlement-currency bucket, and compares the result with maintenance margin in that currency. The subsequent liquidation call is also currency-scoped.
+- [Portfolio equity, `portfolio.rs`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/portfolio/src/portfolio.rs#L851-L900) starts from account balances and accumulates margin equity into a per-currency map. With no account base currency, it does not produce a single reporting-currency total.
+- [Margin-account balance locking, `margin.rs`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/model/src/accounts/margin.rs#L455-L500) totals margin entries within the requested currency and recalculates that currency's balance. It does not convert a different collateral currency in this path.
+- The account model can represent [account-wide margin entries keyed by collateral currency](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/accounting.md#L257-L271). That is a representation of venue-reported per-currency margin, not proof that the backtest liquidation path applies collateral conversion, cross-asset haircuts or a unified portfolio maintenance test.
+
+### IDEAL implication and remaining evidence
+
+The tested NautilusTrader simulated liquidation path is **not a unified multi-collateral liquidation model**. It cannot be treated as exchange-equivalent for an account where BTC, USDT or other assets are pooled with conversion rates and haircuts. If the selected venue supports that account mode, IDEAL will need a deterministic venue-specific collateral/risk model (or a verified engine extension) that explicitly handles collateral eligibility, conversion side/mark, haircuts, concentration limits, stale/missing FX, per-coin maintenance, liquidation ordering and bankruptcy/insurance/ADL outcomes. Preserve native-currency ledger balances and never sum unlike currencies without an explicit conversion.
+
+This test establishes only the pinned simulator behaviour. It does not select a venue, validate a live adapter, or prove how Binance, Bybit, OKX or any other venue handles the user's account mode. Official venue/product/account-mode specifications and representative collateral/liquidation data remain required before the engine-selection gate can close.
