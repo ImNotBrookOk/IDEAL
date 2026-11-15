@@ -79,7 +79,7 @@ class OpenInverseLong(Strategy):
             self.order_factory.limit(
                 instrument_id=INSTRUMENT.id,
                 order_side=OrderSide.BUY,
-                quantity=Quantity.from_str("1000"),
+                quantity=Quantity.from_str("10000000"),
                 price=Price.from_str("6000000.0"),
                 time_in_force=TimeInForce.GTC,
             ),
@@ -103,7 +103,7 @@ def btcjpy_book(timestamp: int):
                 order=BookOrder(
                     OrderSide.BUY,
                     Price.from_str("5999999.5"),
-                    Quantity.from_str("5000"),
+                    Quantity.from_str("10000000"),
                     1,
                 ),
                 flags=0,
