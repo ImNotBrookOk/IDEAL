@@ -87,8 +87,13 @@ jobs:
             research-output/BTC-USDT-SWAP-L2-5000-2026-11-11.tar.gz \
             | tee research-output/audit-summary.jsonl
           cat research-output/manifest.txt
-          # Retain hashes, headers, member listings and audit summaries only.
-          rm research-output/*.tar.gz
+          # The cleanup is a separate always-run step below.
+
+      - name: Remove raw archives before artifact upload
+        if: always()
+        shell: bash
+        run: |
+          rm -f research-output/*.tar.gz
 
       - name: Retain exact archives and verification evidence
         if: always()
