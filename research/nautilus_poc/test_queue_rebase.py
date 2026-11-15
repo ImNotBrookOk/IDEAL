@@ -5,6 +5,8 @@ They are mechanism tests, not venue-matching parity claims.
 """
 from decimal import Decimal
 
+import pytest
+
 from nautilus_trader.backtest import BacktestEngine
 from nautilus_trader.config import BacktestEngineConfig
 from nautilus_trader.execution import MakerTakerFeeModel, OrderPriorityResetPolicy
@@ -132,6 +134,18 @@ def make_engine(book_type: BookType, quantity: str = "1.000"):
     engine.add_strategy(strategy)
     return engine, strategy
 
+
+
+def sell_trade(timestamp: int, size: str):
+    return TradeTick(
+        instrument_id=INSTRUMENT.id,
+        price=Price.from_str("40000.0"),
+        size=Quantity.from_str(size),
+        aggressor_side=AggressorSide.SELL,
+        trade_id=TradeId(f"SELL-{timestamp}"),
+        ts_event=timestamp,
+        ts_init=timestamp,
+    )
 
 def run_l2_snapshot_case(snapshot_size: str, trade_size: str):
     engine, strategy = make_engine(BookType.L2_MBP)
@@ -555,7 +569,7 @@ def run_amendment_edge_case(
             ],
         )
         if mode == "price_change":
-            progress = make_sell_trade(3, "10.000")
+            progress = sell_trade(3, "10.000")
             final_trade = make_sell_trade(5, "1.000")
             data = [initial, quote(2), progress, quote(4), final_trade]
         else:
