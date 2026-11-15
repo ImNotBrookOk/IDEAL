@@ -231,7 +231,7 @@ def run_missing_fx_conversion():
         funding_ts = BASE_NS + 3_100_000_000
         boundary = BASE_NS + 4_000_000_000
         engine.add_data([
-            btcjpy_book(BASE_NS + 1_000_000_000),,
+            btcjpy_book(BASE_NS + 1_000_000_000),
             trigger_book(BASE_NS + 1_500_000_000),
             trigger_quote(BASE_NS + 2_000_000_000),
             MarkPriceUpdate(
