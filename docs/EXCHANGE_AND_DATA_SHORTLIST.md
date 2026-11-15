@@ -194,3 +194,16 @@ Each historical price-level tuple has exactly three fields. The third is an inte
 Trade-file recheck confirms 3,222,603 rows in the 12 Nov UTC+8 file and 5,480,573 in the 13 Nov file, with strictly increasing and continuous trade IDs across the file boundary. No malformed or invalid rows were observed. The 2026-11-12 UTC book-day filter yields 3,224,415 trades.
 
 A second BBO alignment attempt exceeded the local execution limit; no alignment metric is claimed. The data remains a partial pass for archive integrity and coarse one-second visible-book analysis only. Execution calibration remains blocked.
+
+
+## 13.7 OKX module-4 400-level high-frequency sample: updated candidate assessment (16 November 2026)
+
+A follow-up research workflow downloaded and reconstructed the 2026-11-12 BTC-USDT-SWAP module-4 400-level archive (500,244,886 compressed bytes; SHA-256 `6dd55534ddd376c6995bfac584f1e1a19ed64083b76b542da61ee488cacbdfce`). It contains 6,604,203 records, 96 snapshots of 400 levels per side and 6,604,107 updates. All reconstructed states were valid. 85.957% of record intervals were exactly 10 ms. The corresponding module-5 5,000-level archive for 11 November was also retrieved and reconstructed: 86,400 records, 96 snapshots, 5,000 levels per side and 99.947% one-second intervals.
+
+The 400-level stream's first records contain only `action`, `asks`, `bids`, `instId` and `ts`; no sequence IDs, previous-sequence IDs, checksums or local timestamps were present. Each level tuple has three fields, with the third integer still semantically unresolved. Do not use it as an order-count, liquidation-count or queue-size feature without authoritative historical-module documentation.
+
+A no-lookahead alignment against the two matching UTC+8 trade files (timestamp-filtered to the 12 November UTC day) matched all 3,224,415 trades to a preceding valid BBO. Median preceding-book age was 6 ms, p95 10 ms, maximum 509 ms. 62.584% of trades printed outside the preceding sampled spread, but 98.542% were directionally consistent with the preceding BBO and outside-spread distance p95 was 1.40 bps. The same-day one-second module-5 sample had median age 489 ms, p95 947 ms and 76.71% outside-spread prints. This demonstrates materially better temporal resolution for module 4, not exact event synchronization.
+
+**Updated shortlist status:** OKX module 4 400-level L2 is the leading research candidate for short-horizon, 10 ms sampled liquidity, spread, imbalance and conservative taker-impact/slippage analysis. It is not approved for exact FIFO queue position or passive-fill calibration because the historical archive has no sequence IDs/checksums or L3 order identity, and the third level field is unresolved. Module 5 remains a deep, one-second sampled reference. OKX is still a candidate only; no venue/vendor is selected and no runtime integration is approved.
+
+Evidence: [final trade-alignment workflow #43773844334](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43773844334). Detailed reconstruction, alignment, limitations and next gates are in [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), sections 12.8–12.9.
