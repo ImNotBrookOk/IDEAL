@@ -75,7 +75,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **57 tests passed in 0.31s** in [GitHub Actions run 43754898908](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754898908), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **61 tests passed in 0.23s** in [GitHub Actions run 43755658769](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43755658769), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
@@ -108,3 +108,6 @@ The utility reports side-aware implementation shortfall, half-spread residual, f
 
 
 No claim of production suitability, profitability or live-execution parity is made.
+
+
+16. Canonical replay audit: `replay_audit.py` produces versioned compact JSON and SHA-256 digests; `test_replay_integrity.py` compares independent fresh-engine replays and same-engine `reset()` replays, verifies tamper sensitivity and rejects floats in favor of exact decimal strings. Raw client order IDs advance across same-engine reset, so the test maps them to deterministic sequence aliases before hashing. Four replay-integrity tests pass. Durable process restart checkpoint/restore remains open.
