@@ -272,3 +272,10 @@ Staleness sensitivity from the same two days: a preceding-book age cutoff of <=5
 
 
 Additional classification nuance: the FMA's official derivatives guidance defines derivatives to include recurrently traded contracts commonly referred to as futures, options, swaps, CFDs, margin contracts or rolling spot contracts, regardless of duration. It does not explicitly classify every crypto perpetual product by name. Do not assume that an exchange's “perpetual” or “swap” label removes the product from the FMC Act definition; obtain a product-specific New Zealand legal determination. Source: https://www.fma.govt.nz/business/services/derivatives-issuers/.
+
+
+## 13.12 Tardis public historical sample validated (16 November 2026)
+
+A no-API-key first-of-month Tardis Binance Futures BTCUSDT sample for 1 November 2026 was retrieved and reconstructed successfully in [workflow #43777192211](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777192211). The normalized incremental L2 file was 429.9 MB compressed / 6.461 GB uncompressed and contained 79.44m level rows across 3.242m message groups. One initial snapshot, 3.242m update messages, 7.26m zero-amount deletions and all 3.242m reconstructed states valid; maximum message gap 276.101 ms. The matching trade file contained 1,190,743 rows with valid schema, positive price/amount and monotonic local timestamps.
+
+This proves Tardis's public first-of-month sample can be acquired and the documented normalized L2 format can be reconstructed in our research pipeline. It does not prove paid historical API cost, commercial data rights, sequence continuity, L3 queue identity or event-level trade/BBO alignment. Tardis remains an independent data-source candidate/reference only; no vendor is selected. Full details and hashes: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.13.
