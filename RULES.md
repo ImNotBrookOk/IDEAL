@@ -18,8 +18,10 @@ These rules are mandatory for every contributor and agent.
 - Do not invent missing transcript content. Mark incomplete historical transcripts as partial.
 - Do not record hidden chain-of-thought, private system/developer instructions, credentials, tokens or unnecessary sensitive information. Record concise decision rationales and verifiable actions instead.
 - Conversation records are append-only. Correct errors with a dated addendum; do not silently rewrite history.
-- End each conversation by presenting the record/current state and exactly one proposed next step, then wait for the owner's explicit response before starting that next step.
-- Approval applies only to the specifically named next step. It does not authorise later steps, trading, new spending or scope changes.
+- A standing owner authorisation may cover a bounded sequence of roadmap research tasks. Record its exact scope and limits in DECISIONS.md; proceed through that scope in roadmap order without requesting approval at every gate.
+- Under the current standing authorisation, continue Phase 01 research gates in order. For each research change, complete isolated/integration/regression tests, a five-axis audit and documentation before merging its PR. Automatically squash-merge a research PR only when CI is green, the reviewed diff is within the authorised research scope, no material blocker remains, and the PR head SHA is unchanged at merge time. If any condition fails, do not merge; record and report the blocker.
+- Commit each conversation audit record and its index update directly to main after the work is complete; do not create a separate PR solely for the transcript. Verify the saved record by reading it back.
+- The standing authorisation does not approve Phase 02 or later, implementation, exchange/account connections, paper/live orders, risk changes, paid infrastructure or billing. Stop at the Phase 01 exit review and obtain explicit owner approval before Phase 02.
 - If no substantive project work occurred, a brief closeout entry may record that fact rather than manufacture a transcript.
 
 ## Trading safety
