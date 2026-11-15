@@ -73,3 +73,6 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-025-okx-tardis-historical-data-investigation.md](2026-11-16-025-okx-tardis-historical-data-investigation.md) | Phase 01: Tardis feed boundary and CryptoHFTData correction hold documented; OKX unsigned public history endpoint returns current-date 5,000-level L2 and matching trade archive metadata; files not downloaded or validated; phase remains blocked |
 
 | [2026-11-16-026-okx-sample-retrieval-and-reconstruction.md](2026-11-16-026-okx-sample-retrieval-and-reconstruction.md) | Phase 01: isolated OKX public archive retrieval succeeded; artifact digest and archive integrity independently verified; full 86,400-record one-second L2 reconstruction and 8.7m trade-row parsing completed; timestamp anomalies and missing sequence/checksum evidence keep execution-calibration acceptance blocked |
+
+
+| [2026-11-16-026-okx-sample-retrieval-and-reconstruction.md](2026-11-16-026-okx-sample-retrieval-and-reconstruction.md) | Phase 01: isolated OKX public archive retrieval and full-day one-second L2 reconstruction; follow-up corrected update density (283 combined level changes/message median), documented opaque third level field, rechecked continuous trade IDs across both files; alignment still unproven and acceptance blocked |
