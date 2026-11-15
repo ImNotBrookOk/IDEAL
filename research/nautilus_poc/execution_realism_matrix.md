@@ -290,3 +290,41 @@ Extended [`test_funding_fx_conversion.py`](test_funding_fx_conversion.py) with a
 This demonstrates a **fresh replay using corrected FX data**, not an in-place recovery of the failed engine. The original failed engine run remains terminal. Same-engine `reset()` followed by reloading corrected data is still untested.
 
 Final test-only suite: [CI run 43754898908](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754898908), **57 passed in 0.31s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.
+
+
+## 11. Canonical replay hashes and reset/replay determinism
+
+### Pinned source audit
+
+NautilusTrader `v2.0.0rc9` includes a Rust-side canonical result API:
+
+- `BacktestEngine::get_canonical_result()` projects observable result, orders, fills, positions, position snapshots, accounts, portfolio snapshots, statistics, component state and diagnostics.
+- `CanonicalBacktestResult` uses schema `nautilus-backtest-result/v1`, canonical compact JSON and a BLAKE3 digest.
+- Its identity canonicalization is designed to remove generated identity noise while retaining event relationships.
+- `BacktestEngine::reset()` resets exchanges, data/execution/risk engines, trader, portfolio, funding error, accumulators and iterator cursors. Loaded data persists and iterator cursors are reset to the beginning. The engine forces `drop_instruments_on_reset=false` so registered instruments can be reused.
+- The engine's order ID generator does not reset to the original counter: same-engine replay emits different raw client order IDs.
+- The Rust `get_canonical_result` method is not exposed by the Python `BacktestEngine` binding or Python stub in this pin. IDEAL's Python POC therefore cannot call the upstream canonical projection directly.
+
+### IDEAL research utility
+
+Added:
+- [`replay_audit.py`](replay_audit.py): standard-library versioned canonical JSON and SHA-256 helper (`ideal-replay-audit/v1`). It sorts mapping keys, uses compact UTF-8 JSON, rejects floats (exact decimal values must be strings), and hashes the canonical bytes.
+- [`test_replay_integrity.py`](test_replay_integrity.py): four tests:
+  1. Two fresh engines with identical data produce identical event/account snapshots and digests.
+  2. Same-engine `BacktestEngine.reset()` and replay produce the same canonical digest.
+  3. Changing a fill price or account balance changes the digest.
+  4. Mapping insertion order does not change bytes; floating-point values are rejected.
+
+The replay snapshot includes deterministic run counts, summary/account state, fills, open/closed position counts. Generated raw client order IDs are mapped to sequence aliases (`order-0001`, etc.) before hashing. The reset test explicitly verifies raw IDs differ across runs while the canonical projection remains identical.
+
+### Verification
+
+- Exact pin: `nautilus_trader==2.0.0rc9`
+- Ubuntu 24.04 x86_64 / Python 3.14
+- [Final branch CI run 43755658769](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43755658769): **61 passed in 0.23s**.
+- One initial reset-hash test failed because raw client order IDs advanced from suffixes `-1/-2` to `-3/-4` across engine reset. This is expected identity-generator behavior; the canonical test now normalizes those generated IDs while preserving event order and all economic fields.
+- An exploratory attempt to recover a funding failure in the same engine after purging the FX instrument from cache did not recover: the reset/replay run denied the entry because the FX quote/instrument was not restored by that fixture. This was not merged as a recovery claim. Fresh-engine corrected-data replay is already covered by the funding tests; same-engine funding-failure recovery after a cache purge remains unverified.
+
+### Boundary
+
+This is a POC audit hash, not the upstream NautilusTrader BLAKE3 canonical result and not a production event-sourcing/checkpoint design. It covers deterministic backtest replay and reset within one process. Durable process restart, persisted checkpoints, crash recovery, cross-process hash equivalence, schema migration and canonical hashing of every IDEAL domain event remain open.
