@@ -14,14 +14,19 @@ from nautilus_trader.model import (
     AggressorSide,
     Bar,
     BarType,
+    BookAction,
+    BookOrder,
     BookType,
     Currency,
     Money,
+    OrderBookDelta,
+    OrderBookDeltas,
     OmsType,
     OrderSide,
     Price,
     PriceType,
     Quantity,
+    RecordFlag,
     TimeInForce,
     TradeId,
     TradeTick,
@@ -137,7 +142,7 @@ def run_bar_only_liquidation():
 
 
 def run_trade_only_without_quote_book():
-    """Trades update last price and fill entry, but L2 book stays empty without depth."""
+    """LAST valuation with an explicitly cleared L2 book cannot execute a close."""
     engine = build_engine(
         bar_execution=False,
         trade_execution=True,
@@ -146,8 +151,34 @@ def run_trade_only_without_quote_book():
     strategy = RestingInverseLong()
     try:
         engine.add_strategy(strategy)
+        # Seed an L2 ask so the resting limit buy opens the position, then
+        # explicitly clear the entire book. The subsequent trade updates LAST
+        # only: with trade_execution=False it cannot repopulate the empty L2 book.
+        snapshot_ts = BASE_NS + 1_000_000_000
+        clear = OrderBookDelta.clear(
+            INSTRUMENT.id, 1, snapshot_ts, snapshot_ts
+        )
+        ask = OrderBookDelta(
+            instrument_id=INSTRUMENT.id,
+            action=BookAction.ADD,
+            order=BookOrder(
+                OrderSide.SELL,
+                Price.from_str("40000.0"),
+                CONTRACTS,
+                1,
+            ),
+            flags=RecordFlag.F_LAST,
+            sequence=2,
+            ts_event=snapshot_ts,
+            ts_init=snapshot_ts,
+        )
+        empty_book_ts = BASE_NS + 1_500_000_000
+        empty_book = OrderBookDelta.clear(
+            INSTRUMENT.id, 3, empty_book_ts, empty_book_ts
+        )
         engine.add_data([
-            make_trade(40_000, "entry-trade", 1_000_000_000),
+            OrderBookDeltas(INSTRUMENT.id, [clear, ask]),
+            OrderBookDeltas(INSTRUMENT.id, [empty_book]),
             make_trade(20_000, "liquidation-trade", 2_000_000_000),
         ])
         engine.run()
