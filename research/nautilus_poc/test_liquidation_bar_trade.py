@@ -46,7 +46,7 @@ CONTRACTS = Quantity.from_int(10_000_000)
 
 
 class RestingInverseLong(Strategy):
-    """Rest a buy limit so a trade or execution bar can open the position."""
+    """Rest a buy limit so supplied market data can open the position."""
 
     def __init__(self):
         super().__init__()
@@ -219,11 +219,10 @@ def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid(c
     assert "LIQUIDATION triggered" in logs
     assert "LIQUIDATION: no price available" in logs
 
-    # The trade stream opens the position and moves last price through the
-    # maintenance threshold. With an L2 venue and no OrderBookDepth updates,
-    # trade_execution can match the entry from LAST while the actual L2 book
-    # remains empty. The engine values the breach from LAST but skips closing
-    # because best_bid_price() is absent.
+    # The L2 ask snapshot opens the position, then the explicit clear removes
+    # the executable book. The later TradeTick updates LAST only because
+    # trade_execution=False. The engine values the breach from LAST but skips
+    # closing because best_bid_price() is absent.
     assert result["open_positions"] == 1
     assert result["closed_positions"] == 0
     assert result["fill_count"] == 1
