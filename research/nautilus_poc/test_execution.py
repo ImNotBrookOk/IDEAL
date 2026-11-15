@@ -47,6 +47,7 @@ class LimitQueueStrategy(Strategy):
         self.submitted = False
         self.order_ids = []
         self.fill_events = []
+        self.submitted = False
 
     def on_start(self):
         self.subscribe_quotes(INSTRUMENT.id)
@@ -235,6 +236,12 @@ class L2MarketBuyStrategy(Strategy):
         self.fill_events = []
 
     def on_start(self):
+        self.subscribe_quotes(INSTRUMENT.id)
+
+    def on_quote(self, quote):
+        if self.submitted:
+            return
+        self.submitted = True
         for quantity in self.quantities:
             self.submit_order(
                 self.order_factory.market(
@@ -300,7 +307,7 @@ def run_l2_market_case(quantities: list[str]):
     strategy = L2MarketBuyStrategy(quantities)
     try:
         engine.add_strategy(strategy)
-        engine.add_data([make_l2_book()])
+        engine.add_data([make_l2_book(), make_quote(2)])
         engine.run()
         return strategy.fill_events
     finally:
