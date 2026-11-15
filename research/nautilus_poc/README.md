@@ -75,7 +75,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **69 tests passed in 0.35s** in [GitHub Actions run 43756299486](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756299486), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **71 tests passed in 0.41s** in [GitHub Actions run 43756454616](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756454616), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
