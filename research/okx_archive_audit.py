@@ -214,7 +214,7 @@ def main():
     parser.add_argument("archives", nargs="+")
     args = parser.parse_args()
     for path in args.archives:
-        print(json.dumps(audit_archive(path), sort_keys=True))
+        print(orjson.dumps(audit_archive(path), option=orjson.OPT_SORT_KEYS).decode())
 
 
 if __name__ == "__main__":
