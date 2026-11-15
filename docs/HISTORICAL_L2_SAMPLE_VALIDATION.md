@@ -435,3 +435,63 @@ A second attempt to build a full per-record BBO alignment series exceeded the lo
 3. Retrieve the adjacent 2026-11-11 module-5 archive to test boundary and schema consistency.
 4. Complete trade-to-preceding-BBO alignment with a more efficient implementation; report sample age, outside-spread rate and sensitivity to one-second sampling.
 5. Keep sequence continuity and loss detection blocked unless OKX supplies a sequence-bearing historical format or an independent reference validates event completeness.
+
+
+### 12.8 400-level module 4 and no-lookahead trade alignment (16 November 2026)
+
+This section supersedes the earlier statements in sections 12.3–12.7 that full trade-to-preceding-BBO alignment remained incomplete. The alignment has now been completed with a streaming implementation that applies a strict no-lookahead rule: trades at the same timestamp as a book update are evaluated against the preceding book state because the archive provides no event sequence to establish ordering.
+
+Two additional OKX archives were retrieved and fully reconstructed through isolated research workflows:
+
+| Archive | Compressed bytes | Uncompressed member | Records | Snapshots | Updates |
+|---|---:|---:|---:|---:|---:|
+| Module 4, BTC-USDT-SWAP 400-level, 12 Nov UTC | 500,244,886 | 3,048,526,067 | 6,604,203 | 96 | 6,604,107 |
+| Module 5, BTC-USDT-SWAP 5,000-level, 11 Nov UTC | 178,537,085 | 857,560,394 | 86,400 | 96 | 86,304 |
+
+The 400-level archive SHA-256 is `6dd55534ddd376c6995bfac584f1e1a19ed64083b76b542da61ee488cacbdfce`; the 11 November 5,000-level archive SHA-256 is `b7a2e597f7e286d6b14c9fd50abe92a067af76b0129e99a04726a795ed44829f`.
+
+**Module 4 (400 levels):**
+- Every snapshot contains exactly 400 bid and 400 ask levels; 96 snapshots are approximately 15 minutes apart.
+- 109,286,945 price-level rows were processed, including 20,114,734 zero-quantity deletions. Update messages changed 1–1,183 levels, with a median of 6 combined bid/ask levels.
+- All 6,604,203 reconstructed states were valid; no empty, crossed or locked books were observed.
+- 85.957% of the 6,604,202 adjacent record intervals were exactly 10 ms; 7.291% were 20 ms, 3.154% were 30 ms, 1.416% were 40 ms and 0.817% were 50 ms. Longer intervals occur and must be treated as staleness, not interpolated away.
+
+**Module 5 (5,000 levels, 11 November):**
+- Every snapshot contains exactly 5,000 bid and 5,000 ask levels; 96 snapshots.
+- 37,499,572 price-level rows, including 6,941,995 zero-quantity deletions; median 279 combined bid/ask level changes per update.
+- All 86,400 reconstructed states were valid; no empty, crossed or locked books.
+- 86,353 of 86,399 adjacent intervals (99.947%) were exactly 1,000 ms. This confirms the one-second cadence observed in the 12 November module-5 sample.
+
+**Historical record schema:** the first five module-4 records contained only `action`, `asks`, `bids`, `instId` and `ts`. No `seqId`, `prevSeqId`, `checksum` or `local_timestamp` field was present. Every sampled level tuple had three fields. The third field is an integer, but its meaning remains unverified; do not interpret it as order count, liquidation count or queue size without an authoritative historical-module schema. No sequence IDs/checksums means lost-update detection remains unproven.
+
+**No-lookahead alignment to module-4 BBO:** the two UTC+8 trade ZIPs were combined and filtered by actual timestamps to the 12 November UTC book day. All 3,224,415 matching trades were aligned to a preceding valid BBO. Zero trades lacked a preceding book state and zero matched invalid book states.
+
+| Measurement | 400-level module 4 | 5,000-level module 5, 12 Nov |
+|---|---:|---:|
+| Median preceding-book age | 6 ms | 489 ms |
+| 95th-percentile preceding-book age | 10 ms | 947 ms |
+| Maximum preceding-book age | 509 ms | 999 ms |
+| Trades outside preceding sampled spread | 62.584% | 76.71% |
+| Outside-distance p95 | 1.40 bps | 4.86 bps |
+
+For the 400-level alignment:
+- 311,016 trades (9.646%) shared a timestamp with a book update and were conservatively evaluated against the prior book.
+- 98.542% of trade sides were directionally consistent with the preceding BBO (buy at/above ask or sell at/below bid); side mismatch was 1.458%.
+- Outside-spread distance was p50 0.35 bps, p90 1.01 bps, p95 1.40 bps, p99 2.82 bps and maximum 11.81 bps.
+- Preceding-book ages exceeded 10 ms for 161,204 trades (4.999%), 20 ms for 76,469 (2.372%), 50 ms for 16,390 (0.508%), 100 ms for 2,139 (0.066%) and 250 ms for 67 (0.0021%).
+
+The outside-spread percentage is not a direct measure of bad trades: even a 10 ms sampled book can miss intervening state changes. The 98.542% directional consistency and much lower sample age are encouraging, but neither proves event ordering or exact passive fills. The 509 ms maximum age demonstrates a non-zero stale-sample tail and must be accounted for explicitly.
+
+**Updated disposition:** module 4 400-level data is a viable research candidate for 10 ms sampled spread, visible-depth, imbalance, liquidity-dynamics and conservative market-impact/slippage research. It is not sufficient for exact FIFO queue-position or passive-fill calibration: no L3 order identity, no sequence IDs/checksum, no authoritative third-field schema, and no exact event ordering. Module 5 is a deeper but one-second sampled liquidity reference.
+
+The final no-lookahead alignment and initial research acceptance assertions passed in [workflow run #43773844334](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43773844334). The initial gates were: non-zero aligned trades, zero no-preceding-book trades, zero invalid-book matches, p95 sample age at most 20 ms, and side consistency at least 98%.
+
+**Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.** No venue/vendor is selected and no runtime integration is approved.
+
+### 12.9 Next validation gates
+
+1. Retrieve and reconstruct a second 400-level day (11 or 13 November) to test cadence, snapshot behavior, schema and alignment stability.
+2. Characterize the 509 ms sample-age maximum and all >50 ms gaps by time-of-day and clustered duration.
+3. Obtain authoritative OKX historical archive documentation for the third level field; continue treating it as opaque.
+4. Define conservative execution-model bounds. Taker impact and spread/slippage research may proceed with 10 ms samples and staleness controls; passive fills must not assume FIFO or exact queue position.
+5. Continue independent-source, licensing and venue-eligibility checks before any venue selection or runtime integration.
