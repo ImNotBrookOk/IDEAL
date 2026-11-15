@@ -207,3 +207,34 @@ The gap-through test proves only the pinned simulator's synthetic L1 behavior: a
 - Final branch CI: [run 43753234096](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753234096), **52 passed in 0.19s**.
 - One initial assertion expected the synthetic stop-market fill to be strictly worse than the stop trigger. The engine filled exactly at the stop trigger in the intrabar-touch fixture; the assertion was corrected to the observed exact trigger price. The separate gap-through test expects and verifies the open price. The final 52-test suite passed.
 - Research/test/documentation changes only. No runtime logic, dependency or venue selection changed.
+
+
+## 7. Funding settlement fallback and multi-position behaviour
+
+Pinned source: NautilusTrader `v2.0.0rc9`, `crates/backtest/src/exchange.rs`:
+
+- `funding_settlement_price` prefers a cached mark price. If no mark exists, it requires both best bid and best ask and uses their midpoint.
+- If neither mark nor a complete top-of-book is available, settlement returns false and the pending funding rate is retained in the exchange's pending map.
+- A single-currency account whose base currency differs from the position settlement currency requires a cached mid FX conversion rate. Missing/invalid conversion returns false.
+- Funding is calculated per open position and aggregated by currency before account balance adjustments. Positions for the instrument with different settlement currencies are rejected.
+- The backtest engine's `settle_funding_rates` converts a failed settlement into a fatal `Funding settlement failed` error. The pending item remains internally, but the current run does not simply continue and retry when later market data arrives. Recovery must be handled explicitly by reset/replay or corrected data; no automatic in-run retry is established.
+- Settlement idempotency is keyed by `(boundary timestamp, instrument ID)`; a previously settled key is not applied again.
+
+New IDEAL POC file: [`test_funding_edge_cases.py`](test_funding_edge_cases.py)
+
+- Missing mark-price fallback: two independent 0.100 BTC long positions are opened under HEDGING OMS. No mark update is supplied. The funding calculation uses the 60,000.25 top-of-book midpoint, settles both positions, and verifies the aggregate account balance of 9,992.79994600 USDT. Per-position Money quantization is reflected in the expected result.
+- Duplicate update: the same funding rate/boundary is submitted again after settlement. The result (fills, open positions and account balance) is identical to the single-update replay; no second funding debit is applied.
+
+### Verification
+
+- Exact pin: `nautilus_trader==2.0.0rc9`
+- Ubuntu 24.04 x86_64 / Python 3.14
+- [CI run 43753618622](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753618622): **54 passed in 0.18s**.
+- Fixture corrections recorded during development: first, the instrument venue (BINANCE) did not match the configured SIM venue; second, the quote prices used precision 2 while the instrument requires precision 1; third, the exact account balance differed by 0.000001 due to per-position Money rounding. Each fixture/expectation was corrected from observed engine behavior and the final suite passed.
+- No runtime code or dependencies changed.
+
+### Remaining funding risks
+
+- No test yet forces both mark and top-of-book to be absent at the funding boundary and verifies the fatal run error/pending state.
+- No end-to-end test yet constructs a position whose settlement currency differs from a single-currency account base and proves missing FX conversion failure, followed by explicit replay recovery.
+- Multi-position testing covers two same-instrument, same-settlement-currency long positions under HEDGING OMS. Mixed settlement currencies and multi-currency accounts remain untested.

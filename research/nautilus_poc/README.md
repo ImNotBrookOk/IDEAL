@@ -75,7 +75,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **52 tests passed in 0.19s** in [GitHub Actions run 43753234096](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753234096), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **54 tests passed in 0.18s** in [GitHub Actions run 43753618622](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753618622), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
@@ -91,7 +91,7 @@ A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivative
 - Amendment tests currently cover quantity increases under `PRICE_CHANGE`, `PRICE_OR_QUANTITY_INCREASE` and `ANY_MODIFY`. Price changes, quantity decreases and no-op modifications remain untested end-to-end; venue-specific amendment/cancel priority is unknown until a venue is selected.
 - Spread widening, latency races, stale book updates, hidden liquidity and adverse selection.
 - Stop/target same-bar ordering and stop-loss gap-through are now reproduced in `test_stop_target_bar.py`. Default O-H-L-C selects TP when both OCO exits are inside one bar; adaptive low-first ordering selects SL on an equidistant high/low bar. A stop-market gap-through fills at the synthetic bar-open price. OHLC does not reveal actual intrabar chronology or executable spread/depth, so ambiguous dual-touch bars must remain uncertainty-labelled.
-- Funding with missing mark prices, missing exchange rates, multiple positions and multiple currencies.
+- Funding with missing mark price fallback, two hedged positions and duplicate post-settlement updates are covered in `test_funding_edge_cases.py`. Missing both mark and top-of-book, missing account FX conversion, and retry/recovery remain unverified. Source audit shows failed settlement is returned as a fatal backtest funding error; the exchange retains the pending rate internally, but the engine does not automatically retry later data in the same run.
 - Full canonical event/account replay hashes and restart/recovery semantics.
 - Resource benchmarks on the intended free worker.
 - Exchange-specific linear/inverse contract multipliers, fees, margin tiers and liquidation rules.
