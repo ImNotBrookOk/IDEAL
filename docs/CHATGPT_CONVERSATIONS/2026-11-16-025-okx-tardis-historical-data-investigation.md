@@ -68,3 +68,8 @@ Important pairing rule: order-book modules 4/5/6 use UTC calendar dates, whereas
 The execution container still fails DNS resolution for external data hosts. The research fetch path returned JSON metadata and direct URLs, not the 170+ MB L2 archive or trade ZIP bytes. No archive download, checksum, tar/gzip verification, schema parsing, row count, event-cadence measurement, reconstruction, sequence-gap check, trade alignment or replay test has occurred. The OKX source is now the highest-priority bounded retrieval candidate, not an approved data source or venue.
 
 Updated roadmap/docs were read back after commit. Phase 01 remains IN PROGRESS, historical-data gate BLOCKED, Phase 02 LOCKED. No code tests were run; documentation/research only.
+
+
+## Retrieval attempt addendum — direct archive access
+
+After the metadata query, attempted to open the exact 177.63 MB OKX CDN `.tar.gz` URL through the web retrieval interface; it returned an inaccessible-file error. Attempted the container download utility; it refused because the URL had not been successfully viewed through the web interface. No file or partial file was written. This is a retrieval-tool limitation, not a verified HTTP/CDN failure. The actual-file validation gate remains blocked.
