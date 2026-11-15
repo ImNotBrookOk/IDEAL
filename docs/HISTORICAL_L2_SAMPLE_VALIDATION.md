@@ -403,3 +403,35 @@ The sample can potentially support coarse one-second spread, visible-depth and i
 3. Complete trade-to-sampled-BBO alignment, explicitly measuring sample age and the proportion of trades outside the preceding sampled spread. Treat this as a staleness diagnostic, not proof of bad trades.
 4. Obtain the adjacent 2026-11-11 5,000-level archive and verify day-boundary behavior and repeated schema/cadence.
 5. Preserve the source artifact beyond its current 3-day GitHub retention window only through an approved, licence-compatible research-storage method. Do not commit raw vendor archives to the public repository.
+
+
+### 12.6 Follow-up structural and trade-ID audit (16 November 2026)
+
+A second pass refined the update-volume and field-semantics assessment.
+
+- The L2 stream contains 39,035,798 price-level rows across snapshots and updates.
+- There are 7,504,519 zero-quantity update rows, interpreted as price-level deletions by the reconstruction logic.
+- Across 86,304 update messages, changed price levels per message range from 47 to 7,586, with a median of **283 total levels across both sides** (not 283 per side).
+- All 96 snapshots contain exactly 5,000 bid and 5,000 ask levels.
+- Of 86,399 adjacent timestamp intervals, 86,349 are exactly 1,000 ms; 50 differ from 1,000 ms, of which 14 are outside the 900–1,100 ms tolerance. The 14 outliers form seven long/short pairs. Snapshot intervals are approximately 900,000 ms with small jitter.
+- No negative quantities, empty books, crossed books or locked books were observed during full reconstruction.
+
+Every historical price-level row has exactly three fields: price, quantity and a third integer. Current OKX live RPI documentation describes four-field book levels (price, total quantity, non-RPI quantity, order count); older general WebSocket documentation also describes four fields with liquidation count and order count. Neither schema proves the meaning of the third field in this historical archive. **Treat it as opaque; do not use it as order count, liquidation count or queue-size evidence until OKX confirms the historical module-5 schema.** Sources: [current OKX API documentation](https://app.okx.com/docs-v5/log_en/), [OKX WebSocket field description](https://github.com/okx/exchain-docs-api/blob/main/_ws.md).
+
+The two UTC+8 trade files were independently scanned:
+- 12 Nov file: 3,222,603 rows; trade IDs 3,064,471,065–3,067,693,667.
+- 13 Nov file: 5,480,573 rows; trade IDs 3,067,693,668–3,073,174,240.
+- IDs strictly increase within each file and continue exactly across the file boundary (next first ID = previous last ID + 1). No malformed rows, invalid sides, non-positive prices/sizes, adjacent duplicate IDs or ID backsteps were observed.
+- The matching 2026-11-12 UTC book interval contains 3,224,415 trades after timestamp filtering.
+
+This strengthens file-level integrity, but does not prove every exchange event is present in the L2 archive. Trade IDs establish ordering in trade files only; they do not substitute for missing L2 sequence IDs.
+
+A second attempt to build a full per-record BBO alignment series exceeded the local analysis execution time limit and was interrupted. **No trade-vs-preceding-BBO alignment statistic is claimed.**
+
+### 12.7 Corrected next-test order
+
+1. Resolve historical third-field semantics from an authoritative module-5 archive schema; until then, preserve it as opaque.
+2. Compare module 4 and module 5 for the same date.
+3. Retrieve the adjacent 2026-11-11 module-5 archive to test boundary and schema consistency.
+4. Complete trade-to-preceding-BBO alignment with a more efficient implementation; report sample age, outside-spread rate and sensitivity to one-second sampling.
+5. Keep sequence continuity and loss detection blocked unless OKX supplies a sequence-bearing historical format or an independent reference validates event completeness.
