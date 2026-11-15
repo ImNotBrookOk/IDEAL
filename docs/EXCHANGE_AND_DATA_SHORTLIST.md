@@ -207,3 +207,19 @@ A no-lookahead alignment against the two matching UTC+8 trade files (timestamp-f
 **Updated shortlist status:** OKX module 4 400-level L2 is the leading research candidate for short-horizon, 10 ms sampled liquidity, spread, imbalance and conservative taker-impact/slippage analysis. It is not approved for exact FIFO queue position or passive-fill calibration because the historical archive has no sequence IDs/checksums or L3 order identity, and the third level field is unresolved. Module 5 remains a deep, one-second sampled reference. OKX is still a candidate only; no venue/vendor is selected and no runtime integration is approved.
 
 Evidence: [final trade-alignment workflow #43773844334](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43773844334). Detailed reconstruction, alignment, limitations and next gates are in [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), sections 12.8–12.9.
+
+
+## 13.8 Consecutive-day 400-level repeatability and order-count field evidence (16 November 2026)
+
+The successful adjacent-day reconstruction workflow [#43774295757](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43774295757) establishes consistent archive structure on 11 and 12 November:
+- 6.630m and 6.604m records respectively;
+- exactly 96 snapshots each, each with 400 levels per side;
+- 85.929% and 85.957% exact 10 ms adjacent intervals;
+- median six combined price-level changes per update on both days;
+- zero empty/crossed/locked/invalid reconstructed states.
+
+This supports structural repeatability over two consecutive days. It is not proof of no dropped events because the archive records still have no sequence IDs/checksums.
+
+The third tuple field is now **strongly corroborated as order count**, but not fully archive-spec-confirmed. OKX's official API guide defines the three-element array in GET /api/v5/market/books-full as price, quantity and number of orders at that price (https://app.okx.com/docs-v5/en/, “GET / Full order book”). Historical archive rows also contain three elements and the third is a nonnegative integer. However, OKX's currently documented 400-level WebSocket books/books-l2-tbt format has four elements, including a deprecated zero field followed by order count. We therefore retain the raw field and treat it as an optional, provisionally interpreted order-count feature until OKX confirms the downloadable archive schema. It cannot be used to infer FIFO position.
+
+**Shortlist status remains:** OKX module 4 400-level L2 is the leading research candidate for short-horizon sampled market-quality and conservative taker-impact work; module 5 is the deeper one-second reference. No venue selected, no runtime adoption, Phase 01 remains open.
