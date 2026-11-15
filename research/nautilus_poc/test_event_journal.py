@@ -1,7 +1,11 @@
 import json
 import sqlite3
+import subprocess
+import sys
 
 import pytest
+
+from pathlib import Path
 
 from event_journal import (
     EventConflictError,
@@ -169,3 +173,34 @@ def test_schema_version_newer_than_code_is_rejected(tmp_path):
 
     with pytest.raises(SchemaVersionError, match="newer than supported"):
         EventJournal(path)
+
+
+
+def test_committed_event_survives_abrupt_writer_process_exit(tmp_path):
+    path = tmp_path / "crash-recovery.sqlite"
+    script = """
+import os
+import sys
+from event_journal import EventJournal
+
+journal = EventJournal(sys.argv[1])
+journal.append_event(
+    event_id="committed-before-crash",
+    event_type="OrderFilled",
+    event_ts_ns=123,
+    payload={"price": "40001.0"},
+)
+os._exit(0)
+"""
+    subprocess.run(
+        [sys.executable, "-c", script, str(path)],
+        cwd=Path(__file__).parent,
+        check=True,
+    )
+
+    with EventJournal(path) as recovered:
+        verified = recovered.verify_chain()
+        records = recovered.events_after(0)
+
+    assert verified["event_count"] == 1
+    assert records[0].event_id == "committed-before-crash"
