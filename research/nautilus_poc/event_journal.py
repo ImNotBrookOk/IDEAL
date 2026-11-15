@@ -144,6 +144,7 @@ class EventJournal:
             raise ValueError("event_ts_ns must be a non-negative integer")
         event_json = canonical_bytes(
             _event_document(event_id, event_type, event_ts_ns, payload),
+            schema=EVENT_SCHEMA,
         )
         payload_json = event_json.decode("utf-8")
 
