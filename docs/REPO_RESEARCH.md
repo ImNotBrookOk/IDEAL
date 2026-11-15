@@ -291,3 +291,21 @@ Important version distinction: the upstream installation guide states that plain
 7. Complete licence review and the component selection matrix before proposing any engine adoption.
 
 **Current result: 20-test synthetic POC suite passes; engine adoption not decided.** Phase 01 remains IN PROGRESS. No Phase 02 unlock, runtime dependency adoption, exchange connection or trading permission follows from this experiment.
+
+
+## NautilusTrader POC progression update — 15 November 2026
+
+The 20-test result above is the initial POC checkpoint, not the current test count. Subsequent isolated POC extensions increased coverage and ran the exact pinned package on both x86_64 and ARM64:
+- 79 tests passed on both architectures: [CI #43760637330](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760637330), commit `89345943665b904a8e4563ec6ae2276d1e3d417e`.
+- 81 tests passed on both architectures: [CI #43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953), commit `c5d0cc222f84d2bfb2d15c737d74f1beb8bd058b`.
+- 84 tests passed on both architectures: [CI #43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188), commit `4c9ea69d76410152755e6f5b86b7c25a40217827`.
+
+The 84-test extension includes reporting-currency FX freshness checks and the BTC-collateral / USDT-settled liquidation residual case. It confirmed:
+- `Portfolio.equity(venue=...)` returns native-currency equity values rather than one consolidated USD total.
+- `unrealized_pnls(target_currency=USD)` can convert PnL using the configured current mid.
+- Removing the required FX instrument makes explicit target-currency conversion fail closed.
+- A simulator liquidation scenario can leave a -0.05 USDT residual; this is not exchange-equivalent liquidation.
+
+This removes the earlier ARM wheel/test-compatibility uncertainty for the exact POC pin, but does not establish real A1 VM performance, full cross-collateral accounting, consolidated reporting equity, venue-specific collateral haircuts, margin tiers, ADL or exchange-equivalent liquidation/recovery. The pin remains pre-release `nautilus_trader==2.0.0rc9`; no runtime adoption or Phase 02 unlock follows.
+
+**Current POC result:** 84 deterministic tests pass on x86_64 and ARM64; engine selection remains open.
