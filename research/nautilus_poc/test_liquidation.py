@@ -8,6 +8,7 @@ from nautilus_trader.execution import MakerTakerFeeModel
 from nautilus_trader.model import (
     AccountType,
     Currency,
+    MarkPriceUpdate,
     Money,
     OmsType,
     OrderSide,
@@ -63,31 +64,64 @@ def make_quote(price: int, timestamp: int) -> QuoteTick:
     )
 
 
-def run_liquidation_case():
+def build_engine():
     engine = BacktestEngine(
         BacktestEngineConfig(bypass_logging=True, run_analysis=False),
     )
+    engine.add_venue(
+        venue=VENUE,
+        oms_type=OmsType.NETTING,
+        account_type=AccountType.MARGIN,
+        base_currency=BTC,
+        starting_balances=[Money(1, BTC)],
+        fee_model=MakerTakerFeeModel(
+            maker_rate=Decimal("-0.00025"),
+            taker_rate=Decimal("0.00075"),
+        ),
+        liquidation_enabled=True,
+        liquidation_trigger_ratio=1.0,
+        liquidation_cancel_open_orders=True,
+    )
+    engine.add_instrument(INSTRUMENT)
+    return engine
+
+
+def run_liquidation_case():
+    engine = build_engine()
     strategy = BuyInverseOnce()
     try:
-        engine.add_venue(
-            venue=VENUE,
-            oms_type=OmsType.NETTING,
-            account_type=AccountType.MARGIN,
-            base_currency=BTC,
-            starting_balances=[Money(1, BTC)],
-            fee_model=MakerTakerFeeModel(
-                maker_rate=Decimal("-0.00025"),
-                taker_rate=Decimal("0.00075"),
-            ),
-            liquidation_enabled=True,
-            liquidation_trigger_ratio=1.0,
-            liquidation_cancel_open_orders=True,
-        )
-        engine.add_instrument(INSTRUMENT)
         engine.add_strategy(strategy)
         engine.add_data([
             make_quote(40_000, 1),
             make_quote(20_000, 2),
+        ])
+        engine.run()
+        account = engine.portfolio.account(venue=VENUE)
+        return {
+            "open_positions": engine.cache.positions_open_count(),
+            "closed_positions": engine.cache.positions_closed_count(),
+            "balance": account.balance_total(BTC),
+            "strategy_fill_count": len(strategy.fill_events),
+        }
+    finally:
+        engine.dispose()
+
+
+def run_mark_price_precedence_case():
+    engine = build_engine()
+    strategy = BuyInverseOnce()
+    try:
+        engine.add_strategy(strategy)
+        engine.add_data([
+            # The position opens at 40,000 and the matching-engine book stays there.
+            make_quote(40_000, 1),
+            # A conflicting 20,000 mark should trigger liquidation before the quote changes.
+            MarkPriceUpdate(
+                instrument_id=INSTRUMENT.id,
+                value=Price.from_str("20000.0"),
+                ts_event=2,
+                ts_init=2,
+            ),
         ])
         engine.run()
         account = engine.portfolio.account(venue=VENUE)
@@ -113,3 +147,18 @@ def test_maintenance_margin_breach_triggers_synthetic_position_close():
 
 def test_liquidation_replay_is_deterministic():
     assert run_liquidation_case() == run_liquidation_case()
+
+
+def test_mark_price_triggers_liquidation_ahead_of_conflicting_quote():
+    result = run_mark_price_precedence_case()
+
+    assert result["open_positions"] == 0
+    assert result["closed_positions"] == 1
+    assert result["strategy_fill_count"] == 2
+    # Trigger valuation uses the 20,000 mark; synthetic close execution still uses
+    # the matching engine's 40,000 bid. Two taker fees total 0.375 BTC.
+    assert result["balance"] == Money.from_str("0.62500000 BTC")
+
+
+def test_mark_price_precedence_replay_is_deterministic():
+    assert run_mark_price_precedence_case() == run_mark_price_precedence_case()
