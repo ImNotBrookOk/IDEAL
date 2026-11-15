@@ -250,3 +250,72 @@ The current public [Known Gaps & Corrections](https://www.cryptohftdata.com/docs
 - **No pass:** the historical perpetual L2 acceptance gate remains **BLOCKED**. The trade URL response alone is not a usable paired dataset and does not validate order-book quality.
 - **No selection:** Tardis remains a no-key sample-evaluation candidate only. No venue, data vendor, exchange account, API key, paid service or runtime component is selected or authorised.
 - **Next test:** obtain the matching 2026-11-01 `incremental_book_L2`, `trades` and `derivative_ticker` artifacts through a network path that can save exact bytes; hash and validate them before any replay. Preserve the 2026-05-21 feed-generation boundary as a separate stratum in all analysis.
+
+
+## 11. OKX native public historical L2 archive — endpoint and matching-trade discovery (16 November 2026)
+
+### 11.1 Public endpoint contract
+
+The OKX public REST endpoint is:
+
+`GET https://www.okx.com/api/v5/public/market-data-history`
+
+A source-level inspection of the MIT `burakoner/OKX.Api` client at commit `1dd5dd09d04627eb27a6b0b15bac980287295b1b` confirms the client sends this request with `signed: false`. Its module enum maps:
+- `4`: 400-level order book
+- `5`: 5,000-level order book
+- `6`: 50-level order book (being deprecated)
+- `1`: tick-by-tick trade history
+
+The library changelog records that it checked the endpoint against unsigned production requests, including the maximum 10-inclusive-day/month query boundary. The current documented contract states 5 requests per 2 seconds per IP, order-book files normally available T+3, and 10 inclusive calendar days for daily requests. Order-book modules 4/5/6 use UTC calendar dates; trade module 1 uses UTC+8 calendar dates. This timezone difference is important when pairing trades to an order-book UTC day.
+
+Sources:
+- [OKX API change log — historical market data endpoint introduced](https://www.okx.com/docs-v5/log_en/#2025-09-02)
+- [OKX API change log — query window reduced to 10](https://www.okx.com/docs-v5/log_en/#2026-08-06)
+- [OKX public historical-data endpoint implementation and tests (MIT reference client)](https://github.com/burakoner/OKX.Api)
+- [OKX official historical market data portal](https://www.okx.com/historical-data)
+
+### 11.2 Live metadata-query observations
+
+The public endpoint was queried through the research fetch path. It returned JSON `code=0` with file metadata and direct CDN URLs. These are metadata responses only; the archive files themselves were not downloaded.
+
+| Query | Response | File size reported by OKX | Direct archive |
+|---|---|---:|---|
+| Module 5, SWAP, BTC-USDT, 2026-11-12 UTC | `code=0` | 177.63 MB | [BTC 5,000-level L2, 12 Nov](https://static.okx.com/cdn/okx/match/orderbook/pro/L2/5000lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-12.tar.gz) |
+| Module 5, SWAP, BTC-USDT, 2026-11-11 UTC | `code=0` | 170.27 MB | [BTC 5,000-level L2, 11 Nov](https://static.okx.com/cdn/okx/match/orderbook/pro/L2/5000lv/daily/20261111/BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-11.tar.gz) |
+| Module 4, SWAP, BTC-USDT, 2026-11-12 UTC | `code=0` | 477.07 MB | [BTC 400-level L2, 12 Nov](https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-12.tar.gz) |
+| Module 5, SWAP, ETH-USDT, 2026-11-12 UTC | `code=0` | 149.22 MB | [ETH 5,000-level L2, 12 Nov](https://static.okx.com/cdn/okx/match/orderbook/pro/L2/5000lv/daily/20261112/ETH-USDT-SWAP-L2orderbook-5000lv-2026-11-12.tar.gz) |
+
+The endpoint response for BTC 5,000-level L2 on 12 November identifies filename `BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-12.tar.gz`, instrument family `BTC-USDT`, instrument type `SWAP`, and a 177.63 MB file. The corresponding 400-level module is a distinct archive and reports 477.07 MB. File size alone does not establish update cadence, event completeness or which module is better for a given execution study; inspect both file formats and event densities before choosing.
+
+### 11.3 Matching trade archive metadata and timezone alignment
+
+A module 1 query for `BTC-USDT` SWAP, with begin `1794412800000` and end `1794499200000`, returned `code=0` and two trade ZIP files:
+
+- [BTC-USDT-SWAP trades, 12 Nov 2026 (UTC+8 file date)](https://static.okx.com/cdn/okex/traderecords/trades/daily/20261112/BTC-USDT-SWAP-trades-2026-11-12.zip?v=1001), 17.85 MB.
+- [BTC-USDT-SWAP trades, 13 Nov 2026 (UTC+8 file date)](https://static.okx.com/cdn/okex/traderecords/trades/daily/20261113/BTC-USDT-SWAP-trades-2026-11-13.zip?v=1001), 30.43 MB.
+
+Together these two UTC+8 trade-date files cover the UTC book day 2026-11-12 from 00:00 to 24:00, with an 8-hour boundary inside the 13 November trade file. The matching interval must be filtered by actual trade timestamps after extraction; do not pair files by identical filename date alone. The two trade archives report 48.28 MB combined. Combined with the 177.63 MB 5,000-level L2 archive, the metadata-reported download total for the first paired sample is approximately 225.91 MB, before any additional derivative context or redundant day needed for boundary checks.
+
+### 11.4 What is proven and what is not
+
+**Proven at metadata/query level:**
+- The unauthenticated public endpoint returned successful metadata for current-dated BTC and ETH SWAP order-book files and BTC SWAP trade files.
+- OKX provides 5,000-level order-book archive links for dates after 1 November 2025.
+- Matching trade archive links are available through the same endpoint.
+- Order-book and trade files use different calendar-date conventions (UTC versus UTC+8); correct pairing requires timestamp-based filtering.
+- The endpoint supplies filenames, direct URLs and provider-reported sizes.
+
+**Not proven:**
+- The direct CDN archive bytes have not been retrieved into the local working environment.
+- No HTTP status, content length, archive SHA-256, tar/gzip integrity, member listing, JSONL schema or row count has been verified.
+- No snapshot cadence, delta cadence, sequence identifiers, event ordering, timestamp units, empty-book representation, depth semantics or reconnect handling has been independently established from the actual archive.
+- No L2 reconstruction, trade/book alignment, independent oracle comparison, stale/crossed/duplicate detection or replay benchmark has been run.
+- Public endpoint availability does not itself settle data licensing, permitted downstream use, NZ venue eligibility or live trading eligibility.
+
+The container still has DNS resolution failures for external hosts. The research fetch path can retrieve the JSON metadata but does not provide the large archive as a local file. The reported file size is substantial (170–477 MB per day for the queried examples), so download, storage and decompression costs must be measured before scaling beyond a bounded sample.
+
+### 11.5 Revised next test and disposition
+
+Prioritise the OKX 2026-11-12 BTC-USDT-SWAP module 5 archive and the two matching trade ZIPs. Retrieve them through a network path that can save exact bytes; capture headers, byte counts and SHA-256; inspect the compressed archive and schema; then build an independent parser/reconstructor. Keep module 4 as a comparison candidate, not a default selection. Add at least the 11 November module 5 day to test day-boundary snapshot continuity.
+
+**The historical-data acceptance gate remains BLOCKED.** This is the first concrete public exchange-native L2 + trade archive lead with successful current-date metadata, not a data-quality pass or source selection. Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.
