@@ -591,3 +591,40 @@ The workflow's initial acceptance assertions passed separately for each day. Art
 | <=250 ms | 2,597,648 (99.993%) | 3,224,348 (99.998%) |
 
 This is a sensitivity table, not a validated production staleness threshold. It shows that a 50 ms analysis cutoff would retain over 99.2% of trade rows in these two samples while excluding the long stale tail. Any later execution model should report results across multiple age cutoffs and must not interpolate stale book depth. A strategy requiring a stricter 10 ms book-age bound would lose 5.0–7.5% of observations, depending on day.
+
+
+### 12.13 Independent Tardis public normalized-L2 sample validation (16 November 2026)
+
+The isolated Tardis workflow [#43777192211](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777192211) successfully retrieved the first-of-month public sample for Binance USDⓈ-M Futures BTCUSDT, 1 November 2026, without an API key:
+- L2: `https://datasets.tardis.dev/v1/binance-futures/incremental_book_L2/2026/11/01/BTCUSDT.csv.gz`
+- Trades: `https://datasets.tardis.dev/v1/binance-futures/trades/2026/11/01/BTCUSDT.csv.gz`
+
+File sizes:
+| File | Compressed | Uncompressed |
+|---|---:|---:|
+| Incremental L2 | 429.9 MB | 6,461,142,795 bytes |
+| Trades | 9.09 MB | 103,671,148 bytes |
+
+SHA-256:
+- L2: `8856e6e61b480976d9e1bc7ea49d4d18d25b281c56c6e6523bee6179d9558061`
+- Trades: `635a750afca5659cf7848487a1a8105e9dd8a38ce57254689b77ee7ec596efc4`
+
+The new independent CSV parser/reconstructor was tested with six focused unit tests, then used on the full 79,438,130-row L2 file:
+- 3,242,436 local-timestamp message groups;
+- one initial snapshot and 3,242,435 update messages;
+- zero rows before the first snapshot;
+- 7,260,093 zero-amount level deletions;
+- all 3,242,436 reconstructed message states valid (no empty, crossed or locked BBO);
+- maximum gap between processed message groups 276.101 ms;
+- exchange timestamps covered 2026-11-01 UTC;
+- final reconstructed BBO at end of file: 78,313.0 / 78,313.1.
+
+The trade file contained 1,190,743 rows: 587,069 buy and 603,674 sell. All rows had the expected schema, positive finite prices/amounts, valid side values and nondecreasing local timestamps. Local timestamps ranged from 1793491200019430 to 1793577599972800 microseconds.
+
+This validates that the documented Tardis normalized incremental-L2 CSV format can be parsed and reconstructed on a full first-of-month Binance Futures sample. It does not validate the same exchange-day's fills against BBO, prove source-side sequence continuity, provide L3/FIFO order identity, or establish the license rights for commercial use of the data. The 276 ms maximum message gap is a measured property of this one sample, not a general Tardis guarantee.
+
+Tardis's official CSV specification states that messages are grouped by local_timestamp; pre-snapshot updates must be skipped; a new snapshot after updates resets the book; amount is absolute rather than a delta; and amount zero removes a level. Source: https://docs.tardis.dev/downloadable-csv-files (incremental_book_L2 schema).
+
+Artifact ID `14187255879`, SHA-256 `e7ee6eac5ddaf65fd89c0c692690fe109861bc9cf110f370244803bf004735be`, contains only small audit summaries, hashes and manifests (1,521 bytes); expires 18 November 2026 at 23:58 UTC. Raw files were deleted before artifact upload and were not committed.
+
+**Disposition:** Tardis is now a validated independent historical-L2 sample source and normalized CSV reference for parser/reconstruction research. It is not yet a selected data vendor or runtime dependency. Public sample access does not establish commercial redistribution rights; paid historical access and terms remain separate checks.
