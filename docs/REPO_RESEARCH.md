@@ -102,3 +102,92 @@ No source code has been copied into IDEAL as a result of this research.
 ## Current decision
 
 **No repository is selected for adoption. No dependency has been added. No implementation phase is unlocked by this research record.** The shortlist is a research backlog, not an architecture decision.
+
+## Source-level due-diligence addendum (15 November 2026)
+
+This addendum records findings from direct source/documentation inspection, not just repository landing pages. Upstream paths are linked so the review can be repeated against a pinned commit.
+
+### NautilusTrader — execution realism requires explicit configuration
+
+Inspected:
+- [Fill-model documentation](https://github.com/nautechsystems/nautilus_trader/blob/develop/docs/concepts/backtesting/fill-models.md)
+- [Backtest crate overview](https://github.com/nautechsystems/nautilus_trader/blob/develop/crates/backtest/README.md)
+- [Trade execution documentation](https://github.com/nautechsystems/nautilus_trader/blob/develop/docs/concepts/backtesting/trade-execution.md)
+
+Findings:
+- The engine supports event-driven replay, configurable latency/fill models, simulated exchanges and multi-venue/multi-asset tests.
+- Documented default fill settings are permissive for limit touches (`prob_fill_on_limit=1.0`) and have no probabilistic L1 slippage (`prob_slippage=0.0`). These defaults are not suitable as an unexamined realism baseline.
+- Historical book liquidity is immutable after a fill. The docs warn that, with `liquidity_consumption=False`, multiple simulated orders may reuse the same displayed size. IDEAL must explicitly evaluate `liquidity_consumption=True`, queue-position assumptions and whether input data is L1, L2 or L3.
+- Synthetic order books have separate consumption caveats. A custom fill model must own its synthetic liquidity-consumption behavior.
+- A reproducible random seed is available for probabilistic fill/slippage models.
+
+Assessment: **keep as leading engine candidate, not selected**. A proof-of-concept must test limit queue/touch rules, partial fills, market impact, gap-through stops, stop/target same-bar ambiguity, liquidity consumption, funding, fees, margin/liquidation and deterministic replay. Compare its actual futures/account model against the target exchange before adoption.
+
+### Forven — strong execution-kernel pattern, but parity claim has a boundary
+
+Inspected:
+- [Shared execution kernel](https://github.com/judder659/Forven/blob/main/forven/strategies/execution_kernel.py)
+- [Kernel replay parity tests](https://github.com/judder659/Forven/blob/main/tests/test_execution_parity.py)
+- [Pending-action tests](https://github.com/judder659/Forven/blob/main/tests/test_kernel_pending_actions.py)
+- [Funding completeness policy search result/source](https://github.com/judder659/Forven/blob/main/forven/policy.py)
+
+Positive findings:
+- One kernel is designed to serve both batch backtesting and the paper/live scanner.
+- Signals on bar i are modelled as entries at bar i+1 open; stop/target checks use intrabar high/low; trailing stops are based on the prior bar's extreme; fees and slippage are explicitly charged.
+- A replay-parity test compares closed trades from full-history execution with repeated growing-prefix kernel execution across sizing and exit profiles.
+- Funding completeness is treated as a promotion concern: the policy source includes a block for incomplete funding history rather than silently approving it.
+
+Important limitation:
+- The parity harness proves the kernel's growing-prefix replay property; it does not by itself prove end-to-end equivalence of the actual paper scanner, exchange fills and backtest. The kernel's own documentation says the scanner acts on pending actions at signal-bar close while the validated backtest uses next-bar-open fills, and the pending-action test describes a scan-lag/one-bar difference. This is an explicit execution-semantic boundary that must be reconciled, not glossed over as full paper/backtest parity.
+- The kernel is OHLCV-driven. Its intrabar model cannot infer the true ordering of stop and target touches within a candle; conservative ambiguity rules and higher-resolution/order-book evidence are still needed.
+- Funding is an opt-in aligned series in the kernel, with a completeness flag. The downstream policy needs to be tested to ensure incomplete funding blocks eligibility across every path.
+
+Assessment: **retain as a high-value reference for shared-kernel design and replay tests**. Do not adopt its reported parity as proof of live/paper parity. Build an IDEAL contract test that compares the exact scanner/order-fill path with the backtest event stream.
+
+### CCXT — useful REST adapter primitives, not a complete feed/execution stack
+
+Inspected:
+- [Python exchange base](https://github.com/ccxt/ccxt/blob/master/python/ccxt/base/exchange.py)
+
+Findings:
+- The Python base exchange class enables rate limiting by default and includes configurable request pacing, timeout, exception mapping and exchange metadata.
+- The library contains precision conversion helpers and unified market/position/funding-related fields, but endpoint support is exchange-specific.
+- CCXT's own class metadata distinguishes the Pro integration for WebSocket support; the free core must not be assumed to include the paid Pro streaming product.
+
+Assessment: **candidate for REST market/account adapter only**, subject to a per-exchange capability matrix. Keep WebSocket streaming, sequence recovery, stale-feed detection and canonical data contracts independently owned by IDEAL unless a separately verified free adapter is chosen.
+
+### RD-Agent — experiment abstraction is useful; execution isolation is not automatic
+
+Inspected:
+- [Experiment/workspace abstractions](https://github.com/microsoft/RD-Agent/blob/main/rdagent/core/experiment.py)
+- [Hypothesis and experiment trace](https://github.com/microsoft/RD-Agent/blob/main/rdagent/core/proposal.py)
+
+Findings:
+- The framework models tasks, workspaces, experiment feedback, checkpoints and a trace of accepted/rejected experiments.
+- Its hypothesis/feedback/trace abstraction is a useful pattern for retaining why a candidate was proposed, what changed and how it was evaluated.
+- The generic workspace abstraction does not itself establish a secure sandbox. Scenario-specific execution environments and their isolation controls must be audited separately before generated code is run.
+
+Assessment: **research workflow reference only**. IDEAL should retain immutable candidate/experiment lineage and deterministic evaluation separately from agent orchestration. Do not import an agent framework as the strategy evaluator or trust boundary.
+
+### Optuna — persistent and seeded search is feasible, but parallel search is not strictly reproducible
+
+Inspected:
+- [Optuna FAQ](https://github.com/optuna/optuna/blob/master/docs/source/faq.rst)
+- [TPE sampler implementation](https://github.com/optuna/optuna/blob/master/optuna/samplers/_tpe/sampler.py)
+
+Findings:
+- Optuna supports in-memory studies and SQLite-backed study persistence/resumption.
+- A fixed sampler seed improves reproducibility for sequential studies.
+- Its documentation explicitly warns that distributed/parallel optimisation introduces inherent nondeterminism and that objective functions must themselves be deterministic.
+- Trial records persist suggested parameters and objective values; external artifacts need a separate artifact store.
+
+Assessment: **candidate optimiser, not an evaluator**. Begin with sequential seeded studies and immutable data/evaluator versions. Persist all trial metadata and cap search budgets. Parallelism is a later optimisation only if reproducibility controls are demonstrated.
+
+## Updated technical direction
+
+These inspections strengthen the following provisional boundaries:
+- Evaluate NautilusTrader first as an event-driven engine candidate, with strict custom fill/liquidity settings and exchange-specific futures validation.
+- Keep Forven's shared-kernel and replay-test ideas, but explicitly test scanner-to-fill parity rather than relying on its kernel parity suite.
+- Use CCXT only where the exact exchange endpoint and free feature set are verified; do not conflate REST and Pro WebSocket capabilities.
+- Use RD-Agent-like hypothesis/experiment lineage without delegating evaluation or permissions to an agent.
+- Use Optuna sequentially with fixed seeds for controlled parameter exploration; protect untouched holdout data and account for multiple testing.
