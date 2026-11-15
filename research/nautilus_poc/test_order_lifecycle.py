@@ -130,6 +130,7 @@ def run_once():
             "fill_count": len(strategy.fills),
             "open_positions": engine.cache.positions_open_count(),
             "closed_positions": engine.cache.positions_closed_count(),
+            "maintenance_margin": engine.portfolio.account(venue=Venue("SIM")).total_maintenance_margin(USDT),
         }
     finally:
         engine.dispose()
@@ -141,6 +142,7 @@ def test_market_order_completes_submit_accept_fill_and_opens_position():
     assert result["fill_count"] == 1
     assert result["open_positions"] == 1
     assert result["closed_positions"] == 0
+    assert result["maintenance_margin"] == Money.from_str("150.00125000 USDT")
 
 
 def test_identical_synthetic_replay_has_identical_lifecycle_result():
