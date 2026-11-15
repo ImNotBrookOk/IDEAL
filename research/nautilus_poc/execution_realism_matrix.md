@@ -328,3 +328,63 @@ The replay snapshot includes deterministic run counts, summary/account state, fi
 ### Boundary
 
 This is a POC audit hash, not the upstream NautilusTrader BLAKE3 canonical result and not a production event-sourcing/checkpoint design. It covers deterministic backtest replay and reset within one process. Durable process restart, persisted checkpoints, crash recovery, cross-process hash equivalence, schema migration and canonical hashing of every IDEAL domain event remain open.
+
+
+## 12. Durable process recovery: Nautilus cache adapters and SQLite journal prototype
+
+### NautilusTrader v2.0.0rc9 persistence architecture
+
+Source audit:
+- [`CacheConfig`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/common/src/cache/config.rs): `persist_account_events=true`, `save_market_data=false`, `flush_on_start=false`, tick/bar capacities default to 10,000, `drop_instruments_on_reset=true`.
+- [Cache database adapter contract](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/common/src/cache/database.rs): persists currencies, instruments, accounts, orders, positions, order/position snapshots, actor/strategy state, account events and supported market data.
+- [Python cache wrapper](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/common/src/python/cache.rs): `PyCache.__new__` calls `Cache::try_new(config, None)`; no Python `set_database` method is exposed.
+- [Python BacktestEngine wrapper](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/python/engine.rs): constructs `BacktestEngine::new(config)`; no cache database factory injection is exposed.
+- [LiveNode builder](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/live/src/node/builder.rs) supports `with_cache_database_factory`; [Python LiveNode builder](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/live/src/python/node.rs) exposes this through the registered cache factory.
+- [LiveNodeConfig](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/live/src/node/config.rs) has `load_state` and `save_state`, both false by default. These load/save actor and strategy state; they do not constitute a full process checkpoint of all engine scheduling/data-cursor state. LiveNode rejects the Backtest environment.
+- [Redis adapter](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/infrastructure/src/redis/cache.rs): Redis 6.2+ required. It persists cache entities and state, but its `add_quote`, `add_trade`, `add_funding_rate`, `add_bar` and `add_order_book` methods explicitly return unsupported errors. Its `flush()` invokes `FLUSHDB`, clearing the entire logical Redis database, including other traders and user keys.
+- [PostgreSQL adapter](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/infrastructure/src/sql/cache.rs): supports quote, trade, funding-rate and bar persistence, but explicitly does not support order-book persistence. Its `flush()` deletes only rows for the configured trader. PostgreSQL schema migrations are required; integration tests require a running PostgreSQL service and are Linux-only.
+- No SQLite cache adapter exists in the pinned repository tree.
+
+**Conclusion:** Nautilus cache persistence is not a complete replay/checkpoint system. Redis is unsuitable as the only historical market-data store in this release and its flush semantics are unsafe for a shared logical database. PostgreSQL stores more market data but not L2 order books. Neither is injectable into the Python `BacktestEngine` wrapper in this pin. LiveNode supports cache DB injection and component state load/save, but it is not a BacktestEngine checkpoint mechanism.
+
+### IDEAL SQLite event journal POC
+
+Added:
+- [`event_journal.py`](event_journal.py)
+- [`test_event_journal.py`](test_event_journal.py)
+
+Implementation:
+- SQLite file-backed database, WAL mode, `synchronous=FULL`, foreign keys and configurable busy timeout.
+- Schema version stored in `PRAGMA user_version`; newer unsupported schemas fail closed.
+- Append-only event table with monotonically assigned sequence, unique event ID, event type, event timestamp, canonical payload, previous hash and SHA-256 event hash.
+- Hash chain starts from a fixed genesis hash; every event commits in `BEGIN IMMEDIATE` transaction.
+- Duplicate event ID with identical content is idempotent; conflicting content raises an error.
+- Checkpoints store canonical state JSON, state hash, event sequence and chain hash at that point.
+- Restore verifies the full event chain, checkpoint state hash and chain anchor, then returns the checkpoint plus events after its sequence.
+- Floating-point payloads are rejected; exact financial values must be decimal strings.
+- No external dependency or database server is required.
+
+Ten tests cover:
+1. Close/reopen durability.
+2. Abrupt writer-process exit after a committed event, then WAL recovery from a new process/connection.
+3. Event-ID idempotency and conflicting duplicate rejection.
+4. Event payload tamper detection.
+5. Snapshot/checkpoint restore and post-checkpoint event replay.
+6. Snapshot chain-anchor tamper detection.
+7. Float rejection.
+8. Newer schema version rejection.
+9. Event metadata-column tampering (event ID/type/timestamp columns must agree with canonical payload).
+10. Snapshot-state tampering (stored state must match its snapshot hash).
+
+Verification: [final PR-head CI run 43756560957](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756560957), **71 passed in 0.50s**, exact NautilusTrader pin / Ubuntu 24.04 / Python 3.14.
+
+### Production boundaries and open risks
+
+- The SQLite journal is an isolated research prototype, not integrated into IDEAL runtime, NautilusTrader Cache or trading execution.
+- SQLite is single-writer; IDEAL should serialize writes through one journal writer/queue.
+- WAL and `synchronous=FULL` improve local durability but do not replace filesystem persistence, backups or off-host recovery.
+- The database file must reside on persistent local storage, not an ephemeral worker filesystem or unsupported network filesystem.
+- Encryption at rest, key management, backup verification, retention/compaction, schema migration tests, disk-full handling, corruption recovery and write-latency/capacity benchmarks remain open.
+- The hash chain is stored in the same database it protects. It detects accidental or partial edits, but a malicious writer with full database access can recompute the entire chain. An off-host signed checkpoint, HMAC key kept outside the database, or immutable external hash anchor is required for stronger tamper evidence.
+- The current snapshot stores generic state JSON and an event-chain anchor. It does not yet encode the full Nautilus/IDEAL engine state or safely restore live exchange connections and outstanding orders.
+- A fresh deterministic replay with corrected market/FX data remains the verified fallback for backtests; live recovery requires exchange reconciliation and explicit owner-approved architecture.
