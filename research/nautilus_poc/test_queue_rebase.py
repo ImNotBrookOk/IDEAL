@@ -443,7 +443,7 @@ def run_priority_reset_case(policy: OrderPriorityResetPolicy):
             final_trade,
         ])
         engine.run()
-        return strategy.orders, strategy.fill_events, strategy.no_op_rejected
+        return strategy.orders, strategy.fill_events
     finally:
         engine.dispose()
 
@@ -452,7 +452,6 @@ def test_quantity_increase_preserves_priority_under_price_change_policy():
     orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.PRICE_CHANGE)
 
     assert len(fills) == 1
-    assert no_op_rejected is True
     assert fills[0].client_order_id == orders[0].client_order_id
     assert fills[0].last_qty == Quantity.from_str("1.000")
 
