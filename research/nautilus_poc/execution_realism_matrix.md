@@ -412,3 +412,53 @@ Added [`benchmark_event_journal.py`](benchmark_event_journal.py) and a non-gatin
 Environment: GitHub-hosted Ubuntu 24.04 x86_64, 4 vCPU, Python 3.14.10, SQLite 3.45.1; peak process RSS 36,964 KiB (~36.1 MiB). Benchmark step is informational and asserts no throughput threshold.
 
 **Interpretation:** the standard-library prototype is inexpensive in this small synthetic workload. These figures are not a production SLO, not a measurement of an Oracle Always Free VM, and not evidence of durable storage on an ephemeral runner. The test writes one event per transaction; payload shape, disk class, WAL checkpoint frequency, concurrency, backup traffic and long-run growth will materially affect results. The next capacity gate must run on the actual candidate worker with persistent storage and realistic IDEAL event distributions.
+
+
+## 14. ARM64 compatibility and infrastructure candidate
+
+### POC compatibility
+
+Changed `.github/workflows/nautilus-poc.yml` to a two-runner matrix:
+- `ubuntu-24.04` x86_64
+- `ubuntu-24.04-arm` ARM64
+
+[final PR-head CI run 43757428845](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43757428845) completed both jobs successfully:
+- x86_64: **71 passed in 0.40s**
+- ARM64: **71 passed in 0.49s**
+- Exact `nautilus_trader==2.0.0rc9`, Python 3.14.10, Ubuntu 24.04 / glibc 2.39.
+- The pinned PyPI release includes a `cp314 manylinux_2_34_aarch64` wheel; Ubuntu 24.04 glibc 2.39 satisfies the wheel's glibc floor.
+
+### SQLite benchmark cross-architecture comparison
+
+Same CI run, 5,000 events per payload size, WAL + synchronous FULL:
+
+| Architecture | Payload | Throughput | p50 | p95 | p99 | Peak RSS |
+|---|---:|---:|---:|---:|---:|---:|
+| x86_64 | 256B | 2,863/s | 0.158 ms | 0.390 ms | 0.896 ms | 35.6 MiB |
+| x86_64 | 1,024B | 4,075/s | 0.161 ms | 0.372 ms | 0.694 ms | 35.6 MiB |
+| ARM64 | 256B | 2,659/s | 0.320 ms | 0.791 ms | 1.294 ms | 34.4 MiB |
+| ARM64 | 1,024B | 2,735/s | 0.326 ms | 0.555 ms | 1.019 ms | 34.4 MiB |
+
+x86_64 maximum append latency outliers reached ~101–111 ms; ARM64 maxima were ~3.2–4.4 ms in this run. These are noisy GitHub-hosted runner measurements and should not be interpreted as a stable architecture ranking. Both jobs use 4 reported CPUs; Oracle A1 is limited to 2 OCPU in the Always Free allocation.
+
+### Oracle Cloud Always Free candidate
+
+Official Oracle documentation currently lists an Always Free Ampere A1 allocation of **2 OCPU and 12 GB RAM**, plus up to **200 GB block storage** and **10 TB outbound data transfer/month** within Always Free quotas. A1 is ARM64, and the pinned NautilusTrader wheel/POC has now passed on ARM64.
+
+Constraints:
+- Oracle public region list shows Sydney and Melbourne as the nearest public OCI regions; no New Zealand public OCI region is listed.
+- Home region is selected at signup and cannot be changed later; Always Free capacity is region/availability-domain dependent.
+- A1 capacity errors can block instance creation; do not upgrade to paid capacity. Wait or use a different eligible availability domain/region only if it remains free.
+- Oracle can reclaim idle A1 instances after sustained low utilisation (CPU, memory and network metrics below documented thresholds over a seven-day window).
+- Signup requires a supported credit/debit card for verification and may place a temporary authorisation hold; Oracle states it is not a service charge. No account was created and no card details were entered.
+- Always Free resources are not an uptime SLA. Persistent boot/block storage must remain within free quotas and the account must not be upgraded to PAYG or create paid resources.
+
+### Other free-tier options
+
+- Google Cloud's free Compute Engine e2-micro allowance is restricted to selected US regions and is too small/remote for the full IDEAL worker.
+- AWS's current new-account free plan is time-limited rather than a permanent free VM allocation.
+- Cloudflare Workers Free is suitable for a lightweight API/control-plane edge function, not a continuously running Python/Nautilus engine (request CPU limits and serverless lifecycle).
+
+### Current infrastructure decision
+
+Oracle A1 is the **leading candidate, not an approved deployment**. Do not create an account or provision a VM without owner approval. First verify the exact home-region choice, available A1 capacity, persistent-volume quotas and idle-reclamation risk. If free capacity is unavailable, remain in GitHub Actions/manual research mode; do not upgrade or incur cost.
