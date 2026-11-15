@@ -376,7 +376,7 @@ Ten tests cover:
 9. Event metadata-column tampering (event ID/type/timestamp columns must agree with canonical payload).
 10. Snapshot-state tampering (stored state must match its snapshot hash).
 
-Verification: [CI run 43756454616](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756454616), **71 passed in 0.41s**, exact NautilusTrader pin / Ubuntu 24.04 / Python 3.14.
+Verification: [final PR-head CI run 43756560957](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756560957), **71 passed in 0.50s**, exact NautilusTrader pin / Ubuntu 24.04 / Python 3.14.
 
 ### Production boundaries and open risks
 
