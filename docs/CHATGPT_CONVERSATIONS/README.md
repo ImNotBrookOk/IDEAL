@@ -54,3 +54,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-015-sqlite-journal-benchmark.md](2026-11-16-015-sqlite-journal-benchmark.md) | 5k-event SQLite WAL/FULL benchmark; ~10.8–11.1k events/s on GitHub 4-vCPU runner, 35–36 MiB RSS; 71 tests pass; PR #21 merged; target free worker remains unverified |
 
 | [2026-11-16-016-arm64-free-infrastructure.md](2026-11-16-016-arm64-free-infrastructure.md) | NautilusTrader POC passes 71 tests on x86_64 and ARM64; Oracle A1 leading candidate (2 OCPU/12GB) with capacity, idle-reclaim and card-verification risks; PR #22 merged; no VM provisioned |
+
+| [2026-11-16-017-order-amendment-priority.md](2026-11-16-017-order-amendment-priority.md) | Price-change queue rebasing, quantity-decrease priority and no-op modification rejection; 77 tests pass on x86_64 and ARM64; PR #23 merged; venue-specific amendment priority remains open |
