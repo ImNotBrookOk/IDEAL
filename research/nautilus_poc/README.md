@@ -69,7 +69,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest branch verification: **27 tests passed** in [GitHub Actions run 43693369153](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43693369153) on the pre-documentation test revision. The final documentation/test assertion revision is rerunning CI before the pull request is opened.
+Latest test verification: **27 tests passed in 0.18s** in [GitHub Actions run 43693535483](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43693535483), including explicit assertions that the engine logs both the liquidation trigger and the no-executable-bid skip in the empty-L2-book case.
 
 ## Still unverified
 
