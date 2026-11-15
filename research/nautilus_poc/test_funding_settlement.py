@@ -52,7 +52,7 @@ def make_quote(offset: int) -> QuoteTick:
     return QuoteTick(
         instrument_id=INSTRUMENT_ID,
         bid_price=Price.from_str("60000.00"),
-        ask_price=Price.from_str("60001.00"),
+        ask_price=Price.from_str("60000.50"),
         bid_size=Quantity.from_str("1.000"),
         ask_size=Quantity.from_str("1.000"),
         ts_event=timestamp,
