@@ -113,7 +113,7 @@ Added `impact_calibration.py`, a standard-library-only offline analysis utility.
 
 It calculates side-aware realized implementation shortfall:
 - BUY: `(fill_vwap / decision_mid - 1) × 10,000` bps.
-- SELL: `(decision_mid / fill_vwap - 1) × 10,000` bps, expressed using the equivalent signed-return convention in code.
+- SELL: `-(fill_vwap / decision_mid - 1) × 10,000` bps.
 - Residual impact is measured as realized slippage less half the quoted spread; this is a diagnostic decomposition, not a causal impact estimate.
 - It reports fill ratio, volume-weighted mean slippage, p50/p90/p95, and training buckets by order-size participation versus displayed depth, spread, volatility and latency.
 - It sorts chronologically, uses the first 70% for descriptive calibration and the final 30% as an untouched temporal check, reports observed coverage against the training p90, hashes the source CSV and rejects mixed provenance, duplicate IDs and invalid fill records.
@@ -138,7 +138,15 @@ All tests use synthetic BTCUSDT perpetual fixtures, zero fees to isolate the tes
 | Competing-order trade budget | Two 2-unit resting BUY limits; one 3-unit SELL trade; consumption enabled; queue tracking disabled to isolate consumption | Aggregate fills cannot exceed the 3-unit trade size |
 | L1 probabilistic slippage | BUY market order at ask 40,001.0; tick size 0.1; `prob_slippage=1.0` | Fill at 40,001.1 |
 | L2 depth walking | 1.500-unit BUY; asks 0.400 @ 40,001.0 and 0.600 @ 40,002.0 | Two fills of 0.400 and 0.600 at their respective levels; residual 0.500 unfilled |
-| Competing L2 market orders | Two 0.750-unit BUYs against 1.000 total ask depth; consumption enabled | Aggregate fill quantity exactly 1.000; no reuse of consumed depth |\n| L2 snapshot queue decrease | Queue 10.000; replacement snapshot 8.000; BUY trade 9.000 | Queue caps at 8.000; 1.000 fills |\n| L2 snapshot queue increase | Queue 10.000; replacement snapshot 15.000; BUY trade 11.000 | Existing queue remains 10.000; 1.000 fills |\n| L3 MBO snapshot identity | Retain IDs 101/102; add new ID 103; then delete ID 101 | Only previously tracked IDs remain ahead; 1.000 fills on 6.000 trade |\n| L3 MBO cancel/delete | Delete 5.000-unit order ID 101 from 10.000 ahead | Queue advances by exactly 5.000; 1.000 fills on 6.000 trade |\n| L3 MBO size decrease | ID 101 decreases 5.000 → 3.000 | Queue advances 2.000; 1.000 fills on 9.000 trade |\n| L3 MBO size increase | ID 101 increases 5.000 → 7.000 | Queue ahead increases to 12.000; 11.000 trade does not fill |\n| L3 partial fills | 10.000 ahead; 5.000-unit simulated order; trades 12.000 then 3.000 | Partial fills 2.000 then 3.000 |\n| Impact calibration arithmetic | BUY and SELL parent-order examples; 2 bps spread | Both directions report 10 bps adverse slippage and 9 bps residual after half-spread; unfilled order is retained in fill-ratio counts |
+| Competing L2 market orders | Two 0.750-unit BUYs against 1.000 total ask depth; consumption enabled | Aggregate fill quantity exactly 1.000; no reuse of consumed depth |
+| L2 snapshot queue decrease | Queue 10.000; replacement snapshot 8.000; BUY trade 9.000 | Queue caps at 8.000; 1.000 fills |
+| L2 snapshot queue increase | Queue 10.000; replacement snapshot 15.000; BUY trade 11.000 | Existing queue remains 10.000; 1.000 fills |
+| L3 MBO snapshot identity | Retain IDs 101/102; add new ID 103; then delete ID 101 | Only previously tracked IDs remain ahead; 1.000 fills on 6.000 trade |
+| L3 MBO cancel/delete | Delete 5.000-unit order ID 101 from 10.000 ahead | Queue advances by exactly 5.000; 1.000 fills on 6.000 trade |
+| L3 MBO size decrease | ID 101 decreases 5.000 → 3.000 | Queue advances 2.000; 1.000 fills on 9.000 trade |
+| L3 MBO size increase | ID 101 increases 5.000 → 7.000 | Queue ahead increases to 12.000; 11.000 trade does not fill |
+| L3 partial fills | 10.000 ahead; 5.000-unit simulated order; trades 12.000 then 3.000 | Partial fills 2.000 then 3.000 |
+| Impact calibration arithmetic | BUY and SELL parent-order examples; 2 bps spread | Both directions report 10 bps adverse slippage and 9 bps residual after half-spread; unfilled order is retained in fill-ratio counts |
 
 ### Verification
 
@@ -155,11 +163,11 @@ Upstream source tests also cover L1 partial queue depletion and shared trade bud
 
 ## 4. Gaps and risks still open
 
-1. IDEAL has not yet reproduced L2 snapshot rebasing or L3 MBO order-ID queue tracking in its own Python POC.
-2. Queue behavior under partial fills, cancellations, amendments and the selected exchange's exact priority rules needs additional tests. No venue is selected.
-3. One-tick L1 slippage is not a market-impact curve. No empirical calibration has been performed for order size, volatility, spread, depth, latency or adverse selection.
-4. No test here covers spread widening, latency races, stale book updates, hidden liquidity, or venue-specific matching priority.
-5. The tests use zero fees to isolate execution mechanics. Fee, funding and market-impact costs must be combined in later strategy validation.
+1. Empirical calibration remains blocked until a venue is selected and representative historical L2 snapshots/trades and execution outcomes are available. The new utility is validated on synthetic fixtures only.
+2. The POC reproduces external L3 MBO order deletion and size updates. Simulated-client amendment reset policies are source-audited; not every policy combination has a Python end-to-end test. Venue-specific order amendment/cancellation priority remains unverified.
+3. No test here covers spread widening, latency races, stale book updates, hidden liquidity or adverse selection.
+4. The tests use zero fees to isolate execution mechanics. Fee, funding and empirically calibrated market impact must be combined in later strategy validation.
+5. Simulator queue estimates rely on visible feed data and documented FIFO assumptions; they cannot reconstruct hidden queue, feed gaps or priority rules absent from the source venue.
 
 ## 5. Current decision
 
