@@ -118,3 +118,20 @@ The following documentation commits were created sequentially on `main` and all 
 - Audit index `docs/CHATGPT_CONVERSATIONS/README.md`: `0ea0288af9b46004cabe3203d648f0c3310cdeb9`.
 
 Read-back verification confirmed the validation report contains the BLOCKED disposition and historical sample size evidence; ROADMAP links the report and keeps the gate open; the shortlist contains the follow-up findings; this record contains the retrieval failures; and the audit index contains record 022. The final audit-record update below records these commit references.
+
+
+## 6. Alternative-source screening addendum
+
+After the initial audit publication, additional sources were screened:
+- Hugging Face `MaximumLeverage/crypto-lob-stream`: MIT dataset card, 251,388,868 rows / 1.72 GB, BTC/ETH/SOL Binance L2 diffs/trades/snapshot anchors, sequence-reconstructable from 2026-06-03, known 43-minute outage on 2026-07-05. The dataset card does not clearly identify spot vs perpetual market, so it is not accepted as target-market calibration data. It documents ghost-level accumulation unless depth is pruned after each update.
+- `Goodie-Goody/crypto_lob_stream_pypi`: MIT, alpha package; PyPI 0.9.2 released 2026-08-30; latest inspected GitHub commit dated 2026-09-01. Supports Binance USDⓈ-M, OKX swap and Bybit linear, with known sequence, checksum, resync and file-write limitations. Source inspected only; no install/tests/adoption.
+- CryptoHFTData: anonymous free tier documents 60 files/minute and hourly Parquet for multiple derivatives venues. Its own data-quality register states the October 2026 correction release was not yet deployed and documents serious timestamp, snapshot, reconnect and irrecoverable historical issues. Standard terms restrict use to internal/personal research and prohibit redistribution/downstream embedding without a special licence. Held pending corrections and licence confirmation.
+- Direct unauthenticated CryptoHFTData download and Tardis retrieval both failed at DNS resolution in this environment; no binary data from any candidate was obtained.
+
+Updated docs:
+- `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md` section 8.
+- `docs/EXCHANGE_AND_DATA_SHORTLIST.md` sections 8–9.
+- `ROADMAP.md` Phase 01 data gate status.
+- Audit index row for record 022.
+
+No candidate passed actual-file validation. No vendor, venue, dependency, API key or account was selected or connected.
