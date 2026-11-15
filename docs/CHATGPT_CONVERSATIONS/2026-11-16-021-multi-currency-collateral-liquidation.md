@@ -269,3 +269,7 @@ The docs confirm a Tardis first-of-month CSV sample path, including a documented
 - Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.
 
 **Next task:** validate a no-cost historical L2 sample end-to-end (Tardis first-of-month CSV and/or OKX historical download) and produce a machine-readable quality report. Only after that should the owner decide whether a venue/product/account-mode shortlist is sufficiently grounded for approval.
+
+### 17. Additional sample retrieval attempt
+
+A live fetch of the documented Tardis `binance-futures/book_snapshot_5` sample URL timed out, while the container's direct network lookup could not resolve the dataset host. No sample bytes were obtained and no schema/data-quality validation is claimed. The shortlist and roadmap preserve this as the next task; it is not recorded as a vendor outage or proof of unavailability.
