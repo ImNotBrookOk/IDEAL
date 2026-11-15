@@ -50,6 +50,16 @@ def align_records(book_records, trade_records):
     age_histogram = collections.Counter()
     categories = collections.Counter()
     side_consistency = collections.Counter()
+    side_consistency_by_timestamp = {
+        "same_timestamp": collections.Counter(),
+        "strict_preceding": collections.Counter(),
+    }
+    side_consistency_by_age = {
+        "<=10ms": collections.Counter(),
+        "10-20ms": collections.Counter(),
+        "20-50ms": collections.Counter(),
+        ">50ms": collections.Counter(),
+    }
     outside_distance_histogram = collections.Counter()
     outside_distance_max_bps = 0.0
     outside_count = 0
@@ -77,7 +87,8 @@ def align_records(book_records, trade_records):
             return
         if ts < previous_book_ts:
             raise ValueError("trade precedes the currently applied book state")
-        if boundary_ts is not None and ts == boundary_ts:
+        is_same_timestamp = boundary_ts is not None and ts == boundary_ts
+        if is_same_timestamp:
             same_timestamp_trades += 1
 
         bid = book.best_bid()
@@ -107,9 +118,25 @@ def align_records(book_records, trade_records):
         categories[category] += 1
 
         if side == "buy":
-            side_consistency["buy_at_or_above_ask" if price >= ask else "buy_below_ask"] += 1
+            is_consistent = price >= ask
+            side_consistency["buy_at_or_above_ask" if is_consistent else "buy_below_ask"] += 1
         else:
-            side_consistency["sell_at_or_below_bid" if price <= bid else "sell_above_bid"] += 1
+            is_consistent = price <= bid
+            side_consistency["sell_at_or_below_bid" if is_consistent else "sell_above_bid"] += 1
+
+        outcome = "consistent" if is_consistent else "mismatch"
+        timestamp_group = "same_timestamp" if is_same_timestamp else "strict_preceding"
+        side_consistency_by_timestamp[timestamp_group][outcome] += 1
+        age = ts - previous_book_ts
+        if age <= 10:
+            age_group = "<=10ms"
+        elif age <= 20:
+            age_group = "10-20ms"
+        elif age <= 50:
+            age_group = "20-50ms"
+        else:
+            age_group = ">50ms"
+        side_consistency_by_age[age_group][outcome] += 1
 
         if distance_bps > 0:
             outside_count += 1
@@ -143,6 +170,14 @@ def align_records(book_records, trade_records):
         for threshold in (10, 20, 50, 100, 250)
     }
 
+    def summarize_consistency(counter):
+        total = counter["consistent"] + counter["mismatch"]
+        return {
+            "consistent": counter["consistent"],
+            "mismatch": counter["mismatch"],
+            "consistency_pct": (counter["consistent"] / total * 100.0) if total else None,
+        }
+
     return {
         "book_records": book_records_count,
         "trade_rows": trade_rows,
@@ -169,6 +204,14 @@ def align_records(book_records, trade_records):
             "max": outside_distance_max_bps,
         },
         "side_consistency": dict(side_consistency),
+        "side_consistency_by_timestamp": {
+            key: summarize_consistency(value)
+            for key, value in side_consistency_by_timestamp.items()
+        },
+        "side_consistency_by_age": {
+            key: summarize_consistency(value)
+            for key, value in side_consistency_by_age.items()
+        },
         "side_consistency_pct": (side_consistent / aligned * 100.0) if aligned else None,
         "side_mismatch_pct": ((aligned - side_consistent) / aligned * 100.0) if aligned else None,
     }
