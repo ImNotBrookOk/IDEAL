@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run archive reconstruction unit tests (expected RED until implementation)
+      - name: Run archive reconstruction unit tests
         env:
           PYTHONPATH: research
         run: python -m unittest discover -s research/tests -v
