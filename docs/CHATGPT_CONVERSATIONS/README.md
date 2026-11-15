@@ -44,3 +44,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-010-funding-missing-price-failure.md](2026-11-16-010-funding-missing-price-failure.md) | No mark and no top-of-book at funding boundary; L2 book-clear regression proves fatal backtest funding error and no same-run retry; 55 tests pass; PR #16 merged |
 
 | [2026-11-16-011-funding-fx-conversion-failure.md](2026-11-16-011-funding-fx-conversion-failure.md) | Inverse BTCJPY/BTC-settled position in USD account; temporary BTC/USD entry quote purged after fill; valid mark but missing funding FX conversion causes fatal failure; 56 tests pass; PR #17 merged |
+
+| [2026-11-16-012-funding-replay-recovery.md](2026-11-16-012-funding-replay-recovery.md) | Fresh deterministic replay with restored BTC/USD quote completes inverse BTCJPY funding settlement; funding debit observable; 57 tests pass; PR #18 merged; same-engine reset/replay remains open |
