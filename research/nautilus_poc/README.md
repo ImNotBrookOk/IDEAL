@@ -75,7 +75,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **61 tests passed in 0.23s** in [GitHub Actions run 43755658769](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43755658769), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **69 tests passed in 0.35s** in [GitHub Actions run 43756299486](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756299486), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
@@ -111,3 +111,6 @@ No claim of production suitability, profitability or live-execution parity is ma
 
 
 16. Canonical replay audit: `replay_audit.py` produces versioned compact JSON and SHA-256 digests; `test_replay_integrity.py` compares independent fresh-engine replays and same-engine `reset()` replays, verifies tamper sensitivity and rejects floats in favor of exact decimal strings. Raw client order IDs advance across same-engine reset, so the test maps them to deterministic sequence aliases before hashing. Four replay-integrity tests pass. Durable process restart checkpoint/restore remains open.
+
+
+17. Durable replay prototype: `event_journal.py` is a standard-library SQLite WAL append-only event journal with FULL synchronous commits, schema versioning, event-ID idempotency/conflict detection, SHA-256 hash chaining, canonical decimal-string payloads, checkpoint state hashes and post-checkpoint replay. `test_event_journal.py` covers close/reopen durability, abrupt writer-process exit recovery, tamper detection, duplicate handling, checkpoint/tail restore, float rejection and schema version rejection. This is isolated research code, not runtime integration. Requires persistent local storage and a backup/restore policy before production use.
