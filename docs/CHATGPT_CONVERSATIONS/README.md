@@ -56,3 +56,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-016-arm64-free-infrastructure.md](2026-11-16-016-arm64-free-infrastructure.md) | NautilusTrader POC passes 71 tests on x86_64 and ARM64; Oracle A1 leading candidate (2 OCPU/12GB) with capacity, idle-reclaim and card-verification risks; PR #22 merged; no VM provisioned |
 
 | [2026-11-16-017-order-amendment-priority.md](2026-11-16-017-order-amendment-priority.md) | Price-change queue rebasing, quantity-decrease priority and no-op modification rejection; 77 tests pass on x86_64 and ARM64; PR #23 merged; venue-specific amendment priority remains open |
+
+| [2026-11-16-018-same-engine-funding-reset.md](2026-11-16-018-same-engine-funding-reset.md) | Same-engine reset after funding FX failure; reset rewinds but does not restore purged FX instrument; false-success replay with zero fills/positions; fresh-engine reconstruction remains the verified recovery path; 78 tests pass on x86_64 and ARM64; PR #24 merged |
