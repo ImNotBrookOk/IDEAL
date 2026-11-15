@@ -251,3 +251,28 @@ Observed result: `BacktestEngine.run()` raises `RuntimeError` matching `Funding 
 This confirms the distinction between exchange-level pending-rate retention and backtest-engine recovery: the exchange retains the failed pending item internally, but the engine surfaces a fatal error and does not continue replaying later data. Recovery must be explicit (e.g. reset and replay with corrected market data); that recovery procedure is not yet end-to-end tested.
 
 Final test-only branch verification before documentation update: [CI run 43753816852](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753816852), **55 passed in 0.20s**, exact pinned release / Ubuntu 24.04 / Python 3.14.
+
+
+## 9. Missing FX conversion at funding settlement
+
+New IDEAL POC file: [`test_funding_fx_conversion.py`](test_funding_fx_conversion.py).
+
+Fixture design:
+- Open an inverse BTCJPY perpetual position settled in BTC, with account base currency USD.
+- A temporary BTC/USD spot quote is present at entry so the risk engine can validate the position. The order is a marketable limit order against the L2 ask because market-order risk validation requires an available market price.
+- After the BTCJPY position fills, the strategy purges the temporary BTC/USD instrument from cache. The position remains open.
+- A mark price for BTCJPY is supplied before funding settlement, so funding valuation itself has a valid price.
+- The remaining ETH/USD trigger quote does not provide a conversion path from BTC to USD.
+- The funding boundary is advanced by a later event.
+
+Observed result: the funding boundary raises a fatal `RuntimeError: Funding settlement failed`. The test asserts one entry fill and the position remains open. This isolates the FX-conversion failure from missing settlement valuation price.
+
+Earlier attempts and corrections:
+- A BTCUSD inverse instrument inadvertently provided its own BTC/USD conversion rate, so it did not reproduce missing FX.
+- Removing the quote before entry caused the risk engine to deny the order with `Account currency conversion failed: No exchange rate from BTC to USD`; a position could not be opened.
+- A first replay ended before the funding boundary, so it never attempted settlement. A later event was added to advance beyond the boundary.
+- Final fixture uses BTCJPY plus a temporary BTC/USD quote purged after entry, a valid mark price, and a later event after the boundary.
+
+Verification: [CI run 43754511937](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754511937), **56 passed in 0.20s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.
+
+Explicit reset/replay recovery after the fatal conversion failure remains untested. This test establishes failure behaviour only; it does not implement recovery.
