@@ -11,9 +11,28 @@
 > Yes
 
 ### Assistant
-L2 depth and competing-order research is complete and merged.
+**L2 depth and competing-order research is complete and merged.**
 
-Two new tests reproduce multi-level L2 depth walking with a partially unfilled residual and competing market orders sharing finite displayed liquidity. The POC suite reported 35 passing tests. PR #11 was merged and the execution realism report, POC README, roadmap and conversation audit record 006 were updated.
+PR #11 merged.
+
+Two new tests now reproduce:
+
+1. **Multi-level depth walking:** a 1.5-unit market order consumes 0.4 units at the first ask and 0.6 at the second. The remaining 0.5 cannot fill because displayed liquidity is exhausted.
+2. **Competing orders:** two 0.75-unit market orders cannot reuse the same 1.0 units of displayed liquidity.
+
+**35 tests passing** in 0.14 seconds.
+
+- [Final CI run](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697786352)
+- [PR #11](https://github.com/ImNotBrookOk/IDEAL/pull/11)
+- Merge commit: `3d6a49ac7adb629b9bf7bcc5d7fe2b7f233e9b87)
+
+Documentation and audit:
+- [Execution realism report](https://github.com/ImNotBrookOk/IDEAL/blob/main/research/nautilus_poc/execution_realism_matrix.md)
+- [POC README](https://github.com/ImNotBrookOk/IDEAL/blob/main/research/nautilus_poc/README.md)
+- [Roadmap](https://github.com/ImNotBrookOk/IDEAL/blob/main/ROADMAP.md)
+- [Conversation audit record 006](https://github.com/ImNotBrookOk/IDEAL/blob/main/docs/CHATGPT_CONVERSATIONS/2026-11-15-006-l2-depth-competing-orders.md)
+
+L2 snapshot rebasing, L3 MBO queue tracking, queue cancellations/amendments and empirical calibration remained the next research tasks.
 
 ### User
 > Complete them all then return with the outcome. Make sure to correctly save the information along the way as you have been
@@ -28,34 +47,37 @@ The work is being split into independently testable parts:
 - Queue changes caused by cancellations, size amendments and partial fills.
 - Slippage and market-impact calibration.
 
-One important constraint: genuine empirical market-impact calibration requires historical order-book and trade data from a defined venue. IDEAL has not selected an exchange, and synthetic fixtures cannot establish real-world slippage. I’ll build and validate the calibration methodology, but I will not present synthetic results as empirical.
+One important constraint: **genuine empirical market-impact calibration requires historical order-book and trade data from a defined venue.** IDEAL has not selected an exchange, and synthetic fixtures cannot establish real-world slippage. I’ll build and validate the calibration methodology, but I will not present synthetic results as empirical.
 
 ### User
 > Did you document that last conversation. And update everything before I had to start a new conversation here in chatgpt? Lets continue
 
 ### Assistant
-Yes. The previous conversation was documented and its changes were saved to GitHub before you moved to this chat. I independently checked the repository.
+**Yes. The previous conversation was documented and its changes were saved to GitHub before you moved to this chat.** I independently checked the repository rather than relying only on the previous conversation's claims.
 
-Verified on main:
+Verified on `main`:
 
-- Conversation audit record 006 exists.
-- The conversation index lists record 006.
-- The execution realism report contains the L2 findings.
-- The POC README records the test coverage.
-- The roadmap was updated in PR #11.
+- [Conversation audit record 006](https://github.com/ImNotBrookOk/IDEAL/blob/main/docs/CHATGPT_CONVERSATIONS/2026-11-15-006-l2-depth-competing-orders.md) exists.
+- [Conversation index](https://github.com/ImNotBrookOk/IDEAL/blob/main/docs/CHATGPT_CONVERSATIONS/README.md) lists record 006.
+- [Execution realism report](https://github.com/ImNotBrookOk/IDEAL/blob/main/research/nautilus_poc/execution_realism_matrix.md) contains the L2 findings.
+- [POC README](https://github.com/ImNotBrookOk/IDEAL/blob/main/research/nautilus_poc/README.md) records the test coverage.
+- [Roadmap](https://github.com/ImNotBrookOk/IDEAL/blob/main/ROADMAP.md) is present and was updated in PR #11.
 
-PR #11 was confirmed merged at `3d6a49ac7adb629b9bf7bcc5d7fe2b7f233e9b87`; its final CI run reported 35 passing tests. The audit record also preserves failed test attempts and corrections.
+PR #11 is confirmed merged. Its merge commit is `3d6a49ac7adb629b9bf7bcc5d7fe2b7f233e9b87`. The final CI run reported **35 passing tests**.
+
+The audit record also preserves the failed test attempts and their corrections. The previous work is therefore recoverable; we do not need to repeat it.
 
 ### Assistant
-Current technical findings from the pinned NautilusTrader `v2.0.0rc9` source:
+### Current technical findings
 
-- L2 snapshot rebasing waits for a multi-delta snapshot to finish before recalculating queue-ahead estimates.
-- L3 MBO tracks individual order IDs ahead of a simulated order.
-- L3 cancellations can advance queue by the cancelled order's remaining displayed size.
-- Simulated-order amendments use a configurable priority-reset policy.
-- Partial fills must account for remaining order quantity and pending fill events.
+The pinned NautilusTrader source (`v2.0.0rc9`) confirms several important distinctions:
 
-These are simulator behaviours, not proof of how an unselected exchange prioritises orders.
+- **L2 snapshot rebasing:** the engine waits for a multi-delta snapshot to finish before recalculating queue-ahead estimates. A partial snapshot must not prematurely erase the existing estimate.
+- **L3 MBO:** queue tracking records individual market-book order IDs ahead of an IDEAL simulated order, rather than relying only on aggregate price-level size.
+- **Cancellation and amendments:** an L3 cancellation can advance the queue by the cancelled order's remaining displayed size. Successful simulated-order amendments use a configurable priority-reset policy.
+- **Partial fills:** queue state must account for remaining order quantity and pending fill events; otherwise the same displayed trade volume can be incorrectly allocated.
+
+These are simulator behaviours, not proof of how any unselected exchange will prioritise orders. I’m now turning the highest-impact cases into IDEAL-side regression tests.
 
 ## Operational audit log
 
