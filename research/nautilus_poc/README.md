@@ -73,7 +73,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **35 tests passed in 0.18s** in final-head [GitHub Actions run 43697638561](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697638561) on the L2 research branch, using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes five execution-realism tests: three L1 queue/consumption/slippage cases and two L2 depth/competing-order cases. Full findings, test history and caveats are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **35 tests passed in 0.15s** in final-head [GitHub Actions run 43697706395](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697706395) on the L2 research branch, using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes five execution-realism tests: three L1 queue/consumption/slippage cases and two L2 depth/competing-order cases. Full findings, test history and caveats are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
