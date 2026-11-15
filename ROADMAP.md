@@ -43,4 +43,11 @@ Implementation begins only after the planning baseline is reviewed and approved.
 Any new component, changed requirement, altered risk parameter or reordered dependency is a change request. Document rationale, impact, cost, risk and tests; obtain owner approval before implementation.
 
 ## Current state
+
+- Planning baseline: foundational documents exist; owner approval of the complete planning baseline is still required before implementation.
+- Phase 01: IN PROGRESS. The open-source shortlist, source-level findings, engine comparison and free-tier deployment constraints are recorded in [docs/REPO_RESEARCH.md](docs/REPO_RESEARCH.md).
+- Phase 01 remaining: pin exact stable versions/commits; complete one-exchange adapter and execution-semantics proof-of-concept; verify licence obligations and candidate worker account/capacity constraints; produce final component selection matrix with evidence and rejection reasons; obtain owner approval.
+- Phase 02: LOCKED until Phase 01 exit criteria and owner approval are satisfied.
+- No third-party dependencies have been adopted. No exchange account has been connected. No paper or live orders have been authorised.
+
 All implementation phases remain LOCKED pending completion and approval of the planning baseline and Phase 01 research.
