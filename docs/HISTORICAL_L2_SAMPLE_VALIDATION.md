@@ -543,3 +543,38 @@ Official source: https://app.okx.com/docs-v5/en/, “WS / Order book channel” 
 This creates a material live-parity constraint: public historical 10 ms 400-level archives do not prove that IDEAL can obtain the equivalent live feed on an ordinary account tier. A future deployment would need either confirmed VIP4 entitlement, a tested 100 ms full-depth feed, or a 10 ms BBO-only feed with explicitly reduced depth-dependent capabilities. Do not train/calibrate on 10 ms full-depth data and silently execute against 100 ms depth as if the data were equivalent. Any change in live feed granularity requires separate calibration, latency/staleness controls and strategy eligibility review.
 
 No VIP status, account or live feed was requested or connected. This is a research constraint only.
+
+
+### 12.12 Two-day no-lookahead trade-to-book alignment (16 November 2026)
+
+The expanded adjacent-day alignment workflow [#43776264061](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43776264061) completed successfully. It retrieved 11 and 12 November 400-level L2 archives plus the UTC+8 trade archives covering both UTC days, ran the six focused alignment unit tests, inspected the historical schema, and aligned trades to the strictly preceding valid BBO. At equal timestamps, the trade is consumed before applying the book update; this avoids look-ahead when archive ordering cannot establish which event occurred first.
+
+Both days passed the initial independent quality gates: non-zero aligned trades, zero trades without a preceding book, zero invalid-book matches, p95 preceding-book age <=20 ms and directional side consistency >=98%.
+
+| Measurement | 11 Nov 2026 | 12 Nov 2026 |
+|---|---:|---:|
+| L2 book records | 6,630,044 | 6,604,203 |
+| Aligned trades | 2,597,825 | 3,224,415 |
+| Trades without preceding book | 0 | 0 |
+| Trades on invalid book state | 0 | 0 |
+| Median preceding-book age | 6 ms | 6 ms |
+| p95 preceding-book age | 18 ms | 10 ms |
+| Maximum preceding-book age | 497 ms | 509 ms |
+| Same-timestamp trades (conservatively assigned to prior book) | 244,183 (9.400%) | 311,016 (9.646%) |
+| Trade-side directional consistency | 99.118% | 98.542% |
+| Outside preceding sampled spread | 64.445% | 62.584% |
+| Outside-spread distance p95 | 1.35 bps | 1.40 bps |
+
+Preceding-book age tail by day:
+- 11 Nov: >10 ms 194,754 (7.497%); >20 ms 96,808 (3.727%); >50 ms 20,039 (0.771%); >100 ms 2,608 (0.100%); >250 ms 177 (0.0068%).
+- 12 Nov: >10 ms 161,204 (4.999%); >20 ms 76,469 (2.372%); >50 ms 16,390 (0.508%); >100 ms 2,139 (0.066%); >250 ms 67 (0.0021%).
+
+Outside-spread distance distributions:
+- 11 Nov: p50 0.34 bps, p90 0.98 bps, p95 1.35 bps, p99 2.76 bps, maximum 10.38 bps.
+- 12 Nov: p50 0.35 bps, p90 1.01 bps, p95 1.40 bps, p99 2.82 bps, maximum 11.81 bps.
+
+The high outside-spread fraction does not mean 62–64% of trade rows are corrupt. A sampled 10 ms BBO may miss intermediate book states between updates; timestamp ties are conservatively compared with the preceding state; the archive has no sequence IDs to resolve exact ordering. High side consistency (98.54–99.12%) and low median/p95 ages are encouraging, but these are diagnostics, not proof of exact event synchronization or passive execution. The 497–509 ms maximum preceding-state ages demonstrate a small but real stale tail; a runtime consumer must fail closed or apply an explicit staleness policy rather than extrapolate or use stale depth for execution decisions.
+
+The workflow's initial acceptance assertions passed separately for each day. Artifact ID `14186960490`, SHA-256 `4e1e7cd7dece1882b72a07c85140aec39c95faa859e845de8be7eb09673ba55c`, contains only the summaries and small manifests, expires 18 November 2026 23:47 UTC. Raw archives were deleted before upload and were not committed.
+
+**Updated disposition:** two-day structural reconstruction and two-day no-lookahead trade/BBO alignment are provisionally passed for research. The 400-level historical data is viable for sampled spread/depth/imbalance and conservative taker-impact research, subject to staleness controls and the unresolved sequence-continuity limitation. It is not FIFO/queue-position or exact passive-fill grade. Live 10 ms full-depth feed entitlement and NZ derivatives-issuer eligibility remain separate hard gates. See sections 12.11 and the exchange shortlist section 13.10.
