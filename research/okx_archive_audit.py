@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse
 import collections
 import heapq
-import json
+import orjson
 import math
 import statistics
 import tarfile
@@ -177,28 +177,36 @@ def audit_records(records):
 
 def audit_archive(path):
     path = Path(path)
-    with tarfile.open(path, mode="r:gz") as archive:
-        members = [member for member in archive.getmembers() if member.isfile()]
-        data_members = [member for member in members if member.name.endswith((".data", ".jsonl", ".ndjson"))]
-        if len(data_members) != 1:
-            raise ValueError(f"expected exactly one NDJSON data member, found {len(data_members)}")
-        stream = archive.extractfile(data_members[0])
+    with tarfile.open(path, mode="r|gz") as archive:
+        member = archive.next()
+        while member is not None and not member.isfile():
+            member = archive.next()
+        if member is None or not member.name.endswith((".data", ".jsonl", ".ndjson")):
+            raise ValueError("expected one NDJSON data member in the tar archive")
+        stream = archive.extractfile(member)
         if stream is None:
             raise ValueError("unable to read archive data member")
 
-        def records():
-            for line_number, raw in enumerate(stream, start=1):
-                try:
-                    yield json.loads(raw)
-                except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-                    raise ValueError(f"invalid JSON at line {line_number}") from exc
+        summary = audit_records(records_from_stream(stream))
+        extra = archive.next()
+        while extra is not None:
+            if extra.isfile() and extra.name.endswith((".data", ".jsonl", ".ndjson")):
+                raise ValueError("expected exactly one NDJSON data member")
+            extra = archive.next()
 
-        summary = audit_records(records())
         summary["archive"] = str(path)
         summary["archive_bytes"] = path.stat().st_size
-        summary["member"] = data_members[0].name
-        summary["member_uncompressed_bytes"] = data_members[0].size
+        summary["member"] = member.name
+        summary["member_uncompressed_bytes"] = member.size
         return summary
+
+
+def records_from_stream(stream):
+    for line_number, raw in enumerate(stream, start=1):
+        try:
+            yield orjson.loads(raw)
+        except (orjson.JSONDecodeError, UnicodeDecodeError) as exc:
+            raise ValueError(f"invalid JSON at line {line_number}") from exc
 
 
 def main():
