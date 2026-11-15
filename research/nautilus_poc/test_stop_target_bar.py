@@ -13,6 +13,7 @@ from nautilus_trader.model import (
     Money,
     OmsType,
     OrderSide,
+    OrderType,
     Price,
     Quantity,
     QuoteTick,
@@ -38,6 +39,8 @@ class AmbiguousBracketStrategy(Strategy):
         self.fills = []
         self.triggered = []
         self.canceled = []
+        self.tp_order_id = None
+        self.sl_order_id = None
 
     def on_start(self):
         self.subscribe_quotes(INSTRUMENT.id)
@@ -51,14 +54,13 @@ class AmbiguousBracketStrategy(Strategy):
             order_side=OrderSide.BUY,
             quantity=Quantity.from_str("0.100"),
             contingency_type=ContingencyType.OCO,
-            entry_order_type=__import__(
-                "nautilus_trader.model",
-                fromlist=["OrderType"],
-            ).OrderType.MARKET,
+            entry_order_type=OrderType.MARKET,
             tp_price=Price.from_str("40010.0"),
             sl_trigger_price=Price.from_str("39990.0"),
             time_in_force=TimeInForce.GTC,
         )
+        self.sl_order_id = bracket[1].client_order_id
+        self.tp_order_id = bracket[2].client_order_id
         self.submit_order_list(bracket)
 
     def on_order_filled(self, event):
@@ -134,6 +136,8 @@ def run_ambiguous_bar_case(adaptive_ordering: bool):
             "open_positions": engine.cache.positions_open_count(),
             "closed_positions": engine.cache.positions_closed_count(),
             "open_orders": engine.cache.orders_open_count(),
+            "tp_order_id": strategy.tp_order_id,
+            "sl_order_id": strategy.sl_order_id,
         }
     finally:
         engine.dispose()
@@ -144,6 +148,8 @@ def test_ambiguous_bar_default_high_first_path_selects_take_profit():
 
     # Default synthetic path is O-H-L-C: TP is reached before SL.
     assert len(result["fills"]) == 2
+    exit_fill = next(fill for fill in result["fills"] if fill.client_order_id == result["tp_order_id"])
+    assert exit_fill.last_px == Price.from_str("40010.0")
     assert result["closed_positions"] == 1
     assert result["open_positions"] == 0
 
@@ -154,5 +160,7 @@ def test_ambiguous_bar_adaptive_low_first_path_selects_stop_loss():
     # Low is closer to open than high, so adaptive ordering is O-L-H-C.
     # The stop is reached first and the OCO sibling TP is canceled.
     assert len(result["fills"]) == 2
+    exit_fill = next(fill for fill in result["fills"] if fill.client_order_id == result["sl_order_id"])
+    assert exit_fill.last_px < Price.from_str("39990.0")
     assert result["closed_positions"] == 1
     assert result["open_positions"] == 0
