@@ -63,4 +63,4 @@ A conversation record is complete when the available transcript, operational evi
 
 | [2026-11-16-020-engine-poc-verification-and-roadmap-gate.md](2026-11-16-020-engine-poc-verification-and-roadmap-gate.md) | Verified latest 79-test NautilusTrader POC CI on x86_64 and ARM64; native-currency BTC/USDT funding test passed; infrastructure audit synchronized; Phase 01 remains open and implementation remains gated |
 
-| [2026-11-16-021-multi-currency-collateral-liquidation.md](2026-11-16-021-multi-currency-collateral-liquidation.md) | Added deterministic BTC-collateral/USDT-settled liquidation test; 81 POC tests pass on x86_64 and ARM64; PR #26 merged; simulator checks liquidation per settlement currency and leaves -0.05 USDT residual; roadmap, POC README, infrastructure and execution matrix synchronized |
+| [2026-11-16-021-multi-currency-collateral-liquidation.md](2026-11-16-021-multi-currency-collateral-liquidation.md) | Two Phase 01 multi-currency research gates: BTC collateral/USDT liquidation boundary and reporting-currency FX freshness; 84 POC tests pass on x86_64 and ARM64; PRs #26 and #27 merged; docs, roadmap and audits synchronized |
