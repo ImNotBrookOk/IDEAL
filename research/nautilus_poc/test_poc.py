@@ -36,3 +36,35 @@ def test_invalid_or_nonpositive_contract_inputs_are_rejected():
 def test_negative_fee_rate_is_rejected():
     with pytest.raises(ValueError):
         trading_fee(Decimal("10"), Decimal("1"), Decimal("1"), Decimal("-0.01"))
+
+
+
+def test_linear_short_pnl_is_the_inverse_of_long_pnl():
+    assert linear_pnl(
+        Decimal("60000"),
+        Decimal("58500"),
+        Decimal("0.2"),
+        Decimal("1"),
+        is_long=False,
+    ) == Decimal("300")
+
+
+def test_inverse_short_pnl_is_the_inverse_of_long_pnl():
+    assert inverse_pnl(
+        Decimal("60000"),
+        Decimal("63000"),
+        Decimal("100"),
+        Decimal("1"),
+        is_long=False,
+    ) == Decimal("-0.00007936507936507936507936508000")
+
+
+def test_contract_pnl_rejects_non_boolean_direction():
+    with pytest.raises(ValueError):
+        linear_pnl(
+            Decimal("60000"),
+            Decimal("61000"),
+            Decimal("0.1"),
+            Decimal("1"),
+            is_long="long",
+        )
