@@ -202,3 +202,51 @@ The dataset card also documents a roughly 43-minute capture interruption on 2026
 - One depth row-preview request returned HTTP 502, while metadata, snapshot/trade previews and a depth first-rows request returned data. This is an API preview failure, not a claim about the underlying Parquet file.
 
 **Disposition:** source-level and bounded API inspection only. The dataset is spot-only and has an early snapshot-anchor warning. It is not accepted for perpetual calibration. The historical perpetual L2 acceptance gate remains BLOCKED.
+
+
+## 10. OKX Swap / Tardis current-access investigation (16 November 2026)
+
+### 10.1 Exchange metadata and instrument scope
+
+The Tardis exchange metadata endpoint was reachable through the research fetch path:
+
+- `https://api.tardis.dev/v1/exchanges/okex-swap`
+- Response identifies `id=okex-swap`, `enabled=true`, historical coverage beginning `2019-03-30`, and available channels including `trades`, `trades-all`, `books-l2-tbt`, `books`, `bbo-tbt`, `mark-price`, `funding-rate`, `open-interest`, `instruments` and related statistics.
+- The exchange-specific Tardis page identifies the market as OKX perpetual swaps and documents first-of-month CSV samples without a Data API key.
+- A public first-of-month sample URL for a linear perpetual trade file was queried: `https://datasets.tardis.dev/v1/okex-swap/trades/2026/11/01/BTC-USDT-SWAP.csv.gz`. The research fetch path returned a binary body beginning with the gzip magic bytes (`1f 8b`), establishing that the URL resolves to a gzip response through that path. It did **not** provide a saved local file, HTTP headers, content length or a verifiable full-body hash.
+- Matching L2 URLs were queried for `BTC-USDT-SWAP` and `BTC-USD-SWAP`. The fetch service reported `CRAWL_UNEXPECTED_CONTENT_TYPE` for both compressed L2 responses. This is a fetch/parser limitation, not evidence of HTTP 404, vendor outage or absent data.
+
+The execution container was separately retried with HTTP HEAD against all three URLs; DNS resolution still failed with `[Errno -3] Temporary failure in name resolution`. The browser/fetch path and the container therefore have different network reachability. No actual file was placed in the working filesystem.
+
+### 10.2 Feed-generation discontinuity — material
+
+The current Tardis OKX Swap page (last updated 23 days before this research) lists API v5 channels as follows:
+
+- `books-l2-tbt`: tick-by-tick L2 updates (10 ms), available until **2026-05-21**.
+- `books`: incremental L2 depth updates (100 ms), available **2023-02-24 to 2024-07-19**, then again from **2026-05-21 onward**.
+- `trades-all`: non-aggregated trade messages, available since 2023-10-19.
+- `trades`: public swap trade execution stream.
+- `bbo-tbt`: best bid/offer updates at 10 ms, available since 2022-05-05.
+- `mark-price`, `funding-rate`, `open-interest`, `index-tickers` and `instruments` are also listed.
+
+The 21 May 2026 boundary coincides with a documented change in Tardis collection infrastructure from AWS Hong Kong to GCP Tokyo and a change in the OKX public WebSocket endpoint. Do not assume a homogeneous L2 event process across this boundary. The 10 ms tick-by-tick channel is not documented as available after that date; the currently listed `books` channel is 100 ms. This affects observable event granularity, queue-depletion inference, timing and comparisons between historical periods.
+
+Sources:
+- [Tardis OKX Swap historical coverage and channel dates](https://docs.tardis.dev/historical-data-details/okex-swap)
+- [Tardis OKX Swap exchange metadata](https://api.tardis.dev/v1/exchanges/okex-swap)
+- [Tardis downloadable CSV rules and schema](https://docs.tardis.dev/downloadable-csv-files)
+- [OKX official historical market data portal](https://www.okx.com/historical-data)
+
+### 10.3 CryptoHFTData correction status rechecked
+
+The current public [Known Gaps & Corrections](https://www.cryptohftdata.com/docs/data-gaps-and-corrections) page was re-fetched on 16 November 2026. It still states that the 2026-10 data-quality release is **not yet deployed**. Its own table continues to identify material order-book issues for `okx_futures` and other venues, including empty-book snapshots omitted from earlier files; the corrections are not recoverable for affected historical periods. It also lists planned, not yet published, OKX funding timestamp and ticker-volume history repairs, and planned OKX trade backfill from REST. These are explicit provider disclosures, not independent observations by IDEAL.
+
+**Disposition remains HOLD.** Do not use CryptoHFTData for calibration until deployment status changes, corrected partition boundaries are explicit, and independently downloaded samples pass the same reconstruction and cross-check matrix. Confirm permitted use separately; the provider's standard terms remain restrictive for redistribution and downstream embedding.
+
+### 10.4 Updated result
+
+- **Improved:** Tardis exchange metadata is reachable through the research fetch path; a November 2026 OKX linear-perpetual trade sample URL returns a gzip response through that path; current OKX channel dates and the post-May-2026 100 ms L2 feed are documented.
+- **Not achieved:** no L2 or trade artifact is saved locally; no response headers, byte counts, hashes, gzip integrity, CSV schema, row counts, timestamps, sequence continuity or reconstruction results are available.
+- **No pass:** the historical perpetual L2 acceptance gate remains **BLOCKED**. The trade URL response alone is not a usable paired dataset and does not validate order-book quality.
+- **No selection:** Tardis remains a no-key sample-evaluation candidate only. No venue, data vendor, exchange account, API key, paid service or runtime component is selected or authorised.
+- **Next test:** obtain the matching 2026-11-01 `incremental_book_L2`, `trades` and `derivative_ticker` artifacts through a network path that can save exact bytes; hash and validate them before any replay. Preserve the 2026-05-21 feed-generation boundary as a separate stratum in all analysis.
