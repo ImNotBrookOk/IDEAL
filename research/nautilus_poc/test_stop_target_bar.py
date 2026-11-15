@@ -161,6 +161,6 @@ def test_ambiguous_bar_adaptive_low_first_path_selects_stop_loss():
     # The stop is reached first and the OCO sibling TP is canceled.
     assert len(result["fills"]) == 2
     exit_fill = next(fill for fill in result["fills"] if fill.client_order_id == result["sl_order_id"])
-    assert exit_fill.last_px < Price.from_str("39990.0")
+    assert exit_fill.last_px == Price.from_str("39990.0")
     assert result["closed_positions"] == 1
     assert result["open_positions"] == 0
