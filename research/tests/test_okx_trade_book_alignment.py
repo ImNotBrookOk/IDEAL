@@ -50,6 +50,9 @@ class AlignmentTests(unittest.TestCase):
         result = align_records(books, trades)
         self.assertEqual(result["aligned_trades"], 1)
         self.assertEqual(result["sample_age_ms"]["max"], 25)
+        self.assertEqual(result["sample_age_threshold_counts"][">20"], 1)
+        self.assertEqual(result["sample_age_threshold_counts"][">50"], 0)
+        self.assertEqual(result["side_consistency_pct"], 100.0)
 
     def test_non_monotonic_book_timestamps_fail_closed(self):
         books = [snapshot(100), update(90, ask="100")]
