@@ -130,10 +130,11 @@ def audit_rows(rows) -> dict:
             first_exchange_ts = exchange_ts if first_exchange_ts is None else min(first_exchange_ts, exchange_ts)
             last_exchange_ts = exchange_ts if last_exchange_ts is None else max(last_exchange_ts, exchange_ts)
 
-        if is_snapshot and (not have_snapshot or not previous_snapshot):
-            book.reset()
-            snapshots += 1
-            have_snapshot = True
+        if is_snapshot:
+            if not have_snapshot or not previous_snapshot:
+                book.reset()
+                snapshots += 1
+                have_snapshot = True
         elif not have_snapshot:
             skipped += len(message_rows)
             previous_snapshot = is_snapshot
