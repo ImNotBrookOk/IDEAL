@@ -49,3 +49,10 @@ At the time of this audit entry, the workflow was still running. Its result must
 ## Disposition
 
 Two-day structural repeatability is provisionally passed. Trade alignment across both days is still pending. No venue is selected and no runtime integration is approved. Phase 01 remains IN PROGRESS; Phase 02 and implementation phases remain LOCKED.
+
+
+## Additional deployment constraint — live feed entitlement
+
+OKX's official WebSocket documentation states that 400-level 10 ms books-l2-tbt requires VIP4+; standard 400-level books updates at 100 ms; bbo-tbt is one-level/10 ms. Public historical 10 ms archives therefore do not establish equivalent live feed availability. Any 100 ms or BBO fallback requires separate calibration and must not inherit the 10 ms full-depth strategy assumptions. No account or VIP entitlement was checked or connected.
+
+Official source: https://app.okx.com/docs-v5/en/, “WS / Order book channel”.
