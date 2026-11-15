@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: okx-l2-depth-adjacent-comparison
+  group: okx-l2-depth-adjacent-comparison-fast
   cancel-in-progress: true
 
 jobs:
