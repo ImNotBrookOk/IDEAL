@@ -73,6 +73,39 @@ jobs:
             done
           } > research-output/manifest.txt
 
+      - name: Inspect historical record schema and sequence fields
+        run: |
+          python - <<'PY'
+          import orjson
+          import tarfile
+          path = "research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz"
+          with tarfile.open(path, mode="r|gz") as archive:
+              member = archive.next()
+              while member is not None and not member.isfile():
+                  member = archive.next()
+              if member is None:
+                  raise SystemExit("No L2 data member")
+              stream = archive.extractfile(member)
+              for index in range(5):
+                  raw = stream.readline()
+                  if not raw:
+                      break
+                  record = orjson.loads(raw)
+                  print({
+                      "sample": index,
+                      "keys": sorted(record),
+                      "sequence_fields": {
+                          key: record.get(key)
+                          for key in ("seqId", "prevSeqId", "checksum", "instId", "local_timestamp")
+                          if key in record
+                      },
+                      "action": record.get("action"),
+                      "ts": record.get("ts"),
+                      "bid_level_example": record.get("bids", [])[:1],
+                      "ask_level_example": record.get("asks", [])[:1],
+                  })
+          PY
+
       - name: Align trades to strictly preceding sampled BBO
         env:
           PYTHONPATH: research
