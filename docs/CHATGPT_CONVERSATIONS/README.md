@@ -60,3 +60,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-018-same-engine-funding-reset.md](2026-11-16-018-same-engine-funding-reset.md) | Same-engine reset after funding FX failure; reset rewinds but does not restore purged FX instrument; false-success replay with zero fills/positions; fresh-engine reconstruction remains the verified recovery path; 78 tests pass on x86_64 and ARM64; PR #24 merged |
 
 | [2026-11-16-019-multi-currency-margin-funding.md](2026-11-16-019-multi-currency-margin-funding.md) | Multi-currency margin account with no base currency; inverse BTCJPY funding debits BTC, linear BTCUSDT funding debits USDT, USD unchanged; portfolio equity remains per-currency; 79 tests pass on x86_64 and ARM64; PR #25 merged |
+
+| [2026-11-16-020-engine-poc-verification-and-roadmap-gate.md](2026-11-16-020-engine-poc-verification-and-roadmap-gate.md) | Verified latest 79-test NautilusTrader POC CI on x86_64 and ARM64; native-currency BTC/USDT funding test passed; infrastructure audit synchronized; Phase 01 remains open and implementation remains gated |
