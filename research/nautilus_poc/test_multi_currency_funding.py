@@ -179,6 +179,7 @@ def test_multi_currency_margin_account_settles_funding_in_native_currencies():
 
     # The inverse BTCJPY position settles in BTC; the linear BTCUSDT position
     # settles in USDT. With no account base currency, funding remains native.
-    assert funded["balances"][BTC] < baseline["balances"][BTC]
-    assert funded["balances"][USDT] < baseline["balances"][USDT]
-    assert funded["balances"][USD] == baseline["balances"][USD]
+    assert all(balance is not None for balance in baseline["balances"].values())
+    assert baseline["balances"][BTC] - funded["balances"][BTC] == Money.from_str("0.00016667 BTC")
+    assert baseline["balances"][USDT] - funded["balances"][USDT] == Money.from_str("0.60000000 USDT")
+    assert funded["balances"][USD] == baseline["balances"][USD] == Money.from_str("100000 USD")
