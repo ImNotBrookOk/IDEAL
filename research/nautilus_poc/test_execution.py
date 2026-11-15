@@ -47,7 +47,6 @@ class LimitQueueStrategy(Strategy):
         self.submitted = False
         self.order_ids = []
         self.fill_events = []
-        self.submitted = False
 
     def on_start(self):
         self.subscribe_quotes(INSTRUMENT.id)
