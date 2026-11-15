@@ -324,3 +324,82 @@ Prioritise the OKX 2026-11-12 BTC-USDT-SWAP module 5 archive and the two matchin
 ### 11.6 Direct archive retrieval attempt
 
 The direct 177.63 MB OKX CDN archive URL was opened through the web retrieval interface, which returned an inaccessible-file error for the `.tar.gz` resource. The container download utility then refused the URL because it had not been successfully viewed through that interface. This is a tooling/access-path limitation; it is not evidence that the CDN returned an HTTP error or that the file is unavailable. No partial archive was written. The actual-file validation gate remains blocked.
+
+
+## 12. OKX 2026-11-12 BTC-USDT-SWAP sample: byte-level and reconstruction validation (16 November 2026)
+
+### 12.1 Retrieval and artifact provenance
+
+The isolated GitHub Actions research run [#43766633587](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43766633587) completed successfully on branch `research/okx-l2-sample-2026-11-16`, head commit `8c3bfd549276637327be9c75c6113a03e79a4bf3`. All four job steps completed successfully. No secrets, exchange credentials or paid runner were used.
+
+- Artifact ID: `14182173189`
+- Artifact name: `okx-btc-usdt-swap-historical-sample`
+- Artifact size: 236,127,656 bytes
+- GitHub artifact SHA-256: `f4a664471e12a28314c726e3d51335b630361eb05d7ecf4330f539a58130b94d`
+- Artifact expiry: 2026-11-18 21:58:54 UTC (3-day retention configured by the workflow)
+- The artifact was downloaded again through the GitHub artifact API into the current analysis workspace. Its local SHA-256 exactly matched GitHub's recorded artifact digest. ZIP integrity test passed with no errors.
+
+Source archives inside the artifact:
+
+| File | Bytes | SHA-256 |
+|---|---:|---|
+| BTC 5,000-level L2, 2026-11-12 UTC | 186,255,630 | `bab7213b2944a8f8c9540064d8c5b217c84d82d41f17c2e30fa426800e42c99b` |
+| BTC trades, 2026-11-12 UTC+8 date | 18,720,850 | `1da901d447e66aa9bd9b0e57c9711cec27720adc093352d6456ea453a114545e` |
+| BTC trades, 2026-11-13 UTC+8 date | 31,904,876 | `cc3cbef246c1efb3c477eb05816a4d1f32843ae5a5996688a32ebab216d87eb8` |
+
+The L2 HTTP response recorded status 200 and content-length 186,255,630. Both trade ZIP responses also returned HTTP 200 with content-lengths matching the downloaded byte counts. TAR/GZIP and both ZIP integrity tests passed. The L2 tar contains one NDJSON member, `BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-12.data`, which expands to 891,030,123 bytes.
+
+### 12.2 L2 schema, cadence and full-day reconstruction
+
+An independent streaming parser processed all 86,400 NDJSON records:
+
+- Instrument: `BTC-USDT-SWAP` for all records.
+- 96 full snapshots and 86,304 incremental updates.
+- Timestamps span 2026-11-12 00:00:00.002 UTC through 23:59:59.003 UTC.
+- Every snapshot contains exactly 5,000 bid and 5,000 ask levels.
+- Snapshot intervals are approximately 900,000 ms (15 minutes); observed intervals range from 899,994 to 900,008 ms.
+- Update timestamps are predominantly 1,000 ms apart: 86,349 of 86,399 adjacent intervals are exactly 1,000 ms.
+- There are 14 larger timestamp deviations outside the 900–1,100 ms band, arranged as seven adjacent long/short pairs. Long intervals range from 1,130 to 1,429 ms; the compensating short intervals range from 570 to 870 ms. The remaining deviations are small jitter around one second.
+- Each update changes a median 143 ask levels and 143 bid levels (283 combined); per-side p95 is 586, with maxima of 3,619 asks and 3,986 bids in a single record. The maximum combined update contains 7,586 price-level entries.
+- 7,504,519 zero-quantity level updates were interpreted as deletions, consistent with the documented L2 aggregation rule.
+- Full state was rebuilt by replacing the book on each snapshot and applying absolute price-level quantity updates/deletions thereafter.
+- Across all 86,400 reconstructed states: zero empty books, zero crossed books and zero locked books. No negative price/quantity values were observed by the parser.
+
+The archive records are sampled at approximately one-second intervals; they are not a tick-by-tick exchange event stream. The file has no sequence IDs or per-record checksum fields. Consequently, the clean reconstruction and absence of crossed/empty states do **not** prove that no source updates were omitted between records. The 14 timestamp deviations need provider-level explanation or independent corroboration; the paired pattern may reflect timestamp scheduling/serialization, but that is not established.
+
+Each archived price-level row contains three values. OKX's public WebSocket documentation illustrates four values for live order-book levels (price, size, liquidated-order count, order count). The historical archive's three-value representation therefore must not be assigned the same field semantics without a specific archive schema. Treat the third field as unresolved; do not use it as an order-count or liquidation feature yet. See [OKX WebSocket order-book format and aggregation rules](https://github.com/okx/exchain-docs-api/blob/main/_ws.md#checksum).
+
+### 12.3 Trade-file validation and UTC pairing
+
+Both trade ZIPs contain one CSV with columns:
+`instrument_name, trade_id, side, price, size, created_time, source`.
+
+All 8,703,176 rows across both files were parsed:
+
+- 2026-11-12 UTC+8 file: 3,222,603 rows; timestamps span 2026-11-11 16:00:00.054 UTC to 2026-11-12 15:59:59.949 UTC.
+- 2026-11-13 UTC+8 file: 5,480,573 rows; timestamps span 2026-11-12 16:00:00.045 UTC to 2026-11-13 15:59:59.999 UTC.
+- Correctly filtered 2026-11-12 UTC book-day interval [00:00, 24:00): 3,224,415 trades (2,288,403 from the 12 November UTC+8 file and 936,012 from the 13 November UTC+8 file).
+- The filtered target-day trade timestamps range from 00:00:00.639 UTC to 23:59:59.553 UTC.
+- Trade IDs are strictly increasing across the concatenated files; no non-monotonic or adjacent duplicate IDs were observed.
+- No malformed rows, invalid sides, non-positive prices or non-positive sizes were observed.
+- Side counts across both files: 4,406,929 sell and 4,296,247 buy.
+
+This confirms date-level pairing and basic CSV integrity, not event-level book/trade synchronization. A full trade-to-preceding-BBO alignment test has not yet completed. Since the book is sampled once per second and has no sequence IDs, tick-level trade timestamps cannot be assumed to align to the exact book state at execution time.
+
+### 12.4 Revised suitability assessment
+
+**Partial pass:** byte retrieval, digest verification, compressed archive integrity, complete parsing, one-day L2 reconstruction and basic trade-file validation all passed for this sample.
+
+**Still blocked:** sequence continuity, lost-update detection, exact timestamp provenance, event-level trade/book alignment, independent cross-check against an exchange reference, and representativeness across multiple dates/instruments remain unproven.
+
+The sample can potentially support coarse one-second spread, visible-depth and imbalance research, subject to further timestamp and sampling-bias checks. It is not sufficient by itself for true FIFO queue-position estimation, passive-fill calibration, or high-fidelity intrasecond market-impact modelling. The archive is L2 market-by-price, not L3 order identity.
+
+**Disposition remains BLOCKED for execution calibration and historical-data acceptance.** This is a successful retrieval and a meaningful partial data-quality pass, not approval of OKX as the selected venue/vendor. Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.
+
+### 12.5 Next tests
+
+1. Re-run the reconstruction with independent implementation/golden fixtures and validate snapshot ordering, duplicate price keys, update semantics and book-depth truncation.
+2. Investigate the seven long/short timestamp interval pairs; compare another day and the 400-level module.
+3. Complete trade-to-sampled-BBO alignment, explicitly measuring sample age and the proportion of trades outside the preceding sampled spread. Treat this as a staleness diagnostic, not proof of bad trades.
+4. Obtain the adjacent 2026-11-11 5,000-level archive and verify day-boundary behavior and repeated schema/cadence.
+5. Preserve the source artifact beyond its current 3-day GitHub retention window only through an approved, licence-compatible research-storage method. Do not commit raw vendor archives to the public repository.
