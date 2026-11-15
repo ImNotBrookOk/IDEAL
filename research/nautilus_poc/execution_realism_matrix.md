@@ -9,7 +9,7 @@
 
 ## 1. Scope and method
 
-The purpose is to establish what the pinned simulator actually models when multiple simulated orders compete for finite liquidity, how resting limit orders estimate queue priority, and what slippage assumptions are available.
+The purpose is to establish what the pinned simulator actually models when multiple simulated orders compete for finite liquidity, how resting limit orders estimate queue priority, and what slippage assumptions are available. In the exact pinned matching-engine configuration, `trade_execution` defaults to enabled, while `liquidity_consumption` and `queue_position` default to disabled; IDEAL must set the latter two explicitly when required.
 
 The work uses three evidence layers:
 
@@ -42,7 +42,7 @@ Sources: [fill-price rules, L2/L3 and L1](https://github.com/nautechsystems/naut
 
 **Implication:** Enable consumption for conservative competing-order simulation. A synthetic fill model that supplies unlimited or fixed synthetic depth can bypass the normal consumption assumptions and needs its own explicit budget model.
 
-Sources: [matching-engine consumption implementation](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/mod.rs#L353-L455), [trade-consumption seeding](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/mod.rs#L535-L625), [book immutability and consumption rules](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/backtesting/fill-prices-and-matching.md#L137-L198).
+Source for defaults: [matching-engine configuration](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/config.rs#L25-L56).\n\nSources: [matching-engine consumption implementation](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/mod.rs#L353-L455), [trade-consumption seeding](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/mod.rs#L535-L625), [book immutability and consumption rules](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/backtesting/fill-prices-and-matching.md#L137-L198).
 
 ### 2.3 Queue position
 
