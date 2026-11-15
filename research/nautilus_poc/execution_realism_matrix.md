@@ -278,18 +278,39 @@ Verification: [CI run 43754511937](https://github.com/ImNotBrookOk/IDEAL/actions
 Explicit reset/replay recovery after the fatal conversion failure remains untested. This test establishes failure behaviour only; it does not implement recovery.
 
 
-## 10. Corrected-data replay recovery
+## 10. Corrected-data replay and same-engine reset boundary
 
-Extended [`test_funding_fx_conversion.py`](test_funding_fx_conversion.py) with a second deterministic run:
+### Fresh-engine corrected-data replay
+
+Extended [`test_funding_fx_conversion.py`](test_funding_fx_conversion.py) with a deterministic corrected-data run:
 
 - The failure scenario removes BTC/USD after the inverse BTCJPY position is opened and raises a fatal funding settlement error.
 - The corrected replay creates a fresh engine and retains the valid BTC/USD quote through the funding boundary.
 - The same inverse BTCJPY position opens, the mark price remains available, the funding boundary is crossed, and settlement completes.
 - The test asserts one fill, one open position and a USD account balance below the initial 100,000 USD, proving that the funding debit was applied.
 
-This demonstrates a **fresh replay using corrected FX data**, not an in-place recovery of the failed engine. The original failed engine run remains terminal. Same-engine `reset()` followed by reloading corrected data is still untested.
+This demonstrates a **fresh replay using corrected FX data**, not an in-place recovery of the failed engine.
 
-Final test-only suite: [CI run 43754898908](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754898908), **57 passed in 0.31s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.
+### Same-engine reset after cache-purged FX instrument
+
+A new regression test exercises the failed engine itself:
+
+- First run: entry succeeds using a temporary BTC/USD quote; the strategy purges the BTC/USD instrument after the fill; the funding boundary fails closed with `Funding settlement failed`.
+- `BacktestEngine.reset()` clears the latched funding error and rewinds the loaded data stream. The strategy's `on_reset()` restores its local submission/fill state.
+- After reset, `engine.cache.instrument(BTCUSD_INSTRUMENT.id)` and `engine.cache.load_instrument(...)` both return `None`.
+- Calling `engine.add_instrument(BTCUSD_INSTRUMENT)` does not restore the cache entry: the exchange still considers that instrument registered, so `BacktestEngine.add_instrument()` returns early.
+- A second `engine.run()` returns normally, but the BTCJPY entry is denied because BTC/USD conversion is missing. The run has zero fills and zero open positions. A green `run()` return is therefore not sufficient evidence of replay recovery.
+
+Source boundaries in the pinned `v2.0.0rc9` implementation:
+- [`BacktestEngine.run`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/engine.rs#L695-L751) aborts on the latched funding error.
+- [`BacktestEngine.reset`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/engine.rs#L1213-L1299) clears the funding error and resets iterator cursors.
+- [`BacktestEngine.add_instrument`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/engine.rs#L359-L390) returns early when the exchange already has the instrument registered.
+- [`Cache.load_instrument`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/common/src/cache/mod.rs#L1002-L1019) returns `None` when the instrument is absent and no cache database is configured.
+- The Python `BacktestEngine.cache` wrapper exposes `load_instrument` and `purge_instrument`, but not a callable `add_instrument` method in this pin; the test verifies the runtime surface.
+
+**Conclusion:** same-engine reset/replay is not a recovery path after a strategy purges a required FX instrument from cache in this Python POC. Reconstruct a fresh engine with the instrument definition and valid data, or design and verify an explicit persistence/cache-restoration mechanism. Do not count a reset run as recovered unless the expected position, fill and account effects are present.
+
+Verification: [CI run 43760008008](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760008008), **78 passed on x86_64 and ARM64**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.10.
 
 
 ## 11. Canonical replay hashes and reset/replay determinism
