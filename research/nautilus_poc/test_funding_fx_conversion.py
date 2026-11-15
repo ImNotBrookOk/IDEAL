@@ -10,7 +10,9 @@ from nautilus_trader.model import (
     BookAction,
     BookOrder,
     BookType,
+    CryptoPerpetual,
     Currency,
+    InstrumentId,
     FundingRateUpdate,
     MarkPriceUpdate,
     Money,
@@ -22,13 +24,33 @@ from nautilus_trader.model import (
     Quantity,
     QuoteTick,
     RecordFlag,
+    Symbol,
     Venue,
 )
 from nautilus_trader.testkit.providers import TestInstrumentProvider
 from nautilus_trader.trading import Strategy
 
 
-INSTRUMENT = TestInstrumentProvider.btcusd_bybit()
+INSTRUMENT = CryptoPerpetual(
+    instrument_id=InstrumentId.from_str("BTCJPY-PERP.BYBIT"),
+    raw_symbol=Symbol("BTCJPY"),
+    base_currency=Currency.from_str("BTC"),
+    quote_currency=Currency.from_str("JPY"),
+    settlement_currency=Currency.from_str("BTC"),
+    is_inverse=True,
+    price_precision=1,
+    size_precision=0,
+    price_increment=Price.from_str("0.5"),
+    size_increment=Quantity.from_str("1"),
+    ts_event=0,
+    ts_init=0,
+    max_notional=Money(10_000_000.0, Currency.from_str("JPY")),
+    min_notional=Money(1.0, Currency.from_str("JPY")),
+    max_price=Price.from_str("100000000.0"),
+    min_price=Price.from_str("0.5"),
+    margin_init=Decimal("0.01"),
+    margin_maint=Decimal("0.0035"),
+)
 TRIGGER_INSTRUMENT = TestInstrumentProvider.default_fx_ccy("ETHUSD", Venue("BYBIT"))
 VENUE = Venue("BYBIT")
 USD = Currency.from_str("USD")
@@ -71,7 +93,7 @@ def btcusd_book(timestamp: int):
                 action=BookAction.ADD,
                 order=BookOrder(
                     OrderSide.BUY,
-                    Price.from_str("39999.5"),
+                    Price.from_str("5999999.5"),
                     Quantity.from_str("5000"),
                     1,
                 ),
@@ -85,7 +107,7 @@ def btcusd_book(timestamp: int):
                 action=BookAction.ADD,
                 order=BookOrder(
                     OrderSide.SELL,
-                    Price.from_str("40000.0"),
+                    Price.from_str("6000000.0"),
                     Quantity.from_str("5000"),
                     2,
                 ),
@@ -214,7 +236,7 @@ def run_missing_fx_conversion():
             trigger_quote(BASE_NS + 2_000_000_000),
             MarkPriceUpdate(
                 instrument_id=INSTRUMENT.id,
-                value=Price.from_str("40000.0"),
+                value=Price.from_str("6000000.0"),
                 ts_event=mark_ts,
                 ts_init=mark_ts,
             ),
