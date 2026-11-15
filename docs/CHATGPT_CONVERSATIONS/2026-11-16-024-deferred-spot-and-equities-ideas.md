@@ -38,3 +38,17 @@ The owner explicitly asked to save these ideas for later and to keep the current
 ## 5. Test status
 
 Documentation-only change. No source code or runtime behaviour changed; no code tests were run or claimed.
+
+
+## 6. Commit and read-back verification
+
+Initial commits:
+- `docs/FUTURE_SCOPE_IDEAS.md`: `1212b2c4698c3843714374faf485ca54cf78c506`.
+- `DECISIONS.md`: `5f218d797e17d83df22f942aa7f1e7ec85df7b99`.
+- `ROADMAP.md`: `5c5a6e28f5459ec2b38ebe44f93a1e14b11207c9`.
+- Audit index: `2ea21fbd2deffc0076c30c8a3bb64b1156495495`.
+- This conversation record: `420841062c432001204f1512c08f572352280e6c`.
+
+All five files were fetched again from `main`. Content checks passed: both deferred ideas are present; D-014 is Proposed; D-001 remains the active initial-scope decision; ROADMAP labels future scope as not active; this audit record and index entry are present. Read-back blob SHAs: future ideas `4f162e4595838d6c6a969d221fb4262823c43689`; decisions `f26c5794544c684d3af91a0b1bd2d55a5d954026`; roadmap `04ad45f5f5913705c3e3ced06a66b0d124875c06`; audit record before this verification append `fac79ea694e6c72c161f9aca2cb93098f1454709`; audit index `0fe3ad1c695d2a60711fb29dec11577abd377ffd`.
+
+No code tests were run because the change is documentation only. No phase transition occurred.
