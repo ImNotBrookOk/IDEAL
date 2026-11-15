@@ -41,20 +41,22 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p research-output
-          curl --fail --show-error --location --retry 3 --retry-all-errors \
-            --connect-timeout 20 --max-time 2400 \
-            --output research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz \
-            "https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-12.tar.gz"
-          curl --fail --show-error --location --retry 3 --retry-all-errors \
-            --connect-timeout 20 --max-time 2400 \
-            --output research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip \
-            "https://static.okx.com/cdn/okex/traderecords/trades/daily/20261112/BTC-USDT-SWAP-trades-2026-11-12.zip?v=1001"
-          curl --fail --show-error --location --retry 3 --retry-all-errors \
-            --connect-timeout 20 --max-time 2400 \
-            --output research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip \
-            "https://static.okx.com/cdn/okex/traderecords/trades/daily/20261113/BTC-USDT-SWAP-trades-2026-11-13.zip?v=1001"
-          gzip -t research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz
-          tar -tzf research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz > research-output/l2-members.txt
+          for day in 11 12; do
+            curl --fail --show-error --location --retry 3 --retry-all-errors \
+              --connect-timeout 20 --max-time 2400 \
+              --output "research-output/BTC-USDT-SWAP-L2-400-2026-11-$day.tar.gz" \
+              "https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/202611$day/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-$day.tar.gz"
+          done
+          for day in 11 12 13; do
+            curl --fail --show-error --location --retry 3 --retry-all-errors \
+              --connect-timeout 20 --max-time 2400 \
+              --output "research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-$day.zip" \
+              "https://static.okx.com/cdn/okex/traderecords/trades/daily/202611$day/BTC-USDT-SWAP-trades-2026-11-$day.zip?v=1001"
+          done
+          for path in research-output/*.tar.gz; do
+            gzip -t "$path"
+            tar -tzf "$path" >> research-output/l2-members.txt
+          done
           python - <<'PY'
           import zipfile
           from pathlib import Path
@@ -112,26 +114,38 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python research/okx_trade_book_alignment.py \
-            --l2 research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz \
-            --trades \
-              research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip \
-              research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip \
-            --start-ms 1794441600000 \
-            --end-ms 1794528000000 \
-            | tee research-output/trade-book-alignment.json
+          for day in 11 12; do
+            if [ "$day" = "11" ]; then
+              start_ms=1794355200000
+              end_ms=1794441600000
+            else
+              start_ms=1794441600000
+              end_ms=1794528000000
+            fi
+            python research/okx_trade_book_alignment.py \
+              --l2 "research-output/BTC-USDT-SWAP-L2-400-2026-11-$day.tar.gz" \
+              --trades \
+                research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-11.zip \
+                research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip \
+                research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip \
+              --start-ms "$start_ms" \
+              --end-ms "$end_ms" \
+              | tee "research-output/trade-book-alignment-2026-11-$day.json"
+          done
           python - <<'PY'
           import json
           from pathlib import Path
-          summary = json.loads(Path("research-output/trade-book-alignment.json").read_text())
-          assert summary["aligned_trades"] > 0
-          assert summary["no_preceding_book"] == 0
-          assert summary["invalid_book_trades"] == 0
-          assert summary["sample_age_ms"]["p95"] <= 20
-          assert summary["side_consistency_pct"] >= 98.0
-          print("Initial research acceptance checks: PASS")
-          print("Age tail:", summary["sample_age_threshold_counts"])
-          print("Side consistency:", summary["side_consistency_pct"])
+          for day in ("11", "12"):
+              summary = json.loads(Path(f"research-output/trade-book-alignment-2026-11-{day}.json").read_text())
+              assert summary["aligned_trades"] > 0
+              assert summary["no_preceding_book"] == 0
+              assert summary["invalid_book_trades"] == 0
+              assert summary["sample_age_ms"]["p95"] <= 20
+              assert summary["side_consistency_pct"] >= 98.0
+              print(f"2026-11-{day}: acceptance PASS")
+              print("Trades:", summary["aligned_trades"], "age:", summary["sample_age_ms"])
+              print("Age tail:", summary["sample_age_threshold_counts"])
+              print("Side consistency:", summary["side_consistency_pct"])
           PY
           cat research-output/manifest.txt
           rm research-output/*.tar.gz research-output/*.zip
