@@ -30,6 +30,7 @@ Coverage:
 8. Quote-driven liquidation: an inverse BTCUSD maintenance-margin breach closes the position; replay is deterministic. The 40,000 → 20,000 gap fixture leaves a negative account balance.
 9. Mark precedence: a 20,000 mark triggers liquidation while the cached matching-engine quote remains 40,000; the synthetic close executes at the 40,000 bid and the exact final balance is `0.62500000 BTC`. Replaying this conflict fixture is deterministic.
 10. Bar-only and trade-only liquidation: an external LAST bar with L1 bar execution triggers and closes a liquidation using the bar-generated synthetic book; a separate L2 case opens a position from an ask, clears the L2 book, then moves LAST to 20,000 with a TradeTick. The independent inverse-PnL oracle gives -250 BTC against 0.8125 BTC account balance and 0.0875 BTC maintenance margin. The liquidation trigger is therefore breached, but the close is skipped because the L2 book has no executable best bid. Both cases replay deterministically.
+11. Long/short quote-side selection under a non-zero spread: from a 40,000 entry, a later 39,800 bid / 40,200 ask makes the long adverse only at bid and the short adverse only at ask. Separate engine runs assert both positions liquidate and the close fills at the expected executable side. Replays are deterministic.
 
 ## Liquidation source audit (2.0.0rc9)
 
@@ -41,6 +42,7 @@ The source audit corrects an earlier interpretation of NautilusTrader issue [#54
 - Bar-only behaviour depends on execution configuration. With `bar_execution=True` and `BookType.L1_MBP`, the matching engine converts the external LAST bar into synthetic L1 market updates. The bar-close fallback triggers liquidation and the bar-generated synthetic bid executes the close. This is model-generated liquidity, not evidence that a real exchange supplied an executable quote.
 - Do not equate a trade-only feed with an empty order book in every configuration. An initial L1 `trade_execution=True` experiment showed trade ticks can populate synthetic L1 bid/ask state and allow a close. The no-book test therefore uses L2, an explicit book clear, and `trade_execution=False` for the adverse trade.
 - The mark-precedence test confirms that the 20,000 mark triggers liquidation despite a stale 40,000 quote. The synthetic close then fills against the available 40,000 bid. This separates *trigger valuation* from *close execution price*; the two prices are not interchangeable.
+- The spread tests exercise the quote fallback with no mark price: long valuation must use bid, while short valuation must use ask. The deliberately asymmetric 39,800/40,200 quote makes the opposite side favourable, so an incorrect side selection would not trigger liquidation. The synthetic close then executes at the same position-closing side (bid for a long, ask for a short).
 - The current inverse quote-gap fixture closes one position and leaves the account at **-249.56250000 BTC**. The synthetic close uses the observed quote and can produce a negative balance; no guaranteed bankruptcy-price cap, insurance-fund recovery or ADL protection is demonstrated.
 - The synthetic liquidation fill is not a realistic exchange liquidation model. Exchange-specific liquidation fees, partial liquidation, bankruptcy price, insurance fund, ADL and account recovery remain unverified.
 
@@ -69,11 +71,10 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest test verification: **27 tests passed in 0.18s** in [GitHub Actions run 43693535483](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43693535483), including explicit assertions that the engine logs both the liquidation trigger and the no-executable-bid skip in the empty-L2-book case.
+Latest verification: **30 tests passed in 0.13s** in [GitHub Actions run 43694589374](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43694589374), using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. This includes long/short spread-side selection and deterministic replay.
 
 ## Still unverified
 
-- Long/short position-side quote selection under a non-zero spread.
 - Exchange-specific liquidation thresholds, liquidation price, bankruptcy price, insurance fund, ADL and account recovery.
 - Partial fills, queue position, conservative liquidity consumption under multiple competing orders.
 - Slippage, spread widening, adverse selection and stop/target same-bar ordering/gap-through.
