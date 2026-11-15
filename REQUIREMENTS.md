@@ -13,6 +13,9 @@ Build an autonomous crypto-perpetuals intelligence system that researches strate
 ## Strategy lifecycle
 Generate candidates → validate code/data → backtest → cost-adjust → walk-forward/out-of-sample validation → classify by regime → apply absolute quality gates → rank comparable passing cohort → select eligible candidates. No eligible candidate means no trade.
 
+## Execution quality objective
+Execution must optimise conservative expected net decision value, not minimum order-placement latency or execution cost in isolation. The execution policy must balance strategy alpha decay and urgency against fees, spread, market impact, adverse selection, fill probability and opportunity cost. It must be able to wait, reprice, slice, cross, cancel, reduce or decline to place an order. Scheduling (when/how much) and placement (where/how) are separate decisions. Compare candidate policies on identical parent intents and market paths, with causal inputs, realistic costs, paired inference, uncertainty intervals and untouched out-of-sample validation. Latency must be bounded and measured, but is not the primary optimisation objective. See [Execution Quality Research](docs/EXECUTION_QUALITY_RESEARCH.md).
+
 ## Preliminary screening
 The user's initial screen is more than 100 trades and win rate above 30%. This is necessary only as an initial filter and is not sufficient proof. Additional gates must include positive net expectancy, profit factor, drawdown, uncertainty, regime robustness, execution realism and untouched out-of-sample performance.
 
