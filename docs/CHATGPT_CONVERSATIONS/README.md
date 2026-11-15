@@ -67,3 +67,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-022-historical-l2-sample-validation.md](2026-11-16-022-historical-l2-sample-validation.md) | Phase 01: Tardis and CryptoHFTData sample retrieval blocked by environment DNS; no data-quality validation claimed; HftBacktest sample-size evidence and alternative-source/licence/data-quality screening recorded; detailed acceptance matrix added |
 
 | [2026-11-16-023-decision-quality-execution-priority.md](2026-11-16-023-decision-quality-execution-priority.md) | Owner sets decision quality and execution correctness above minimum order latency; D-013 recorded; execution-quality research decomposes scheduling vs placement, expected net value, TCA and candidate open-source references; no runtime adoption or phase transition |
+
+| [2026-11-16-024-deferred-spot-and-equities-ideas.md](2026-11-16-024-deferred-spot-and-equities-ideas.md) | Owner asks to preserve future macro-regime-aware crypto spot accumulation from a bounded share of eligible profits and eventual equities support; recorded as deferred proposals only, with D-001 initial perpetual scope unchanged |
