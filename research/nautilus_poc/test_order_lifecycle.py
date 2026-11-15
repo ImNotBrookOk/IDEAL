@@ -15,7 +15,9 @@ from nautilus_trader.model import (
     Price,
     Quantity,
     QuoteTick,
+    StandardMarginModel,
     Symbol,
+    TimeInForce,
     Venue,
 )
 from nautilus_trader.trading import Strategy
@@ -105,6 +107,7 @@ def build_engine():
             taker_rate=Decimal("0.0005"),
         ),
         liquidity_consumption=True,
+        margin_model=StandardMarginModel(),
         use_market_order_acks=True,
     )
     engine.add_instrument(make_instrument())
@@ -142,3 +145,54 @@ def test_market_order_completes_submit_accept_fill_and_opens_position():
 
 def test_identical_synthetic_replay_has_identical_lifecycle_result():
     assert run_once() == run_once()
+
+
+
+class RestingLimitBuy(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.accepted = 0
+
+    def on_start(self):
+        self.subscribe_quotes(INSTRUMENT_ID)
+
+    def on_quote(self, quote):
+        if self.accepted:
+            return
+        order = self.order_factory.limit(
+            instrument_id=INSTRUMENT_ID,
+            order_side=OrderSide.BUY,
+            quantity=Quantity.from_str("0.100"),
+            price=Price.from_str("59999.00"),
+            time_in_force=TimeInForce.GTC,
+        )
+        self.submit_order(order)
+
+    def on_order_accepted(self, event):
+        self.accepted += 1
+
+
+def run_pending_limit_order():
+    engine = build_engine()
+    strategy = RestingLimitBuy()
+    try:
+        engine.add_strategy(strategy)
+        engine.add_data([make_quote(Decimal("60000"), 1_000_000_000)])
+        engine.run()
+        account = engine.portfolio.account(venue=Venue("SIM"))
+        return {
+            "accepted": strategy.accepted,
+            "open_orders": engine.cache.orders_open_count(),
+            "initial_margin": account.total_initial_margin(USDT),
+            "maintenance_margin": account.total_maintenance_margin(USDT),
+        }
+    finally:
+        engine.dispose()
+
+
+def test_resting_limit_order_reserves_initial_margin():
+    result = run_pending_limit_order()
+    assert result["accepted"] == 1
+    assert result["open_orders"] == 1
+    assert result["initial_margin"] == Money.from_str("299.99500000 USDT")
+    assert result["maintenance_margin"] == Money.from_str("0.00000000 USDT")
