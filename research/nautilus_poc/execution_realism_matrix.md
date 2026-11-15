@@ -104,7 +104,7 @@ All tests use synthetic BTCUSDT perpetual fixtures, zero fees to isolate the tes
 - Command: `python -m pytest -q`
 - Exact dependency assertion: `nautilus_trader==2.0.0rc9`
 - Runner: Ubuntu 24.04 x86_64 / Python 3.14
-- Final L2 research branch verification: **35 passed in 0.22s** in [CI run 43697425596](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697425596), exact pinned wheel / Ubuntu 24.04 / Python 3.14.
+- Final L2 research branch verification: **35 passed in 0.18s** in final-head [CI run 43697638561](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697638561), exact pinned wheel / Ubuntu 24.04 / Python 3.14.
 - CI: [run 43696169232](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696169232) and [PR-triggered run 43696163846](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696163846), both successful.
 - Test-harness correction: the first attempt passed constructor arguments to the NautilusTrader `Strategy` wrapper and failed with `Strategy.__new__()`. The fixture was corrected to instantiate with no arguments and set test parameters afterwards. The corrected head passed both CI runs. This was a test-harness API error, not a simulator defect.
 - The prior main baseline had 33 tests; this branch adds 2 L2 tests. Final suite: 35 passed. No production code or dependency changed.
