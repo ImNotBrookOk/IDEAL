@@ -108,7 +108,7 @@ def buy_trade(timestamp: int, size: str):
     )
 
 
-def make_engine(book_type: BookType):
+def make_engine(book_type: BookType, quantity: str = "1.000"):
     engine = BacktestEngine(
         BacktestEngineConfig(bypass_logging=True, run_analysis=False),
     )
@@ -128,7 +128,7 @@ def make_engine(book_type: BookType):
         ),
     )
     engine.add_instrument(INSTRUMENT)
-    strategy = PassiveSellStrategy()
+    strategy = PassiveSellStrategy(quantity)
     engine.add_strategy(strategy)
     return engine, strategy
 
@@ -189,8 +189,8 @@ def test_l2_snapshot_does_not_push_existing_order_back_on_size_increase():
     assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
 
 
-def run_l3_case(book_updates, trade_size: str):
-    engine, strategy = make_engine(BookType.L3_MBO)
+def run_l3_case(book_updates, trade_size: str | list[str], order_quantity: str = "1.000"):
+    engine, strategy = make_engine(BookType.L3_MBO, order_quantity)
     initial = OrderBookDeltas(
         INSTRUMENT.id,
         [
@@ -202,7 +202,8 @@ def run_l3_case(book_updates, trade_size: str):
     try:
         data = [initial, quote(3)]
         data.extend(book_updates)
-        data.append(buy_trade(10, trade_size))
+        trade_sizes = trade_size if isinstance(trade_size, list) else [trade_size]
+        data.extend(buy_trade(10 + index, size) for index, size in enumerate(trade_sizes))
         engine.add_data(data)
         engine.run()
         return strategy.fill_events
@@ -305,3 +306,13 @@ def test_l3_snapshot_rebase_preserves_existing_order_ids_not_new_orders():
     # ID 103 is not retroactively inserted ahead. Deleting ID 101 leaves 5
     # ahead, so six aggressive units fill exactly one.
     assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
+
+
+
+def test_l3_queue_partial_fills_are_bounded_by_trade_volume():
+    fills = run_l3_case([], trade_size=["12.000", "3.000"], order_quantity="5.000")
+
+    assert [event.last_qty for event in fills] == [
+        Quantity.from_str("2.000"),
+        Quantity.from_str("3.000"),
+    ]
