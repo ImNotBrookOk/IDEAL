@@ -46,3 +46,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-011-funding-fx-conversion-failure.md](2026-11-16-011-funding-fx-conversion-failure.md) | Inverse BTCJPY/BTC-settled position in USD account; temporary BTC/USD entry quote purged after fill; valid mark but missing funding FX conversion causes fatal failure; 56 tests pass; PR #17 merged |
 
 | [2026-11-16-012-funding-replay-recovery.md](2026-11-16-012-funding-replay-recovery.md) | Fresh deterministic replay with restored BTC/USD quote completes inverse BTCJPY funding settlement; funding debit observable; 57 tests pass; PR #18 merged; same-engine reset/replay remains open |
+
+| [2026-11-16-013-canonical-replay-hashes.md](2026-11-16-013-canonical-replay-hashes.md) | Versioned canonical JSON/SHA-256 replay audit; fresh-engine and same-engine reset replay hashes match after generated-ID normalization; tamper detection; 61 tests pass; PR #19 merged; durable process restart remains open |
