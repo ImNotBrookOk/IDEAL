@@ -30,6 +30,7 @@ Create an auditable record of what was requested, what was proposed, what was ch
 | [2026-11-15-002-project-resumption-and-audit-confirmation.md](2026-11-15-002-project-resumption-and-audit-confirmation.md) | Owner confirms project continuation and audit requirement; PR #5 merge verified; D-011 accepted; next technical task remains pending |
 | [2026-11-15-003-liquidation-bar-trade-fallback.md](2026-11-15-003-liquidation-bar-trade-fallback.md) | Bar/trade liquidation fallback research; 27 tests pass; PR #6 subsequently squash-merged |
 | [2026-11-15-004-long-short-liquidation-spread-side.md](2026-11-15-004-long-short-liquidation-spread-side.md) | Standing Phase 01 authorisation; long/short quote-side tests and Binance/Bybit/OKX liquidation recovery research; 30 tests pass; PRs #7 and #8 squash-merged |
+| [2026-11-15-005-execution-realism-partial-fills-queue.md](2026-11-15-005-execution-realism-partial-fills-queue.md) | Execution realism research: L1 partial fills, queue depletion, shared trade consumption and slippage; 33 tests pass; PR #9 merged; L2/L3 POC work remains open |
 
 ## Completion standard
 A conversation record is complete when the available transcript, operational evidence, decisions, unresolved items and approval boundary are documented and committed to the repository. A task is not approved merely because its conversation record is committed.
