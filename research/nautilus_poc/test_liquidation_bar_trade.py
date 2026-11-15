@@ -6,6 +6,8 @@ to value a maintenance breach from the matching engine's executable close side.
 
 from decimal import Decimal
 
+from poc import inverse_pnl
+
 from nautilus_trader.backtest import BacktestEngine
 from nautilus_trader.config import BacktestEngineConfig
 from nautilus_trader.execution import MakerTakerFeeModel
@@ -181,11 +183,19 @@ def run_trade_only_without_quote_book():
             make_trade(20_000, "liquidation-trade", 2_000_000_000),
         ])
         engine.run()
+        account = engine.portfolio.account(venue=VENUE)
         return {
             "open_positions": engine.cache.positions_open_count(),
             "closed_positions": engine.cache.positions_closed_count(),
             "fill_count": len(strategy.fill_events),
-            "balance": engine.portfolio.account(venue=VENUE).balance_total(BTC),
+            "balance": account.balance_total(BTC),
+            "maintenance_margin": account.total_maintenance_margin(BTC),
+            "oracle_unrealized_pnl": inverse_pnl(
+                Decimal("40000"),
+                Decimal("20000"),
+                Decimal("10000000"),
+                Decimal("1"),
+            ),
             "last_trade": engine.cache.price(INSTRUMENT.id, PriceType.LAST),
         }
     finally:
@@ -215,6 +225,12 @@ def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid()
     assert result["closed_positions"] == 0
     assert result["fill_count"] == 1
     assert result["last_trade"] == Price.from_str("20000.0")
+    assert result["balance"] == Money.from_str("0.81250000 BTC")
+    assert result["maintenance_margin"] == Money.from_str("0.08750000 BTC")
+    # Independent inverse-contract oracle: equity is 0.8125 - 250 BTC,
+    # far below 0.0875 BTC maintenance margin, so the liquidation trigger
+    # condition is breached even though no executable L2 bid exists.
+    assert result["oracle_unrealized_pnl"] == Decimal("-250")
 
 
 def test_bar_only_and_trade_only_replays_are_deterministic():
