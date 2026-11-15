@@ -27,8 +27,9 @@ INSTRUMENT = TestInstrumentProvider.btcusd_bybit()
 
 
 class BuyInverseOnce(Strategy):
-    def __init__(self):
+    def __init__(self, side=OrderSide.BUY):
         super().__init__()
+        self.side = side
         self.submitted = False
         self.fill_events = []
 
@@ -42,7 +43,7 @@ class BuyInverseOnce(Strategy):
         self.submit_order(
             self.order_factory.market(
                 instrument_id=INSTRUMENT.id,
-                order_side=OrderSide.BUY,
+                order_side=self.side,
                 quantity=Quantity.from_int(10_000_000),
             ),
         )
@@ -162,3 +163,66 @@ def test_mark_price_triggers_liquidation_ahead_of_conflicting_quote():
 
 def test_mark_price_precedence_replay_is_deterministic():
     assert run_mark_price_precedence_case() == run_mark_price_precedence_case()
+
+
+
+def make_spread_quote(bid: int, ask: int, timestamp: int) -> QuoteTick:
+    return QuoteTick(
+        instrument_id=INSTRUMENT.id,
+        bid_price=Price.from_str(f"{bid}.0"),
+        ask_price=Price.from_str(f"{ask}.0"),
+        bid_size=Quantity.from_int(10_000_000),
+        ask_size=Quantity.from_int(10_000_000),
+        ts_event=timestamp,
+        ts_init=timestamp,
+    )
+
+
+def run_spread_liquidation_case(position_side: OrderSide):
+    engine = build_engine()
+    strategy = BuyInverseOnce(side=position_side)
+    try:
+        engine.add_strategy(strategy)
+        engine.add_data([
+            make_spread_quote(40_000, 40_000, 1),
+            # A 1% spread around 40,000 creates opposite PnL signs depending
+            # on which side is used: bid 39,800 is adverse for a long, while
+            # ask 40,200 is adverse for a short.
+            make_spread_quote(39_800, 40_200, 2),
+        ])
+        engine.run()
+        return {
+            "open_positions": engine.cache.positions_open_count(),
+            "closed_positions": engine.cache.positions_closed_count(),
+            "balance": engine.portfolio.account(venue=VENUE).balance_total(BTC),
+            "fill_prices": [event.last_px for event in strategy.fill_events],
+        }
+    finally:
+        engine.dispose()
+
+
+def test_long_liquidation_valuation_uses_bid_not_favourable_ask():
+    result = run_spread_liquidation_case(OrderSide.BUY)
+
+    assert result["open_positions"] == 0
+    assert result["closed_positions"] == 1
+    assert result["fill_prices"] == [
+        Price.from_str("40000.0"),
+        Price.from_str("39800.0"),
+    ]
+
+
+def test_short_liquidation_valuation_uses_ask_not_favourable_bid():
+    result = run_spread_liquidation_case(OrderSide.SELL)
+
+    assert result["open_positions"] == 0
+    assert result["closed_positions"] == 1
+    assert result["fill_prices"] == [
+        Price.from_str("40000.0"),
+        Price.from_str("40200.0"),
+    ]
+
+
+def test_long_and_short_spread_liquidation_replays_are_deterministic():
+    assert run_spread_liquidation_case(OrderSide.BUY) == run_spread_liquidation_case(OrderSide.BUY)
+    assert run_spread_liquidation_case(OrderSide.SELL) == run_spread_liquidation_case(OrderSide.SELL)
