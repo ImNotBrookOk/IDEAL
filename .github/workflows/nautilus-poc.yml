@@ -1,4 +1,5 @@
 name: NautilusTrader isolated proof of concept
+# Deliberately pinned to the exact pre-release under evaluation; CI is research-only.
 
 on:
   push:
