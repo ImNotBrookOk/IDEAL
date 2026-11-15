@@ -69,3 +69,8 @@ All implementation phases remain LOCKED pending completion and approval of the p
 - SQLite journal baseline on a GitHub-hosted Ubuntu 24.04 x86_64 runner (4 vCPU, Python 3.14.10, SQLite 3.45.1): 5,000 events per case, synchronous FULL per append, 256B and 1,024B payloads, approximately 10.8k events/s and 36.1 MiB peak RSS. This is not a target-worker or always-free infrastructure benchmark; actual candidate worker capacity and disk persistence remain unverified.
 
 - Infrastructure finding: Oracle Always Free Ampere A1 is the only credible always-free general-purpose compute candidate identified so far (2 OCPU/12 GB RAM, 200 GB block storage, 10 TB outbound/month), but it has regional capacity constraints and idle-instance reclamation. No public OCI region is listed in New Zealand; Sydney/Melbourne are the nearest public regions. Signup requires card verification with a temporary authorisation hold. No account/VM was created. See [Infrastructure Research](docs/INFRASTRUCTURE_RESEARCH.md).
+
+
+## Deferred future scope — not active
+
+The owner has asked to preserve two future ideas in [Deferred Future Scope Ideas](docs/FUTURE_SCOPE_IDEAS.md): (F-001) a macro-regime-aware, separately risk-budgeted crypto spot accumulation sleeve, potentially using a bounded portion of eligible realised profits for staged DCA; and (F-002) later evaluation of equities using reusable platform capabilities but market-specific data, execution, accounting and regulatory adapters. These are deferred proposals only. They do not amend D-001, change the active crypto-perpetual scope, alter Phase 01 priorities, authorise implementation or unlock any phase. Decision D-014 is Proposed, not Accepted.
