@@ -483,3 +483,34 @@ Constraints:
 ### Current infrastructure decision
 
 Oracle A1 is the **leading candidate, not an approved deployment**. Do not create an account or provision a VM without owner approval. First verify the exact home-region choice, available A1 capacity, persistent-volume quotas and idle-reclamation risk. If free capacity is unavailable, remain in GitHub Actions/manual research mode; do not upgrade or incur cost.
+
+
+## 15. Multi-currency margin account and native-currency funding
+
+New POC file: [`test_multi_currency_funding.py`](test_multi_currency_funding.py).
+
+Fixture:
+- One simulated Binance venue with `AccountType.MARGIN`, `OmsType.HEDGING` and `base_currency=None`.
+- Starting balances: 100,000 USD, 2 BTC and 100,000 USDT.
+- One inverse BTCJPY perpetual settled in BTC and one linear BTCUSDT perpetual settled in USDT.
+- Both long positions are opened with no BTC/USD, USDT/USD or other FX conversion instrument in the engine.
+- A positive 0.0001 funding rate is applied to both positions at the same settlement boundary.
+- A no-funding baseline run is compared with the funded run.
+
+Observed exact native-currency deltas:
+- BTC balance decreases by **0.00016667 BTC** from inverse BTCJPY funding.
+- USDT balance decreases by **0.60000000 USDT** from linear BTCUSDT funding.
+- USD balance is unchanged.
+- Both runs have two fills and two open positions.
+
+This confirms the pinned simulator supports a multi-currency margin account when `base_currency=None`, and applies funding adjustments in each instrument's settlement currency rather than converting all adjustments to one base currency.
+
+Pinned source boundaries:
+- [`SimulatedExchange::new`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/exchange.rs#L225-L237) rejects multiple starting currencies only when a base currency is specified.
+- [Funding settlement conversion](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/backtest/src/exchange.rs#L1626-L1664) converts adjustments only when the account has a base currency; otherwise native-currency adjustments remain native.
+- [`MarginAccount` multi-currency tests](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/model/src/accounts/margin.rs#L1757-L1823) document no-base-currency margin accounts and show that margin locks only currencies already reported in account balances. The POC therefore pre-seeds both BTC and USDT balances.
+- [`Portfolio::equity`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/portfolio/src/portfolio.rs#L836-L894) returns a per-currency map. [Snapshot base-currency equity](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/portfolio/src/portfolio.rs#L1003-L1015) is absent when the account has no base currency.
+
+**IDEAL design implication (proposal, not an approved decision):** preserve native-currency balances and funding/fee events in the canonical ledger. For portfolio-level risk limits, compute a deterministic reporting-currency equity view from timestamped, side-aware FX marks with explicit freshness and missing-rate handling. Do not sum unlike currency amounts or treat a multi-currency account as having a single USD equity value. This test does not establish venue-specific collateral haircuts, cross-currency margin offsets, liquidation rules or exchange parity.
+
+Verification: [CI run 43760637330](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760637330), **79 passed on x86_64 and ARM64**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.10.
