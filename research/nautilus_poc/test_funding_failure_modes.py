@@ -7,7 +7,6 @@ from nautilus_trader.config import BacktestEngineConfig
 from nautilus_trader.execution import MakerTakerFeeModel
 from nautilus_trader.model import (
     AccountType,
-    AggressorSide,
     BookAction,
     BookOrder,
     BookType,
@@ -22,9 +21,6 @@ from nautilus_trader.model import (
     Quantity,
     QuoteTick,
     RecordFlag,
-    TimeInForce,
-    TradeId,
-    TradeTick,
     Venue,
 )
 from nautilus_trader.testkit.providers import TestInstrumentProvider
@@ -183,7 +179,7 @@ def run_without_settlement_price():
             # within the same backtest run.
             quote(BASE_NS + 6_000_000_000),
         ])
-        with pytest.raises(Exception, match="Funding settlement failed"):
+        with pytest.raises(RuntimeError, match="Funding settlement failed"):
             engine.run()
         return {
             "fills": list(strategy.fills),
