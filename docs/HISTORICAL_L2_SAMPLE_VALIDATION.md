@@ -319,3 +319,8 @@ The container still has DNS resolution failures for external hosts. The research
 Prioritise the OKX 2026-11-12 BTC-USDT-SWAP module 5 archive and the two matching trade ZIPs. Retrieve them through a network path that can save exact bytes; capture headers, byte counts and SHA-256; inspect the compressed archive and schema; then build an independent parser/reconstructor. Keep module 4 as a comparison candidate, not a default selection. Add at least the 11 November module 5 day to test day-boundary snapshot continuity.
 
 **The historical-data acceptance gate remains BLOCKED.** This is the first concrete public exchange-native L2 + trade archive lead with successful current-date metadata, not a data-quality pass or source selection. Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.
+
+
+### 11.6 Direct archive retrieval attempt
+
+The direct 177.63 MB OKX CDN archive URL was opened through the web retrieval interface, which returned an inaccessible-file error for the `.tar.gz` resource. The container download utility then refused the URL because it had not been successfully viewed through that interface. This is a tooling/access-path limitation; it is not evidence that the CDN returned an HTTP error or that the file is unavailable. No partial archive was written. The actual-file validation gate remains blocked.
