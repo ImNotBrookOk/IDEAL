@@ -14,8 +14,8 @@
 
 The exact pinned package installed in CI, its version assertion passed, and the complete suite passed:
 
-- **20 tests passed** in GitHub Actions run [43691306566](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43691306566).
-- CI commit: `da8ac0bfdefc060d54655118ddfa57f5453bddec`.
+- **20 tests passed** on the merged `main` branch in GitHub Actions run [43691402915](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43691402915).
+- CI commit: `fb13425c7318f9426c78a230231aa6f0a372b1a6`.
 - Test command: `python -m pytest -q`.
 
 Coverage:
