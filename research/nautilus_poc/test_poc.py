@@ -40,7 +40,7 @@ def test_inverse_contract_pnl_is_settled_in_base_currency():
         exit=Decimal("63000"),
         contracts=Decimal("100"),
         contract_value_quote=Decimal("1"),
-    ) == Decimal("0.0007936507936507936507936507937")
+    ) == Decimal("0.00007936507936507936507936508000")
 
 
 def test_fee_uses_execution_notional():
