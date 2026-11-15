@@ -167,7 +167,7 @@ def run_trade_only_without_quote_book():
                 CONTRACTS,
                 1,
             ),
-            flags=RecordFlag.F_LAST,
+            flags=1,  # RecordFlag.F_LAST
             sequence=2,
             ts_event=snapshot_ts,
             ts_init=snapshot_ts,
