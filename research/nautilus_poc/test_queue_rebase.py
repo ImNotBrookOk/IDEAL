@@ -590,7 +590,7 @@ def run_amendment_edge_case(
             data = [initial, quote(2), progress, deeper, quote(5), final_trade]
         engine.add_data(data)
         engine.run()
-        return strategy.orders, strategy.fill_events
+        return strategy.orders, strategy.fill_events, strategy.no_op_rejected
     finally:
         engine.dispose()
 
