@@ -52,6 +52,7 @@ INSTRUMENT = CryptoPerpetual(
     margin_init=Decimal("0.01"),
     margin_maint=Decimal("0.0035"),
 )
+BTCUSD_INSTRUMENT = TestInstrumentProvider.default_fx_ccy("BTCUSD", Venue("BYBIT"))
 TRIGGER_INSTRUMENT = TestInstrumentProvider.default_fx_ccy("ETHUSD", Venue("BYBIT"))
 VENUE = Venue("BYBIT")
 USD = Currency.from_str("USD")
@@ -85,6 +86,10 @@ class OpenInverseLong(Strategy):
 
     def on_order_filled(self, event):
         self.fills.append(event)
+        if event.instrument_id == INSTRUMENT.id:
+            # BTC/USD permits entry risk validation. Remove it after entry so
+            # the later funding settlement has no conversion path.
+            self.cache.purge_instrument(BTCUSD_INSTRUMENT.id)
 
 
 def btcjpy_book(timestamp: int):
@@ -160,6 +165,54 @@ def clear_btcjpy_book(timestamp: int):
 
 
 
+
+def btcusd_spot_book(timestamp: int):
+    return OrderBookDeltas(
+        BTCUSD_INSTRUMENT.id,
+        [
+            OrderBookDelta(
+                instrument_id=BTCUSD_INSTRUMENT.id,
+                action=BookAction.ADD,
+                order=BookOrder(
+                    OrderSide.BUY,
+                    Price.from_str("39999.90000"),
+                    Quantity.from_str("100000"),
+                    21,
+                ),
+                flags=0,
+                sequence=1,
+                ts_event=timestamp,
+                ts_init=timestamp,
+            ),
+            OrderBookDelta(
+                instrument_id=BTCUSD_INSTRUMENT.id,
+                action=BookAction.ADD,
+                order=BookOrder(
+                    OrderSide.SELL,
+                    Price.from_str("40000.00000"),
+                    Quantity.from_str("100000"),
+                    22,
+                ),
+                flags=RecordFlag.F_LAST.value,
+                sequence=2,
+                ts_event=timestamp,
+                ts_init=timestamp,
+            ),
+        ],
+    )
+
+
+def btcusd_spot_quote(timestamp: int):
+    return QuoteTick(
+        instrument_id=BTCUSD_INSTRUMENT.id,
+        bid_price=Price.from_str("39999.90000"),
+        ask_price=Price.from_str("40000.00000"),
+        bid_size=Quantity.from_str("100000"),
+        ask_size=Quantity.from_str("100000"),
+        ts_event=timestamp,
+        ts_init=timestamp,
+    )
+
 def trigger_book(timestamp: int):
     return OrderBookDeltas(
         TRIGGER_INSTRUMENT.id,
@@ -226,6 +279,7 @@ def run_missing_fx_conversion():
         ),
     )
     engine.add_instrument(INSTRUMENT)
+    engine.add_instrument(BTCUSD_INSTRUMENT)
     engine.add_instrument(TRIGGER_INSTRUMENT)
     strategy = OpenInverseLong()
     try:
@@ -235,7 +289,9 @@ def run_missing_fx_conversion():
         boundary = BASE_NS + 4_000_000_000
         engine.add_data([
             btcjpy_book(BASE_NS + 1_000_000_000),
+            btcusd_spot_book(BASE_NS + 1_200_000_000),
             trigger_book(BASE_NS + 1_500_000_000),
+            btcusd_spot_quote(BASE_NS + 1_800_000_000),
             trigger_quote(BASE_NS + 2_000_000_000),
             MarkPriceUpdate(
                 instrument_id=INSTRUMENT.id,
