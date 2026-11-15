@@ -135,3 +135,12 @@ The owner has explicitly prioritised decision quality and execution correctness 
 - No repository or algorithm was selected. No dependency was installed. No code or execution tests were run in this documentation/research update.
 
 The next execution-research sequence is: validate actual perpetual L2/trades first; then establish causal replay and identical parent intents; benchmark immediate IOC, passive limit, TWAP, VWAP and POV; calibrate fill probability, adverse selection, liquidity replenishment and impact; and only then evaluate adaptive or learned policies out-of-sample. Latency remains measured, not ignored, but it is not the primary optimisation objective.
+
+
+## 11. Hugging Face Binance dataset — market identity resolved (16 November 2026)
+
+The earlier “spot/perpetual unclear” note is superseded by source inspection. The public dataset rows identify `exchange=binance`; the associated MIT collector maps that adapter to spot endpoints (`stream.binance.com`, `api.binance.com/api/v3/depth`). The same source has a distinct `binance_futures` adapter using `fstream.binance.com` and `fapi.binance.com/fapi/v1/depth`. The published files are therefore **spot data**, not USDⓈ-M perpetual data.
+
+The Hugging Face datasets-server API reports 220.6m depth rows (1.49 GB), 224k snapshot rows (1.66 MB), and 30.58m trade rows (230 MB), total 251.39m rows / 1.72 GB. Bounded row previews exposed depth/snapshot/trade schemas, but the published schemas omit separate `exchange_ts`. The first returned snapshot row is 2026-06-05 06:29:48 UTC, while first returned depth/trade rows are 2026-06-04 00:54 UTC, so an initial snapshot anchor is not demonstrated for the earliest ~29.6 hours. The dataset card also documents a 43-minute outage on 2026-07-05 requiring a hard snapshot reset.
+
+No Parquet bytes were downloaded, parsed or reconstructed. This dataset is rejected for perpetual calibration; it may be considered only as a generic spot-data parser fixture after actual file validation. See [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 9.
