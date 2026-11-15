@@ -73,6 +73,10 @@ CI runs the same command on GitHub-hosted Linux runners. No paid service or secr
 
 Latest verification: **30 tests passed in 0.13s** in [GitHub Actions run 43694663624](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43694663624), using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. This includes long/short spread-side selection and deterministic replay.
 
+## Exchange-specific liquidation and recovery gap
+
+A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivatives is recorded in [exchange_liquidation_gap_matrix.md](exchange_liquidation_gap_matrix.md). The venues differ in staged liquidation, bankruptcy-price takeover, insurance-pool allocation, ADL triggers/ranking and telemetry. The pinned NautilusTrader simulator's current liquidation path submits one full-position reduce-only IOC after an executable-side check; it does not implement these venue-specific workflows. No venue is selected and no testnet/account access was used.
+
 ## Still unverified
 
 - Exchange-specific liquidation thresholds, liquidation price, bankruptcy price, insurance fund, ADL and account recovery.
