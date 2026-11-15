@@ -123,3 +123,15 @@ Before any historical dataset is used for market-impact or fill calibration, ver
 ## 9. Alternative-source screening (16 November 2026)
 
 See [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 8. The community Binance dataset is a potential parser/reconstruction fixture only until spot-versus-perpetual market identity is verified. CryptoHFTData is held pending deployment and independent verification of its documented corrections. The MIT `crypto-lob-stream` collector is a reference, not an adopted dependency. No candidate passed the actual-file validation gate.
+
+
+## 10. Execution-quality and order-placement research (16 November 2026)
+
+The owner has explicitly prioritised decision quality and execution correctness over minimum order-placement latency (D-013). See [Execution Quality Research](EXECUTION_QUALITY_RESEARCH.md) for the objective function, scheduling-vs-placement decomposition, evaluation protocol and repository review.
+
+- `eshaan2418/sorx` (MIT): useful OMS invariants, deterministic replay, per-venue book validation, parent-level paired TCA and fill simulation. Its reported 5–80 ms latency sensitivity is small in its own 40-minute spot USD-pair capture, but this cannot be transferred to perps. The capture's consolidated book was crossed in every 1-second sample, sample size was small, fees/latencies illustrative, and passive queue/market impact beyond consumed depth were not modelled. Reference only.
+- `moussoulijane/execution-cost-analytics` (MIT): useful causal scheduling comparisons, paired path-level inference, bootstrap uncertainty and explicit negative results. One inspected initial commit; historical results and impact parameters are not a calibrated crypto-perpetual model. Research-method reference only.
+- `AshJha0/electronic-trading` (MIT, release 2.0.1 dated 2026-10-31): useful Almgren–Chriss, Avellaneda–Stoikov/GLFT, impact/markout and golden-value test concepts. Its illustrative/equity calibration is not directly transferable to crypto perps. Mathematical/test reference only.
+- No repository or algorithm was selected. No dependency was installed. No code or execution tests were run in this documentation/research update.
+
+The next execution-research sequence is: validate actual perpetual L2/trades first; then establish causal replay and identical parent intents; benchmark immediate IOC, passive limit, TWAP, VWAP and POV; calibrate fill probability, adverse selection, liquidity replenishment and impact; and only then evaluate adaptive or learned policies out-of-sample. Latency remains measured, not ignored, but it is not the primary optimisation objective.
