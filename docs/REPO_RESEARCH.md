@@ -254,3 +254,10 @@ Oracle is not approved or activated. Its free allocation does not guarantee capa
 5. Benchmark CPU/RAM/disk/egress on the candidate free worker. Testnet/paper adapter parity only; no mainnet order submission.
 
 **Phase 01 remains IN PROGRESS.** This review narrows the first experiment but does not authorise Phase 02, real-money trading, account linking, paid services or dependency adoption.
+
+
+### Exchange-selection constraint carried forward
+
+The earlier project plan specified that public market-data research and simulated paper execution should begin without requiring an exchange account. Exchange/API access must remain free. Therefore the first engine proof-of-concept should be exchange-neutral and use deterministic fixtures or public unauthenticated market data with a simulated execution venue. Do not create credentials, request API keys or connect an account as a prerequisite.
+
+Binance and Kraken were previously discussed as initial exchange candidates, with OKX as an additional candidate, but that discussion did not select a venue for this perpetual-futures implementation. Their regional product availability, derivatives endpoints, test environments and free access must be re-verified before any adapter is selected. The first proof-of-concept must not silently turn an earlier candidate list into an exchange decision.
