@@ -106,3 +106,15 @@ The report explicitly records the failed retrieval, documented historical sample
 **Next step:** obtain real incremental L2 and paired trade files from a reachable no-cost source, then run the full validation matrix in `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md`.
 
 **Owner approval:** not required for this bounded Phase 01 research continuation under D-012; approval remains required before Phase 02, implementation, venue/account connection, trading, risk changes or spending.
+
+
+## 5. Publication and read-back verification addendum
+
+The following documentation commits were created sequentially on `main` and all five target files were fetched again successfully:
+- Validation report `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md`: `cff215acedfc731581c692c02f3ef8dc32dd0174`.
+- Roadmap `ROADMAP.md`: `184c57a27252273de4ac1a2f467a511bf73d0a3f`.
+- Exchange/data shortlist `docs/EXCHANGE_AND_DATA_SHORTLIST.md`: `96e298a90e94ce9b31d10c48b3e1c7bd2f4b74e6`.
+- This conversation record: `b26adbe552f6efbf40a4ec3339e3ac3ecf222aa1`.
+- Audit index `docs/CHATGPT_CONVERSATIONS/README.md`: `0ea0288af9b46004cabe3203d648f0c3310cdeb9`.
+
+Read-back verification confirmed the validation report contains the BLOCKED disposition and historical sample size evidence; ROADMAP links the report and keeps the gate open; the shortlist contains the follow-up findings; this record contains the retrieval failures; and the audit index contains record 022. The final audit-record update below records these commit references.
