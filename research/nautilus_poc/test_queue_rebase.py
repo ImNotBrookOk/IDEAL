@@ -570,10 +570,10 @@ def run_amendment_edge_case(
         )
         if mode == "price_change":
             progress = sell_trade(3, "10.000")
-            final_trade = make_sell_trade(5, "1.000")
+            final_trade = sell_trade(5, "1.000")
             data = [initial, quote(2), progress, quote(4), final_trade]
         else:
-            progress = make_sell_trade(3, "6.000")
+            progress = sell_trade(3, "6.000")
             deeper = delta(
                 BookAction.UPDATE,
                 OrderSide.BUY,
@@ -582,7 +582,7 @@ def run_amendment_edge_case(
                 1,
                 4,
             )
-            final_trade = make_sell_trade(6, "5.000")
+            final_trade = sell_trade(6, "5.000")
             data = [initial, quote(2), progress, deeper, quote(5), final_trade]
         engine.add_data(data)
         engine.run()
