@@ -257,3 +257,12 @@ Official source links:
 - OKX terms: https://www.okx.com/help/terms-of-service
 
 **Disposition:** No venue is currently verified as legally/product-eligible for a New Zealand retail user to trade crypto perpetuals. This is not a legal conclusion that all are unavailable. Do not create an account, connect an exchange, obtain API keys or route orders based on generic availability pages. Before venue selection, obtain authoritative confirmation of the exact contracting entity, product, customer classification (retail/wholesale), and applicable FMA licence or exemption. Obtain independent New Zealand legal advice where necessary. The public market-data research can continue without this gate being cleared.
+
+
+## 13.11 Two-day trade/BBO alignment gate passed for research (16 November 2026)
+
+The expanded no-lookahead workflow [#43776264061](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43776264061) aligned 2,597,825 trades on 11 November and 3,224,415 on 12 November to strictly preceding valid 400-level BBO states. Both days had zero trades without a preceding book and zero invalid-book matches. Median age was 6 ms on both days; p95 was 18 ms and 10 ms; maximum age 497 ms and 509 ms. Directional side consistency was 99.118% and 98.542%, respectively. Initial acceptance gates passed independently on each day.
+
+Outside-spread rates were 64.445% and 62.584%; this is not automatically a data defect because 10 ms sampling can miss intervening states and same-timestamp ordering is unknown. It does mean the dataset cannot establish exact trade/book event ordering. The 497–509 ms stale tail requires explicit runtime staleness controls. Detailed metrics: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.12.
+
+**Status:** historical module-4 400-level data is provisionally viable for sampled market-quality and conservative taker-impact research on the two validated days. It remains unsuitable for FIFO queue-position or exact passive-fill calibration. This does not clear live feed entitlement (13.9), NZ derivatives eligibility (13.10), venue selection or runtime adoption.
