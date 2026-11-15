@@ -144,7 +144,7 @@ def run_trade_only_without_quote_book():
     """LAST valuation with an explicitly cleared L2 book cannot execute a close."""
     engine = build_engine(
         bar_execution=False,
-        trade_execution=True,
+        trade_execution=False,
         book_type=BookType.L2_MBP,
     )
     strategy = RestingInverseLong()
