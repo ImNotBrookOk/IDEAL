@@ -258,7 +258,7 @@ def make_l2_book(timestamp: int = 1):
     ]
     for index, (side, price, size) in enumerate(entries):
         sequence = index + 1
-        flags = RecordFlag.F_LAST if index == len(entries) - 1 else 0
+        flags = RecordFlag.F_LAST.value if index == len(entries) - 1 else 0
         deltas.append(
             OrderBookDelta(
                 instrument_id=INSTRUMENT.id,
