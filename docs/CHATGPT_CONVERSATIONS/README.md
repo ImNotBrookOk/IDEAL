@@ -42,3 +42,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-009-funding-fallback-multiposition.md](2026-11-16-009-funding-fallback-multiposition.md) | Funding mark-price fallback to top-of-book midpoint, two hedged positions, duplicate-boundary idempotency and fatal failed-settlement recovery limitation; 54 tests pass; PR #15 merged |
 
 | [2026-11-16-010-funding-missing-price-failure.md](2026-11-16-010-funding-missing-price-failure.md) | No mark and no top-of-book at funding boundary; L2 book-clear regression proves fatal backtest funding error and no same-run retry; 55 tests pass; PR #16 merged |
+
+| [2026-11-16-011-funding-fx-conversion-failure.md](2026-11-16-011-funding-fx-conversion-failure.md) | Inverse BTCJPY/BTC-settled position in USD account; temporary BTC/USD entry quote purged after fill; valid mark but missing funding FX conversion causes fatal failure; 56 tests pass; PR #17 merged |
