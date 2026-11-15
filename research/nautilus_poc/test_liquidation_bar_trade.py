@@ -20,6 +20,7 @@ from nautilus_trader.model import (
     OmsType,
     OrderSide,
     Price,
+    PriceType,
     Quantity,
     TimeInForce,
     TradeId,
@@ -151,9 +152,7 @@ def run_trade_only_without_quote_book():
             "closed_positions": engine.cache.positions_closed_count(),
             "fill_count": len(strategy.fill_events),
             "balance": engine.portfolio.account(venue=VENUE).balance_total(BTC),
-            "last_trade": engine.cache.price(INSTRUMENT.id, __import__(
-                "nautilus_trader.model", fromlist=["PriceType"]
-            ).PriceType.LAST),
+            "last_trade": engine.cache.price(INSTRUMENT.id, PriceType.LAST),
         }
     finally:
         engine.dispose()
