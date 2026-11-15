@@ -70,7 +70,7 @@ def make_bar(price: int, offset: int) -> Bar:
         high=value,
         low=value,
         close=value,
-        volume=CONTRACTS,
+        volume=Quantity.from_int(40_000_000),
         ts_event=timestamp,
         ts_init=timestamp,
     )
@@ -89,7 +89,7 @@ def make_trade(price: int, trade_id: str, offset: int) -> TradeTick:
     )
 
 
-def build_engine(*, bar_execution: bool, trade_execution: bool):
+def build_engine(*, bar_execution: bool, trade_execution: bool, book_type=BookType.L1_MBP):
     engine = BacktestEngine(
         BacktestEngineConfig(bypass_logging=True, run_analysis=False),
     )
@@ -99,7 +99,7 @@ def build_engine(*, bar_execution: bool, trade_execution: bool):
         account_type=AccountType.MARGIN,
         base_currency=BTC,
         starting_balances=[Money(1, BTC)],
-        book_type=BookType.L1_MBP,
+        book_type=book_type,
         fee_model=MakerTakerFeeModel(
             maker_rate=Decimal("-0.00025"),
             taker_rate=Decimal("0.00075"),
@@ -137,8 +137,12 @@ def run_bar_only_liquidation():
 
 
 def run_trade_only_without_quote_book():
-    """Trades update last price and fill entry, but never create a bid/ask quote."""
-    engine = build_engine(bar_execution=False, trade_execution=True)
+    """Trades update last price and fill entry, but L2 book stays empty without depth."""
+    engine = build_engine(
+        bar_execution=False,
+        trade_execution=True,
+        book_type=BookType.L2_MBP,
+    )
     strategy = RestingInverseLong()
     try:
         engine.add_strategy(strategy)
@@ -173,9 +177,10 @@ def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid()
     result = run_trade_only_without_quote_book()
 
     # The trade stream opens the position and moves last price through the
-    # maintenance threshold. It does not create an executable bid. The engine
-    # can value the breach from LAST, but liquidate_open_positions skips the
-    # synthetic close because best_bid_price() is absent.
+    # maintenance threshold. With an L2 venue and no OrderBookDepth updates,
+    # trade_execution can match the entry from LAST while the actual L2 book
+    # remains empty. The engine values the breach from LAST but skips closing
+    # because best_bid_price() is absent.
     assert result["open_positions"] == 1
     assert result["closed_positions"] == 0
     assert result["fill_count"] == 1
