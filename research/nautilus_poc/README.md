@@ -75,7 +75,7 @@ Latest verification: **30 tests passed in 0.13s** in [GitHub Actions run 4369466
 
 ## Exchange-specific liquidation and recovery gap
 
-A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivatives is recorded in [exchange_liquidation_gap_matrix.md](exchange_liquidation_gap_matrix.md). The venues differ in staged liquidation, bankruptcy-price takeover, insurance-pool allocation, ADL triggers/ranking and telemetry. The pinned NautilusTrader simulator's current liquidation path submits one full-position reduce-only IOC after an executable-side check; it does not implement these venue-specific workflows. No venue is selected and no testnet/account access was used.
+A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivatives is recorded in [exchange_liquidation_gap_matrix.md](exchange_liquidation_gap_matrix.md). The venues differ in staged liquidation, bankruptcy-price takeover, insurance-pool allocation, ADL triggers/ranking and telemetry. The pinned NautilusTrader simulator's current liquidation path submits one full-position reduce-only IOC after an executable-side check; it does not implement these venue-specific workflows. No venue is selected and no testnet/account access was used. Refresh official contract specifications, API changelogs and jurisdiction eligibility immediately before any future adapter implementation.
 
 ## Still unverified
 
