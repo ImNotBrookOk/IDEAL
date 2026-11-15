@@ -235,3 +235,25 @@ OKX's official WebSocket guide distinguishes:
 Source: https://app.okx.com/docs-v5/en/, “WS / Order book channel”.
 
 Thus, the public historical 400-level 10 ms archive is a credible research-data source, but equivalent live full-depth data is not established for an ordinary account tier. Any venue shortlist must separately score historical data access and live feed entitlement. A 100 ms book or 10 ms BBO fallback changes the information set and requires separate calibration; it cannot be assumed execution-equivalent to 10 ms full depth. No VIP entitlement or live connection is assumed.
+
+
+## 13.10 New Zealand derivatives-issuer eligibility gate (16 November 2026)
+
+This is a hard venue-selection gate, not a minor onboarding check. The New Zealand FMA states that anyone offering derivatives to retail investors in New Zealand must hold a derivatives issuer licence and comply with the relevant disclosure and client-funds rules. The FMA's crypto guidance specifically states that providers offering crypto CFDs in New Zealand require a derivatives issuer licence and directs users considering other crypto derivatives to verify that the service provider is licensed. Official sources:
+- https://www.fma.govt.nz/consumer/investing/types-of-investments/derivatives
+- https://www.fma.govt.nz/consumer/investing/types-of-investments/cryptocurrencies/
+- https://www.fma.govt.nz/business/services/derivatives-issuers/
+
+Preliminary public-source screen:
+- Binance New Zealand's official licensing page lists fiat purchase, virtual-asset trading, NFT trading and virtual-asset investment services; it does not list derivatives issuance. Its NZ futures market/fee pages exist but currently render “No records found”, which is not proof of eligibility.
+- Bybit's NZ-specific terms identify Kono Group Limited as the contracting party and state that NZ users may access only the “NZ Supported Services”; the public addendum does not enumerate those services. Bybit's global excluded-jurisdiction list alone is insufficient to establish NZ perpetuals availability.
+- OKX's 14 November 2026 Risk & Compliance Disclosure does not name New Zealand among the restricted locations or its separately named limited-service jurisdictions, but both lists are open-ended. OKX's terms list Aux Cayes FinTech Co. Ltd. for other eligible users; no NZ product-level derivatives entitlement is established by these pages.
+
+Official source links:
+- Binance NZ entity/services: https://www.binance.com/en-GB/legal/licenses
+- Bybit NZ addendum: https://www.bybit.global/common-static/compliance/legal/BYBIT/700f3662d5d08a2d6cc9e75b47e381f0.pdf
+- Bybit restricted jurisdictions: https://www.bybit.com/en/help-center/article/Service-Restricted-Countries/trade/spot
+- OKX disclosure: https://www.okx.com/help/risk-compliance-disclosure
+- OKX terms: https://www.okx.com/help/terms-of-service
+
+**Disposition:** No venue is currently verified as legally/product-eligible for a New Zealand retail user to trade crypto perpetuals. This is not a legal conclusion that all are unavailable. Do not create an account, connect an exchange, obtain API keys or route orders based on generic availability pages. Before venue selection, obtain authoritative confirmation of the exact contracting entity, product, customer classification (retail/wholesale), and applicable FMA licence or exemption. Obtain independent New Zealand legal advice where necessary. The public market-data research can continue without this gate being cleared.
