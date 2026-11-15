@@ -37,7 +37,11 @@ A second workflow [#43776264061](https://github.com/ImNotBrookOk/IDEAL/actions/r
 - align each trade only to a strictly preceding book state;
 - apply the initial quality gates independently to each day: nonzero aligned trades, zero missing preceding books, zero invalid book matches, p95 book age <=20 ms and side consistency >=98%.
 
-At the time of this audit entry, the workflow was still running. Its result must be appended when complete; it is not marked as passed here.
+Workflow #43776264061 completed successfully. Both days passed independently: 2,597,825 aligned trades on 11 November and 3,224,415 on 12 November; zero trades without a preceding book; zero invalid-book matches; median age 6 ms on each day; p95 age 18 ms / 10 ms; maximum age 497 ms / 509 ms; directional side consistency 99.118% / 98.542%. Same-timestamp trades were conservatively assigned to the preceding book (9.400% / 9.646%). Outside-spread prints were 64.445% / 62.584%; outside-distance p95 was 1.35 / 1.40 bps. Both days passed the initial gates (nonzero aligned trades, no missing preceding book, no invalid matches, p95 <=20 ms, side consistency >=98%). The outside-spread percentage is not a direct defect measure; 10 ms sampled states can miss intermediate updates. The stale tail and missing sequence IDs remain material limitations.
+
+Artifact ID 14186960490, SHA-256 4e1e7cd7dece1882b72a07c85140aec39c95faa859e845de8be7eb09673ba55c, contains only summaries/manifests and expires 18 November 2026 23:47 UTC. Raw L2/trade archives were deleted before upload.
+
+**Checkpoint 2 disposition:** two-day no-lookahead alignment is provisionally passed for sampled market-quality and conservative taker-impact research. It is not FIFO queue-position or exact passive-fill grade.
 
 ## Documentation updated and read-back required
 
