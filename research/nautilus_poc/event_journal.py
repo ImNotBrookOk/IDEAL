@@ -195,7 +195,7 @@ class EventJournal:
             raise ValueError("snapshot_id must be non-empty")
         if isinstance(created_at_ns, bool) or not isinstance(created_at_ns, int) or created_at_ns < 0:
             raise ValueError("created_at_ns must be a non-negative integer")
-        state_json = canonical_bytes({"schema": SNAPSHOT_SCHEMA, "state": state}).decode("utf-8")
+        state_json = canonical_bytes({"schema": SNAPSHOT_SCHEMA, "state": state}, schema=SNAPSHOT_SCHEMA).decode("utf-8")
         state_hash = _sha256(state_json.encode("utf-8"))
 
         self._connection.execute("BEGIN IMMEDIATE")
@@ -297,7 +297,7 @@ class EventJournal:
             if prev_hash != previous:
                 raise JournalIntegrityError(f"event {event_id!r} previous hash mismatch")
             try:
-                event_json = canonical_bytes(json.loads(payload_json))
+                event_json = canonical_bytes(json.loads(payload_json), schema=EVENT_SCHEMA)
             except Exception as exc:
                 raise JournalIntegrityError(f"event {event_id!r} payload is not canonical JSON") from exc
             if _event_hash(previous, event_json) != event_hash:
