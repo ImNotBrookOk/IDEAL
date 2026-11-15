@@ -30,8 +30,8 @@ def make_quote(offset: int) -> QuoteTick:
     timestamp = BASE_NS + offset
     return QuoteTick(
         instrument_id=INSTRUMENT.id,
-        bid_price=Price.from_str("60000.00"),
-        ask_price=Price.from_str("60000.50"),
+        bid_price=Price.from_str("60000.0"),
+        ask_price=Price.from_str("60000.5"),
         bid_size=Quantity.from_str("1.000"),
         ask_size=Quantity.from_str("1.000"),
         ts_event=timestamp,
