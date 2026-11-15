@@ -71,7 +71,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest completed baseline: **27 tests passed in 0.18s** in [GitHub Actions run 43693535483](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43693535483). Three additional long/short spread-side tests have been added; their CI verification is pending.
+Latest verification: **30 tests passed in 0.13s** in [GitHub Actions run 43694589374](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43694589374), using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. This includes long/short spread-side selection and deterministic replay.
 
 ## Still unverified
 
