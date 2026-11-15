@@ -130,6 +130,7 @@ def run_once():
             "fill_count": len(strategy.fills),
             "open_positions": engine.cache.positions_open_count(),
             "closed_positions": engine.cache.positions_closed_count(),
+            "fill_price": strategy.fills[0].last_px,
             "maintenance_margin": engine.portfolio.account(venue=Venue("SIM")).total_maintenance_margin(USDT),
         }
     finally:
@@ -142,6 +143,7 @@ def test_market_order_completes_submit_accept_fill_and_opens_position():
     assert result["fill_count"] == 1
     assert result["open_positions"] == 1
     assert result["closed_positions"] == 0
+    assert result["fill_price"] == Price.from_str("60000.50")
     assert result["maintenance_margin"] == Money.from_str("150.00125000 USDT")
 
 
