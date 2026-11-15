@@ -142,7 +142,7 @@ Important limitation:
 - The kernel is OHLCV-driven. Its intrabar model cannot infer the true ordering of stop and target touches within a candle; conservative ambiguity rules and higher-resolution/order-book evidence are still needed.
 - Funding is an opt-in aligned series in the kernel, with a completeness flag. The downstream policy needs to be tested to ensure incomplete funding blocks eligibility across every path.
 
-Assessment: **retain as a high-value reference for shared-kernel design and replay tests**. Do not adopt its reported parity as proof of live/paper parity. Build an IDEAL contract test that compares the exact scanner/order-fill path with the backtest event stream.
+Assessment: **retain as a high-value reference for shared-kernel design and replay tests**. Do not adopt its kernel replay suite as proof of exchange-level paper/backtest parity. Build an IDEAL contract test that compares signal time, submitted order time, exchange/simulator acknowledgement, actual fill price, fees and position state against the backtest event stream.
 
 ### CCXT — useful REST adapter primitives, not a complete feed/execution stack
 
@@ -191,3 +191,11 @@ These inspections strengthen the following provisional boundaries:
 - Use CCXT only where the exact exchange endpoint and free feature set are verified; do not conflate REST and Pro WebSocket capabilities.
 - Use RD-Agent-like hypothesis/experiment lineage without delegating evaluation or permissions to an agent.
 - Use Optuna sequentially with fixed seeds for controlled parameter exploration; protect untouched holdout data and account for multiple testing.
+
+
+### Additional candidate comparison: crypto-perpetual support and control surfaces
+
+- NautilusTrader documents a dedicated `CryptoPerpetual` instrument with linear/inverse settlement, precision, contract multiplier, min/max quantity/notional and initial/maintenance margin fields. Its documented adapters include Binance, Bybit, dYdX, Hyperliquid, Kraken and OKX. Funding is delivered as timestamped data updates rather than stored as a static instrument field. This is a material advantage for IDEAL's target market, but each adapter's exact order types, funding history, mark/index feed and account-margin semantics still require exchange-specific tests. See the [crypto perpetual instrument contract](https://github.com/nautechsystems/nautilus_trader/blob/develop/docs/concepts/instruments/crypto_perpetual.md).
+- Barter's README describes separable MarketStream and ExecutionClient interfaces, mock execution for paper/backtesting, pluggable Strategy/RiskManager components, a central order-management system and an Engine AuditStream suitable for an external monitoring process. This is a useful smaller Rust architecture comparison, especially for clean control-plane boundaries. It does not establish that the exchange integrations or derivatives semantics meet IDEAL's needs. See the [Barter README](https://github.com/barter-rs/barter-rs/blob/main/README.md).
+- Forven's current policy defaults are materially different from IDEAL's preliminary screen: the inspected quick-screen config uses a 20-trade minimum and disables a minimum win-rate floor by default, with profit-factor and other gates. IDEAL's user-defined initial screen is over 100 trades and over 30% win rate, while also requiring net expectancy, PF, drawdown, costs and out-of-sample robustness. These thresholds must not be copied or treated as interchangeable. See [Forven policy](https://github.com/judder659/Forven/blob/main/forven/policy.py).
+
