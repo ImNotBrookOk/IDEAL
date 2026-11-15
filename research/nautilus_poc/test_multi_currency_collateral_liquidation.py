@@ -103,7 +103,7 @@ def run_btc_collateral_vs_usdt_liquidation_case():
         engine.add_data([
             # The market buy executes at the 60,000 ask.
             make_quote("59999.5", "60000.0", 1_000_000_000),
-            # A 10,000 adverse move loses 1,000 USDT on 0.1 BTC.
+            # The 10,000.5 bid-side move loses 1,000.05 USDT on 0.1 BTC.
             make_quote("49999.5", "50000.0", 2_000_000_000),
         ])
         engine.run()
@@ -126,9 +126,10 @@ def test_btc_balance_does_not_offset_usdt_settled_liquidation_in_simulator():
     # The account owns 2 BTC of collateral, but this pinned simulator's
     # liquidation check is bucketed by each position's settlement currency.
     # The 0.1 BTCUSDT loss exhausts the 1,000 USDT balance and triggers closure.
+    # The 0.5 USDT residual below zero comes from the half-tick bid difference.
     assert result["base_currency"] is None
     assert result["btc_balance"] == Money.from_str("2 BTC")
-    assert result["usdt_balance"] == Money.from_str("0 USDT")
+    assert result["usdt_balance"] == Money.from_str("-0.05000000 USDT")
     assert result["open_positions"] == 0
     assert result["closed_positions"] == 1
     assert result["fill_count"] == 2
