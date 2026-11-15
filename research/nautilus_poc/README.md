@@ -28,6 +28,13 @@ Coverage:
 6. Funding: positive funding of `0.0001` on `6000.05 USDT` mark notional debits `0.60000500 USDT` at the specified funding boundary. The taker fee is `3.00002500 USDT`; final balance is `9996.39997000 USDT`.
 7. Missing boundary: a funding update without `next_funding_ns` and not aligned to its interval does not create a funding payment.
 
+## Liquidation POC findings (2.0.0rc9)
+
+- A synthetic inverse BTCUSD position opened from quote ticks is closed when the next quote creates a maintenance-margin breach with `liquidation_enabled=True` and `liquidation_trigger_ratio=1.0`.
+- The deterministic fixture closes one position and leaves the account at **-249.56250000 BTC** after a 40,000 → 20,000 quote gap. This is a critical limitation: the simulated close occurs at the observed quote and can produce a deeply negative balance. It does not model a guaranteed bankruptcy-price cap, insurance-fund recovery or ADL protection in this scenario.
+- Liquidation tests must currently be quote-driven. NautilusTrader issue [#5453](https://github.com/nautechsystems/nautilus_trader/issues/5453) documents that the liquidation check in the evaluated code path calculates unrealised PnL from cached quotes; bar-only, trade-only and bar-plus-mark-price inputs can leave a breached position open. This limitation must be retested against any later engine pin before considering adoption.
+- The synthetic liquidation fill is not a realistic exchange liquidation model. Exchange-specific liquidation fees, partial liquidation, bankruptcy price, insurance fund, ADL and recovery remain unverified.
+
 ## Important engine semantics observed
 
 - A simulated market order does not emit `OrderAccepted` by default. The test enables `use_market_order_acks=True` to explicitly exercise the acknowledgement stage. Do not assume this is identical to every live adapter's event sequence.
@@ -47,7 +54,7 @@ CI runs the same command on GitHub-hosted Linux runners. No paid service or secr
 
 ## Still unverified
 
-- Liquidation thresholds, liquidation price and account recovery.
+- Exchange-specific liquidation thresholds, liquidation price, bankruptcy price, insurance fund, ADL and account recovery.
 - Partial fills, queue position, conservative liquidity consumption under multiple competing orders.
 - Slippage, spread widening, adverse selection and stop/target same-bar ordering/gap-through.
 - Funding with missing mark prices, missing exchange rates, multiple positions and multiple currencies.
