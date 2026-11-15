@@ -158,7 +158,47 @@ Direct unauthenticated download attempts against both Tardis and CryptoHFTData f
 ### 8.5 Revised disposition
 
 1. Keep Tardis as a no-key sample candidate; obtain actual L2 and paired trade bytes when a network path is available.
-2. Screen the Hugging Face community dataset only as a possible reconstruction/parser fixture after confirming its market type and obtaining a bounded file. Do not treat it as perpetual calibration data unless USDⓈ-M market identity is proved.
+2. The Hugging Face community dataset has since been identified as Binance spot, not USDⓈ-M perpetual. Do not use it for perpetual calibration. It may be considered only as a generic parser/reconstruction fixture after an actual bounded file is obtained and independently validated.
 3. Keep `crypto-lob-stream` as an MIT collector reference only; inspect source/tests before any future reuse and independently test ghost-level pruning, sequence gaps, resync and file-write durability.
 4. Hold CryptoHFTData until its own corrections are deployed and licence scope is confirmed for the intended use.
 5. No source is selected, no venue is selected, and the historical-data acceptance gate remains BLOCKED.
+
+
+## 9. Hugging Face sample API and market-identity verification (16 November 2026)
+
+### 9.1 Public metadata and bounded row previews
+
+The Hugging Face dataset metadata and datasets-server endpoints were reachable through the research browser, even though direct binary downloads were not. The dataset is public, ungated and marked MIT. Its API reports:
+- 251,388,868 total rows and 1,723,754,188 bytes (about 1.72 GB) across all configurations.
+- Depth: 220,581,733 rows / 1,491,633,558 bytes.
+- Snapshots: 224,000 rows / 1,659,329 bytes.
+- Trades: 30,583,135 rows / 230,461,301 bytes.
+
+The public row-preview API returned schema and records for the depth, snapshot and trade configurations. The observed fields were:
+- Depth: `timestamp_ms`, `asset`, `side`, `price`, `quantity`, `first_update_id`, `last_update_id`, `exchange`.
+- Snapshot: `timestamp_ms`, `asset`, `side`, `price`, `quantity`, `last_update_id`, `exchange`.
+- Trades: `timestamp_ms`, `asset`, `trade_id`, `price`, `quantity`, `buyer_maker`, `exchange`.
+
+The published dataset-server schemas do not expose a separate `exchange_ts` field. The collector source currently defines `timestamp_ms` as local receive time and keeps exchange event time separately as nullable `exchange_ts`; however, the exact collector version used to produce this dataset was not proven. Therefore feed-delay/event-time analysis cannot be assumed available from the published dataset.
+
+### 9.2 Spot versus perpetual — resolved
+
+The dataset rows use `exchange="binance"` and paths such as `depth/binance/BTCUSDT`. The inspected MIT collector source defines:
+- `BinanceExchange` (name `binance`) using `wss://stream.binance.com:9443/stream` and REST snapshot endpoint `https://api.binance.com/api/v3/depth` — the spot adapter.
+- A distinct `BinanceFuturesExchange` (name `binance_futures`) using `wss://fstream.binance.com/stream` and `https://fapi.binance.com/fapi/v1/depth` — the USDⓈ-M futures adapter.
+
+The published dataset uses the spot adapter identity and does not contain `binance_futures` records. Its market type is therefore **spot**, not USDⓈ-M perpetual. This resolves the earlier ambiguity. It is rejected as direct perpetual execution-calibration data. It may still serve as a generic parser/reconstruction fixture if actual Parquet bytes are later obtained and validated.
+
+### 9.3 Snapshot coverage warning
+
+The first returned row in the snapshot configuration has timestamp `1780640988543` (2026-06-05 06:29:48.543 UTC). The first returned depth row has `1780534480378` (2026-06-04 00:54:40.378 UTC), and the first returned trade row has `1780534474149` (2026-06-04 00:54:34.149 UTC). Thus the first exposed snapshot anchor is about 29 hours 35 minutes later than the first exposed depth/trade records. The row API's first row is not a full inventory proof, but the earliest interval has no preceding snapshot anchor demonstrated by the returned data. Do not replay that interval until earlier anchors are found or the dataset publisher explains the discrepancy.
+
+The dataset card also documents a roughly 43-minute capture interruption on 2026-07-05 affecting all three symbols, followed by a fresh snapshot; it must be treated as a hard reset, not a continuous sequence.
+
+### 9.4 What was and was not tested
+
+- **Performed:** retrieved public metadata; inspected all three dataset-server schemas and bounded row previews; checked representative timestamps, IDs, quantities, symbol and exchange fields; inspected collector source to resolve spot/perpetual adapter identity.
+- **Not performed:** downloaded Parquet bytes; verified Parquet/Snappy integrity; parsed the actual monthly files locally; checked complete sequence continuity; reconstructed a full book; compared reconstructed levels with REST; checked the entire snapshot coverage; ran the collector's tests; or measured replay performance.
+- One depth row-preview request returned HTTP 502, while metadata, snapshot/trade previews and a depth first-rows request returned data. This is an API preview failure, not a claim about the underlying Parquet file.
+
+**Disposition:** source-level and bounded API inspection only. The dataset is spot-only and has an early snapshot-anchor warning. It is not accepted for perpetual calibration. The historical perpetual L2 acceptance gate remains BLOCKED.
