@@ -139,3 +139,23 @@ Historical conversation records 019 and 020 remain unchanged under the append-on
 **Single next task:** continue the Phase 01 multi-currency account research with a deterministic POC for reporting-currency equity conversion, FX freshness and missing-rate failure handling. Then continue the remaining Phase 01 blockers in roadmap order.
 
 **Owner approval:** still required before Phase 02 and runtime implementation under D-012.
+
+## Addendum — verbatim transcript completion
+
+The final assistant partial message in this conversation is reproduced below verbatim to preserve the append-only audit requirement:
+
+> 81 / 81 passed on both architectures
+>
+> The corrected test now passes:
+>
+> | CI verification | Result |
+> |---|---:|
+> | x86_64 | 81 passed |
+> | ARM64 | 81 passed |
+> | Deterministic replay | Passed |
+> | Engine version check | Passed |
+> | SQLite benchmark step | Passed |
+>
+> Verified in [CI run 43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953).
+>
+> This establishes a concrete simulator limitation: **the tested liquidation model does not pool BTC collateral to protect a USDT-settled position.** It evaluates maintenance equity in the position's settlement currency.
