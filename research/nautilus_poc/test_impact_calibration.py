@@ -81,7 +81,7 @@ def test_calibration_rejects_partial_fill_without_vwap(tmp_path):
 def test_calibration_requires_single_provenance_universe(tmp_path):
     path = tmp_path / "mixed-venue.csv"
     write_dataset(path, count=2)
-    content = path.read_text(encoding="utf-8").replace("TEST,BTCUSDT-PERP,synthetic-test-fixture,1864000000000", "OTHER,BTCUSDT-PERP,synthetic-test-fixture,1864000000000")
+    content = path.read_text(encoding="utf-8").replace("TEST,BTCUSDT-PERP,synthetic-test-fixture,86401000000000,order-1", "OTHER,BTCUSDT-PERP,synthetic-test-fixture,86401000000000,order-1")
     path.write_text(content, encoding="utf-8")
 
     with pytest.raises(ValueError, match="exactly one non-empty venue"):
