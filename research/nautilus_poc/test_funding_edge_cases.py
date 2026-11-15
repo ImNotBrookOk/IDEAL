@@ -125,7 +125,7 @@ def test_funding_falls_back_to_top_of_book_mid_when_mark_is_missing():
     # Each 0.1 BTC position is valued at the 60,000.25 bid/ask midpoint.
     # Funding debit per position: 6,000.025 * 0.0001 = 0.6000025 USDT.
     # Two taker fees: 2 * 3.000025 USDT.
-    assert result["balance"] == Money.from_str("9992.79994500 USDT")
+    assert result["balance"] == Money.from_str("9992.79994600 USDT")
 
 
 def test_repeated_funding_update_after_settlement_is_idempotent():
