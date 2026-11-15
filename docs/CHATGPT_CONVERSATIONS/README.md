@@ -27,6 +27,7 @@ Create an auditable record of what was requested, what was proposed, what was ch
 |---|---|
 | [2026-11-15-001-conversation-audit-protocol.md](2026-11-15-001-conversation-audit-protocol.md) | Initial owner request and establishment of the conversation audit protocol; PR #5 subsequently merged |
 | [2026-11-15-002-project-resumption-and-audit-confirmation.md](2026-11-15-002-project-resumption-and-audit-confirmation.md) | Owner confirms project continuation and audit requirement; PR #5 merge verified; D-011 accepted; next technical task remains pending |
+| [2026-11-15-003-liquidation-bar-trade-fallback.md](2026-11-15-003-liquidation-bar-trade-fallback.md) | Owner approves bar/trade liquidation research; 27 tests pass; PR #6 open for review; no merge performed |
 
 ## Completion standard
 A conversation record is complete when the available transcript, operational evidence, decisions, unresolved items and approval boundary are documented and committed to the repository. A task is not approved merely because its conversation record is committed.
