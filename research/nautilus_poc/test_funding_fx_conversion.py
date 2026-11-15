@@ -70,9 +70,10 @@ class OpenInverseLong(Strategy):
         # Trigger the BTCJPY order from a different instrument so no BTC/JPY
         # quote is cached for later funding conversion.
         self.subscribe_quotes(TRIGGER_INSTRUMENT.id)
+        self.subscribe_quotes(BTCUSD_INSTRUMENT.id)
 
     def on_quote(self, quote):
-        if self.submitted:
+        if quote.instrument_id != TRIGGER_INSTRUMENT.id or self.submitted:
             return
         self.submitted = True
         self.submit_order(
