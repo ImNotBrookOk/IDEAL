@@ -116,3 +116,15 @@ The audit record was committed as `ba85d3caf072a94dbd851d11b01229c8442c8462`. Al
 - `docs/CHATGPT_CONVERSATIONS/README.md`: `54f2706255534ab98227178ef2f3c75a3b25a1ee`.
 
 No code tests were run because this change is documentation and research only. No phase transition occurred.
+
+
+## 8. Follow-up: Hugging Face dataset market identity and API preview
+
+After publishing the execution-quality decision, the Hugging Face dataset was inspected through its public metadata and datasets-server row-preview API:
+- Metadata: public, ungated, MIT; 251,388,868 rows / 1,723,754,188 bytes. Configurations: depth 220,581,733 rows / 1,491,633,558 bytes; snapshots 224,000 rows / 1,659,329 bytes; trades 30,583,135 rows / 230,461,301 bytes.
+- Bounded previews exposed depth/snapshot/trade schemas. Published schemas omit a separate `exchange_ts` field.
+- Market identity resolved to **Binance spot**. Dataset records use `exchange=binance`; collector `BinanceExchange` uses `stream.binance.com` and `api.binance.com/api/v3/depth`. The separate `BinanceFuturesExchange` uses `binance_futures`, `fstream.binance.com` and `fapi.binance.com/fapi/v1/depth`. The dataset is not perpetual market data.
+- First returned snapshot row is 2026-06-05 06:29:48.543 UTC; first depth/trade rows are 2026-06-04 00:54:40.378 / 00:54:34.149 UTC. An anchor for the first ~29.6 hours is not demonstrated by the exposed row preview. Dataset card records a separate ~43-minute outage on 2026-07-05 requiring a hard reset.
+- The public API returned metadata and sample rows, but no Parquet bytes were downloaded or locally parsed. One depth row-preview request returned HTTP 502. No sequence-completeness, reconstruction or data-quality pass is claimed.
+
+Updated `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md` section 9, `docs/EXCHANGE_AND_DATA_SHORTLIST.md` section 11 and ROADMAP Phase 01 status. The earlier “spot/perpetual unclear” statement is superseded. Historical perpetual L2 gate remains BLOCKED.
