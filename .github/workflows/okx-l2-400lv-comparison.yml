@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install pinned high-throughput JSON parser
+        run: python -m pip install --disable-pip-version-check orjson==3.11.3
+
       - name: Run archive reconstruction unit tests
         env:
           PYTHONPATH: research
