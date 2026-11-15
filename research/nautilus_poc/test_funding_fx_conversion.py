@@ -60,11 +60,11 @@ BASE_NS = 1_700_000_000_000_000_000
 
 
 class OpenInverseLong(Strategy):
-    def __init__(self, purge_fx_after_fill: bool = True):
+    def __init__(self):
         super().__init__()
         self.submitted = False
         self.fills = []
-        self.purge_fx_after_fill = purge_fx_after_fill
+        self.purge_fx_after_fill = True
 
     def on_start(self):
         # Trigger the BTCJPY order from a different instrument so no BTC/JPY
@@ -282,7 +282,8 @@ def run_missing_fx_conversion(*, purge_fx_after_fill: bool = True):
     engine.add_instrument(INSTRUMENT)
     engine.add_instrument(BTCUSD_INSTRUMENT)
     engine.add_instrument(TRIGGER_INSTRUMENT)
-    strategy = OpenInverseLong(purge_fx_after_fill=purge_fx_after_fill)
+    strategy = OpenInverseLong()
+    strategy.purge_fx_after_fill = purge_fx_after_fill
     try:
         engine.add_strategy(strategy)
         mark_ts = BASE_NS + 3_000_000_000
