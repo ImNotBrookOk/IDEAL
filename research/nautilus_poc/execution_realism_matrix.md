@@ -275,7 +275,7 @@ Earlier attempts and corrections:
 
 Verification: [CI run 43754511937](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43754511937), **56 passed in 0.20s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.
 
-Explicit reset/replay recovery after the fatal conversion failure remains untested. This test establishes failure behaviour only; it does not implement recovery.
+This first-run test establishes the fatal conversion-failure behaviour. The same-engine reset boundary and its false-success replay case are evaluated separately in section 10.
 
 
 ## 10. Corrected-data replay and same-engine reset boundary
