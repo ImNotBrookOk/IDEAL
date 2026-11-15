@@ -3,6 +3,7 @@ from decimal import Decimal
 import nautilus_trader
 from nautilus_trader.backtest import BacktestEngine
 from nautilus_trader.config import BacktestEngineConfig
+from nautilus_trader.execution import MakerTakerFeeModel
 from nautilus_trader.model import (
     AccountType,
     CryptoPerpetual,
@@ -34,8 +35,6 @@ def make_instrument():
         ts_init=1,
         margin_init=Decimal("0.05"),
         margin_maint=Decimal("0.025"),
-        maker_fee=Decimal("0.0002"),
-        taker_fee=Decimal("0.0005"),
     )
 
 
@@ -69,6 +68,10 @@ def test_backtest_margin_venue_and_instrument_register():
             oms_type=OmsType.NETTING,
             account_type=AccountType.MARGIN,
             starting_balances=[Money.from_str("10000 USDT")],
+            fee_model=MakerTakerFeeModel(
+                maker_rate=Decimal("0.0002"),
+                taker_rate=Decimal("0.0005"),
+            ),
         )
         instrument = make_instrument()
         engine.add_instrument(instrument)
