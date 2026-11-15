@@ -120,3 +120,6 @@ No claim of production suitability, profitability or live-execution parity is ma
 
 
 19. Cross-architecture validation: the exact `nautilus_trader==2.0.0rc9` POC installs and passes all 71 tests on GitHub-hosted Ubuntu 24.04 x86_64 and ARM64 runners using Python 3.14.10 / glibc 2.39. This confirms the pinned Python wheel and POC are compatible with an ARM64 environment relevant to Oracle Ampere A1. The CI benchmark on ARM64 measured ~2.66–2.74k events/s and ~34.4 MiB peak RSS for 5,000-event cases; this is not an Oracle VM benchmark.
+
+
+20. Queue amendment edge cases: `test_queue_rebase.py` now covers successful price improvements and reductions under all three `OrderPriorityResetPolicy` settings, quantity decreases under all policies, and unchanged-quantity no-op rejection before a modify command is emitted. Together with the earlier quantity-increase cases, all three policy dimensions (price change, quantity increase/decrease, and ANY_MODIFY) have end-to-end tests for the covered cases. Venue-specific exchange priority remains unknown until venue selection.
