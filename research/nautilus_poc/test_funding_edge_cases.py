@@ -21,7 +21,7 @@ from nautilus_trader.trading import Strategy
 
 
 INSTRUMENT = TestInstrumentProvider.btcusdt_perp_binance()
-VENUE = Venue("SIM")
+VENUE = Venue("BINANCE")
 USDT = Currency.from_str("USDT")
 BASE_NS = 1_700_000_000_000_000_000
 
