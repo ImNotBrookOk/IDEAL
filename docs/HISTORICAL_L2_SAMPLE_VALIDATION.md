@@ -528,3 +528,18 @@ SHA-256:
 The adjacent-day workflow passed all six archive audit unit tests, full archive integrity checks, and complete reconstruction for all three files. Audit artifact ID `14185851827` (SHA-256 `db78a9d5611552974f9bc581cf8c3cc1328dfdad7112e4e28dce20034e31e2e6`) contains only small manifests and summaries, not raw archives. Artifact expires 18 November 2026 at 23:28 UTC.
 
 **Disposition:** consecutive-day structural repeatability is provisionally passed. Trade-to-book alignment on both days is the next gate; the previous one-day 12 November alignment remains the only completed event-level comparison until workflow #43776264061 finishes.
+
+
+### 12.11 Historical-versus-live feed entitlement boundary (16 November 2026)
+
+Historical archive availability must not be conflated with live WebSocket entitlement. OKX's official API guide states that:
+- `books-l2-tbt` provides 400 depth levels with incremental updates every 10 ms;
+- subscription to the 400-depth `books-l2-tbt` channel is restricted to VIP4 and above;
+- standard `books` provides 400 depth levels with incremental updates every 100 ms;
+- `bbo-tbt` provides one depth level with snapshots every 10 ms when changes occur.
+
+Official source: https://app.okx.com/docs-v5/en/, “WS / Order book channel” (the channel cadence and VIP restriction are stated in the channel description).
+
+This creates a material live-parity constraint: public historical 10 ms 400-level archives do not prove that IDEAL can obtain the equivalent live feed on an ordinary account tier. A future deployment would need either confirmed VIP4 entitlement, a tested 100 ms full-depth feed, or a 10 ms BBO-only feed with explicitly reduced depth-dependent capabilities. Do not train/calibrate on 10 ms full-depth data and silently execute against 100 ms depth as if the data were equivalent. Any change in live feed granularity requires separate calibration, latency/staleness controls and strategy eligibility review.
+
+No VIP status, account or live feed was requested or connected. This is a research constraint only.
