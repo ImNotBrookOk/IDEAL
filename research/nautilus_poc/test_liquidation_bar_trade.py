@@ -26,7 +26,6 @@ from nautilus_trader.model import (
     Price,
     PriceType,
     Quantity,
-    RecordFlag,
     TimeInForce,
     TradeId,
     TradeTick,
