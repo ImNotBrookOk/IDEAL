@@ -213,9 +213,9 @@ def test_bar_close_fallback_triggers_liquidation_and_bar_book_executes_close():
     assert result["fill_count"] == 2
 
 
-def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid(capsys):
+def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid(capfd):
     result = run_trade_only_without_quote_book()
-    logs = capsys.readouterr().out
+    logs = capfd.readouterr().out
     assert "LIQUIDATION triggered" in logs
     assert "LIQUIDATION: no price available" in logs
 
