@@ -344,3 +344,75 @@ def test_fresh_replay_with_restored_fx_quote_completes_funding():
     assert len(result["fills"]) == 1
     assert result["open_positions"] == 1
     assert result["balance"] < Money.from_str("100000 USD")
+
+
+def test_same_engine_reset_replay_recovers_after_funding_fx_failure():
+    class ResettableOpenInverseLong(OpenInverseLong):
+        def on_reset(self):
+            self.submitted = False
+            self.fills = []
+
+    engine = BacktestEngine(BacktestEngineConfig(bypass_logging=True, run_analysis=False))
+    engine.add_venue(
+        venue=VENUE,
+        oms_type=OmsType.NETTING,
+        account_type=AccountType.MARGIN,
+        starting_balances=[Money.from_str("100000 USD")],
+        base_currency=USD,
+        book_type=BookType.L2_MBP,
+        trade_execution=False,
+        liquidity_consumption=True,
+        fee_model=MakerTakerFeeModel(maker_rate=Decimal("0"), taker_rate=Decimal("0")),
+    )
+    engine.add_instrument(INSTRUMENT)
+    engine.add_instrument(BTCUSD_INSTRUMENT)
+    engine.add_instrument(TRIGGER_INSTRUMENT)
+    strategy = ResettableOpenInverseLong()
+    try:
+        engine.add_strategy(strategy)
+        mark_ts = BASE_NS + 3_000_000_000
+        funding_ts = BASE_NS + 3_100_000_000
+        boundary = BASE_NS + 4_000_000_000
+        engine.add_data([
+            btcjpy_book(BASE_NS + 1_000_000_000),
+            btcusd_spot_book(BASE_NS + 1_200_000_000),
+            trigger_book(BASE_NS + 1_500_000_000),
+            btcusd_spot_quote(BASE_NS + 1_800_000_000),
+            trigger_quote(BASE_NS + 2_000_000_000),
+            MarkPriceUpdate(INSTRUMENT.id, Price.from_str("6000000.0"), mark_ts, mark_ts),
+            FundingRateUpdate(
+                instrument_id=INSTRUMENT.id, rate=Decimal("0.0001"),
+                ts_event=funding_ts, ts_init=funding_ts, interval=480,
+                next_funding_ns=boundary,
+            ),
+            clear_btcjpy_book(BASE_NS + 3_500_000_000),
+            trigger_quote(BASE_NS + 5_000_000_000),
+        ])
+
+        with pytest.raises(RuntimeError, match="Funding settlement failed"):
+            engine.run()
+        assert len(strategy.fills) == 1
+        assert engine.cache.positions_open_count() == 1
+
+        # Reset must clear the fatal funding error, reset strategy state and
+        # rewind the already-loaded data stream. With the same purge behaviour
+        # the deterministic replay should fail again rather than resume mid-run.
+        engine.reset()
+        with pytest.raises(RuntimeError, match="Funding settlement failed"):
+            engine.run()
+        assert len(strategy.fills) == 1
+        assert engine.cache.positions_open_count() == 1
+
+        # Correct the replay condition: retain the BTC/USD conversion quote.
+        # A second full reset/replay on the same engine should now settle.
+        strategy.purge_fx_after_fill = False
+        engine.reset()
+        engine.run()
+        account = engine.portfolio.account(venue=VENUE)
+        fresh = run_missing_fx_conversion(purge_fx_after_fill=False)
+
+        assert len(strategy.fills) == 1
+        assert engine.cache.positions_open_count() == 1
+        assert account.balance_total(USD) == fresh["balance"]
+    finally:
+        engine.dispose()
