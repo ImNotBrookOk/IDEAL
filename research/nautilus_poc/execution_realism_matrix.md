@@ -238,3 +238,16 @@ New IDEAL POC file: [`test_funding_edge_cases.py`](test_funding_edge_cases.py)
 - No test yet forces both mark and top-of-book to be absent at the funding boundary and verifies the fatal run error/pending state.
 - No end-to-end test yet constructs a position whose settlement currency differs from a single-currency account base and proves missing FX conversion failure, followed by explicit replay recovery.
 - Multi-position testing covers two same-instrument, same-settlement-currency long positions under HEDGING OMS. Mixed settlement currencies and multi-currency accounts remain untested.
+
+
+## 8. Missing mark and missing top-of-book: fatal funding path
+
+New IDEAL POC file: [`test_funding_failure_modes.py`](test_funding_failure_modes.py).
+
+The test opens a long position against an L2 book, queues a funding rate with a future boundary, clears both bid and ask sides before that boundary, and deliberately supplies a later quote after the boundary. No mark update is supplied. At settlement, neither a mark nor a complete top-of-book exists.
+
+Observed result: `BacktestEngine.run()` raises `RuntimeError` matching `Funding settlement failed`. The strategy has one filled entry and the position remains open. The later quote does not recover the same run because the engine aborts at the failed boundary.
+
+This confirms the distinction between exchange-level pending-rate retention and backtest-engine recovery: the exchange retains the failed pending item internally, but the engine surfaces a fatal error and does not continue replaying later data. Recovery must be explicit (e.g. reset and replay with corrected market data); that recovery procedure is not yet end-to-end tested.
+
+Final test-only branch verification before documentation update: [CI run 43753816852](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753816852), **55 passed in 0.20s**, exact pinned release / Ubuntu 24.04 / Python 3.14.
