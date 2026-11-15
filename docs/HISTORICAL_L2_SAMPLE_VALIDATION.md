@@ -125,3 +125,40 @@ Run an independent second implementation or oracle on a bounded event slice and 
 - No runtime integration, exchange/account access, testnet, paper/live orders, paid service or infrastructure was used.
 
 **Next roadmap task:** obtain actual public historical L2 and paired trade bytes through a network path that can reach the dataset host, then execute the validation matrix above. If access remains unavailable, preserve the blocker and assess an alternate no-cost source without weakening the acceptance criteria.
+
+
+## 8. Additional no-cost source and collector screening (16 November 2026)
+
+### 8.1 Community Binance L2 dataset and collector
+
+The Hugging Face dataset `MaximumLeverage/crypto-lob-stream` advertises Snappy Parquet depth diffs, trades and full-book snapshot anchors for BTCUSDT, ETHUSDT and SOLUSDT. Its dataset card reports 251,388,868 rows and 1.72 GB total, an MIT licence, reconstructable sequence IDs from 2026-06-03 onward, and a known 43-minute capture interruption on 5 July 2026 for all three symbols. A fresh snapshot follows the outage, so it must be treated as a hard reset, not a continuous sequence. The card does not unambiguously identify the published Binance market as spot or USDⓈ-M perpetual; therefore it is not yet accepted as target-market perpetual data.
+
+A critical reconstruction issue is explicitly documented: Binance depth updates do not necessarily emit deletions for levels that drift outside the tracked snapshot depth. A replay that removes only explicit zero-quantity levels can accumulate stale “ghost” levels even when sequence IDs are continuous. The published reconstruction helper prunes to the intended depth after every update. IDEAL's independent validator must test this property rather than trust a third-party reconstruction helper.
+
+Dataset source: [Hugging Face dataset card](https://huggingface.co/datasets/MaximumLeverage/crypto-lob-stream).
+
+### 8.2 MIT collector candidate
+
+The related `crypto-lob-stream` package/repository is a small alpha-stage collector, not a trading engine. Its repository declares MIT; PyPI 0.9.2 was released 30 August 2026 and requires Python 3.10+. The GitHub repository's latest inspected commit is 1 September 2026; the README documents Binance USDⓈ-M, OKX swaps and Bybit linear perpetual adapters, Parquet output, sequence-gap logging, and Kraken checksum verification. It also documents material limits: Binance depth files before 2026-06-03 14:38:49 UTC lack sequence IDs; Binance/OKX/Bybit do not have checksum verification in this package; OKX/Bybit resynchronisation requires reconnect; pre-0.9.2 files may contain overwritten flush intervals; and OKX swap mark-price data is absent unless a separate channel is added. No package installation, test execution, live connection or adoption occurred.
+
+Sources: [GitHub repository](https://github.com/Goodie-Goody/crypto_lob_stream_pypi), [MIT licence](https://github.com/Goodie-Goody/crypto_lob_stream_pypi/blob/main/LICENSE), [PyPI 0.9.2 release](https://pypi.org/project/crypto-lob-stream/0.9.2/).
+
+### 8.3 CryptoHFTData free API candidate — hold pending corrections
+
+CryptoHFTData documents anonymous downloads at up to 60 files/minute, one Zstandard Parquet file per symbol/data type/UTC hour, with Binance Futures, Bybit, OKX and Hyperliquid coverage from 28 June 2025 (venue-specific start dates vary). The documented free path needs no API key, but the standard terms limit use to personal/internal research and prohibit raw-data redistribution, resale, repackaging or embedding it in a downstream product/dashboard/service without a separate licence.
+
+Its own known-gaps register says its October 2026 data-quality release was **not yet deployed** when inspected. The register describes material issues including timestamp-unit/clock corrections, empty-book snapshot handling, incorrect REST snapshot resets for Bybit/Kraken/Lighter, stale or crossed reconstructed books, missing reconnect trades, duplicated snapshots, mark-price gaps and historical periods that cannot be recovered. Some corrections are planned or under review rather than published. A free download endpoint is not evidence of usable data. Do not use this provider for empirical calibration until the corrected release is deployed, affected historical partitions are identified, and a real sample passes independent reconstruction and reconciliation.
+
+Sources: [CryptoHFTData API/free tier](https://www.cryptohftdata.com/), [terms and licensing](https://www.cryptohftdata.com/terms), [known gaps and corrections](https://www.cryptohftdata.com/docs/data-gaps-and-corrections).
+
+### 8.4 Retrieval status
+
+Direct unauthenticated download attempts against both Tardis and CryptoHFTData from this execution container failed at DNS resolution. The browser retrieval path could not retrieve the binary files. No data bytes were obtained from either provider or the Hugging Face dataset; no Parquet/CSV parsing, gzip/Parquet integrity, reconstruction, sequence, timestamp, depth or cross-channel tests were run. The alternatives above are source-level screens only, not data-quality passes.
+
+### 8.5 Revised disposition
+
+1. Keep Tardis as a no-key sample candidate; obtain actual L2 and paired trade bytes when a network path is available.
+2. Screen the Hugging Face community dataset only as a possible reconstruction/parser fixture after confirming its market type and obtaining a bounded file. Do not treat it as perpetual calibration data unless USDⓈ-M market identity is proved.
+3. Keep `crypto-lob-stream` as an MIT collector reference only; inspect source/tests before any future reuse and independently test ghost-level pruning, sequence gaps, resync and file-write durability.
+4. Hold CryptoHFTData until its own corrections are deployed and licence scope is confirmed for the intended use.
+5. No source is selected, no venue is selected, and the historical-data acceptance gate remains BLOCKED.
