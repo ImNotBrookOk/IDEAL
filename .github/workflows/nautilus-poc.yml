@@ -36,3 +36,7 @@ jobs:
       - name: Run isolated proof-of-concept tests
         working-directory: research/nautilus_poc
         run: python -m pytest -q
+
+      - name: Benchmark SQLite event journal (informational)
+        working-directory: research/nautilus_poc
+        run: python benchmark_event_journal.py --events 5000 --payload-sizes 256 1024
