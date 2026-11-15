@@ -108,7 +108,7 @@ def audit_rows(rows) -> dict:
     have_snapshot = False
     last_processed_local_ts = None
     max_gap_us = 0
-    first_exchange_ts = last_exchange_ts = None
+    min_exchange_ts = max_exchange_ts = None
 
     for local_ts_text, grouped_rows in groupby(rows, key=lambda row: str(row["local_timestamp"])):
         local_ts = int(local_ts_text)
@@ -127,8 +127,8 @@ def audit_rows(rows) -> dict:
         for row in message_rows:
             row_count += 1
             exchange_ts = int(row["timestamp"])
-            first_exchange_ts = exchange_ts if first_exchange_ts is None else min(first_exchange_ts, exchange_ts)
-            last_exchange_ts = exchange_ts if last_exchange_ts is None else max(last_exchange_ts, exchange_ts)
+            min_exchange_ts = exchange_ts if min_exchange_ts is None else min(min_exchange_ts, exchange_ts)
+            max_exchange_ts = exchange_ts if max_exchange_ts is None else max(max_exchange_ts, exchange_ts)
 
         if is_snapshot:
             if not have_snapshot or not previous_snapshot:
@@ -167,8 +167,8 @@ def audit_rows(rows) -> dict:
         "deleted_levels": book.deleted_levels,
         "book_status_counts": dict(status_counts),
         "max_message_gap_ms": max_gap_us / 1000.0,
-        "first_exchange_timestamp_us": first_exchange_ts,
-        "last_exchange_timestamp_us": last_exchange_ts,
+        "min_exchange_timestamp_us": min_exchange_ts,
+        "max_exchange_timestamp_us": max_exchange_ts,
         "final_best_bid": float(best_bid) if best_bid is not None else None,
         "final_best_ask": float(best_ask) if best_ask is not None else None,
         "final_bid_levels": len(book.bids),
@@ -179,7 +179,7 @@ def audit_rows(rows) -> dict:
 
 
 def audit_gzip_csv(path: str | Path) -> dict:
-    with gzip.open(path, "rt", encoding="utf-8", newline="") as stream:
+    with gzip.open(path, "rt", encoding="utf-8-sig", newline="") as stream:
         reader = csv.DictReader(stream)
         required = {"exchange", "symbol", "timestamp", "local_timestamp", "is_snapshot", "side", "price", "amount"}
         missing = required.difference(reader.fieldnames or [])
