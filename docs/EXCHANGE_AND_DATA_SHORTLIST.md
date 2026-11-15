@@ -159,3 +159,16 @@ CryptoHFTData's current correction register still says the 2026-10 data-quality 
 Sources: [Tardis OKX Swap](https://docs.tardis.dev/historical-data-details/okex-swap), [Tardis exchange metadata](https://api.tardis.dev/v1/exchanges/okex-swap), [Tardis CSV documentation](https://docs.tardis.dev/downloadable-csv-files), [CryptoHFTData correction register](https://www.cryptohftdata.com/docs/data-gaps-and-corrections), [OKX official historical data portal](https://www.okx.com/historical-data).
 
 **Disposition:** no sample files were saved or validated; no provider or venue selected; the historical-data gate remains BLOCKED. See validation report section 10.
+
+
+## 13. OKX public historical L2 endpoint — concrete archive metadata (16 November 2026)
+
+OKX's public `GET /api/v5/public/market-data-history` endpoint provides an unsigned route to order-book archive metadata and direct CDN file URLs. The endpoint was successfully queried through the research fetch path with `module=5`, `instType=SWAP`, `dateAggrType=daily`, `instFamilyList=BTC-USDT`, and the UTC date range for 2026-11-12. It returned `code=0`, a 177.63 MB 5,000-level archive and a direct `.tar.gz` URL. Further successful metadata queries returned BTC 5,000-level data for 11 November (170.27 MB), BTC 400-level data for 12 November (477.07 MB), and ETH 5,000-level data for 12 November (149.22 MB).
+
+A matching module 1 BTC-USDT SWAP trade query returned two UTC+8-dated ZIP archives for 12 and 13 November (17.85 MB and 30.43 MB). Because order-book modules use UTC dates while trade module 1 uses UTC+8 dates, both trade archives are needed to cover the full 12 November UTC book day; trim the combined trade rows by actual timestamps. The query contract and date behavior are corroborated by the MIT OKX client source and its 2026 changelog, which documents unsigned production verification, 10-day inclusive maximum windows, and a 5-requests-per-2-second IP limit.
+
+The 400-level and 5,000-level archives have materially different reported sizes, but no cadence or quality inference is made from size alone. Actual archive bytes, headers, hashes, archive integrity, schema, event cadence, sequence continuity, snapshot behavior, trade alignment and reconstruction remain untested. The execution container still cannot resolve the external hosts, and the research fetch service has only returned JSON metadata, not the large archives.
+
+Sources: [OKX API change log, endpoint introduced](https://www.okx.com/docs-v5/log_en/#2025-09-02), [OKX API change log, query limit](https://www.okx.com/docs-v5/log_en/#2026-08-06), [MIT OKX.Api implementation](https://github.com/burakoner/OKX.Api), [OKX historical-data portal](https://www.okx.com/historical-data).
+
+**Disposition:** OKX is now the highest-priority direct-download candidate for the next bounded sample test. It is not a selected venue or data vendor; no file has been downloaded or validated. The acceptance gate remains BLOCKED. See [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 11.
