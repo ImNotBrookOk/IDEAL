@@ -35,10 +35,10 @@ VENUE = Venue("BINANCE")
 
 
 class LimitQueueStrategy(Strategy):
-    def __init__(self, order_count: int, order_quantity: str):
+    def __init__(self):
         super().__init__()
-        self.order_count = order_count
-        self.order_quantity = Quantity.from_str(order_quantity)
+        self.order_count = 1
+        self.order_quantity = Quantity.from_str("1.000")
         self.submitted = False
         self.order_ids = []
         self.fill_events = []
@@ -155,7 +155,9 @@ def run_limit_trade_case(
         queue_position=queue_position,
         liquidity_consumption=liquidity_consumption,
     )
-    strategy = LimitQueueStrategy(order_count, order_quantity)
+    strategy = LimitQueueStrategy()
+    strategy.order_count = order_count
+    strategy.order_quantity = Quantity.from_str(order_quantity)
     try:
         engine.add_strategy(strategy)
         data = [make_quote(1)]
