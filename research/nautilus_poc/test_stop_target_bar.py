@@ -85,22 +85,22 @@ def make_quote(timestamp: int) -> QuoteTick:
     )
 
 
-def make_ambiguous_bar(timestamp: int) -> Bar:
+def make_ambiguous_bar(timestamp: int, open_price: str = "40000.0", high: str = "40012.0", low: str = "39988.0", close: str = "40001.0") -> Bar:
     # Both exit thresholds are inside this bar's range. OHLC cannot reveal
     # whether the high or low occurred first.
     return Bar(
         bar_type=BAR_TYPE,
-        open=Price.from_str("40000.0"),
-        high=Price.from_str("40012.0"),
-        low=Price.from_str("39988.0"),
-        close=Price.from_str("40001.0"),
+        open=Price.from_str(open_price),
+        high=Price.from_str(high),
+        low=Price.from_str(low),
+        close=Price.from_str(close),
         volume=Quantity.from_str("1.000"),
         ts_event=timestamp,
         ts_init=timestamp,
     )
 
 
-def run_ambiguous_bar_case(adaptive_ordering: bool):
+def run_ambiguous_bar_case(adaptive_ordering: bool, bar: Bar | None = None):
     engine = BacktestEngine(
         BacktestEngineConfig(bypass_logging=True, run_analysis=False),
     )
@@ -126,7 +126,7 @@ def run_ambiguous_bar_case(adaptive_ordering: bool):
         engine.add_strategy(strategy)
         engine.add_data([
             make_quote(1_000_000_000),
-            make_ambiguous_bar(61_000_000_000),
+            bar or make_ambiguous_bar(61_000_000_000),
         ])
         engine.run()
         return {
@@ -162,5 +162,27 @@ def test_ambiguous_bar_adaptive_low_first_path_selects_stop_loss():
     assert len(result["fills"]) == 2
     exit_fill = next(fill for fill in result["fills"] if fill.client_order_id == result["sl_order_id"])
     assert exit_fill.last_px == Price.from_str("39990.0")
+    assert result["closed_positions"] == 1
+    assert result["open_positions"] == 0
+
+
+
+def test_stop_loss_gap_through_fills_at_bar_open_not_stop_trigger():
+    # The market opens 10 points below the stop. OHLC data establishes the gap,
+    # but not any executable bid/ask depth or real-world slippage beyond the open.
+    gap_bar = make_ambiguous_bar(
+        61_000_000_000,
+        open_price="39980.0",
+        high="40005.0",
+        low="39970.0",
+        close="39990.0",
+    )
+    result = run_ambiguous_bar_case(adaptive_ordering=False, bar=gap_bar)
+
+    exit_fill = next(
+        fill for fill in result["fills"]
+        if fill.client_order_id == result["sl_order_id"]
+    )
+    assert exit_fill.last_px == Price.from_str("39980.0")
     assert result["closed_positions"] == 1
     assert result["open_positions"] == 0
