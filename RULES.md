@@ -9,6 +9,18 @@ These rules are mandatory for every contributor and agent.
 - A task is not complete without isolated, integration, regression and audit evidence.
 - Record deviations and failures; never claim an unrun test passed.
 - No paid service, subscription or billing activation without explicit owner approval.
+- Work on one approved task at a time. Completing a task does not authorise the next task.
+
+## Conversation accountability
+- At the close of every IDEAL work conversation, create a dated record under `docs/CHATGPT_CONVERSATIONS/`.
+- Preserve the complete available user-visible transcript verbatim and add a chronological operational audit log covering material research, repository changes, tests, CI, PRs, merges, failures, corrections and evidence links.
+- Clearly distinguish owner decisions, assistant proposals, assumptions, failed attempts and unresolved questions. Never treat a recommendation or silence as approval.
+- Do not invent missing transcript content. Mark incomplete historical transcripts as partial.
+- Do not record hidden chain-of-thought, private system/developer instructions, credentials, tokens or unnecessary sensitive information. Record concise decision rationales and verifiable actions instead.
+- Conversation records are append-only. Correct errors with a dated addendum; do not silently rewrite history.
+- End each conversation by presenting the record/current state and exactly one proposed next step, then wait for the owner's explicit response before starting that next step.
+- Approval applies only to the specifically named next step. It does not authorise later steps, trading, new spending or scope changes.
+- If no substantive project work occurred, a brief closeout entry may record that fact rather than manufacture a transcript.
 
 ## Trading safety
 - Paper trading only. No live orders or real-money credentials until separate explicit approval.
