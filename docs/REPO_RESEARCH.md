@@ -309,3 +309,28 @@ The 84-test extension includes reporting-currency FX freshness checks and the BT
 This removes the earlier ARM wheel/test-compatibility uncertainty for the exact POC pin, but does not establish real A1 VM performance, full cross-collateral accounting, consolidated reporting equity, venue-specific collateral haircuts, margin tiers, ADL or exchange-equivalent liquidation/recovery. The pin remains pre-release `nautilus_trader==2.0.0rc9`; no runtime adoption or Phase 02 unlock follows.
 
 **Current POC result:** 84 deterministic tests pass on x86_64 and ARM64; engine selection remains open.
+
+
+## Tardis Machine — market-data normalization/replay candidate (16 November 2026)
+
+Repository: https://github.com/tardis-dev/tardis-machine
+
+Verified GitHub metadata at review:
+- 313 stars, 60 forks, 0 open issues.
+- Created 13 June 2019; latest repository push 10 November 2026.
+- Latest release 18.9.0, published 10 November 2026.
+- Default branch `master`; not archived.
+- SPDX licence: MPL-2.0 (verified from repository LICENSE and package.json).
+- TypeScript/Node.js package; current package engine requires Node `^24.22.1 || >=26.12.1`, npm >=11.17.
+- Runtime dependencies include `tardis-dev ^18.9.0`, `ws ^8.21.3` and `debug ^4.4.3`.
+
+The project provides a locally runnable server with disk caching, historical replay, normalized and exchange-native HTTP/WebSocket APIs, multi-exchange replay, and real-time streaming. It is a useful reference for exchange adapter mapping, message normalization, replay/cache boundaries and seamless historical-to-live switching.
+
+Constraints:
+1. The README states that the machine uses the Tardis.dev HTTP API under the hood. Public first-of-month CSV samples are documented as downloadable without an API key, but broader historical replay/data access must not be assumed free; subscription and usage terms need separate confirmation.
+2. Tardis.dev's published Terms of Service include a data licence for purchased services, with internal-business-use restrictions and limits on redistribution. Those paid-service terms do not by themselves establish the rights attached to unauthenticated public sample files. No sample data is redistributed or embedded in IDEAL; obtain written clarity before commercial/product use.
+3. MPL-2.0 is not MIT/Apache-2.0. Modified MPL-covered source files carry file-level source disclosure obligations; any reuse requires a licence review and careful file boundary.
+4. The Node 24 runtime and TypeScript dependency tree are a second runtime stack beside the current Python/NautilusTrader POC. It adds operational complexity and is not automatically justified by its normalizer/cache functionality.
+5. The tool's data normalization cannot create exchange sequence IDs or L3 queue identity that the underlying source does not provide.
+
+**Disposition:** strong reference implementation and possible isolated sidecar candidate, but not selected or adopted. Reuse ideas and test the public sample parser independently first; do not add it as an IDEAL dependency. Current repo and licence evidence: GitHub API metadata, repository LICENSE and package.json; latest release 18.9.0. Data access/terms references: https://docs.tardis.dev/downloadable-csv-files and https://docs.tardis.dev/legal/terms-of-service.
