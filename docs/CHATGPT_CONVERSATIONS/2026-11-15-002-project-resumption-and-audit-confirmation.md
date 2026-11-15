@@ -77,3 +77,14 @@ This is the complete user-visible transcript for this conversation, preserving t
 **One proposed next step:** Continue Phase 01 by implementing the next isolated NautilusTrader liquidation research gate: bar-only/trade-only valuation and liquidation close-path behaviour when no executable quote book is present. This task should remain a research-only POC with deterministic fixtures and tests, isolated from IDEAL runtime.
 
 **Owner approval:** PENDING. This request to “proceed with the project” does not silently authorise unrelated roadmap tasks, engine adoption, account access, paper/live orders, paid services or risk/permission changes. Wait for the owner's explicit response to the named next step.
+
+
+## 7. Post-commit evidence addendum — 2026-11-15
+
+This addendum records the GitHub write results and subsequent read-back verification. It supplements the record above; it does not alter the historical transcript or decision rationale.
+
+- Audit index correction commit: [`a277238afec64428dffb4931061c35d93c262901`](https://github.com/ImNotBrookOk/IDEAL/commit/a277238afec64428dffb4931061c35d93c262901); verified file blob: `18b7eee7972d6d1e30744f3359713146ad765e8a`.
+- D-011 acceptance commit: [`27d8f86957fb385b310f621a8a18023769c2961a`](https://github.com/ImNotBrookOk/IDEAL/commit/27d8f86957fb385b310f621a8a18023769c2961a); verified file blob: `f3af3a8db8b0c3d3d84ce62cf09fa6edd0423e29`.
+- Initial creation of this conversation record: [`34ca6c521a1f577f15c328bcbdbc3bfcc9ec2c16`](https://github.com/ImNotBrookOk/IDEAL/commit/34ca6c521a1f577f15c328bcbdbc2bfcc9ec2c16).
+- Read-back verification confirmed both governance files and this record are present on `main`; the index lists record 002 and D-011 is Accepted.
+- No automated test was run for these Markdown-only changes. No test result is claimed for this governance update.
