@@ -335,3 +335,178 @@ def test_competing_l2_market_orders_cannot_reuse_consumed_depth():
         Decimal("0"),
     )
     assert total_filled == Decimal("1.000")
+
+
+class QueueBookStrategy(Strategy):
+    def __init__(self, quantity: str = "2.000"):
+        super().__init__()
+        self.quantity = Quantity.from_str(quantity)
+        self.submitted = False
+        self.fill_events = []
+
+    def on_start(self):
+        self.subscribe_quotes(INSTRUMENT.id)
+
+    def on_quote(self, quote):
+        if self.submitted:
+            return
+        self.submitted = True
+        self.submit_order(
+            self.order_factory.limit(
+                instrument_id=INSTRUMENT.id,
+                order_side=OrderSide.BUY,
+                quantity=self.quantity,
+                price=Price.from_str("40000.0"),
+                time_in_force=TimeInForce.GTC,
+            ),
+        )
+
+    def on_order_filled(self, event):
+        self.fill_events.append(event)
+
+
+def make_queue_book(book_type: BookType, orders: list[tuple[int, str]]):
+    """Build same-price bid orders; order IDs are meaningful for L3 MBO."""
+    deltas = []
+    for index, (order_id, size) in enumerate(orders):
+        deltas.append(
+            OrderBookDelta(
+                instrument_id=INSTRUMENT.id,
+                action=BookAction.ADD,
+                order=BookOrder(
+                    OrderSide.BUY,
+                    Price.from_str("40000.0"),
+                    Quantity.from_str(size),
+                    order_id,
+                ),
+                flags=RecordFlag.F_LAST.value if index == len(orders) - 1 else 0,
+                sequence=index + 1,
+                ts_event=1,
+                ts_init=1,
+            ),
+        )
+    return OrderBookDeltas(INSTRUMENT.id, deltas)
+
+
+def make_l2_snapshot(size: str):
+    clear = OrderBookDelta(
+        instrument_id=INSTRUMENT.id,
+        action=BookAction.CLEAR,
+        order=BookOrder(
+            OrderSide.BUY,
+            Price.from_str("40000.0"),
+            Quantity.from_str("0.000"),
+            0,
+        ),
+        flags=RecordFlag.F_SNAPSHOT.value,
+        sequence=10,
+        ts_event=10,
+        ts_init=10,
+    )
+    add = OrderBookDelta(
+        instrument_id=INSTRUMENT.id,
+        action=BookAction.ADD,
+        order=BookOrder(
+            OrderSide.BUY,
+            Price.from_str("40000.0"),
+            Quantity.from_str(size),
+            11,
+        ),
+        flags=RecordFlag.F_LAST.value,
+        sequence=11,
+        ts_event=10,
+        ts_init=10,
+    )
+    return OrderBookDeltas(INSTRUMENT.id, [clear, add])
+
+
+def run_queue_book_case(
+    book_type: BookType,
+    initial_book,
+    book_updates: list,
+    trade_sizes: list[str],
+):
+    engine = BacktestEngine(
+        BacktestEngineConfig(bypass_logging=True, run_analysis=False),
+    )
+    engine.add_venue(
+        venue=VENUE,
+        oms_type=OmsType.NETTING,
+        account_type=AccountType.MARGIN,
+        base_currency=USDT,
+        starting_balances=[Money(100_000, USDT)],
+        book_type=book_type,
+        trade_execution=True,
+        queue_position=True,
+        liquidity_consumption=True,
+        fee_model=MakerTakerFeeModel(
+            maker_rate=Decimal("0"),
+            taker_rate=Decimal("0"),
+        ),
+    )
+    engine.add_instrument(INSTRUMENT)
+    strategy = QueueBookStrategy()
+    try:
+        engine.add_strategy(strategy)
+        data = [initial_book, make_quote(2), *book_updates]
+        data.extend(
+            make_sell_trade(index + 20, size)
+            for index, size in enumerate(trade_sizes)
+        )
+        engine.add_data(data)
+        engine.run()
+        return strategy.fill_events
+    finally:
+        engine.dispose()
+
+
+def test_l2_snapshot_rebases_queue_down_after_complete_snapshot_only():
+    fills = run_queue_book_case(
+        BookType.L2_MBP,
+        make_queue_book(BookType.L2_MBP, [(1, "10.000")]),
+        [make_l2_snapshot("8.000")],
+        ["8.000", "1.000"],
+    )
+
+    # The complete snapshot reduces queue-ahead from 10 to 8.
+    # Eight units consume the remaining displayed queue; the next unit fills.
+    assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
+
+
+def test_l2_snapshot_does_not_increase_existing_queue_estimate():
+    fills = run_queue_book_case(
+        BookType.L2_MBP,
+        make_queue_book(BookType.L2_MBP, [(1, "10.000")]),
+        [make_l2_snapshot("15.000")],
+        ["10.000", "1.000"],
+    )
+
+    # A larger replacement snapshot must not move an existing order backwards.
+    assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
+
+
+def test_l3_mbo_cancel_of_order_ahead_advances_queue_by_its_size():
+    delete = OrderBookDelta(
+        instrument_id=INSTRUMENT.id,
+        action=BookAction.DELETE,
+        order=BookOrder(
+            OrderSide.BUY,
+            Price.from_str("40000.0"),
+            Quantity.from_str("5.000"),
+            101,
+        ),
+        flags=0,
+        sequence=3,
+        ts_event=3,
+        ts_init=3,
+    )
+    fills = run_queue_book_case(
+        BookType.L3_MBO,
+        make_queue_book(BookType.L3_MBO, [(101, "5.000"), (102, "5.000")]),
+        [delete],
+        ["5.000", "1.000"],
+    )
+
+    # Canceling order 101 removes only its 5 units from the 10-unit queue.
+    # The first trade consumes order 102; the next trade reaches our order.
+    assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
