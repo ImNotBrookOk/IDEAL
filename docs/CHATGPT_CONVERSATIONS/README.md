@@ -52,3 +52,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-014-sqlite-event-journal.md](2026-11-16-014-sqlite-event-journal.md) | Nautilus Redis/PostgreSQL persistence limits; standard-library SQLite WAL event journal, hash chain, checkpoints, abrupt-process recovery and tamper tests; 71 tests pass; PR #20 merged; runtime integration remains locked |
 
 | [2026-11-16-015-sqlite-journal-benchmark.md](2026-11-16-015-sqlite-journal-benchmark.md) | 5k-event SQLite WAL/FULL benchmark; ~10.8–11.1k events/s on GitHub 4-vCPU runner, 35–36 MiB RSS; 71 tests pass; PR #21 merged; target free worker remains unverified |
+
+| [2026-11-16-016-arm64-free-infrastructure.md](2026-11-16-016-arm64-free-infrastructure.md) | NautilusTrader POC passes 71 tests on x86_64 and ARM64; Oracle A1 leading candidate (2 OCPU/12GB) with capacity, idle-reclaim and card-verification risks; PR #22 merged; no VM provisioned |
