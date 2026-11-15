@@ -54,7 +54,7 @@ class BookState:
                 self.deleted_levels += 1
                 continue
             if price_text not in book:
-                heapq.heappush(heap, -price if is_bid else price)
+                heapq.heappush(heap, (-price if is_bid else price, price_text))
             book[price_text] = (price, quantity)
 
     def apply(self, record):
@@ -74,16 +74,18 @@ class BookState:
 
     def best_bid(self):
         while self._bid_heap:
-            price = -self._bid_heap[0]
-            if any(value[0] == price for value in self.bids.values()):
-                return price
+            negative_price, price_text = self._bid_heap[0]
+            current = self.bids.get(price_text)
+            if current is not None and current[0] == -negative_price:
+                return -negative_price
             heapq.heappop(self._bid_heap)
         return None
 
     def best_ask(self):
         while self._ask_heap:
-            price = self._ask_heap[0]
-            if any(value[0] == price for value in self.asks.values()):
+            price, price_text = self._ask_heap[0]
+            current = self.asks.get(price_text)
+            if current is not None and current[0] == price:
                 return price
             heapq.heappop(self._ask_heap)
         return None
