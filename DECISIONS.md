@@ -14,7 +14,8 @@ Append decisions; do not silently rewrite history. Superseding decisions must re
 | D-008 | Hard daily loss boundary is 10% of UTC day-start equity, realised plus unrealised, followed by 24-hour cooldown. Earlier warnings and portfolio controls remain unresolved. | Accepted |
 | D-009 | Progression gates are predefined and deterministic; AI cannot alter thresholds or permissions. Demotion preserves knowledge/history. | Accepted |
 | D-010 | Target $0 recurring cost; no paid plan or billing activation without explicit approval. | Accepted |
-| D-011 | Maintain a dated, append-only GitHub record for every IDEAL work conversation, including the available verbatim user-visible transcript and operational evidence. At conversation close, present the record and one proposed next step, then wait for explicit owner approval before proceeding. | Accepted |
+| D-011 | Maintain a dated, append-only GitHub record for every IDEAL work conversation, including the available verbatim user-visible transcript and operational evidence. | Accepted |
+| D-012 | Standing authorisation: continue Phase 01 research gates in roadmap order without per-gate approval. Automatically squash-merge each research PR only after successful CI, five-axis review, scope verification and unchanged-head confirmation. Commit each conversation audit record and index update directly to main and verify read-back. Stop at Phase 01 completion for explicit owner approval before Phase 02. No runtime integration, exchange/account access, paper/live execution, risk changes, paid services or billing are authorised. | Accepted |
 
 ## Open decisions
 Exchange and data sources; deployment and storage; market universe/liquidity filters; fee/slippage/funding model; absolute statistical gates; minimum comparable cohort size; leverage and portfolio limits; early loss warnings; gate thresholds; AI provider and token budget; backup/retention policy.
