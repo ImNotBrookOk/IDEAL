@@ -41,13 +41,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p research-output
-          for day in 11 12; do
+          for day in 11 12 13; do
             curl --fail --show-error --location --retry 3 --retry-all-errors \
               --connect-timeout 20 --max-time 2400 \
               --output "research-output/BTC-USDT-SWAP-L2-400-2026-11-$day.tar.gz" \
               "https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/202611$day/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-$day.tar.gz"
           done
-          for day in 11 12 13; do
+          for day in 11 12 13 14; do
             curl --fail --show-error --location --retry 3 --retry-all-errors \
               --connect-timeout 20 --max-time 2400 \
               --output "research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-$day.zip" \
@@ -114,13 +114,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for day in 11 12; do
+          for day in 11 12 13; do
             if [ "$day" = "11" ]; then
               start_ms=1794355200000
               end_ms=1794441600000
-            else
+            elif [ "$day" = "12" ]; then
               start_ms=1794441600000
               end_ms=1794528000000
+            else
+              start_ms=1794528000000
+              end_ms=1794614400000
             fi
             python research/okx_trade_book_alignment.py \
               --l2 "research-output/BTC-USDT-SWAP-L2-400-2026-11-$day.tar.gz" \
@@ -135,7 +138,7 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          for day in ("11", "12"):
+          for day in ("11", "12", "13"):
               summary = json.loads(Path(f"research-output/trade-book-alignment-2026-11-{day}.json").read_text())
               assert summary["aligned_trades"] > 0
               assert summary["no_preceding_book"] == 0
