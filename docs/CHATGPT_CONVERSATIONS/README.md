@@ -12,8 +12,9 @@ Create an auditable record of what was requested, what was proposed, what was ch
 4. Record exact repository paths, commit SHAs, PRs, CI run URLs, test counts and source references when available. Never claim a test ran unless its output is evidenced.
 5. End every record with the current state, the single proposed next step, and whether owner approval is pending.
 6. Update the project rules/decision register when the owner changes this process. Conversation records themselves are append-only: do not silently rewrite earlier records. Corrections go in a dated addendum.
-7. Before starting the next substantive project task, present the record and the proposed next step to the owner, then stop and wait for an explicit response. A clear approval advances only the named next step; it does not approve later steps.
-8. If the owner asks to continue with a different scope, record that change and follow it only after confirming any material impact.
+7. A bounded standing authorisation can permit multiple roadmap research gates. Record its exact scope and limits in DECISIONS.md; proceed in roadmap order without repeated approval prompts. For research PRs, require green CI, a five-axis review, scope verification and unchanged-head confirmation before automatic squash merge. If any check fails, do not merge and report the blocker.
+8. Commit each conversation record and index update directly to main, then read the record back to verify it. Do not create a separate PR solely for transcript publication.
+9. Stop at the end of the standing authorisation's scope and obtain explicit owner approval before entering a new phase, implementing runtime functionality, connecting accounts, enabling paper/live orders, changing risk controls or incurring cost.
 
 ## Transcript and audit boundaries
 - Record the full user-visible messages available in the active conversation, including user instructions and assistant responses. Preserve wording rather than rewriting it as a summary.
