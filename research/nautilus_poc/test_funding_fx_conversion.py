@@ -25,6 +25,7 @@ from nautilus_trader.model import (
     QuoteTick,
     RecordFlag,
     Symbol,
+    TimeInForce,
     Venue,
 )
 from nautilus_trader.testkit.providers import TestInstrumentProvider
@@ -73,10 +74,12 @@ class OpenInverseLong(Strategy):
             return
         self.submitted = True
         self.submit_order(
-            self.order_factory.market(
+            self.order_factory.limit(
                 instrument_id=INSTRUMENT.id,
                 order_side=OrderSide.BUY,
                 quantity=Quantity.from_str("1000"),
+                price=Price.from_str("6000000.0"),
+                time_in_force=TimeInForce.GTC,
             ),
         )
 
