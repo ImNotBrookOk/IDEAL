@@ -30,7 +30,86 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run Tardis parser tests (red-first checkpoint)
+      - name: Run full research unit suite
         env:
           PYTHONPATH: research
-        run: python -m unittest research/tests/test_tardis_l2_audit.py -v
+        run: python -m unittest discover -s research/tests -v
+      - name: Download Tardis public first-of-month Binance Futures sample
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-output
+          curl --fail --show-error --location --retry 3 --retry-all-errors \
+            --connect-timeout 20 --max-time 2400 \
+            --output research-output/binance-futures-BTCUSDT-L2-2026-11-01.csv.gz \
+            "https://datasets.tardis.dev/v1/binance-futures/incremental_book_L2/2026/11/01/BTCUSDT.csv.gz"
+          curl --fail --show-error --location --retry 3 --retry-all-errors \
+            --connect-timeout 20 --max-time 2400 \
+            --output research-output/binance-futures-BTCUSDT-trades-2026-11-01.csv.gz \
+            "https://datasets.tardis.dev/v1/binance-futures/trades/2026/11/01/BTCUSDT.csv.gz"
+          gzip -t research-output/*.csv.gz
+          sha256sum research-output/*.csv.gz | tee research-output/sha256.txt
+          gzip -l research-output/*.csv.gz | tee research-output/gzip-inventory.txt
+          printf '%s\n' \
+            'exchange=binance-futures' \
+            'symbol=BTCUSDT' \
+            'date=2026-11-01' \
+            'source=Tardis first-of-month public sample; no API key supplied' \
+            'schema=normalized incremental_book_L2 CSV and trades CSV' \
+            > research-output/source-manifest.txt
+
+      - name: Reconstruct Tardis incremental L2 and audit trade archive bytes
+        env:
+          PYTHONPATH: research
+        run: |
+          python research/tardis_l2_audit.py \
+            --l2 research-output/binance-futures-BTCUSDT-L2-2026-11-01.csv.gz \
+            | tee research-output/tardis-l2-summary.json
+          python - <<'PY'
+          import csv, gzip, json
+          from pathlib import Path
+          path = Path("research-output/binance-futures-BTCUSDT-trades-2026-11-01.csv.gz")
+          with gzip.open(path, "rt", encoding="utf-8-sig", newline="") as stream:
+              reader = csv.DictReader(stream)
+              required = {"exchange", "symbol", "timestamp", "local_timestamp", "id", "side", "price", "amount"}
+              missing = required.difference(reader.fieldnames or [])
+              assert not missing, f"missing trade columns: {sorted(missing)}"
+              rows = 0
+              sides = {}
+              previous_local = None
+              first_local = last_local = None
+              for row in reader:
+                  rows += 1
+                  local = int(row["local_timestamp"])
+                  int(row["timestamp"])
+                  price = float(row["price"])
+                  amount = float(row["amount"])
+                  assert price > 0 and amount > 0
+                  side = row["side"].lower()
+                  assert side in {"buy", "sell", "unknown"}
+                  if previous_local is not None:
+                      assert local >= previous_local, "trade local_timestamp moved backwards"
+                  previous_local = last_local = local
+                  first_local = local if first_local is None else first_local
+                  sides[side] = sides.get(side, 0) + 1
+              assert rows > 0, "trade archive contains no rows"
+          summary = {"rows": rows, "side_counts": sides, "first_local_timestamp_us": first_local, "last_local_timestamp_us": last_local}
+          Path("research-output/tardis-trades-summary.json").write_text(json.dumps(summary, sort_keys=True))
+          print(json.dumps(summary, sort_keys=True))
+          PY
+          cat research-output/tardis-l2-summary.json
+
+      - name: Retain audit summaries only
+        if: always()
+        shell: bash
+        run: |
+          rm -f research-output/*.csv.gz
+
+      - name: Upload Tardis validation summaries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: tardis-binance-futures-btcusdt-2026-11-01-validation
+          path: research-output/
+          if-no-files-found: warn
+          retention-days: 3
