@@ -269,3 +269,6 @@ Outside-spread rates were 64.445% and 62.584%; this is not automatically a data 
 
 
 Staleness sensitivity from the same two days: a preceding-book age cutoff of <=50 ms retains 99.229% of 11 Nov trades and 99.492% of 12 Nov trades; <=20 ms retains 96.273% and 97.628%; <=10 ms retains 92.503% and 95.001%. These are research coverage calculations, not a production policy. The data model must preserve sample age and exclude stale depth rather than interpolate it. Full counts: historical validation section 12.12.
+
+
+Additional classification nuance: the FMA's official derivatives guidance defines derivatives to include recurrently traded contracts commonly referred to as futures, options, swaps, CFDs, margin contracts or rolling spot contracts, regardless of duration. It does not explicitly classify every crypto perpetual product by name. Do not assume that an exchange's “perpetual” or “swap” label removes the product from the FMC Act definition; obtain a product-specific New Zealand legal determination. Source: https://www.fma.govt.nz/business/services/derivatives-issuers/.
