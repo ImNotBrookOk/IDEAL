@@ -1,0 +1,104 @@
+name: Research — OKX BTC-USDT-SWAP historical sample
+
+on:
+  push:
+    branches:
+      - research/okx-l2-sample-2026-11-16
+    paths:
+      - .github/workflows/okx-l2-sample.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: okx-l2-sample-retrieval
+  cancel-in-progress: true
+
+jobs:
+  retrieve-and-verify:
+    name: Retrieve bounded public archives
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Retrieve OKX L2 and paired trade archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-output/headers research-output/integrity
+
+          fetch() {
+            local name="$1"
+            local url="$2"
+            local expected="$3"
+            echo "Fetching $name"
+            curl --fail --show-error --location \
+              --retry 3 --retry-all-errors \
+              --connect-timeout 20 --max-time 2400 \
+              --dump-header "research-output/headers/$name.headers" \
+              --output "research-output/$name" \
+              "$url"
+            local bytes
+            bytes="$(wc -c < "research-output/$name" | tr -d ' ')"
+            printf '%s\n' "$bytes" > "research-output/integrity/$name.bytes"
+            printf '%s\n' "$expected" > "research-output/integrity/$name.provider_reported_size_mb"
+            sha256sum "research-output/$name" | tee -a research-output/SHA256SUMS
+            echo "$name: actual_bytes=$bytes provider_reported_size_mb=$expected"
+          }
+
+          fetch "BTC-USDT-SWAP-L2-5000-2026-11-12.tar.gz" \
+            "https://static.okx.com/cdn/okx/match/orderbook/pro/L2/5000lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-12.tar.gz" \
+            "177.63"
+
+          fetch "BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip" \
+            "https://static.okx.com/cdn/okex/traderecords/trades/daily/20261112/BTC-USDT-SWAP-trades-2026-11-12.zip?v=1001" \
+            "17.85"
+
+          fetch "BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip" \
+            "https://static.okx.com/cdn/okex/traderecords/trades/daily/20261113/BTC-USDT-SWAP-trades-2026-11-13.zip?v=1001" \
+            "30.43"
+
+          echo "Verifying gzip/tar integrity"
+          tar -tzf research-output/BTC-USDT-SWAP-L2-5000-2026-11-12.tar.gz \
+            > research-output/integrity/L2-tar-members.txt
+          wc -l research-output/integrity/L2-tar-members.txt \
+            | tee research-output/integrity/L2-tar-member-count.txt
+
+          echo "Verifying trade ZIP integrity"
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+
+          for path in sorted(Path("research-output").glob("*.zip")):
+              with zipfile.ZipFile(path) as archive:
+                  bad_member = archive.testzip()
+                  if bad_member is not None:
+                      raise SystemExit(f"{path}: CRC failure in {bad_member}")
+                  names = archive.namelist()
+                  if not names:
+                      raise SystemExit(f"{path}: empty ZIP archive")
+                  out = Path("research-output/integrity") / f"{path.name}.members.txt"
+                  out.write_text("\\n".join(names) + "\\n", encoding="utf-8")
+                  print(f"{path.name}: ZIP integrity OK; members={len(names)}")
+          PY
+
+          {
+            echo "Retrieval timestamp (UTC): $(date -u +%FT%TZ)"
+            echo "Runner: $RUNNER_OS / $RUNNER_ARCH"
+            echo "Provider-reported sizes are metadata, not validation."
+            echo "SHA-256:"
+            cat research-output/SHA256SUMS
+            echo "Actual byte counts:"
+            for f in research-output/integrity/*.bytes; do
+              printf '%s: ' "$(basename "$f" .bytes)"
+              cat "$f"
+            done
+          } > research-output/manifest.txt
+
+      - name: Retain exact source archives and verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: okx-btc-usdt-swap-historical-sample
+          path: research-output/
+          if-no-files-found: warn
+          retention-days: 3
