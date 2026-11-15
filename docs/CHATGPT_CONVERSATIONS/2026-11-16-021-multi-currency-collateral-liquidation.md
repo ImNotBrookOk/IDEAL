@@ -159,3 +159,67 @@ The final assistant partial message in this conversation is reproduced below ver
 > Verified in [CI run 43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953).
 >
 > This establishes a concrete simulator limitation: **the tested liquidation model does not pool BTC collateral to protect a USDT-settled position.** It evaluates maintenance equity in the position's settlement currency.
+
+## Continuation — reporting-currency FX freshness
+
+This work continues the same user request recorded above; no new user message was issued between the two research gates.
+
+### Verbatim user-visible assistant update
+
+> ## Next research gate — reporting-currency conversion
+>
+> We have also completed the next test rather than stopping at liquidation.
+>
+> 84 / 84 passed on both architectures
+>
+> [CI run 43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188)
+>
+> The tests establish three behaviours:
+>
+> 1. Native BTC and USDT equity remains separated in a multi-currency account.
+> 2. Explicit USDT-to-USD PnL conversion uses the latest available FX midpoint.
+> 3. If the FX instrument disappears, an explicit USD valuation fails closed, even when an older conversion rate was cached.
+>
+> The key distinction is that NautilusTrader can convert PnL, but its native equity output still does not provide a consolidated reporting-currency account total for this no-base-currency configuration.
+
+### 8. Reporting-currency POC test
+
+- Added `research/nautilus_poc/test_reporting_currency_fx_freshness.py` on branch `research/reporting-currency-fx-freshness`.
+- Fixture: no-base-currency margin account with 2 BTC and 1,000 USDT; open 0.1 BTCUSDT long from 60,000 to a 61,000 bid; USDT/USD mid updates from 1.00000 to 0.90000.
+- Verified `Portfolio.equity()` returns a native map containing 2 BTC and 1,100 USDT, without a USD total.
+- Verified `Portfolio.unrealized_pnls(target_currency=USD)` converts +100 USDT PnL using the latest 0.90000 mid and returns 90.00 USD.
+- Verified explicit USD queries fail closed after the USDT/USD instrument is purged despite a previously cached rate, and also fail when no FX rate ever existed.
+- Inspected exact v2.0.0rc9 source: `Portfolio.equity()` has no target-currency argument; explicit PnL conversion uses a current mark xrate when configured, otherwise/fallback to current MID; the explicit target-currency path disables stale-xrate fallback.
+
+### 9. CI and merge
+
+- Final PR-head CI [run 43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188):
+  - x86_64: **84 passed in 0.40s**.
+  - ARM64: **84 passed in 0.61s**.
+  - Exact engine version check and SQLite benchmark step passed on both.
+- Five-axis review:
+  1. Correctness: native equity, latest FX midpoint, missing-rate and purged/stale-rate assertions; both architectures green.
+  2. Scope: one isolated research test file only.
+  3. Security: no secrets, credentials, exchange accounts, or network exchange calls.
+  4. Maintainability: self-contained fixture, no new dependencies.
+  5. Cost: public GitHub Actions runners only.
+- PR [#27](https://github.com/ImNotBrookOk/IDEAL/pull/27) changed only `research/nautilus_poc/test_reporting_currency_fx_freshness.py`.
+- Confirmed PR base remained `35c3d894970afce171b09afe1b58cb2b6b3ff520`, head remained `4c9ea69d76410152755e6f5b86b7c25a40217827`, and both matched the successful CI state before squash merge.
+- Squash-merged PR #27 as [66be9a121541a4e740bbfd1d2845a47ce050e5e3](https://github.com/ImNotBrookOk/IDEAL/commit/66be9a121541a4e740bbfd1d2845a47ce050e5e3).
+
+### 10. Documentation synchronization
+
+- `ROADMAP.md`: records the 84-test reporting-currency finding and leaves IDEAL-owned total-equity aggregation open. Commit [285df57](https://github.com/ImNotBrookOk/IDEAL/commit/285df57a75b5241ea16dbbed79a199c2287728e6).
+- `research/nautilus_poc/README.md`: latest suite updated to 84 tests; records FX freshness and missing-rate limits. Commit [74a6e77](https://github.com/ImNotBrookOk/IDEAL/commit/74a6e77deaca19d832d2d41749433566d53dd42f).
+- `docs/INFRASTRUCTURE_RESEARCH.md`: latest POC verification updated to 84 tests. Commit [7c372bf](https://github.com/ImNotBrookOk/IDEAL/commit/7c372bf685d2b3d4929fb7340538a9acbf8f0877).
+- `research/nautilus_poc/execution_realism_matrix.md`: section 17 added with source links, test evidence and IDEAL implications. Commit [b9ad0c9](https://github.com/ImNotBrookOk/IDEAL/commit/b9ad0c9334e3189708c8bcd92c5a71ade5a89888).
+
+### 11. Updated finding and next roadmap gate
+
+**Verified:** the engine's native equity remains a per-currency map for a no-base-currency account. Explicit PnL queries can convert to a requested target currency using current FX data and fail closed when the current conversion is unavailable. They do not convert every native cash balance into a single consolidated equity scalar.
+
+**IDEAL requirement:** build a deterministic reporting-equity aggregator that converts each native balance, liability, PnL and fee into a selected reporting currency; define conservative conversion direction (bid/ask), mark policy, FX path, timestamp freshness, missing/stale-rate failure and collateral haircuts. This is an architectural requirement/proposal, not an approved runtime implementation.
+
+**Current state:** Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED; NautilusTrader remains an unapproved engine candidate; no runtime integration, account access, paper/live orders, risk changes, cloud resources or paid services were created.
+
+**Next task in roadmap order:** begin the venue and historical-data shortlist. Verify official jurisdiction/product/account-mode eligibility and API/data availability; do not select or connect a venue without owner approval. Then obtain representative L2/trade/fill data for empirical market-impact calibration.
