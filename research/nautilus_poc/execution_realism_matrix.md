@@ -388,3 +388,27 @@ Verification: [final PR-head CI run 43756560957](https://github.com/ImNotBrookOk
 - The hash chain is stored in the same database it protects. It detects accidental or partial edits, but a malicious writer with full database access can recompute the entire chain. An off-host signed checkpoint, HMAC key kept outside the database, or immutable external hash anchor is required for stronger tamper evidence.
 - The current snapshot stores generic state JSON and an event-chain anchor. It does not yet encode the full Nautilus/IDEAL engine state or safely restore live exchange connections and outstanding orders.
 - A fresh deterministic replay with corrected market/FX data remains the verified fallback for backtests; live recovery requires exchange reconciliation and explicit owner-approved architecture.
+
+
+## 13. SQLite event-journal performance baseline
+
+Added [`benchmark_event_journal.py`](benchmark_event_journal.py) and a non-gating CI benchmark step. Each case appends 5,000 events in individual transactions using WAL and `synchronous=FULL`, creates a midpoint checkpoint, appends the remaining events, verifies the full hash chain, loads the checkpoint and replays the tail.
+
+[CI run 43756858418](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756858418) measured:
+
+| Metric | 256-byte payload | 1,024-byte payload |
+|---|---:|---:|
+| Events | 5,000 | 5,000 |
+| Throughput | 10,779 events/s | 10,813 events/s |
+| p50 append latency | 0.0736 ms | 0.0756 ms |
+| p95 append latency | 0.1976 ms | 0.1744 ms |
+| p99 append latency | 0.3382 ms | 0.2982 ms |
+| Max append latency | 1.4036 ms | 1.3900 ms |
+| DB size after close | 4.04 MB | 10.85 MB |
+| WAL size before close | 4.14 MB | 4.14 MB |
+| Full chain verification | 0.0527 s | 0.0659 s |
+| Snapshot + tail restore | 0.0658 s | 0.0791 s |
+
+Environment: GitHub-hosted Ubuntu 24.04 x86_64, 4 vCPU, Python 3.14.10, SQLite 3.45.1; peak process RSS 36,964 KiB (~36.1 MiB). Benchmark step is informational and asserts no throughput threshold.
+
+**Interpretation:** the standard-library prototype is inexpensive in this small synthetic workload. These figures are not a production SLO, not a measurement of an Oracle Always Free VM, and not evidence of durable storage on an ephemeral runner. The test writes one event per transaction; payload shape, disk class, WAL checkpoint frequency, concurrency, backup traffic and long-run growth will materially affect results. The next capacity gate must run on the actual candidate worker with persistent storage and realistic IDEAL event distributions.
