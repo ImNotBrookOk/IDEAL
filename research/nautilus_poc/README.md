@@ -114,3 +114,6 @@ No claim of production suitability, profitability or live-execution parity is ma
 
 
 17. Durable replay prototype: `event_journal.py` is a standard-library SQLite WAL append-only event journal with FULL synchronous commits, schema versioning, event-ID idempotency/conflict detection, SHA-256 hash chaining, canonical decimal-string payloads, checkpoint state hashes and post-checkpoint replay. `test_event_journal.py` covers close/reopen durability, abrupt writer-process exit recovery, tamper detection, duplicate handling, checkpoint/tail restore, float rejection and schema version rejection. This is isolated research code, not runtime integration. Requires persistent local storage and a backup/restore policy before production use. The in-database hash chain detects accidental/partial corruption, not a malicious writer able to rewrite the whole database; an external signed checkpoint or HMAC anchor is required for stronger tamper evidence.
+
+
+18. SQLite event-journal benchmark: the CI runner executes 5,000 committed events for 256B and 1,024B payloads using WAL + synchronous FULL. Latest measured baseline: approximately 10.8k events/s, p50 write latency 0.074–0.076ms, p95 0.174–0.198ms, p99 0.298–0.338ms, 36.1 MiB peak process RSS. This is GitHub-hosted runner data, not a target-worker guarantee.
