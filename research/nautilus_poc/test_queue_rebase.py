@@ -344,8 +344,8 @@ class PriorityResetStrategy(Strategy):
                 self.orders.append(order)
                 self.submit_order(order)
         elif self.quote_count == 2:
-            # Quantity-only increase after the external L2 update. The
-            # configured policy decides whether this order loses queue priority.
+            # Quantity amendment after the external L2 update. The configured
+            # policy decides whether this order loses queue priority.
             if self.modification == "noop":
                 try:
                     self.modify_order(
@@ -441,6 +441,9 @@ def run_priority_reset_case(policy: OrderPriorityResetPolicy, modification: str 
             final_trade,
         ])
         engine.run()
+        if modification == "noop":
+            assert strategy.modify_rejected is not None
+            assert "Cannot create command ModifyOrder" in strategy.modify_rejected
         return strategy.orders, strategy.fill_events
     finally:
         engine.dispose()
