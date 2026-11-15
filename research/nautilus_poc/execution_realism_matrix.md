@@ -544,3 +544,35 @@ Verification: [CI run 43761762953](https://github.com/ImNotBrookOk/IDEAL/actions
 The tested NautilusTrader simulated liquidation path is **not a unified multi-collateral liquidation model**. It cannot be treated as exchange-equivalent for an account where BTC, USDT or other assets are pooled with conversion rates and haircuts. If the selected venue supports that account mode, IDEAL will need a deterministic venue-specific collateral/risk model (or a verified engine extension) that explicitly handles collateral eligibility, conversion side/mark, haircuts, concentration limits, stale/missing FX, per-coin maintenance, liquidation ordering and bankruptcy/insurance/ADL outcomes. Preserve native-currency ledger balances and never sum unlike currencies without an explicit conversion.
 
 This test establishes only the pinned simulator behaviour. It does not select a venue, validate a live adapter, or prove how Binance, Bybit, OKX or any other venue handles the user's account mode. Official venue/product/account-mode specifications and representative collateral/liquidation data remain required before the engine-selection gate can close.
+
+
+## 17. Multi-currency reporting equity and FX freshness
+
+Added `test_reporting_currency_fx_freshness.py` to test the boundary between native-currency account equity and explicit reporting-currency PnL conversion.
+
+### Deterministic fixture and observed result
+
+- Margin account uses `base_currency=None` with **2 BTC** and **1,000 USDT** starting balances.
+- Opens a **0.1 BTCUSDT long** at 60,000 USDT; the next bid is 61,000, giving **+100 USDT** unrealized PnL.
+- USDT/USD first quotes a 1.00000 mid, then updates to a 0.90000 mid before the final BTCUSDT valuation.
+- `Portfolio.equity(venue=BINANCE)` returns native balances plus PnL as a currency map: **2 BTC** and **1,100 USDT**. It does not add a USD total.
+- `Portfolio.unrealized_pnls(target_currency=USD)` returns **90.00 USD**, proving it used the latest 0.90000 USDT/USD mid rather than the earlier 1.00000 mid.
+- After a valid conversion query caches the rate, purging the USDT/USD instrument makes a subsequent explicit USD query fail with a conversion error. It does not silently reuse the cached stale rate.
+- A separate case with no conversion instrument/rate from the outset also fails closed.
+
+Verification: [CI run 43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188), **84 passed on x86_64 and ARM64**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04 / Python 3.14.10. Research PR [#27](https://github.com/ImNotBrookOk/IDEAL/pull/27) was squash-merged as [66be9a121541a4e740bbfd1d2845a47ce050e5e3](https://github.com/ImNotBrookOk/IDEAL/commit/66be9a121541a4e740bbfd1d2845a47ce050e5e3).
+
+### Exact pinned source behaviour
+
+- [Portfolio equity, `portfolio.rs`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/portfolio/src/portfolio.rs#L851-L900) returns a per-currency map seeded from account balances and adds margin PnL in its native currency. The method has no `target_currency` argument, so it does not consolidate a no-base-currency account's balances into one reporting-currency total.
+- [Unrealized PnL conversion, `portfolio.rs`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/portfolio/src/portfolio.rs#L2488-L2565) accepts an explicit target currency and converts each position's PnL. With an explicit target currency, `allow_stale_xrate` is false.
+- [FX resolution, `portfolio.rs`](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/portfolio/src/portfolio.rs#L3307-L3365) prefers a cached mark xrate when `use_mark_xrates` is enabled, then falls back to a current `MID` xrate from the cache. It caches the last valid rate, but the explicit-target query path does not consume that cached rate when the current conversion is missing.
+- [Portfolio conversion documentation](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/portfolio.md#base-currency-conversion) distinguishes base-currency conversion from native-currency results when an account has no base currency.
+
+### IDEAL implication and remaining evidence
+
+The pinned engine can convert **PnL** into an explicit reporting currency when a current FX rate exists, and its explicit target-currency query fails closed when that rate disappears. It still leaves the account's native cash/equity in a per-currency map. Do not treat converted PnL as a consolidated account-equity figure.
+
+IDEAL therefore needs its own deterministic reporting-equity aggregator to convert every native cash balance, liability, realised/unrealised PnL and fee into the reporting currency, while preserving the native ledger. Define conversion direction and rate source explicitly (for example, conservative bid for converting an owned asset into reporting currency and ask for liabilities), enforce timestamp freshness, reject missing/stale paths, and apply venue-specific collateral haircuts separately. The engine's default MID-based PnL conversion is useful for reporting but is not sufficient by itself for conservative risk or liquidation decisions.
+
+This test does not establish a live venue's conversion conventions, collateral valuation, haircuts, concentration limits or unified account equity. Those remain Phase 01 blockers pending venue and account-mode selection.
