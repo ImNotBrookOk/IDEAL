@@ -235,7 +235,7 @@ def test_l3_order_size_decrease_advances_queue_by_the_decrement():
         101,
         4,
     )
-    fills = run_l3_case([shrink_first], trade_size="8.000")
+    fills = run_l3_case([shrink_first], trade_size="9.000")
 
     # The first MBO order decreases from 5 to 3; queue ahead falls from 10 to 8.
     assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
