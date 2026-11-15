@@ -170,3 +170,55 @@ After merge, the README and roadmap CI references were corrected to the final-he
 ## 7. Next step
 
 Continue with the next Phase 01 research gate: exchange-specific liquidation mechanics and recovery behaviour, comparing candidate venues without selecting or connecting an exchange. The standing authorisation remains active for Phase 01 only. Stop for explicit owner approval before Phase 02 or any excluded activity.
+
+
+## 8. Exchange-specific liquidation and recovery research addendum — 2026-11-15
+
+This addendum records the next Phase 01 gate completed under the standing owner authorisation.
+
+### Research scope and method
+
+- Compared official public documentation for Binance Futures, Bybit UTA derivatives and OKX derivatives.
+- Inspected the exact NautilusTrader `v2.0.0rc9` matching-engine implementation at `liquidate_open_positions`.
+- No exchange was selected; no testnet/account access, credentials, adapter, or live connection was used.
+- The comparison is source-based. It does not claim that all account modes, contract families, jurisdictions or future rule revisions behave identically.
+
+### Principal findings
+
+1. **The venues use materially different liquidation state machines.**
+   - Binance Smart Liquidation cancels relevant orders, sends one large IOC to reduce the margin deficit, hands any remaining bankrupt exposure to the insurance fund at bankruptcy price, and uses ADL if the fund cannot absorb the exposure.
+   - Bybit UTA uses mark-price triggers and risk-tier laddered IOC reductions; if the position/account remains unsafe, the liquidation engine takes over at bankruptcy price. Insurance fund surplus/deficit is reconciled against actual market execution. ADL trigger conditions include 8-hour drawdown thresholds and combined independent-pool balance conditions.
+   - OKX uses mark-price/MMR triggers, staged tier reductions, and a full-close step at the lowest applicable tier. Its security fund and ADL rules have different trigger and ranking semantics.
+
+2. **Trigger, bankruptcy reference and actual execution price are separate concepts.** They must be persisted independently. The local system must not infer actual fills from a liquidation trigger or use a bankruptcy reference as though it were an executable order-book quote.
+
+3. **NautilusTrader's current POC liquidation path is not exchange-equivalent.** It cancels open orders if configured, checks for a best bid/ask, then emits one reduce-only IOC market close for the entire open position quantity. It does not implement venue-specific risk-tier ladders, bankruptcy takeover, fund accounting, negative-balance recovery, ADL or exchange event reconciliation. Existing POC tests also show an empty book can prevent the close and a quote gap can leave a negative simulated balance.
+
+4. **Telemetry is a material adapter risk.**
+   - Binance public liquidation streams are 1-second snapshots and only publish the latest liquidation order per symbol within the interval. Private account streams expose liquidation/ADL markers and account changes; the symbol ADL risk rating updates every 30 minutes. Force-order history is limited to 90 days by the reviewed 2026 API changelog.
+   - Bybit public all-liquidation snapshots update every 500ms. Private position data exposes liquidation/ADL status and ADL rank; event enums distinguish liquidation, takeover and ADL.
+   - OKX's June 9, 2026 security-fund API change removed regular-update granularity and stopped normal-state ADL-warning pushes; warning/ADL pushes continue but some fields are empty. The API changelog documents liquidation/ADL order fields and sets affected tradeId values to zero.
+
+5. **The minimum venue-specific test contract is now documented.** It covers mark-price triggers, margin-mode aggregation, tier reductions, partial IOC fills, bankruptcy calculations, fund surplus/deficit, ADL start/stop/ranking, negative-balance recovery, stream reconnect/backfill and idempotent account reconciliation.
+
+Official source set and full comparison are recorded in [exchange_liquidation_gap_matrix.md](https://github.com/ImNotBrookOk/IDEAL/blob/main/research/nautilus_poc/exchange_liquidation_gap_matrix.md).
+
+### PR #8 closeout
+
+- PR: [#8 — Document exchange-specific liquidation and recovery gaps](https://github.com/ImNotBrookOk/IDEAL/pull/8)
+- Files: 3 documentation files; 159 additions, 2 deletions.
+- Final head: `d6ced995d5def248c2d6012429dc0425b27b8da4`.
+- Final-head CI: [run 43695271067](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43695271067) — **30 passed in 0.13s**, exact `nautilus_trader==2.0.0rc9`, Ubuntu 24.04/Python 3.14.
+- Review: correctness/source scope, readability, architecture, security and performance reviewed; no merge blocker identified.
+- Merge: automatic squash merge under D-012 after green CI and unchanged-head confirmation.
+- Merge commit: `5249f9d089193e0bf6654ce5ae5d25654b060b22`.
+- Post-merge PR state verified CLOSED and merged=true.
+
+### Gate status
+
+- Exchange-specific source comparison: complete for Binance, Bybit and OKX.
+- Exchange selected: no.
+- Venue-specific testnet validation: blocked until an exact venue, product family and margin mode are selected.
+- NautilusTrader production adoption: not approved.
+- Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.
+- Next Phase 01 gate: partial fills, queue position, liquidity consumption and slippage under competing orders.
