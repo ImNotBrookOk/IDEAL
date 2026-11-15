@@ -3,6 +3,7 @@ from decimal import Decimal
 import nautilus_trader
 from nautilus_trader.backtest import BacktestEngine
 from nautilus_trader.config import BacktestEngineConfig
+from nautilus_trader.execution import MakerTakerFeeModel
 from nautilus_trader.model import (
     AccountType,
     CryptoPerpetual,
@@ -13,6 +14,7 @@ from nautilus_trader.model import (
     OmsType,
     Price,
     Quantity,
+    Symbol,
     Venue,
 )
 
@@ -34,8 +36,6 @@ def make_instrument():
         ts_init=1,
         margin_init=Decimal("0.05"),
         margin_maint=Decimal("0.025"),
-        maker_fee=Decimal("0.0002"),
-        taker_fee=Decimal("0.0005"),
     )
 
 
@@ -69,9 +69,36 @@ def test_backtest_margin_venue_and_instrument_register():
             oms_type=OmsType.NETTING,
             account_type=AccountType.MARGIN,
             starting_balances=[Money.from_str("10000 USDT")],
+            fee_model=MakerTakerFeeModel(
+                maker_rate=Decimal("0.0002"),
+                taker_rate=Decimal("0.0005"),
+            ),
         )
         instrument = make_instrument()
         engine.add_instrument(instrument)
         assert engine.cache.instrument(instrument.id) is not None
     finally:
         engine.dispose()
+
+
+
+def test_inverse_crypto_perpetual_uses_base_currency_settlement():
+    btc = Currency.from_str("BTC")
+    inverse = CryptoPerpetual(
+        instrument_id=InstrumentId.from_str("BTCUSD-PERP.SIM"),
+        raw_symbol=Symbol("BTCUSD"),
+        base_currency=btc,
+        quote_currency=Currency.from_str("USD"),
+        settlement_currency=btc,
+        is_inverse=True,
+        price_precision=1,
+        size_precision=0,
+        price_increment=Price.from_str("0.1"),
+        size_increment=Quantity.from_str("1"),
+        ts_event=1,
+        ts_init=1,
+        margin_init=Decimal("0.05"),
+        margin_maint=Decimal("0.025"),
+    )
+    assert inverse.is_inverse is True
+    assert inverse.settlement_currency == btc

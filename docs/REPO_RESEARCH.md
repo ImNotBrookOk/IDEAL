@@ -272,19 +272,22 @@ An isolated experiment has been added under `research/nautilus_poc/`; it is not 
 - Data: synthetic, deterministic fixtures only.
 - No exchange adapters, API credentials, external market data, paid services, paper orders or live orders.
 - The test harness contains independent Decimal oracles for linear PnL, inverse PnL, fees and funding cashflow, plus native smoke tests for package identity, CryptoPerpetual construction, FundingRateUpdate construction and margin-venue/instrument registration.
-- Local arithmetic verification: seven pure pytest cases passed against a local copy of the committed Decimal oracle and test cases (`7 passed`). Coverage includes linear/inverse PnL, fees, positive/negative funding sign, invalid zero entry and negative fee rejection. This did not import NautilusTrader or execute the repository's full test suite.
-- Native NautilusTrader tests have **not yet been executed in this environment** because the package is not installed and outbound network access is unavailable. The GitHub Actions workflow is committed, but the GitHub integration returned no status checks and no completed run/logs could be independently retrieved. Therefore no native engine behaviour is marked verified.
+- Native GitHub Actions CI installed the exact `2.0.0rc9` wheel on Ubuntu 24.04/Python 3.14 and passed the full repository suite: **20 passed in 0.13s**, run [43691306566](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43691306566), commit `da8ac0bfdefc060d54655118ddfa57f5453bddec`.
+- Verified synthetic cases include linear/inverse long/short Decimal PnL oracles; linear and inverse `CryptoPerpetual` construction; funding event construction; venue fee configuration; submit/ack/fill/position lifecycle; best-ask market execution; deterministic replay of order and funding fixtures; fixed initial and maintenance margin calculations under `StandardMarginModel`; positive funding settlement at a specified boundary; and rejection of implicit funding settlement when no valid boundary is available.
+- Exact funding case: 0.1 BTC long, mark price 60,000.50 USDT, funding rate +0.0001, boundary at the scheduled timestamp. The simulated venue debited 0.60000500 USDT funding and 3.00002500 USDT taker fee, leaving 9,996.39997000 USDT. A separate missing-boundary case applied no funding debit.
+- Exact margin cases: resting buy limit 0.1 at 59,999 USDT reserves 299.99500000 USDT initial margin at 5%; filled 0.1 long at 60,000.50 USDT carries 150.00125000 USDT maintenance margin at 2.5%. These are fixture parameters for testing the model, not selected IDEAL or exchange risk settings.
+- An initial CI run exposed incorrect assumptions: maker/taker fees are venue-level, a venue requires an explicit fee model, and market-order acknowledgement events are disabled by default unless `use_market_order_acks=True`. These were corrected and covered by passing tests.
 
 Important version distinction: the upstream installation guide states that plain PyPI stable installs resolve to the 1.x API, while the 2.x docs require pre-release installation. The 2.0.0rc9 package is explicitly a pre-release and must not be treated as production-ready. Python 3.14/Linux x86_64 is selected because it is within the documented wheel support matrix. See [release 2.0.0rc9](https://github.com/nautechsystems/nautilus_trader/releases), [installation/version guidance](https://nautilustrader.io/docs/latest/getting_started/installation/), and [2.x funding/margin model](https://nautilustrader.io/docs/latest/concepts/backtesting/accounts-and-margin/).
 
 ### POC gates still open
 
-1. Obtain a successful CI run and inspect complete logs; resolve any import/API incompatibility.
-2. Verify order submission → acknowledgement → fill → position/account state using synthetic market data.
-3. Verify funding settlement at a funding boundary and independently reconcile the resulting position and cash balance.
-4. Verify margin reservation, maintenance margin and liquidation behaviour against hand-calculated cases.
-5. Verify conservative fill assumptions, fees, slippage, partial fills, liquidity consumption and same-bar ambiguity.
-6. Replay the identical fixture twice and compare canonical event/order/position/account outputs.
-7. Record resource use and licence obligations before making any engine-selection recommendation.
+1. Test liquidation triggers, liquidation price, partial close/ADL behaviour and account recovery against independent expected values.
+2. Verify partial fills, queue position, conservative liquidity consumption under multiple competing orders, spread/slippage and adverse selection.
+3. Test stop/target same-bar ordering, gap-through, and the ambiguity of OHLCV-only data.
+4. Test funding with missing mark prices, missing FX rates, multiple positions, multiple currencies, repeated updates and settlement retry/recovery.
+5. Expand deterministic replay to canonical event/order/position/account hashes and process restart/recovery.
+6. Benchmark CPU, RAM, disk and egress on the candidate free worker; verify the exact worker can run the engine within the $0 budget.
+7. Complete licence review and the component selection matrix before proposing any engine adoption.
 
-**Current result: POC harness committed; engine adoption not decided.** Phase 01 remains IN PROGRESS. No Phase 02 unlock, architecture adoption, exchange connection or trading permission follows from this experiment.
+**Current result: 20-test synthetic POC suite passes; engine adoption not decided.** Phase 01 remains IN PROGRESS. No Phase 02 unlock, runtime dependency adoption, exchange connection or trading permission follows from this experiment.

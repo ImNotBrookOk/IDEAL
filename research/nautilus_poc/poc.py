@@ -16,13 +16,18 @@ def linear_pnl(
     exit: Decimal,
     quantity: Decimal,
     multiplier: Decimal,
+    *,
+    is_long: bool = True,
 ) -> Decimal:
     """Linear contract PnL in quote settlement currency."""
     _positive("entry", entry)
     _positive("exit", exit)
     _positive("quantity", quantity)
     _positive("multiplier", multiplier)
-    return (exit - entry) * quantity * multiplier
+    if not isinstance(is_long, bool):
+        raise ValueError("is_long must be bool")
+    direction = Decimal(1) if is_long else Decimal(-1)
+    return (exit - entry) * quantity * multiplier * direction
 
 
 def inverse_pnl(
@@ -30,13 +35,18 @@ def inverse_pnl(
     exit: Decimal,
     contracts: Decimal,
     contract_value_quote: Decimal,
+    *,
+    is_long: bool = True,
 ) -> Decimal:
     """Inverse contract PnL in base settlement currency."""
     _positive("entry", entry)
     _positive("exit", exit)
     _positive("contracts", contracts)
     _positive("contract_value_quote", contract_value_quote)
-    return contracts * contract_value_quote * (Decimal(1) / entry - Decimal(1) / exit)
+    if not isinstance(is_long, bool):
+        raise ValueError("is_long must be bool")
+    direction = Decimal(1) if is_long else Decimal(-1)
+    return contracts * contract_value_quote * (Decimal(1) / entry - Decimal(1) / exit) * direction
 
 
 def trading_fee(
