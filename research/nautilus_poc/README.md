@@ -117,3 +117,6 @@ No claim of production suitability, profitability or live-execution parity is ma
 
 
 18. SQLite event-journal benchmark: the CI runner executes 5,000 committed events for 256B and 1,024B payloads using WAL + synchronous FULL. Latest measured baseline: approximately 10.8k events/s, p50 write latency 0.074–0.076ms, p95 0.174–0.198ms, p99 0.298–0.338ms, 36.1 MiB peak process RSS. This is GitHub-hosted runner data, not a target-worker guarantee.
+
+
+19. Cross-architecture validation: the exact `nautilus_trader==2.0.0rc9` POC installs and passes all 71 tests on GitHub-hosted Ubuntu 24.04 x86_64 and ARM64 runners using Python 3.14.10 / glibc 2.39. This confirms the pinned Python wheel and POC are compatible with an ARM64 environment relevant to Oracle Ampere A1. The CI benchmark on ARM64 measured ~2.66–2.74k events/s and ~34.4 MiB peak RSS for 5,000-event cases; this is not an Oracle VM benchmark.
