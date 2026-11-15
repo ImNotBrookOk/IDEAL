@@ -2,7 +2,7 @@
 
 **Research date:** 15 November 2026  
 **Phase:** 01 — open-source and infrastructure research  
-**Status:** IN PROGRESS — selected L1 execution scenarios reproduced; L2/L3 depth and queue scenarios remain source-audited but not yet reproduced in IDEAL's Python POC.  
+**Status:** IN PROGRESS — selected L1 and L2 execution scenarios reproduced; L2 snapshot rebasing and L3 order-level queue scenarios remain source-audited but not yet reproduced in IDEAL's Python POC.  
 **Engine under evaluation:** `nautilus_trader==2.0.0rc9` (pre-release; not approved for production)  
 **Environment:** Ubuntu 24.04 x86_64, Python 3.14, GitHub Actions  
 **Adoption decision:** None. This is isolated research only.
@@ -76,6 +76,15 @@ Sources: [queue tracking contract and limitations](https://github.com/nautechsys
 
 Sources: [fill model behavior and catalogue](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/backtesting/fill-models.md#L7-L69), [probabilistic slippage semantics](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/backtesting/fill-models.md#L173-L196).
 
+### 2.5 IDEAL L2 reproduction results
+
+The IDEAL POC now exercises the pinned L2 MBP matching path using explicit `OrderBookDelta` data. The fixture creates two ask levels (0.400 at 40,001.0 and 0.600 at 40,002.0) and a bid to establish a valid two-sided book. A quote event is delivered only after the L2 book snapshot so the strategy submits its market orders against initialized depth.
+
+- A 1.500-unit BUY market order fills 0.400 at 40,001.0 and 0.600 at 40,002.0. The remaining 0.500 is not filled because no more displayed ask depth exists. This reproduces multi-level depth walking and a partial market-order fill.
+- Two sequential 0.750-unit BUY market orders share the same 1.000 units of displayed ask depth. With liquidity consumption enabled, aggregate fills equal 1.000, not 1.500. The second simulated order cannot reuse depth already consumed by the first.
+
+**Interpretation:** This demonstrates finite displayed L2 depth consumption in the pinned simulator. It does not model hidden liquidity, latency races, exchange matching priority or the impact of other real participants beyond what is present in the supplied book/trade feed.
+
 ## 3. IDEAL POC tests
 
 New file: [`test_execution.py`](test_execution.py)
@@ -86,33 +95,32 @@ All tests use synthetic BTCUSDT perpetual fixtures, zero fees to isolate the tes
 |---|---|---|
 | Queue-ahead depletion | 10 units displayed ahead; a 12-unit SELL trade then a 3-unit SELL trade | First print clears 10 ahead and fills 2; next print fills remaining 3 |
 | Competing-order trade budget | Two 2-unit resting BUY limits; one 3-unit SELL trade; consumption enabled; queue tracking disabled to isolate consumption | Aggregate fills cannot exceed the 3-unit trade size |
-| L1 probabilistic slippage | BUY market order at ask 40,001.0; tick size 0.1; `prob_slippage=1.0` | Fill at 40,001.1 |
+| L1 probabilistic slippage | BUY market order at ask 40,001.0; tick size 0.1; `prob_slippage=1.0` | Fill at 40,001.1 |\n| L2 depth walking | 1.500-unit BUY; asks 0.400 @ 40,001.0 and 0.600 @ 40,002.0 | Two fills of 0.400 and 0.600 at their respective levels; residual 0.500 unfilled |\n| Competing L2 market orders | Two 0.750-unit BUYs against 1.000 total ask depth; consumption enabled | Aggregate fill quantity exactly 1.000; no reuse of consumed depth |
 
 ### Verification
 
 - Command: `python -m pytest -q`
 - Exact dependency assertion: `nautilus_trader==2.0.0rc9`
 - Runner: Ubuntu 24.04 x86_64 / Python 3.14
-- Final test result for the test commit: **33 passed in 0.18s**
+- Final L2 research branch verification: **35 passed in 0.22s** in [CI run 43697425596](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697425596), exact pinned wheel / Ubuntu 24.04 / Python 3.14.
 - CI: [run 43696169232](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696169232) and [PR-triggered run 43696163846](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696163846), both successful.
 - Test-harness correction: the first attempt passed constructor arguments to the NautilusTrader `Strategy` wrapper and failed with `Strategy.__new__()`. The fixture was corrected to instantiate with no arguments and set test parameters afterwards. The corrected head passed both CI runs. This was a test-harness API error, not a simulator defect.
-- The 30-test pre-existing suite plus 3 new tests passed. No production code or dependency changed.
+- The prior main baseline had 33 tests; this branch adds 2 L2 tests. Final suite: 35 passed. No production code or dependency changed.
 
 Upstream source tests also cover L1 partial queue depletion and shared trade budgets ([Rust tests around lines 4704–4915](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/tests.rs#L4704-L4915)), plus L2 snapshot/depth queue rebasing ([tests around lines 3983–4140](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/tests.rs#L3983-L4140)). Those upstream tests are source evidence, not IDEAL POC integration tests.
 
 ## 4. Gaps and risks still open
 
-1. IDEAL has not yet reproduced L2 multi-level depth walking, partial fills across multiple price levels, and competing market orders against finite L2 depth in its own Python POC.
-2. IDEAL has not yet reproduced L2 snapshot rebasing or L3 MBO order-ID queue tracking in its own POC.
-3. Queue behavior under partial fills, cancellations, amendments and the selected exchange's exact priority rules needs additional tests. No venue is selected.
-4. One-tick slippage is not a market-impact curve. No empirical calibration has been performed for order size, volatility, spread, depth, latency or adverse selection.
-5. No test here covers spread widening, latency races, stale book updates, hidden liquidity, or venue-specific matching priority.
-6. The tests use zero fees to isolate execution mechanics. Fee, funding and market-impact costs must be combined in later strategy validation.
+1. IDEAL has not yet reproduced L2 snapshot rebasing or L3 MBO order-ID queue tracking in its own Python POC.
+2. Queue behavior under partial fills, cancellations, amendments and the selected exchange's exact priority rules needs additional tests. No venue is selected.
+3. One-tick L1 slippage is not a market-impact curve. No empirical calibration has been performed for order size, volatility, spread, depth, latency or adverse selection.
+4. No test here covers spread widening, latency races, stale book updates, hidden liquidity, or venue-specific matching priority.
+5. The tests use zero fees to isolate execution mechanics. Fee, funding and market-impact costs must be combined in later strategy validation.
 
 ## 5. Current decision
 
 - Keep NautilusTrader as an isolated research candidate only. Do not add it to the IDEAL runtime or adopt a synthetic fill model.
 - Any future execution simulation must explicitly configure and record book type, trade execution, liquidity consumption, queue tracking, fill model, price protection, fee model, timestamps and random seeds.
 - Unknown aggressor side, missing depth, stale data, or a synthetic liquidity fallback must be labelled as uncertainty and must not silently improve backtest fills.
-- Continue Phase 01 with L2/L3 Python POC reproduction before closing this execution-realism gate.
+- Continue Phase 01 with L2 snapshot rebasing, L3 MBO order-ID queue reproduction, queue cancellation/amendment cases and empirical impact calibration before closing this execution-realism gate.
 - No exchange, adapter, account, testnet, paper or live trading authorization is implied.
