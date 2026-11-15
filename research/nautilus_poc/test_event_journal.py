@@ -204,3 +204,51 @@ os._exit(0)
 
     assert verified["event_count"] == 1
     assert records[0].event_id == "committed-before-crash"
+
+
+
+def test_hash_chain_detects_event_metadata_column_tampering(tmp_path):
+    path = tmp_path / "journal.sqlite"
+    with EventJournal(path) as journal:
+        journal.append_event(
+            event_id="evt-1",
+            event_type="OrderFilled",
+            event_ts_ns=100,
+            payload={"price": "40001.0"},
+        )
+
+    with sqlite3.connect(path) as connection:
+        connection.execute(
+            "UPDATE events SET event_ts_ns=? WHERE event_id=?",
+            (101, "evt-1"),
+        )
+
+    with EventJournal(path) as reopened:
+        with pytest.raises(JournalIntegrityError, match="columns disagree"):
+            reopened.verify_chain()
+
+
+def test_snapshot_state_tampering_is_detected(tmp_path):
+    path = tmp_path / "journal.sqlite"
+    with EventJournal(path) as journal:
+        journal.append_event(
+            event_id="evt-1",
+            event_type="OrderFilled",
+            event_ts_ns=100,
+            payload={"price": "40001.0"},
+        )
+        journal.create_snapshot(
+            snapshot_id="checkpoint-1",
+            state=sample_state(),
+            created_at_ns=110,
+        )
+
+    with sqlite3.connect(path) as connection:
+        connection.execute(
+            "UPDATE snapshots SET state_json=? WHERE snapshot_id=?",
+            ('{"schema":"ideal-state-snapshot/v1","state":{"account":{"balance":"1.00","currency":"USDT"},"positions":[]}}', "checkpoint-1"),
+        )
+
+    with EventJournal(path) as reopened:
+        with pytest.raises(JournalIntegrityError, match="state hash mismatch"):
+            reopened.load_snapshot("checkpoint-1")
