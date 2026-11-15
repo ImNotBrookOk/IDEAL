@@ -134,6 +134,42 @@ def clear_btcusd_book(timestamp: int):
     )
 
 
+
+def trigger_book(timestamp: int):
+    return OrderBookDeltas(
+        TRIGGER_INSTRUMENT.id,
+        [
+            OrderBookDelta(
+                instrument_id=TRIGGER_INSTRUMENT.id,
+                action=BookAction.ADD,
+                order=BookOrder(
+                    OrderSide.BUY,
+                    Price.from_str("2999.90000"),
+                    Quantity.from_str("100000"),
+                    11,
+                ),
+                flags=0,
+                sequence=1,
+                ts_event=timestamp,
+                ts_init=timestamp,
+            ),
+            OrderBookDelta(
+                instrument_id=TRIGGER_INSTRUMENT.id,
+                action=BookAction.ADD,
+                order=BookOrder(
+                    OrderSide.SELL,
+                    Price.from_str("3000.00000"),
+                    Quantity.from_str("100000"),
+                    12,
+                ),
+                flags=RecordFlag.F_LAST.value,
+                sequence=2,
+                ts_event=timestamp,
+                ts_init=timestamp,
+            ),
+        ],
+    )
+
 def trigger_quote(timestamp: int):
     return QuoteTick(
         instrument_id=TRIGGER_INSTRUMENT.id,
@@ -174,6 +210,7 @@ def run_missing_fx_conversion():
         boundary = BASE_NS + 4_000_000_000
         engine.add_data([
             btcusd_book(BASE_NS + 1_000_000_000),
+            trigger_book(BASE_NS + 1_500_000_000),
             trigger_quote(BASE_NS + 2_000_000_000),
             MarkPriceUpdate(
                 instrument_id=INSTRUMENT.id,
