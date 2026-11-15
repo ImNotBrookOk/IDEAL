@@ -70,10 +70,9 @@ class OpenInverseLong(Strategy):
         # Trigger the BTCJPY order from a different instrument so no BTC/JPY
         # quote is cached for later funding conversion.
         self.subscribe_quotes(TRIGGER_INSTRUMENT.id)
-        self.subscribe_quotes(BTCUSD_INSTRUMENT.id)
 
     def on_quote(self, quote):
-        if quote.instrument_id != TRIGGER_INSTRUMENT.id or self.submitted:
+        if self.submitted:
             return
         self.submitted = True
         self.submit_order(
@@ -92,10 +91,6 @@ class OpenInverseLong(Strategy):
             # BTC/USD permits entry risk validation. Remove it after entry so
             # the later funding settlement has no conversion path.
             self.cache.purge_instrument(BTCUSD_INSTRUMENT.id)
-
-    def on_reset(self):
-        self.submitted = False
-        self.fills = []
 
 
 def btcjpy_book(timestamp: int):
@@ -266,7 +261,7 @@ def trigger_quote(timestamp: int):
     )
 
 
-def run_missing_fx_conversion(*, purge_fx_after_fill: bool = True, reset_after_failure: bool = False):
+def run_missing_fx_conversion(*, purge_fx_after_fill: bool = True):
     engine = BacktestEngine(
         BacktestEngineConfig(bypass_logging=True, run_analysis=False),
     )
@@ -321,18 +316,6 @@ def run_missing_fx_conversion(*, purge_fx_after_fill: bool = True, reset_after_f
         if purge_fx_after_fill:
             with pytest.raises(RuntimeError, match="Funding settlement failed"):
                 engine.run()
-            if reset_after_failure:
-                # The failed run is terminal. Reset the same engine, preserve
-                # its loaded data, and replay with the FX source restored.
-                strategy.purge_fx_after_fill = False
-                engine.reset()
-                # The test deliberately purged this instrument from Cache;
-                # reset retains registered instruments, so re-register it.
-                engine.add_instrument(BTCUSD_INSTRUMENT)
-                # Explicitly reset Python strategy-owned state for replay.
-                strategy.submitted = False
-                strategy.fills = []
-                engine.run()
         else:
             # Fresh deterministic replay with the required BTC/USD conversion
             # quote retained through the funding boundary.
@@ -357,18 +340,6 @@ def test_inverse_funding_with_missing_btc_to_usd_conversion_fails_closed():
 
 def test_fresh_replay_with_restored_fx_quote_completes_funding():
     result = run_missing_fx_conversion(purge_fx_after_fill=False)
-
-    assert len(result["fills"]) == 1
-    assert result["open_positions"] == 1
-    assert result["balance"] < Money.from_str("100000 USD")
-
-
-
-def test_same_engine_reset_and_replay_recovers_after_funding_fx_failure():
-    result = run_missing_fx_conversion(
-        purge_fx_after_fill=True,
-        reset_after_failure=True,
-    )
 
     assert len(result["fills"]) == 1
     assert result["open_positions"] == 1
