@@ -8,8 +8,6 @@ import platform
 from pathlib import Path
 import resource
 import sqlite3
-import statistics
-import sys
 import tempfile
 import time
 
