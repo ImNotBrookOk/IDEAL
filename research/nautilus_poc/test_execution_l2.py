@@ -102,7 +102,7 @@ def make_l2_snapshot() -> OrderBookDeltas:
                     Quantity.from_str("3.000"),
                     3,
                 ),
-                flags=RecordFlag.F_SNAPSHOT | RecordFlag.F_LAST,
+                flags=RecordFlag.F_SNAPSHOT.value | RecordFlag.F_LAST.value,
                 sequence=sequence,
                 ts_event=timestamp,
                 ts_init=timestamp,
