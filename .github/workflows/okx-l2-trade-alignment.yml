@@ -31,7 +31,70 @@ jobs:
       - name: Install pinned high-throughput JSON parser
         run: python -m pip install --disable-pip-version-check orjson==3.11.3
 
-      - name: Run trade/book alignment unit tests (expected RED until implementation)
+      - name: Run trade/book alignment unit tests
         env:
           PYTHONPATH: research
         run: python -m unittest discover -s research/tests -p 'test_okx_trade_book_alignment.py' -v
+
+      - name: Retrieve 400-level L2 and paired trade archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-output
+          curl --fail --show-error --location --retry 3 --retry-all-errors \
+            --connect-timeout 20 --max-time 2400 \
+            --output research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz \
+            "https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-12.tar.gz"
+          curl --fail --show-error --location --retry 3 --retry-all-errors \
+            --connect-timeout 20 --max-time 2400 \
+            --output research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip \
+            "https://static.okx.com/cdn/okex/traderecords/trades/daily/20261112/BTC-USDT-SWAP-trades-2026-11-12.zip?v=1001"
+          curl --fail --show-error --location --retry 3 --retry-all-errors \
+            --connect-timeout 20 --max-time 2400 \
+            --output research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip \
+            "https://static.okx.com/cdn/okex/traderecords/trades/daily/20261113/BTC-USDT-SWAP-trades-2026-11-13.zip?v=1001"
+          gzip -t research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz
+          tar -tzf research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz > research-output/l2-members.txt
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+          for path in sorted(Path("research-output").glob("*.zip")):
+              with zipfile.ZipFile(path) as archive:
+                  bad = archive.testzip()
+                  if bad:
+                      raise SystemExit(f"{path}: CRC failure in {bad}")
+                  print(f"{path.name}: ZIP integrity OK")
+          PY
+          sha256sum research-output/* | tee research-output/SHA256SUMS
+          {
+            echo "Retrieved UTC: $(date -u +%FT%TZ)"
+            for f in research-output/*.tar.gz research-output/*.zip; do
+              echo "$(basename "$f"): $(wc -c < "$f") bytes"
+            done
+          } > research-output/manifest.txt
+
+      - name: Align trades to strictly preceding sampled BBO
+        env:
+          PYTHONPATH: research
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/okx_trade_book_alignment.py \
+            --l2 research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz \
+            --trades \
+              research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip \
+              research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip \
+            --start-ms 1794441600000 \
+            --end-ms 1794528000000 \
+            | tee research-output/trade-book-alignment.json
+          cat research-output/manifest.txt
+          rm research-output/*.tar.gz research-output/*.zip
+
+      - name: Retain audit summaries only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: okx-btc-usdt-swap-400lv-trade-alignment
+          path: research-output/
+          if-no-files-found: warn
+          retention-days: 3
