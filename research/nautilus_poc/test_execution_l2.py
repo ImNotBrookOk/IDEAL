@@ -18,6 +18,7 @@ from nautilus_trader.model import (
     OmsType,
     Price,
     Quantity,
+    QuoteTick,
     RecordFlag,
     Venue,
 )
@@ -38,9 +39,9 @@ class L2MarketBuyStrategy(Strategy):
         self.fill_events = []
 
     def on_start(self):
-        self.subscribe_book_deltas(INSTRUMENT.id, BookType.L2_MBP)
+        self.subscribe_quotes(INSTRUMENT.id)
 
-    def on_book_deltas(self, deltas):
+    def on_quote(self, quote):
         if self.submitted:
             return
         self.submitted = True
@@ -55,6 +56,18 @@ class L2MarketBuyStrategy(Strategy):
 
     def on_order_filled(self, event):
         self.fill_events.append(event)
+
+
+def make_quote() -> QuoteTick:
+    return QuoteTick(
+        instrument_id=INSTRUMENT.id,
+        bid_price=Price.from_str("39999.0"),
+        ask_price=Price.from_str("40001.0"),
+        bid_size=Quantity.from_str("5.000"),
+        ask_size=Quantity.from_str("2.000"),
+        ts_event=2,
+        ts_init=2,
+    )
 
 
 def make_l2_snapshot() -> OrderBookDeltas:
@@ -133,7 +146,7 @@ def test_l2_depth_walk_and_consumption_prevent_competing_orders_reusing_depth():
     strategy = L2MarketBuyStrategy()
     try:
         engine.add_strategy(strategy)
-        engine.add_data([make_l2_snapshot()])
+        engine.add_data([make_l2_snapshot(), make_quote()])
         engine.run()
 
         filled_by_order = {}
