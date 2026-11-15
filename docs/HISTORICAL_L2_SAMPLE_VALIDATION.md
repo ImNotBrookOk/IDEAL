@@ -495,3 +495,36 @@ The final no-lookahead alignment and initial research acceptance assertions pass
 3. Obtain authoritative OKX historical archive documentation for the third level field; continue treating it as opaque.
 4. Define conservative execution-model bounds. Taker impact and spread/slippage research may proceed with 10 ms samples and staleness controls; passive fills must not assume FIFO or exact queue position.
 5. Continue independent-source, licensing and venue-eligibility checks before any venue selection or runtime integration.
+
+
+### 12.10 Consecutive-day 400-level reconstruction and field-schema corroboration (16 November 2026)
+
+The adjacent-day workflow [#43774295757](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43774295757) successfully retrieved and independently reconstructed both 11 and 12 November 2026 BTC-USDT-SWAP module-4 archives, alongside the 11 November module-5 reference.
+
+| Measurement | 11 Nov 400-level | 12 Nov 400-level |
+|---|---:|---:|
+| Compressed archive bytes | 452,866,800 | 500,244,886 |
+| Uncompressed NDJSON bytes | 2,818,674,224 | 3,048,526,067 |
+| Records | 6,630,044 | 6,604,203 |
+| Snapshots | 96 | 96 |
+| Updates | 6,629,948 | 6,604,107 |
+| Snapshot depth per side | exactly 400 | exactly 400 |
+| Price-level rows | 99,009,762 | 109,286,945 |
+| Zero-quantity deletions | 17,885,894 | 20,114,734 |
+| Median combined levels changed/update | 6 | 6 |
+| Minimum/maximum changed levels/update | 1 / 1,218 | 1 / 1,183 |
+| Empty/crossed/locked/invalid reconstructed states | 0 | 0 |
+| Exactly 10 ms intervals | 5,697,158 / 6,630,043 (85.929%) | 5,676,756 / 6,604,202 (85.957%) |
+
+Both days have 96 full snapshots, consistent with roughly 15-minute snapshot spacing. The two consecutive days show closely matching record cadence and median update density, while total level rows and deletion counts vary with market activity. This supports repeatability of the archive's structure across the two sampled days; it does not establish lossless sequence continuity.
+
+SHA-256:
+- 11 Nov 400-level: `e4a315e221c106fb59da079632ce4d4605e7e8e22cab810f350959a8950c7426`
+- 12 Nov 400-level: `6dd55534ddd376c6995bfac584f1e1a19ed64083b76b542da61ee488cacbdfce`
+- 11 Nov 5,000-level: `b7a2e597f7e286d6b14c9fd50abe92a067af76b0129e99a04726a795ed44829f`
+
+**Third tuple field — refined interpretation:** OKX's official API documentation defines the three-element order-book tuple in GET /api/v5/market/books-full as [price, quantity, number of orders at the price] (official docs: https://app.okx.com/docs-v5/en/, section “GET / Full order book”, response parameter examples). The historical archive records also have exactly three elements and their third value is a nonnegative integer, so “order count” is now the leading, strongly corroborated interpretation. However, the official documentation retrieved does not explicitly state that the downloadable module-4/module-5 archive serializer uses the same tuple contract. The current books/books-l2-tbt WebSocket schema is a four-element tuple: price, quantity, deprecated always-zero field, order count. Consequently, preserve the raw third value, do not make it a required feature, and retain archive-specific semantic confirmation as an outstanding documentation question. It is not a liquidation count or a queue-position signal based on available evidence.
+
+The adjacent-day workflow passed all six archive audit unit tests, full archive integrity checks, and complete reconstruction for all three files. Audit artifact ID `14185851827` (SHA-256 `db78a9d5611552974f9bc581cf8c3cc1328dfdad7112e4e28dce20034e31e2e6`) contains only small manifests and summaries, not raw archives. Artifact expires 18 November 2026 at 23:28 UTC.
+
+**Disposition:** consecutive-day structural repeatability is provisionally passed. Trade-to-book alignment on both days is the next gate; the previous one-day 12 November alignment remains the only completed event-level comparison until workflow #43776264061 finishes.
