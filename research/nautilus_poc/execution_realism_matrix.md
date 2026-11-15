@@ -364,7 +364,7 @@ Implementation:
 - Floating-point payloads are rejected; exact financial values must be decimal strings.
 - No external dependency or database server is required.
 
-Eight tests cover:
+Ten tests cover:
 1. Close/reopen durability.
 2. Abrupt writer-process exit after a committed event, then WAL recovery from a new process/connection.
 3. Event-ID idempotency and conflicting duplicate rejection.
@@ -373,8 +373,10 @@ Eight tests cover:
 6. Snapshot chain-anchor tamper detection.
 7. Float rejection.
 8. Newer schema version rejection.
+9. Event metadata-column tampering (event ID/type/timestamp columns must agree with canonical payload).
+10. Snapshot-state tampering (stored state must match its snapshot hash).
 
-Verification: [CI run 43756299486](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756299486), **69 passed in 0.35s**, exact NautilusTrader pin / Ubuntu 24.04 / Python 3.14.
+Verification: [CI run 43756454616](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43756454616), **71 passed in 0.41s**, exact NautilusTrader pin / Ubuntu 24.04 / Python 3.14.
 
 ### Production boundaries and open risks
 
