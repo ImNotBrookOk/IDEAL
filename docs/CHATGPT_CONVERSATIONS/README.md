@@ -38,3 +38,5 @@ Create an auditable record of what was requested, what was proposed, what was ch
 A conversation record is complete when the available transcript, operational evidence, decisions, unresolved items and approval boundary are documented and committed to the repository. A task is not approved merely because its conversation record is committed.
 
 | [2026-11-16-008-stop-target-bar-ordering.md](2026-11-16-008-stop-target-bar-ordering.md) | Same-bar OCO stop/target ambiguity under default and adaptive OHLC paths; stop-loss gap-through at synthetic bar open; 52 tests pass; PR #14 merged; OHLC chronology and venue execution limitations documented |
+
+| [2026-11-16-009-funding-fallback-multiposition.md](2026-11-16-009-funding-fallback-multiposition.md) | Funding mark-price fallback to top-of-book midpoint, two hedged positions, duplicate-boundary idempotency and fatal failed-settlement recovery limitation; 54 tests pass; PR #15 merged |
