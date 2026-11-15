@@ -578,3 +578,16 @@ The high outside-spread fraction does not mean 62–64% of trade rows are corrup
 The workflow's initial acceptance assertions passed separately for each day. Artifact ID `14186960490`, SHA-256 `4e1e7cd7dece1882b72a07c85140aec39c95faa859e845de8be7eb09673ba55c`, contains only the summaries and small manifests, expires 18 November 2026 23:47 UTC. Raw archives were deleted before upload and were not committed.
 
 **Updated disposition:** two-day structural reconstruction and two-day no-lookahead trade/BBO alignment are provisionally passed for research. The 400-level historical data is viable for sampled spread/depth/imbalance and conservative taker-impact research, subject to staleness controls and the unresolved sequence-continuity limitation. It is not FIFO/queue-position or exact passive-fill grade. Live 10 ms full-depth feed entitlement and NZ derivatives-issuer eligibility remain separate hard gates. See sections 12.11 and the exchange shortlist section 13.10.
+
+
+**Staleness sensitivity (trade coverage if a research analysis excludes older preceding books):**
+
+| Maximum preceding-book age | 11 Nov retained trades | 12 Nov retained trades |
+|---|---:|---:|
+| <=10 ms | 2,403,071 (92.503%) | 3,063,211 (95.001%) |
+| <=20 ms | 2,501,017 (96.273%) | 3,147,946 (97.628%) |
+| <=50 ms | 2,577,786 (99.229%) | 3,208,025 (99.492%) |
+| <=100 ms | 2,595,217 (99.900%) | 3,222,276 (99.934%) |
+| <=250 ms | 2,597,648 (99.993%) | 3,224,348 (99.998%) |
+
+This is a sensitivity table, not a validated production staleness threshold. It shows that a 50 ms analysis cutoff would retain over 99.2% of trade rows in these two samples while excluding the long stale tail. Any later execution model should report results across multiple age cutoffs and must not interpolate stale book depth. A strategy requiring a stricter 10 ms book-age bound would lose 5.0–7.5% of observations, depending on day.
