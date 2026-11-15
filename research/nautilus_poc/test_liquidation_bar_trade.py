@@ -213,8 +213,11 @@ def test_bar_close_fallback_triggers_liquidation_and_bar_book_executes_close():
     assert result["fill_count"] == 2
 
 
-def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid():
+def test_trade_price_fallback_triggers_breach_but_close_is_skipped_without_bid(capsys):
     result = run_trade_only_without_quote_book()
+    logs = capsys.readouterr().out
+    assert "LIQUIDATION triggered" in logs
+    assert "LIQUIDATION: no price available" in logs
 
     # The trade stream opens the position and moves last price through the
     # maintenance threshold. With an L2 venue and no OrderBookDepth updates,
