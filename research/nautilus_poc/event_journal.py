@@ -201,6 +201,7 @@ class EventJournal:
 
         self._connection.execute("BEGIN IMMEDIATE")
         try:
+            self.verify_chain()
             last = self._connection.execute(
                 "SELECT seq, event_hash FROM events ORDER BY seq DESC LIMIT 1",
             ).fetchone()
@@ -298,7 +299,17 @@ class EventJournal:
             if prev_hash != previous:
                 raise JournalIntegrityError(f"event {event_id!r} previous hash mismatch")
             try:
-                event_json = canonical_bytes(json.loads(payload_json), schema=EVENT_SCHEMA)
+                document = json.loads(payload_json)
+                if (
+                    document.get("schema") != EVENT_SCHEMA
+                    or document.get("event_id") != event_id
+                    or document.get("event_type") != event_type
+                    or document.get("event_ts_ns") != int(event_ts_ns)
+                ):
+                    raise JournalIntegrityError(f"event {event_id!r} columns disagree with canonical payload")
+                event_json = canonical_bytes(document, schema=EVENT_SCHEMA)
+            except JournalIntegrityError:
+                raise
             except Exception as exc:
                 raise JournalIntegrityError(f"event {event_id!r} payload is not canonical JSON") from exc
             if _event_hash(previous, event_json) != event_hash:
