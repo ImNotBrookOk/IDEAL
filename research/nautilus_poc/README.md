@@ -14,8 +14,8 @@
 
 The exact pinned package installed in CI, its version assertion passed, and the complete suite passed:
 
-- **20 tests passed** on the merged `main` branch in GitHub Actions run [43691402915](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43691402915).
-- CI commit: `fb13425c7318f9426c78a230231aa6f0a372b1a6`.
+- **22 tests passed** on the liquidation research branch in GitHub Actions run [43691805092](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43691805092); the tested change was subsequently squash-merged to `main`.
+- Merged commit: [`9a5ee8488bedf762999ca03c4969771c1e803157`](https://github.com/ImNotBrookOk/IDEAL/commit/9a5ee8488bedf762999ca03c4969771c1e803157).
 - Test command: `python -m pytest -q`.
 
 Coverage:
@@ -27,6 +27,7 @@ Coverage:
 5. Margin: a resting limit order reserves exactly `299.99500000 USDT` initial margin under `StandardMarginModel`; a filled position has exactly `150.00125000 USDT` maintenance margin under the same fixed-percentage model.
 6. Funding: positive funding of `0.0001` on `6000.05 USDT` mark notional debits `0.60000500 USDT` at the specified funding boundary. The taker fee is `3.00002500 USDT`; final balance is `9996.39997000 USDT`.
 7. Missing boundary: a funding update without `next_funding_ns` and not aligned to its interval does not create a funding payment.
+8. Liquidation: a quote-driven inverse BTCUSD maintenance-margin breach closes the position; replay is deterministic. The 40,000 → 20,000 gap fixture leaves a negative account balance, and bar/trade liquidation remains a known engine limitation.
 
 ## Liquidation POC findings (2.0.0rc9)
 
