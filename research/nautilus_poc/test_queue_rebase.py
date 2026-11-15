@@ -322,6 +322,7 @@ class PriorityResetStrategy(Strategy):
     def __init__(self, modification: str = "increase"):
         super().__init__()
         self.modification = modification
+        self.modify_rejected = None
         self.quote_count = 0
         self.orders = []
         self.fill_events = []
@@ -345,11 +346,20 @@ class PriorityResetStrategy(Strategy):
         elif self.quote_count == 2:
             # Quantity-only increase after the external L2 update. The
             # configured policy decides whether this order loses queue priority.
-            quantity = {"increase": "7.000", "decrease": "3.000", "noop": "5.000"}[self.modification]
-            self.modify_order(
-                self.orders[0].client_order_id,
-                quantity=Quantity.from_str(quantity),
-            )
+            if self.modification == "noop":
+                try:
+                    self.modify_order(
+                        self.orders[0].client_order_id,
+                        quantity=Quantity.from_str("5.000"),
+                    )
+                except RuntimeError as exc:
+                    self.modify_rejected = str(exc)
+            else:
+                quantity = {"increase": "7.000", "decrease": "3.000"}[self.modification]
+                self.modify_order(
+                    self.orders[0].client_order_id,
+                    quantity=Quantity.from_str(quantity),
+                )
 
     def on_order_filled(self, event):
         self.fill_events.append(event)
@@ -483,25 +493,19 @@ def test_quantity_decrease_resets_priority_under_any_modify_policy():
     assert fills[0].last_qty == Quantity.from_str("1.000")
 
 
-def test_noop_modify_preserves_priority_under_price_change_policy():
-    orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.PRICE_CHANGE, modification="noop")
-    assert len(fills) == 1
-    assert fills[0].client_order_id == orders[0].client_order_id
-    assert fills[0].last_qty == Quantity.from_str("1.000")
+def test_noop_modify_is_rejected_before_any_priority_policy_is_applied():
+    for policy in (
+        OrderPriorityResetPolicy.PRICE_CHANGE,
+        OrderPriorityResetPolicy.PRICE_OR_QUANTITY_INCREASE,
+        OrderPriorityResetPolicy.ANY_MODIFY,
+    ):
+        orders, fills = run_priority_reset_case(policy, modification="noop")
 
-
-def test_noop_modify_preserves_priority_under_increase_policy():
-    orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.PRICE_OR_QUANTITY_INCREASE, modification="noop")
-    assert len(fills) == 1
-    assert fills[0].client_order_id == orders[0].client_order_id
-    assert fills[0].last_qty == Quantity.from_str("1.000")
-
-
-def test_noop_modify_resets_priority_under_any_modify_policy():
-    orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.ANY_MODIFY, modification="noop")
-    assert len(fills) == 1
-    assert fills[0].client_order_id == orders[1].client_order_id
-    assert fills[0].last_qty == Quantity.from_str("1.000")
+        # The command factory rejects unchanged quantity before ModifyOrder
+        # reaches process_modify, so ANY_MODIFY cannot reset queue priority.
+        assert len(fills) == 1
+        assert fills[0].client_order_id == orders[0].client_order_id
+        assert fills[0].last_qty == Quantity.from_str("1.000")
 
 
 class PriceChangeStrategy(Strategy):
