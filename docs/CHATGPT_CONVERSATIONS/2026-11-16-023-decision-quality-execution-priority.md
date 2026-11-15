@@ -102,3 +102,17 @@ A malformed literal newline escape in the existing ROADMAP remaining-work entry 
 Phase 01 remains IN PROGRESS. Phase 02 remains LOCKED. The next technical gate is still actual-file historical perpetual L2/trade retrieval and independent reconstruction. Only after that gate passes should the replay harness and matched-parent execution-policy comparisons proceed. Continue in roadmap order; do not weaken acceptance criteria to force progress.
 
 No owner approval is pending for continued Phase 01 research under D-012. Explicit owner approval is still required before Phase 02, runtime implementation/integration, account access, paper/live execution, risk changes or paid infrastructure.
+
+
+## 7. Publication and read-back verification
+
+The audit record was committed as `ba85d3caf072a94dbd851d11b01229c8442c8462`. All seven project files were fetched again from `main`; content checks passed for the research report, D-013, REQUIREMENTS execution objective, ROADMAP Phase 01/Phase 02 gate, shortlist, audit record and index entry. Read-back blob SHAs:
+- `docs/EXECUTION_QUALITY_RESEARCH.md`: `a1c9a3a583d650e3f071f58f670b4a1e9d68f23b`.
+- `DECISIONS.md`: `f0e260e04bccd2b6a26b962a691bf93c45223afb`.
+- `REQUIREMENTS.md`: `aa3f53bba7b50945653df7f687477e6c83954462`.
+- `ROADMAP.md`: `301b24ad651d84ece8acf104c48824eb4527f044`.
+- `docs/EXCHANGE_AND_DATA_SHORTLIST.md`: `faf39ccc03e10d871086ac031ee120b8e009b753`.
+- This audit record: `c7e9d75a9775bcb9398c97ebca52bb358bb1f5df`.
+- `docs/CHATGPT_CONVERSATIONS/README.md`: `54f2706255534ab98227178ef2f3c75a3b25a1ee`.
+
+No code tests were run because this change is documentation and research only. No phase transition occurred.
