@@ -385,5 +385,6 @@ Verification: [final PR-head CI run 43756560957](https://github.com/ImNotBrookOk
 - WAL and `synchronous=FULL` improve local durability but do not replace filesystem persistence, backups or off-host recovery.
 - The database file must reside on persistent local storage, not an ephemeral worker filesystem or unsupported network filesystem.
 - Encryption at rest, key management, backup verification, retention/compaction, schema migration tests, disk-full handling, corruption recovery and write-latency/capacity benchmarks remain open.
+- The hash chain is stored in the same database it protects. It detects accidental or partial edits, but a malicious writer with full database access can recompute the entire chain. An off-host signed checkpoint, HMAC key kept outside the database, or immutable external hash anchor is required for stronger tamper evidence.
 - The current snapshot stores generic state JSON and an event-chain anchor. It does not yet encode the full Nautilus/IDEAL engine state or safely restore live exchange connections and outstanding orders.
 - A fresh deterministic replay with corrected market/FX data remains the verified fallback for backtests; live recovery requires exchange reconciliation and explicit owner-approved architecture.
