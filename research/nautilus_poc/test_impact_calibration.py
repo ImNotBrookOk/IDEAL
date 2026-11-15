@@ -3,7 +3,7 @@ import csv
 
 import pytest
 
-from research.nautilus_poc.impact_calibration import analyze, load_csv
+from impact_calibration import analyze, load_csv
 
 
 FIELDS = [
