@@ -144,3 +144,18 @@ The earlier “spot/perpetual unclear” note is superseded by source inspection
 The Hugging Face datasets-server API reports 220.6m depth rows (1.49 GB), 224k snapshot rows (1.66 MB), and 30.58m trade rows (230 MB), total 251.39m rows / 1.72 GB. Bounded row previews exposed depth/snapshot/trade schemas, but the published schemas omit separate `exchange_ts`. The first returned snapshot row is 2026-06-05 06:29:48 UTC, while first returned depth/trade rows are 2026-06-04 00:54 UTC, so an initial snapshot anchor is not demonstrated for the earliest ~29.6 hours. The dataset card also documents a 43-minute outage on 2026-07-05 requiring a hard snapshot reset.
 
 No Parquet bytes were downloaded, parsed or reconstructed. This dataset is rejected for perpetual calibration; it may be considered only as a generic spot-data parser fixture after actual file validation. See [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 9.
+
+
+## 12. OKX Swap / Tardis historical-data update (16 November 2026)
+
+Tardis's current OKX Swap metadata endpoint is reachable through the research fetch path and reports the exchange enabled, historical coverage since 2019-03-30, and channels including trades, trades-all, books-l2-tbt, books, BBO, mark price, funding, open interest and instrument updates. Tardis documents first-of-month CSV files without a Data API key.
+
+A 2026-11-01 `BTC-USDT-SWAP` trades sample URL returned a gzip-signature binary response through the research fetch service, but the response was not materialised as a local file and no HTTP headers, byte count or hash were captured. The matching L2 URLs for `BTC-USDT-SWAP` and `BTC-USD-SWAP` were not parsed by that service (`CRAWL_UNEXPECTED_CONTENT_TYPE`). The execution container still fails DNS resolution. This is an access-path improvement, **not** a data-quality validation or successful local download.
+
+The current Tardis channel history is a material constraint: `books-l2-tbt` (10 ms) is listed only until 2026-05-21; `books` (100 ms) is listed from 2026-05-21 onward (with an earlier 2023-02-24 to 2024-07-19 interval). The 21 May 2026 boundary also coincides with a collector-region and WebSocket-endpoint change. Any replay or model calibration must stratify across this feed-generation boundary; do not treat pre/post data as one homogeneous microstructure sample.
+
+CryptoHFTData's current correction register still says the 2026-10 data-quality release is **not yet deployed**. Its disclosures include omitted empty-book snapshots affecting OKX Futures and planned, not published, OKX funding/ticker/trade-history corrections. It remains on hold for calibration.
+
+Sources: [Tardis OKX Swap](https://docs.tardis.dev/historical-data-details/okex-swap), [Tardis exchange metadata](https://api.tardis.dev/v1/exchanges/okex-swap), [Tardis CSV documentation](https://docs.tardis.dev/downloadable-csv-files), [CryptoHFTData correction register](https://www.cryptohftdata.com/docs/data-gaps-and-corrections), [OKX official historical data portal](https://www.okx.com/historical-data).
+
+**Disposition:** no sample files were saved or validated; no provider or venue selected; the historical-data gate remains BLOCKED. See validation report section 10.
