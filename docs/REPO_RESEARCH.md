@@ -138,7 +138,7 @@ Positive findings:
 - Funding completeness is treated as a promotion concern: the policy source includes a block for incomplete funding history rather than silently approving it.
 
 Important limitation:
-- The parity harness proves the kernel's growing-prefix replay property; it does not by itself prove end-to-end equivalence of the actual paper scanner, exchange fills and backtest. The kernel's own documentation says the scanner acts on pending actions at signal-bar close while the validated backtest uses next-bar-open fills, and the pending-action test describes a scan-lag/one-bar difference. This is an explicit execution-semantic boundary that must be reconciled, not glossed over as full paper/backtest parity.
+- The parity harness proves the kernel's growing-prefix replay property; it does not by itself prove end-to-end equivalence of the actual paper scanner, exchange fills and backtest. The kernel documentation says the scanner emits pending actions when the signal bar closes for the next forming bar's open. The pending-action tests cover projected entry timestamps, reconciliation and duplicate suppression, and describe this mechanism as removing a previous one-bar scan lag. This is a useful design, but these tests do not by themselves prove exchange acknowledgement/fill-price parity or full scanner-to-backtest event equivalence.
 - The kernel is OHLCV-driven. Its intrabar model cannot infer the true ordering of stop and target touches within a candle; conservative ambiguity rules and higher-resolution/order-book evidence are still needed.
 - Funding is an opt-in aligned series in the kernel, with a completeness flag. The downstream policy needs to be tested to ensure incomplete funding blocks eligibility across every path.
 
