@@ -60,10 +60,11 @@ BASE_NS = 1_700_000_000_000_000_000
 
 
 class OpenInverseLong(Strategy):
-    def __init__(self):
+    def __init__(self, purge_fx_after_fill: bool = True):
         super().__init__()
         self.submitted = False
         self.fills = []
+        self.purge_fx_after_fill = purge_fx_after_fill
 
     def on_start(self):
         # Trigger the BTCJPY order from a different instrument so no BTC/JPY
@@ -86,7 +87,7 @@ class OpenInverseLong(Strategy):
 
     def on_order_filled(self, event):
         self.fills.append(event)
-        if event.instrument_id == INSTRUMENT.id:
+        if event.instrument_id == INSTRUMENT.id and self.purge_fx_after_fill:
             # BTC/USD permits entry risk validation. Remove it after entry so
             # the later funding settlement has no conversion path.
             self.cache.purge_instrument(BTCUSD_INSTRUMENT.id)
@@ -260,7 +261,7 @@ def trigger_quote(timestamp: int):
     )
 
 
-def run_missing_fx_conversion():
+def run_missing_fx_conversion(*, purge_fx_after_fill: bool = True):
     engine = BacktestEngine(
         BacktestEngineConfig(bypass_logging=True, run_analysis=False),
     )
@@ -281,7 +282,7 @@ def run_missing_fx_conversion():
     engine.add_instrument(INSTRUMENT)
     engine.add_instrument(BTCUSD_INSTRUMENT)
     engine.add_instrument(TRIGGER_INSTRUMENT)
-    strategy = OpenInverseLong()
+    strategy = OpenInverseLong(purge_fx_after_fill=purge_fx_after_fill)
     try:
         engine.add_strategy(strategy)
         mark_ts = BASE_NS + 3_000_000_000
@@ -311,11 +312,18 @@ def run_missing_fx_conversion():
             # Advance beyond the boundary so the engine actually attempts settlement.
             trigger_quote(BASE_NS + 5_000_000_000),
         ])
-        with pytest.raises(RuntimeError, match="Funding settlement failed"):
+        if purge_fx_after_fill:
+            with pytest.raises(RuntimeError, match="Funding settlement failed"):
+                engine.run()
+        else:
+            # Fresh deterministic replay with the required BTC/USD conversion
+            # quote retained through the funding boundary.
             engine.run()
+        account = engine.portfolio.account(venue=VENUE)
         return {
             "fills": list(strategy.fills),
             "open_positions": engine.cache.positions_open_count(),
+            "balance": account.balance_total(USD),
         }
     finally:
         engine.dispose()
@@ -326,3 +334,12 @@ def test_inverse_funding_with_missing_btc_to_usd_conversion_fails_closed():
 
     assert len(result["fills"]) == 1
     assert result["open_positions"] == 1
+
+
+
+def test_fresh_replay_with_restored_fx_quote_completes_funding():
+    result = run_missing_fx_conversion(purge_fx_after_fill=False)
+
+    assert len(result["fills"]) == 1
+    assert result["open_positions"] == 1
+    assert result["balance"] < Money.from_str("100000 USD")
