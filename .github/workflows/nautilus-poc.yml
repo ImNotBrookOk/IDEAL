@@ -1,0 +1,37 @@
+name: NautilusTrader isolated proof of concept
+
+on:
+  push:
+    paths:
+      - "research/nautilus_poc/**"
+      - ".github/workflows/nautilus-poc.yml"
+  pull_request:
+    paths:
+      - "research/nautilus_poc/**"
+      - ".github/workflows/nautilus-poc.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research-poc:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: "pip"
+          cache-dependency-path: research/nautilus_poc/requirements.txt
+      - name: Install pinned research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r research/nautilus_poc/requirements.txt
+      - name: Verify engine version
+        run: |
+          python -c "import nautilus_trader; print(nautilus_trader.__version__); assert nautilus_trader.__version__ == '2.0.0rc9'"
+      - name: Run isolated proof-of-concept tests
+        working-directory: research/nautilus_poc
+        run: python -m pytest -q
