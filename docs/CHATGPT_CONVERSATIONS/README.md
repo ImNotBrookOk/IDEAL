@@ -48,3 +48,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-012-funding-replay-recovery.md](2026-11-16-012-funding-replay-recovery.md) | Fresh deterministic replay with restored BTC/USD quote completes inverse BTCJPY funding settlement; funding debit observable; 57 tests pass; PR #18 merged; same-engine reset/replay remains open |
 
 | [2026-11-16-013-canonical-replay-hashes.md](2026-11-16-013-canonical-replay-hashes.md) | Versioned canonical JSON/SHA-256 replay audit; fresh-engine and same-engine reset replay hashes match after generated-ID normalization; tamper detection; 61 tests pass; PR #19 merged; durable process restart remains open |
+
+| [2026-11-16-014-sqlite-event-journal.md](2026-11-16-014-sqlite-event-journal.md) | Nautilus Redis/PostgreSQL persistence limits; standard-library SQLite WAL event journal, hash chain, checkpoints, abrupt-process recovery and tamper tests; 71 tests pass; PR #20 merged; runtime integration remains locked |
