@@ -105,6 +105,7 @@ def build_engine():
             taker_rate=Decimal("0.0005"),
         ),
         liquidity_consumption=True,
+        use_market_order_acks=True,
     )
     engine.add_instrument(make_instrument())
     return engine
