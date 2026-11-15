@@ -49,3 +49,22 @@ The next priority is obtaining and independently validating real crypto perpetua
 Phase 01 remains IN PROGRESS. Historical perpetual L2 acceptance remains BLOCKED. No vendor or venue is selected. The next test is to obtain matching 2026-11-01 OKX Swap incremental L2, trades and derivative-ticker files as actual local artifacts, then record hashes, schema, gzip integrity, row counts, sequence/timestamp checks and independent book reconstruction. If this environment cannot retrieve binary files, use an owner-controlled ordinary network path or a different permitted retrieval route without weakening the acceptance criteria.
 
 Owner approval for Phase 02 remains pending and is not requested by this research update.
+
+
+## Addendum — OKX native archive discovery (16 November 2026)
+
+Subsequent to the initial Tardis-only update, the public OKX historical-market-data endpoint was queried successfully through the research fetch path. Exact metadata responses:
+
+1. `module=5`, `instType=SWAP`, `dateAggrType=daily`, `instFamilyList=BTC-USDT`, 2026-11-12 UTC: `code=0`; `BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-12.tar.gz`; 177.63 MB; URL `https://static.okx.com/cdn/okx/match/orderbook/pro/L2/5000lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-12.tar.gz`.
+2. Same module and family, 2026-11-11 UTC: `code=0`; 170.27 MB.
+3. `module=4`, BTC-USDT SWAP, 2026-11-12 UTC: `code=0`; 400-level archive; 477.07 MB.
+4. `module=5`, ETH-USDT SWAP, 2026-11-12 UTC: `code=0`; 149.22 MB.
+5. `module=1`, BTC-USDT SWAP, daily dates 2026-11-12 and 2026-11-13 in UTC+8: `code=0`; two trade ZIPs of 17.85 MB and 30.43 MB. Both are required to cover the 2026-11-12 UTC order-book day, because the trade and order-book modules use different calendar timezones.
+
+The MIT `burakoner/OKX.Api` source at commit `1dd5dd09d04627eb27a6b0b15bac980287295b1b` was inspected: the endpoint implementation uses `signed: false`; module 4/5/6 map to 400/5000/50 levels; response fields include `filename`, `sizeMB`, and direct `url`; the request requires inclusive begin/end, one-to-ten instrument families for SWAP, and a maximum ten-day/month range. Its changelog records unsigned production boundary tests, T+3 order-book availability and 5 requests per 2 seconds per IP. The repository declares MIT. It is used as a source/code reference only; no dependency is adopted.
+
+Important pairing rule: order-book modules 4/5/6 use UTC calendar dates, whereas trade module 1 uses UTC+8. For the full 2026-11-12 UTC book day, retrieve both trade-date files (12 and 13 November UTC+8) and filter rows by actual timestamps. Do not pair by filename date alone.
+
+The execution container still fails DNS resolution for external data hosts. The research fetch path returned JSON metadata and direct URLs, not the 170+ MB L2 archive or trade ZIP bytes. No archive download, checksum, tar/gzip verification, schema parsing, row count, event-cadence measurement, reconstruction, sequence-gap check, trade alignment or replay test has occurred. The OKX source is now the highest-priority bounded retrieval candidate, not an approved data source or venue.
+
+Updated roadmap/docs were read back after commit. Phase 01 remains IN PROGRESS, historical-data gate BLOCKED, Phase 02 LOCKED. No code tests were run; documentation/research only.
