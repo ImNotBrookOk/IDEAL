@@ -29,7 +29,7 @@ Create an auditable record of what was requested, what was proposed, what was ch
 
 | Record | Scope |
 |---|---|
-| [2026-11-15-001-conversation-audit-protocol.md](2026-11-15-001-conversation-audit-protocol.md) | Owner request and establishment of the conversation audit protocol; includes current liquidation research checkpoint |
+| [2026-11-15-001-conversation-audit-protocol.md](2026-11-15-001-conversation-audit-protocol.md) | Owner request and establishment of the conversation audit protocol; PR #5 is open for owner review |
 
 ## Completion standard
 
