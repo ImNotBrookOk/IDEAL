@@ -443,7 +443,7 @@ def run_priority_reset_case(policy: OrderPriorityResetPolicy):
             final_trade,
         ])
         engine.run()
-        return strategy.orders, strategy.fill_events
+        return strategy.orders, strategy.fill_events, strategy.no_op_rejected
     finally:
         engine.dispose()
 
@@ -452,6 +452,7 @@ def test_quantity_increase_preserves_priority_under_price_change_policy():
     orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.PRICE_CHANGE)
 
     assert len(fills) == 1
+    assert no_op_rejected is True
     assert fills[0].client_order_id == orders[0].client_order_id
     assert fills[0].last_qty == Quantity.from_str("1.000")
 
@@ -481,6 +482,7 @@ class AmendmentEdgeStrategy(Strategy):
         self.mode = None
         self.orders = []
         self.fill_events = []
+        self.no_op_rejected = False
 
     def on_start(self):
         self.subscribe_quotes(INSTRUMENT.id)
@@ -516,10 +518,13 @@ class AmendmentEdgeStrategy(Strategy):
             elif self.mode == "no_op":
                 # An explicit same-quantity amend probes whether the engine
                 # accepts no-op updates and whether ANY_MODIFY resets priority.
-                self.modify_order(
-                    self.orders[0].client_order_id,
-                    quantity=Quantity.from_str("5.000"),
-                )
+                try:
+                    self.modify_order(
+                        self.orders[0].client_order_id,
+                        quantity=Quantity.from_str("5.000"),
+                    )
+                except RuntimeError as exc:
+                    self.no_op_rejected = "same as existing values" in str(exc)
 
     def on_order_filled(self, event):
         self.fill_events.append(event)
@@ -600,7 +605,7 @@ def run_amendment_edge_case(
     ],
 )
 def test_price_change_resets_queue_priority_under_all_policies(policy):
-    orders, fills = run_amendment_edge_case(policy, "price_change")
+    orders, fills, no_op_rejected = run_amendment_edge_case(policy, "price_change")
 
     assert len(fills) == 1
     # The older order was originally resting at 39999.0. After repricing it to
@@ -618,7 +623,7 @@ def test_price_change_resets_queue_priority_under_all_policies(policy):
     ],
 )
 def test_quantity_decrease_preserves_or_resets_priority_by_policy(policy, expected_order_index):
-    orders, fills = run_amendment_edge_case(policy, "quantity_decrease")
+    orders, fills, no_op_rejected = run_amendment_edge_case(policy, "quantity_decrease")
 
     assert len(fills) == 1
     assert fills[0].client_order_id == orders[expected_order_index].client_order_id
@@ -634,7 +639,7 @@ def test_quantity_decrease_preserves_or_resets_priority_by_policy(policy, expect
     ],
 )
 def test_no_op_quantity_amendment_does_not_create_a_priority_reset(policy):
-    orders, fills = run_amendment_edge_case(policy, "no_op")
+    orders, fills, no_op_rejected = run_amendment_edge_case(policy, "no_op")
 
     assert len(fills) == 1
     # NautilusTrader rejects/ignores an unchanged quantity rather than treating
