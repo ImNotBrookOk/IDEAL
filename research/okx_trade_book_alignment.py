@@ -134,6 +134,15 @@ def align_records(book_records, trade_records):
         consume(current_trade)
         current_trade = next(trades, None)
 
+    side_consistent = (
+        side_consistency["buy_at_or_above_ask"]
+        + side_consistency["sell_at_or_below_bid"]
+    )
+    age_threshold_counts = {
+        f">{threshold}": sum(count for age, count in age_histogram.items() if age > threshold)
+        for threshold in (10, 20, 50, 100, 250)
+    }
+
     return {
         "book_records": book_records_count,
         "trade_rows": trade_rows,
@@ -141,12 +150,14 @@ def align_records(book_records, trade_records):
         "no_preceding_book": no_preceding_book,
         "invalid_book_trades": invalid_book_trades,
         "same_timestamp_trades": same_timestamp_trades,
+        "same_timestamp_pct": (same_timestamp_trades / trade_rows * 100.0) if trade_rows else None,
         "sample_age_ms": {
             "min": min(age_histogram) if age_histogram else None,
             "median": _hist_quantile(age_histogram, aligned, 0.50),
             "p95": _hist_quantile(age_histogram, aligned, 0.95),
             "max": max(age_histogram) if age_histogram else None,
         },
+        "sample_age_threshold_counts": age_threshold_counts,
         "price_vs_preceding_bbo": dict(categories),
         "outside_spread_trades": outside_count,
         "outside_spread_pct": (outside_count / aligned * 100.0) if aligned else None,
@@ -158,6 +169,8 @@ def align_records(book_records, trade_records):
             "max": outside_distance_max_bps,
         },
         "side_consistency": dict(side_consistency),
+        "side_consistency_pct": (side_consistent / aligned * 100.0) if aligned else None,
+        "side_mismatch_pct": ((aligned - side_consistent) / aligned * 100.0) if aligned else None,
     }
 
 
