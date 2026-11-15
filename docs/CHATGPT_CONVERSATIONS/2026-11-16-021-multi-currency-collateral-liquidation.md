@@ -223,3 +223,49 @@ This work continues the same user request recorded above; no new user message wa
 **Current state:** Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED; NautilusTrader remains an unapproved engine candidate; no runtime integration, account access, paper/live orders, risk changes, cloud resources or paid services were created.
 
 **Next task in roadmap order:** begin the venue and historical-data shortlist. Verify official jurisdiction/product/account-mode eligibility and API/data availability; do not select or connect a venue without owner approval. Then obtain representative L2/trade/fill data for empirical market-impact calibration.
+
+## Continuation — venue and historical-data shortlist
+
+This work continues the same user instruction to keep building. The roadmap's next Phase 01 blocker is venue selection plus representative historical L2/trade/fill data. Prior project constraints remain exchange-neutral research, public unauthenticated data only, no credentials, and no venue selected. No account or API key was created.
+
+### 12. Preliminary shortlist document
+
+Created [`docs/EXCHANGE_AND_DATA_SHORTLIST.md`](../EXCHANGE_AND_DATA_SHORTLIST.md) and linked it from `ROADMAP.md`. The document compares Binance USDⓈ-M/COIN-M, Bybit linear/inverse, OKX swaps/futures and Hyperliquid on live public market data, historical L2, trade/funding/OI/liquidation coverage, vendor alternatives, data-quality issues, cost and NZ product eligibility.
+
+### 13. Verified source findings
+
+- [Binance Public Data repository](https://github.com/binance/binance-public-data): public Futures archives document trades, aggregate trades and klines; no general historical L2 archive is documented there.
+- [Binance Futures orderbook history endpoint](https://developers.binance.com/docs/derivatives/futures-data/market-data/Get-Future-TickLevel-Orderbook-Historical-Data-Download-Link): `GET /sapi/v1/futures/histDataLink` is a signed USER_DATA path. Current endpoint material indicates VIP gating, request windows shorter than seven days, and no new historical data after 2024-11-01.
+- [Bybit V5 orderbook endpoint](https://bybit-exchange.github.io/docs/v5/market/orderbook): public contract snapshots support up to 1,000 levels; response includes update ID `u`, cross sequence `seq` and matching-engine timestamp `cts`; RPI orders are not included.
+- [OKX historical data portal](https://www.okx.com/historical-data): advertises tick trades from September 2021, perpetual funding from March 2022 and high-resolution L2 from March 2023.
+- [OKX API changelog](https://www.okx.com/docs-v5/log_en/): checksum deprecation from 23 June 2026 means consumers must validate orderbook continuity using `seqId/prevSeqId`; higher-frequency 400-depth `books-l2-tbt` requires VIP5 and 50-depth `books50-l2-tbt` requires VIP4, while standard `books` remains public.
+- [Hyperliquid Info API](https://hyperliquid.gitbook.io/Hyperliquid-docs/for-developers/api/info-endpoint): `l2Book` is capped at 20 levels per side; candle snapshots are capped at 5,000; `userFillsByTime` is account-specific and only the 10,000 most recent fills are available.
+- [Tardis data types](https://docs.tardis.dev/faq/data): normalized tick-level trades, incremental L2, top-25/top-5 snapshots, quotes, derivative tickers and liquidations; raw API is Pro/Business.
+- [Tardis downloadable CSV documentation](https://docs.tardis.dev/downloadable-csv-files): first-day-of-month CSV samples are available without an API key; daily datasets are gzip files ordered by local receive timestamp.
+- [Tardis historical data details](https://docs.tardis.dev/historical-data-details): initial snapshots at 00:00 UTC and reconnects; reconnect gaps are documented at approximately 300–3,000 ms depending on venue.
+- [FMA derivatives issuer guidance](https://www.fma.govt.nz/business/services/derivatives-issuers/): a derivatives issuer making a regulated offer of derivatives must be licensed; the FMA definition includes futures, swaps, CFDs, margin contracts and rolling spot contracts. Applicability to a specific offshore platform/user arrangement is not decided here.
+- [Binance licences and registrations](https://www.binance.com/en/about-legal/licenses): Binance states the NZ local entity's services and explicitly says it is not licensed by a NZ regulator; the listed local services do not establish Futures eligibility.
+- [Bybit NZ addendum](https://www.bybit.com/en/help-center/article/Addendum-to-Terms-of-Service-New-Zealand-Users): NZ users may access only the changing NZ Supported Services list; the addendum does not itself confirm perpetual futures availability.
+
+### 14. Preliminary disposition
+
+- No venue selected. OKX is currently the strongest **historical-data access candidate** because its official portal advertises high-resolution L2 downloads from March 2023, but download format, depth, access conditions, price and NZ product eligibility remain unverified.
+- Binance remains useful for public live feeds and free historical trades/aggTrades/klines, but its official public archive does not close the L2 gap.
+- Bybit exposes useful public live orderbook data, but a native historical L2 archive was not verified and NZ services are product-restricted.
+- Hyperliquid's 20-level L2 snapshot limit and lack of a verified public historical delta tape make it a weaker fit for queue-sensitive execution calibration.
+- Tardis offers a no-key monthly sample path but no free full-history entitlement was established; full raw replay is a paid tier.
+- L2 is not L3. Do not claim true queue-position/fill-probability modelling from market-by-price data alone.
+
+### 15. Sample retrieval limitation
+
+The docs confirm a Tardis first-of-month CSV sample path, including a documented `binance-futures` dataset family. The current execution container could not resolve the external dataset host, so no binary sample was downloaded or parsed. This is an environment/network limitation, not evidence that the vendor endpoint is unavailable. No sample-quality assessment is claimed.
+
+### 16. Roadmap and audit state
+
+- `ROADMAP.md` now records the preliminary venue/data shortlist and changes the next task to validate a free historical L2 sample and produce a data-quality report before venue selection.
+- New document: `docs/EXCHANGE_AND_DATA_SHORTLIST.md`.
+- No trading venue, account mode, derivatives product, vendor subscription or API key approved.
+- No account access, exchange connection, paper/live order, paid data purchase or runtime implementation occurred.
+- Phase 01 remains IN PROGRESS; Phase 02 remains LOCKED.
+
+**Next task:** validate a no-cost historical L2 sample end-to-end (Tardis first-of-month CSV and/or OKX historical download) and produce a machine-readable quality report. Only after that should the owner decide whether a venue/product/account-mode shortlist is sufficiently grounded for approval.
