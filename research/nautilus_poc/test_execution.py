@@ -234,6 +234,7 @@ class L2MarketBuyStrategy(Strategy):
         super().__init__()
         self.quantities = quantities
         self.fill_events = []
+        self.submitted = False
 
     def on_start(self):
         self.subscribe_quotes(INSTRUMENT.id)
