@@ -56,3 +56,17 @@ Two-day structural repeatability is provisionally passed. Trade alignment across
 OKX's official WebSocket documentation states that 400-level 10 ms books-l2-tbt requires VIP4+; standard 400-level books updates at 100 ms; bbo-tbt is one-level/10 ms. Public historical 10 ms archives therefore do not establish equivalent live feed availability. Any 100 ms or BBO fallback requires separate calibration and must not inherit the 10 ms full-depth strategy assumptions. No account or VIP entitlement was checked or connected.
 
 Official source: https://app.okx.com/docs-v5/en/, “WS / Order book channel”.
+
+
+## New Zealand derivatives eligibility — hard gate
+
+The FMA states that anyone offering derivatives to retail investors in New Zealand must hold a derivatives issuer licence; its crypto guidance specifically requires crypto CFD providers to hold an FMA derivatives issuer licence and directs users to verify providers of other crypto derivatives. This creates a hard gate before any NZ retail venue selection or account/API connection.
+
+Public-source review:
+- Binance NZ official entity-services list does not list derivatives issuance; NZ futures pages currently show no records. This does not prove the global futures product is unavailable or available to NZ users.
+- Bybit's NZ addendum names Kono Group Limited as the contracting party and limits NZ users to “NZ Supported Services”, but does not enumerate the products.
+- OKX's 14 November 2026 disclosure does not name NZ in its open-ended restricted/limited jurisdiction lists; this does not establish product-level derivatives availability or local licensing.
+
+Sources: FMA derivatives guidance https://www.fma.govt.nz/consumer/investing/types-of-investments/derivatives ; FMA crypto guidance https://www.fma.govt.nz/consumer/investing/types-of-investments/cryptocurrencies/ ; Binance entity/services https://www.binance.com/en-GB/legal/licenses ; Bybit NZ addendum https://www.bybit.global/common-static/compliance/legal/BYBIT/700f3662d5d08a2d6cc9e75b47e381f0.pdf ; OKX disclosure https://www.okx.com/help/risk-compliance-disclosure .
+
+No venue is confirmed eligible. This is not a legal conclusion that all are prohibited; exact entity, product, retail/wholesale classification and any licence/exemption require authoritative confirmation and independent legal advice. No exchange account, API key or trading action is authorised.
