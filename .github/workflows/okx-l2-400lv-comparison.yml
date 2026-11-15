@@ -73,7 +73,7 @@ jobs:
             cat research-output/SHA256SUMS
           } > research-output/manifest.txt
 
-      - name: Audit both L2 archives with independent reconstruction
+      - name: Audit all L2 archives with independent reconstruction
         env:
           PYTHONPATH: research
         shell: bash
