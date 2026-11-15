@@ -44,6 +44,7 @@ jobs:
           files=(
             "BTC-USDT-SWAP-L2-400-2026-11-11.tar.gz|https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261111/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-11.tar.gz"
             "BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz|https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-12.tar.gz"
+            "BTC-USDT-SWAP-L2-400-2026-11-13.tar.gz|https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261113/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-13.tar.gz"
             "BTC-USDT-SWAP-L2-5000-2026-11-11.tar.gz|https://static.okx.com/cdn/okx/match/orderbook/pro/L2/5000lv/daily/20261111/BTC-USDT-SWAP-L2orderbook-5000lv-2026-11-11.tar.gz"
           )
           : > research-output/SHA256SUMS
