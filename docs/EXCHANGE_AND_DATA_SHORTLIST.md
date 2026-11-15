@@ -266,3 +266,6 @@ The expanded no-lookahead workflow [#43776264061](https://github.com/ImNotBrookO
 Outside-spread rates were 64.445% and 62.584%; this is not automatically a data defect because 10 ms sampling can miss intervening states and same-timestamp ordering is unknown. It does mean the dataset cannot establish exact trade/book event ordering. The 497–509 ms stale tail requires explicit runtime staleness controls. Detailed metrics: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.12.
 
 **Status:** historical module-4 400-level data is provisionally viable for sampled market-quality and conservative taker-impact research on the two validated days. It remains unsuitable for FIFO queue-position or exact passive-fill calibration. This does not clear live feed entitlement (13.9), NZ derivatives eligibility (13.10), venue selection or runtime adoption.
+
+
+Staleness sensitivity from the same two days: a preceding-book age cutoff of <=50 ms retains 99.229% of 11 Nov trades and 99.492% of 12 Nov trades; <=20 ms retains 96.273% and 97.628%; <=10 ms retains 92.503% and 95.001%. These are research coverage calculations, not a production policy. The data model must preserve sample age and exclude stale depth rather than interpolate it. Full counts: historical validation section 12.12.
