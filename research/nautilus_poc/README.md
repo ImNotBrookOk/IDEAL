@@ -79,7 +79,7 @@ A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivative
 
 ## Still unverified
 
-- Exchange-specific liquidation thresholds, liquidation price, bankruptcy price, insurance fund, ADL and account recovery.
+- Venue-specific liquidation and recovery model validation (blocked until a venue, contract family and margin mode are selected); the source comparison is documented in [the gap matrix](exchange_liquidation_gap_matrix.md).
 - Partial fills, queue position, conservative liquidity consumption under multiple competing orders.
 - Slippage, spread widening, adverse selection and stop/target same-bar ordering/gap-through.
 - Funding with missing mark prices, missing exchange rates, multiple positions and multiple currencies.
