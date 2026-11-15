@@ -30,7 +30,8 @@ Coverage:
 8. Quote-driven liquidation: an inverse BTCUSD maintenance-margin breach closes the position; replay is deterministic. The 40,000 → 20,000 gap fixture leaves a negative account balance.
 9. Mark precedence: a 20,000 mark triggers liquidation while the cached matching-engine quote remains 40,000; the synthetic close executes at the 40,000 bid and the exact final balance is `0.62500000 BTC`. Replaying this conflict fixture is deterministic.
 10. Bar-only and trade-only liquidation: an external LAST bar with L1 bar execution triggers and closes a liquidation using the bar-generated synthetic book; a separate L2 case opens a position from an ask, clears the L2 book, then moves LAST to 20,000 with a TradeTick. The independent inverse-PnL oracle gives -250 BTC against 0.8125 BTC account balance and 0.0875 BTC maintenance margin. The liquidation trigger is therefore breached, but the close is skipped because the L2 book has no executable best bid. Both cases replay deterministically.
-11. Long/short quote-side selection under a non-zero spread: from a 40,000 entry, a later 39,800 bid / 40,200 ask makes the long adverse only at bid and the short adverse only at ask. Separate engine runs assert both positions liquidate and the close fills at the expected executable side. Replays are deterministic.\n12. Execution realism: queue-ahead depletion, partial trade-driven fills, shared trade-volume consumption across competing L1 limit orders, and deterministic one-tick L1 slippage when the fill-model probability is 1.0. Three new Python tests reproduce these behaviors against the pinned wheel.
+11. Long/short quote-side selection under a non-zero spread: from a 40,000 entry, a later 39,800 bid / 40,200 ask makes the long adverse only at bid and the short adverse only at ask. Separate engine runs assert both positions liquidate and the close fills at the expected executable side. Replays are deterministic.
+12. Execution realism: queue-ahead depletion, partial trade-driven fills, shared trade-volume consumption across competing L1 limit orders, and deterministic one-tick L1 slippage when the fill-model probability is 1.0. Three new Python tests reproduce these behaviors against the pinned wheel.
 
 ## Liquidation source audit (2.0.0rc9)
 
@@ -73,15 +74,21 @@ CI runs the same command on GitHub-hosted Linux runners. No paid service or secr
 
 Latest verification: **33 tests passed in 0.18s** in [GitHub Actions run 43696169232](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696169232), with the PR-triggered duplicate [run 43696163846](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696163846) also successful. Both used the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The three added tests cover L1 queue depletion/partial fills, shared trade consumption across competing limit orders, and one-tick probabilistic L1 slippage. Full findings and caveats are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
-## Execution realism research\n\nPartial fills, queue position, liquidity consumption and slippage findings are recorded in [execution_realism_matrix.md](execution_realism_matrix.md). Three new IDEAL POC tests pass on the exact pinned wheel; this verifies selected L1 trade/queue/consumption and one-tick slippage paths only. L2 multi-level depth and L3 MBO queue scenarios remain open. No production code or dependency was added.\n\n## Exchange-specific liquidation and recovery gap
+## Execution realism research
+
+Partial fills, queue position, liquidity consumption and slippage findings are recorded in [execution_realism_matrix.md](execution_realism_matrix.md). Three new IDEAL POC tests pass on the exact pinned wheel; this verifies selected L1 trade/queue/consumption and one-tick slippage paths only. L2 multi-level depth and L3 MBO queue scenarios remain open. No production code or dependency was added.
+
+## Exchange-specific liquidation and recovery gap
 
 A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivatives is recorded in [exchange_liquidation_gap_matrix.md](exchange_liquidation_gap_matrix.md). The venues differ in staged liquidation, bankruptcy-price takeover, insurance-pool allocation, ADL triggers/ranking and telemetry. The pinned NautilusTrader simulator's current liquidation path submits one full-position reduce-only IOC after an executable-side check; it does not implement these venue-specific workflows. No venue is selected and no testnet/account access was used. Refresh official contract specifications, API changelogs and jurisdiction eligibility immediately before any future adapter implementation.
 
 ## Still unverified
 
 - Venue-specific liquidation and recovery model validation (blocked until a venue, contract family and margin mode are selected); the source comparison is documented in [the gap matrix](exchange_liquidation_gap_matrix.md).
-- Partial fills, queue position, conservative liquidity consumption under multiple competing orders.
-- Slippage, spread widening, adverse selection and stop/target same-bar ordering/gap-through.
+- L2 multi-level depth walking and partial fills under finite competing depth in the IDEAL POC; L2 snapshot rebasing and L3 MBO queue tracking are source-audited but not yet reproduced in the Python POC.
+- Queue cancellation/amendment edge cases and venue-specific priority rules (blocked on venue selection).
+- Empirical slippage/market-impact calibration across order sizes, volatility, spread, depth, latency and adverse selection; the current L1 one-tick test is a mechanism check only.
+- Spread widening and stop/target same-bar ordering/gap-through.
 - Funding with missing mark prices, missing exchange rates, multiple positions and multiple currencies.
 - Full canonical event/account replay hashes and restart/recovery semantics.
 - Resource benchmarks on the intended free worker.
