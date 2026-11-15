@@ -136,10 +136,10 @@ def make_engine(book_type: BookType, quantity: str = "1.000"):
 
 
 
-def sell_trade(timestamp: int, size: str):
+def sell_trade(timestamp: int, size: str, price: str = "40000.0"):
     return TradeTick(
         instrument_id=INSTRUMENT.id,
-        price=Price.from_str("40000.0"),
+        price=Price.from_str(price),
         size=Quantity.from_str(size),
         aggressor_side=AggressorSide.SELL,
         trade_id=TradeId(f"SELL-{timestamp}"),
@@ -491,6 +491,8 @@ class AmendmentEdgeStrategy(Strategy):
         if self.quote_count == 1:
             if self.mode == "price_change":
                 prices = ["39999.0", "40000.0"]
+            elif self.mode == "price_decrease":
+                prices = ["40000.0", "39999.0"]
             else:
                 prices = ["40000.0", "40000.0"]
             for price in prices:
@@ -508,6 +510,11 @@ class AmendmentEdgeStrategy(Strategy):
                 self.modify_order(
                     self.orders[0].client_order_id,
                     price=Price.from_str("40000.0"),
+                )
+            elif self.mode == "price_decrease":
+                self.modify_order(
+                    self.orders[0].client_order_id,
+                    price=Price.from_str("39999.0"),
                 )
             elif self.mode == "quantity_decrease":
                 self.modify_order(
@@ -572,9 +579,10 @@ def run_amendment_edge_case(
                 ),
             ],
         )
-        if mode == "price_change":
+        if mode in ("price_change", "price_decrease"):
             progress = sell_trade(3, "10.000")
-            final_trade = sell_trade(5, "1.000")
+            final_price = "39999.0" if mode == "price_decrease" else "40000.0"
+            final_trade = sell_trade(5, "1.000", final_price)
             data = [initial, quote(2), progress, quote(4), final_trade]
         else:
             progress = sell_trade(3, "6.000")
@@ -603,12 +611,13 @@ def run_amendment_edge_case(
         OrderPriorityResetPolicy.ANY_MODIFY,
     ],
 )
-def test_price_change_resets_queue_priority_under_all_policies(policy):
-    orders, fills, no_op_rejected = run_amendment_edge_case(policy, "price_change")
+@pytest.mark.parametrize("mode", ["price_change", "price_decrease"])
+def test_price_change_in_either_direction_resets_queue_priority_under_all_policies(policy, mode):
+    orders, fills, no_op_rejected = run_amendment_edge_case(policy, mode)
 
     assert len(fills) == 1
-    # The older order was originally resting at 39999.0. After repricing it to
-    # 40000.0, every policy treats the successful price change as priority loss.
+    # The older order is repriced into the other order's level; every policy
+    # treats a successful price change as priority loss in either direction.
     assert fills[0].client_order_id == orders[1].client_order_id
     assert fills[0].last_qty == Quantity.from_str("1.000")
 
@@ -641,8 +650,8 @@ def test_no_op_quantity_amendment_does_not_create_a_priority_reset(policy):
     orders, fills, no_op_rejected = run_amendment_edge_case(policy, "no_op")
 
     assert len(fills) == 1
-    # NautilusTrader rejects/ignores an unchanged quantity rather than treating
-    # it as a successful modify, so even ANY_MODIFY does not move the order.
+    # Strategy.modify_order rejects an unchanged quantity before emitting a
+    # command, so ANY_MODIFY never reaches the matching engine and cannot reset it.
     assert no_op_rejected is True
     assert fills[0].client_order_id == orders[0].client_order_id
     assert fills[0].last_qty == Quantity.from_str("1.000")
