@@ -2,7 +2,7 @@
 
 **Research date:** 15 November 2026  
 **Phase:** 01 — open-source and infrastructure research  
-**Status:** IN PROGRESS — selected L1 and L2 execution scenarios reproduced; L2 snapshot rebasing and L3 order-level queue scenarios remain source-audited but not yet reproduced in IDEAL's Python POC.  
+**Status:** L1/L2 depth, L2 snapshot rebasing and L3 MBO queue scenarios reproduced in the isolated POC. A provenance-aware impact-calibration utility is implemented and tested; empirical calibration remains blocked pending a selected venue and representative historical order-book/fill data.  
 **Engine under evaluation:** `nautilus_trader==2.0.0rc9` (pre-release; not approved for production)  
 **Environment:** Ubuntu 24.04 x86_64, Python 3.14, GitHub Actions  
 **Adoption decision:** None. This is isolated research only.
@@ -85,6 +85,47 @@ The IDEAL POC now exercises the pinned L2 MBP matching path using explicit `Orde
 
 **Interpretation:** This demonstrates finite displayed L2 depth consumption in the pinned simulator. It does not model hidden liquidity, latency races, exchange matching priority or the impact of other real participants beyond what is present in the supplied book/trade feed.
 
+### 2.6 IDEAL L2 snapshot and L3 MBO queue reproduction
+
+The POC now tests queue rebasing and order-level queue events through observable fills, not only source inspection.
+
+**L2 MBP snapshot rebasing**
+- Start with 10.000 units displayed at the simulated SELL order's price; the order joins behind that quantity.
+- A replacement snapshot reducing visible quantity to 8.000 caps the existing queue estimate at 8.000. A subsequent 9.000-unit BUY trade fills exactly 1.000.
+- A replacement snapshot increasing visible quantity to 15.000 does not push the existing order back. Its queue estimate remains capped at the prior 10.000; an 11.000-unit BUY trade fills exactly 1.000.
+- The clear/start and final-delta snapshot sequence is processed as a batch, so the queue estimate is not discarded on the intermediate clear.
+
+**L3 MBO identity-aware queue tracking**
+- Two displayed ask orders (IDs 101 and 102, 5.000 units each) establish 10.000 units ahead of a simulated SELL limit.
+- A completed snapshot retaining IDs 101 and 102 while introducing a new 50.000-unit ID 103 preserves only the previously tracked IDs. New IDs in the replacement snapshot are not retroactively inserted ahead of the resting simulated order.
+- Deleting ID 101 advances the queue by its 5.000 units only. A 6.000-unit BUY trade then fills exactly 1.000.
+- Updating ID 101 from 5.000 to 3.000 advances the queue by the 2.000-unit decrement. A 9.000-unit BUY trade fills exactly 1.000.
+- Updating ID 101 from 5.000 to 7.000 adds 2.000 units ahead under this simulator's retained-FIFO-slot rule. An 11.000-unit BUY trade cannot reach the simulated order.
+- With 10.000 units ahead, a 12.000-unit BUY trade partially fills a 5.000-unit resting order by 2.000; the next 3.000-unit BUY trade fills the remaining 3.000.
+
+**Simulated order amendments:** the pinned documentation and Rust tests define `OrderPriorityResetPolicy`. Default `PRICE_CHANGE` preserves progress for quantity-only decreases/increases but resets at a changed price. `PRICE_OR_QUANTITY_INCREASE` also resets on quantity increases. `ANY_MODIFY` resets on every successful modify command, including no-op changes. The Python POC now tests all three policies for a quantity increase after queue progress and an L2 depth increase: `PRICE_CHANGE` preserves the original order's priority, while `PRICE_OR_QUANTITY_INCREASE` and `ANY_MODIFY` move it behind the unmodified peer. Price changes, quantity decreases and no-op modifications remain untested end-to-end. Venue-specific amendment priority remains unknown until a venue is selected.
+
+Sources: [pinned queue implementation and rebase logic](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/mod.rs#L625-L1088), [pinned queue lifecycle and amendment policies](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/docs/concepts/backtesting/trade-execution.md#L116-L258), [upstream L2/L3 queue tests](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/tests.rs#L3983-L4297).
+
+### 2.7 Empirical market-impact calibration utility
+
+Added `impact_calibration.py`, a standard-library-only offline analysis utility. It accepts one row per parent order and requires a single venue, instrument and data source, unique order IDs, event timestamps, side, requested/filled quantity, fill VWAP, decision-time midpoint, spread, volatility, visible depth within 10 bps and execution latency.
+
+It calculates side-aware realized implementation shortfall:
+- BUY: `(fill_vwap / decision_mid - 1) × 10,000` bps.
+- SELL: `-(fill_vwap / decision_mid - 1) × 10,000` bps.
+- Residual impact is measured as realized slippage less half the quoted spread; this is a diagnostic decomposition, not a causal impact estimate.
+- It reports fill ratio, volume-weighted mean slippage, p50/p90/p95, and training buckets by order-size participation versus displayed depth, spread, volatility and latency.
+- It sorts chronologically, uses the first 70% for descriptive calibration and the final 30% as an untouched temporal check, reports observed coverage against the training p90, hashes the source CSV and rejects mixed provenance, duplicate IDs and invalid fill records.
+- Provisional diagnostic review minimums are 200 parent orders, at least 30 filled OOS orders and 30 observations per bucket. These are not owner-approved strategy gates.
+
+**Empirical status: BLOCKED.** No venue has been selected and no representative historical L2 snapshots/trades paired with IDEAL-style parent-order execution outcomes have been supplied. Synthetic unit fixtures verify arithmetic, data validation, provenance handling and chronological splitting only. They do not calibrate real-world slippage, adverse selection or market impact. Do not use the generated synthetic test data as a trading cost model.
+
+Run with:
+```bash
+python impact_calibration.py path/to/parent_order_fills.csv --output impact_calibration_report.json
+```
+
 ## 3. IDEAL POC tests
 
 New file: [`test_execution.py`](test_execution.py)
@@ -98,32 +139,40 @@ All tests use synthetic BTCUSDT perpetual fixtures, zero fees to isolate the tes
 | L1 probabilistic slippage | BUY market order at ask 40,001.0; tick size 0.1; `prob_slippage=1.0` | Fill at 40,001.1 |
 | L2 depth walking | 1.500-unit BUY; asks 0.400 @ 40,001.0 and 0.600 @ 40,002.0 | Two fills of 0.400 and 0.600 at their respective levels; residual 0.500 unfilled |
 | Competing L2 market orders | Two 0.750-unit BUYs against 1.000 total ask depth; consumption enabled | Aggregate fill quantity exactly 1.000; no reuse of consumed depth |
+| L2 snapshot queue decrease | Queue 10.000; replacement snapshot 8.000; BUY trade 9.000 | Queue caps at 8.000; 1.000 fills |
+| L2 snapshot queue increase | Queue 10.000; replacement snapshot 15.000; BUY trade 11.000 | Existing queue remains 10.000; 1.000 fills |
+| L3 MBO snapshot identity | Retain IDs 101/102; add new ID 103; then delete ID 101 | Only previously tracked IDs remain ahead; 1.000 fills on 6.000 trade |
+| L3 MBO cancel/delete | Delete 5.000-unit order ID 101 from 10.000 ahead | Queue advances by exactly 5.000; 1.000 fills on 6.000 trade |
+| L3 MBO size decrease | ID 101 decreases 5.000 → 3.000 | Queue advances 2.000; 1.000 fills on 9.000 trade |
+| L3 MBO size increase | ID 101 increases 5.000 → 7.000 | Queue ahead increases to 12.000; 11.000 trade does not fill |
+| L3 partial fills | 10.000 ahead; 5.000-unit simulated order; trades 12.000 then 3.000 | Partial fills 2.000 then 3.000 |
+| Impact calibration arithmetic | BUY and SELL parent-order examples; 2 bps spread | Both directions report 10 bps adverse slippage and 9 bps residual after half-spread; unfilled order is retained in fill-ratio counts |
 
 ### Verification
 
 - Command: `python -m pytest -q`
 - Exact dependency assertion: `nautilus_trader==2.0.0rc9`
 - Runner: Ubuntu 24.04 x86_64 / Python 3.14
-- Final L2 research branch verification: **35 passed in 0.15s** in final-head [CI run 43697706395](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697706395), exact pinned wheel / Ubuntu 24.04 / Python 3.14.
+- Final queue/impact research branch verification: **49 passed in 0.18s** in [final PR-head CI run 43699506563](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43699506563), exact pinned wheel / Ubuntu 24.04 / Python 3.14.
 - CI: [run 43696169232](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696169232) and [PR-triggered run 43696163846](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43696163846), both successful.
 - Test-harness correction: the first attempt passed constructor arguments to the NautilusTrader `Strategy` wrapper and failed with `Strategy.__new__()`. The fixture was corrected to instantiate with no arguments and set test parameters afterwards. The corrected head passed both CI runs. This was a test-harness API error, not a simulator defect.
-- The prior main baseline had 33 tests; this branch adds 2 L2 tests. Final suite: 35 passed. No production code or dependency changed.
+- The prior main baseline had 35 tests; this branch adds 7 queue-reproduction tests, 3 simulated-client amendment-priority tests and 4 impact-utility tests. Final suite: 49 passed. No production code or dependency changed.
 - L2 fixture debugging history: first run failed because the Python binding required integer record flags (`RecordFlag.F_LAST.value`); second run constructed the book but submitted market orders before the book had been processed, resulting in no fills. The strategy was changed to submit on a subsequent quote event after the L2 book snapshot. The final run passed. These were test-fixture issues, not engine defects.
 
 Upstream source tests also cover L1 partial queue depletion and shared trade budgets ([Rust tests around lines 4704–4915](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/tests.rs#L4704-L4915)), plus L2 snapshot/depth queue rebasing ([tests around lines 3983–4140](https://github.com/nautechsystems/nautilus_trader/blob/v2.0.0rc9/crates/execution/src/matching_engine/tests.rs#L3983-L4140)). Those upstream tests are source evidence, not IDEAL POC integration tests.
 
 ## 4. Gaps and risks still open
 
-1. IDEAL has not yet reproduced L2 snapshot rebasing or L3 MBO order-ID queue tracking in its own Python POC.
-2. Queue behavior under partial fills, cancellations, amendments and the selected exchange's exact priority rules needs additional tests. No venue is selected.
-3. One-tick L1 slippage is not a market-impact curve. No empirical calibration has been performed for order size, volatility, spread, depth, latency or adverse selection.
-4. No test here covers spread widening, latency races, stale book updates, hidden liquidity, or venue-specific matching priority.
-5. The tests use zero fees to isolate execution mechanics. Fee, funding and market-impact costs must be combined in later strategy validation.
+1. Empirical calibration remains blocked until a venue is selected and representative historical L2 snapshots/trades and execution outcomes are available. The new utility is validated on synthetic fixtures only.
+2. The POC reproduces external L3 MBO order deletion and size updates, and tests all three simulated-client amendment reset policies for quantity increases. Price changes, quantity decreases and no-op amendments remain untested end-to-end. Venue-specific order amendment/cancellation priority remains unverified.
+3. No test here covers spread widening, latency races, stale book updates, hidden liquidity or adverse selection.
+4. The tests use zero fees to isolate execution mechanics. Fee, funding and empirically calibrated market impact must be combined in later strategy validation.
+5. Simulator queue estimates rely on visible feed data and documented FIFO assumptions; they cannot reconstruct hidden queue, feed gaps or priority rules absent from the source venue.
 
 ## 5. Current decision
 
 - Keep NautilusTrader as an isolated research candidate only. Do not add it to the IDEAL runtime or adopt a synthetic fill model.
 - Any future execution simulation must explicitly configure and record book type, trade execution, liquidity consumption, queue tracking, fill model, price protection, fee model, timestamps and random seeds.
 - Unknown aggressor side, missing depth, stale data, or a synthetic liquidity fallback must be labelled as uncertainty and must not silently improve backtest fills.
-- Continue Phase 01 with L2 snapshot rebasing, L3 MBO order-ID queue reproduction, queue cancellation/amendment cases and empirical impact calibration before closing this execution-realism gate.
+- The IDEAL POC now reproduces L2 snapshot rebasing, L3 MBO order identity, queue partial fills, external order deletion and size amendments, plus all three configured simulated-order priority policies for quantity increases. Keep empirical calibration blocked until venue-specific historical data is available; do not substitute synthetic fixtures.
 - No exchange, adapter, account, testnet, paper or live trading authorization is implied.

@@ -32,7 +32,9 @@ Coverage:
 10. Bar-only and trade-only liquidation: an external LAST bar with L1 bar execution triggers and closes a liquidation using the bar-generated synthetic book; a separate L2 case opens a position from an ask, clears the L2 book, then moves LAST to 20,000 with a TradeTick. The independent inverse-PnL oracle gives -250 BTC against 0.8125 BTC account balance and 0.0875 BTC maintenance margin. The liquidation trigger is therefore breached, but the close is skipped because the L2 book has no executable best bid. Both cases replay deterministically.
 11. Long/short quote-side selection under a non-zero spread: from a 40,000 entry, a later 39,800 bid / 40,200 ask makes the long adverse only at bid and the short adverse only at ask. Separate engine runs assert both positions liquidate and the close fills at the expected executable side. Replays are deterministic.
 12. Execution realism L1: queue-ahead depletion, partial trade-driven fills, shared trade-volume consumption across competing L1 limit orders, and deterministic one-tick L1 slippage.
-13. Execution realism L2: multi-level ask depth walking with a partially unfilled residual, plus two competing market orders sharing finite displayed depth with liquidity consumption enabled. Both new L2 scenarios pass against the pinned wheel.
+13. Execution realism L2: multi-level ask depth walking with a partially unfilled residual, plus competing market orders sharing finite displayed depth.
+14. Queue rebasing and MBO: L2 snapshot size decrease/increase; L3 order-ID snapshot retention; L3 delete/cancel, size decrease/increase and sequential partial fills. Ten queue scenarios pass, including three end-to-end quantity-increase amendment tests across all three configured reset policies.
+15. Impact calibration utility: provenance-checked parent-order CSV input, side-aware slippage, half-spread residual, fill ratios, size/depth participation, spread/volatility/latency buckets, chronological 70/30 split, OOS p90 coverage, dataset SHA-256 and input validation. Four synthetic-fixture tests pass; empirical market impact remains blocked pending venue selection and historical depth/fill data.
 
 ## Liquidation source audit (2.0.0rc9)
 
@@ -73,11 +75,11 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **35 tests passed in 0.15s** in final-head [GitHub Actions run 43697706395](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697706395) on the L2 research branch, using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes five execution-realism tests: three L1 queue/consumption/slippage cases and two L2 depth/competing-order cases. Full findings, test history and caveats are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **49 tests passed in 0.18s** in [PR-head GitHub Actions run 43699506563](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43699506563), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios and impact-calibration utility tests. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
-The POC reproduces selected L1 queue depletion, partial trade-driven fills, shared trade-volume consumption and one-tick L1 slippage. It also reproduces L2 multi-level depth walking and finite displayed-depth consumption across competing market orders. L2 snapshot rebasing and L3 MBO queue scenarios remain open. No production code or dependency was added.
+The POC reproduces selected L1 queue depletion, partial trade-driven fills, shared trade-volume consumption and one-tick L1 slippage; L2 multi-level depth and finite displayed-depth consumption; L2 snapshot rebasing; and L3 MBO order-ID snapshot retention, delete/cancel, size updates and partial fills. All three simulated-client priority reset policies are end-to-end tested for quantity-increase amendments. A separate standard-library calibration utility is tested on synthetic fixtures. Real empirical calibration is blocked pending venue selection and representative historical depth/fill data. No production code or dependency was added.
 
 ## Exchange-specific liquidation and recovery gap
 
@@ -85,14 +87,24 @@ A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivative
 
 ## Still unverified
 
-- Venue-specific liquidation and recovery model validation (blocked until a venue, contract family and margin mode are selected); the source comparison is documented in [the gap matrix](exchange_liquidation_gap_matrix.md).
-- L2 snapshot rebasing and L3 MBO order-ID queue tracking are source-audited but not yet reproduced in the Python POC.
-- Queue cancellation/amendment edge cases and venue-specific priority rules (blocked on venue selection).
-- Empirical slippage/market-impact calibration across order sizes, volatility, spread, depth, latency and adverse selection; the current L1 one-tick test is a mechanism check only.
-- Spread widening and stop/target same-bar ordering/gap-through.
+- Empirical slippage/market-impact calibration using representative venue-specific historical L2, trade and execution data. The analysis utility is implemented and tested on synthetic fixtures only; it cannot generate empirical results without that dataset.
+- Amendment tests currently cover quantity increases under `PRICE_CHANGE`, `PRICE_OR_QUANTITY_INCREASE` and `ANY_MODIFY`. Price changes, quantity decreases and no-op modifications remain untested end-to-end; venue-specific amendment/cancel priority is unknown until a venue is selected.
+- Spread widening, latency races, stale book updates, hidden liquidity and adverse selection.
+- Stop/target same-bar ordering/gap-through.
 - Funding with missing mark prices, missing exchange rates, multiple positions and multiple currencies.
 - Full canonical event/account replay hashes and restart/recovery semantics.
 - Resource benchmarks on the intended free worker.
 - Exchange-specific linear/inverse contract multipliers, fees, margin tiers and liquidation rules.
+
+## Impact calibration utility
+
+Use the standard-library-only `impact_calibration.py` utility with one row per parent order. Start from [the CSV template](impact_calibration_template.csv), populate it only with provenance-labelled observations from one venue, instrument and source, then run:
+
+```bash
+python impact_calibration.py path/to/parent_order_fills.csv --output impact_calibration_report.json
+```
+
+The utility reports side-aware implementation shortfall, half-spread residual, fill ratios, p50/p90/p95, size/depth participation and spread/volatility/latency buckets, dataset SHA-256, and a chronological 70/30 train/OOS diagnostic. It rejects duplicate IDs, mixed provenance and invalid fills. Its provisional sample minimums are diagnostic only, not approved trading gates. No actual market data is bundled or inferred.
+
 
 No claim of production suitability, profitability or live-execution parity is made.
