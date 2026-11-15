@@ -138,3 +138,21 @@ This addendum records the audit-record publication and index update. It suppleme
 - Final conversation record read-back verified after publication.
 - PR #6 remains open and unmerged. No merge action was performed.
 - No automated tests were required or run for these Markdown-only audit updates.
+
+
+## 7. Owner direction and merge closeout — 2026-11-15
+
+**User:**
+
+> Do what you think is best
+
+**Interpretation and decision:** This response delegated the pending choice between merging PR #6 and requesting revisions. After rechecking the PR head, successful CI job, mergeability and complete patch, no merge-blocking issue was identified. The change was limited to the approved research scope and its documentation. The PR was therefore squash-merged.
+
+- Pre-merge PR state: OPEN; mergeable=true; head SHA 6c7e3591dca93d6384200864863e0eef6cdd0524.
+- CI run [43693632643](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43693632643): successful; the research-poc job completed successfully.
+- Review: three files only; isolated POC test, research README and roadmap. No runtime execution path, exchange connectivity, credentials, risk parameters, permissions, or billing changes.
+- Merge method: squash.
+- Merge result: successful; merge commit d04af3de4308b096590908dec16daf2dc55c726a.
+- PR: [#6](https://github.com/ImNotBrookOk/IDEAL/pull/6).
+
+**Post-merge governance state:** This merge closes only the approved research change. Phase 01 remains IN PROGRESS, Phase 02 remains LOCKED, and no subsequent research task or implementation work is authorised by this merge. Await the owner's next instruction before proceeding.
