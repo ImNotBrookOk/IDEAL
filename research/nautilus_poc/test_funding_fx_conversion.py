@@ -249,6 +249,8 @@ def run_missing_fx_conversion():
                 next_funding_ns=boundary,
             ),
             clear_btcjpy_book(BASE_NS + 3_500_000_000),
+            # Advance beyond the boundary so the engine actually attempts settlement.
+            trigger_quote(BASE_NS + 5_000_000_000),
         ])
         with pytest.raises(RuntimeError, match="Funding settlement failed"):
             engine.run()
