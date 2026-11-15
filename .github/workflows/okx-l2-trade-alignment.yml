@@ -6,6 +6,8 @@ on:
       - research/okx-l2-sample-2026-11-16
     paths:
       - .github/workflows/okx-l2-trade-alignment.yml
+      - research/okx_trade_book_alignment.py
+      - research/tests/test_okx_trade_book_alignment.py
 
 permissions:
   contents: read
