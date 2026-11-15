@@ -199,3 +199,58 @@ These inspections strengthen the following provisional boundaries:
 - Barter's README describes separable MarketStream and ExecutionClient interfaces, mock execution for paper/backtesting, pluggable Strategy/RiskManager components, a central order-management system and an Engine AuditStream suitable for an external monitoring process. This is a useful smaller Rust architecture comparison, especially for clean control-plane boundaries. It does not establish that the exchange integrations or derivatives semantics meet IDEAL's needs. See the [Barter README](https://github.com/barter-rs/barter-rs/blob/main/README.md).
 - Forven's current policy defaults are materially different from IDEAL's preliminary screen: the inspected quick-screen config uses a 20-trade minimum and disables a minimum win-rate floor by default, with profit-factor and other gates. IDEAL's user-defined initial screen is over 100 trades and over 30% win rate, while also requiring net expectancy, PF, drawdown, costs and out-of-sample robustness. These thresholds must not be copied or treated as interchangeable. See [Forven policy](https://github.com/judder659/Forven/blob/main/forven/policy.py).
 
+
+
+## Engine and zero-cost deployment comparison — 15 November 2026
+
+### Engine comparison
+
+| Requirement | NautilusTrader | QuantConnect LEAN | Barter |
+|---|---|---|---|
+| Crypto perpetuals | Dedicated CryptoPerpetual model; linear/inverse contract metadata | Crypto-future margin models exist; exact perp funding semantics need validation | Modular execution interfaces; exact funding/margin coverage unproven |
+| Exchange adapters | Current docs cover Binance, Bybit, OKX and Hyperliquid perpetuals | Broad brokerage ecosystem; exact target venue and data availability need validation | Smaller exchange ecosystem |
+| Funding backtest | Explicit FundingRateUpdate and boundary-driven settlement | Not established by this review | Not established by this review |
+| Margin | Simulated margin accounts and configurable models; live venue-reported margin has distinct reconciliation semantics | Crypto-future buying-power/margin models | Pluggable risk manager; exact engine needs audit |
+| Fill realism | Event-driven matching and configurable fills, but permissive defaults/liquidity reuse need correction | Mature fill abstractions; custom perp funding/liquidation semantics need validation | Smaller OHLCV-driven implementation cannot infer true intrabar order |
+| Current position | **First engine to prototype; not selected** | Alternative benchmark | Smaller architectural alternative |
+
+Evidence:
+- [Nautilus crypto perpetual model](https://nautilustrader.io/docs/latest/concepts/instruments/) and [instrument details](https://nautilustrader.io/docs/nightly/concepts/instruments/crypto_perpetual/).
+- [Nautilus backtest funding/margin](https://github.com/nautechsystems/nautilus_trader/blob/develop/docs/concepts/backtesting/accounts-and-margin.md), [accounting](https://github.com/nautechsystems/nautilus_trader/blob/develop/docs/concepts/accounting.md), and [backtesting guide](https://nautilustrader.io/docs/latest/concepts/backtesting/).
+- Exchange guides: [Binance](https://nautilustrader.io/docs/latest/integrations/binance/), [Bybit](https://nautilustrader.io/docs/latest/integrations/bybit/), [OKX](https://nautilustrader.io/docs/latest/integrations/okx/), [Hyperliquid](https://nautilustrader.io/docs/latest/integrations/hyperliquid/).
+- [LEAN crypto-futures margin model](https://github.com/QuantConnect/Lean/blob/master/Common/Brokerages/DefaultBrokerageModel.cs); [Barter architecture](https://github.com/barter-rs/barter-rs).
+
+Nautilus is the strongest current match found for a first proof-of-concept: it models perpetual instruments, funding settlement and margin, and documents data/execution adapters for the four exchanges above. This is not proof of production correctness. Hyperliquid's guide, for example, documents mark/index/funding updates, L2 data, conditional/reduce-only orders and reconciliation, but historical trades are only available as a recent snapshot rather than arbitrary historical depth. Every venue's funding history, fee tiers, margin modes, order types, testnet and recovery semantics still require independent testing.
+
+### Free-tier deployment feasibility
+
+| Provider/service | Current documented free limits | IDEAL suitability |
+|---|---|---|
+| GitHub Actions | Standard hosted runners are free for public repositories; GitHub Free private repos include 2,000 minutes/month and 500 MB artifact storage | CI and tests only; not a persistent runtime |
+| Cloudflare Workers Free | 100,000 requests/day, 10 ms CPU per HTTP request, 128 MB memory, 50 subrequests/request; limited Cron CPU | Static/control plane, lightweight API and alerts; not strategy/backtest worker |
+| Supabase Free | 2 free projects, 500 MB database size/project, 5 GB egress; low-activity projects can pause after 7 days; no automatic backups | Prototype metadata/dashboard projection; not sole authoritative audit store |
+| Render Free | Sleeps after 15 minutes idle; cold start; ephemeral local filesystem; free Postgres expires after 30 days | Demo/preview only; reject as trading worker or primary persistence |
+| Oracle Cloud Always Free A1 | Up to 1,500 OCPU-hours and 9,000 GB-hours/month (equivalent to 2 OCPUs and 12 GB RAM when fully allocated); home-region capacity can be unavailable | Only credible always-on $0 VM candidate identified, subject to eligibility, capacity, ARM compatibility and no-billing safeguards |
+
+Official sources: [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions), [Cloudflare limits](https://developers.cloudflare.com/workers/platform/limits/), [Supabase pricing](https://supabase.com/pricing), [Supabase pausing](https://supabase.com/docs/guides/platform/free-project-pausing), [Render free limits](https://render.com/docs/free), [Oracle Always Free resources](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm).
+
+Oracle is not approved or activated. Its free allocation does not guarantee capacity in the user's home region. Before considering it, verify account eligibility, sign-up/payment-card requirements, A1 availability, ARM64 dependency compatibility, persistent storage, outbound exchange connectivity and hard zero-spend controls. Do not upgrade to a paid account or create resources if there is uncertain billing exposure.
+
+### Provisional $0 deployment shape (not approved)
+
+- Android runs the PWA dashboard only.
+- Cloudflare Pages serves static frontend assets; Workers handle lightweight control-plane requests only.
+- GitHub Actions runs deterministic CI on the public repo; never expose secrets to untrusted pull-request workflows.
+- A verified always-free Linux worker runs the research/paper engine. If no such worker is available, IDEAL remains intermittent/manual-trigger research mode and must not claim continuous operation.
+- Authoritative event history uses durable local SQLite/Postgres on the worker with encrypted off-host exports where free capacity allows. Supabase can be a projection, not the only copy.
+- Watchdog, heartbeat, stale-feed guard, restart recovery, durable order/position reconciliation and fail-closed behavior are mandatory.
+
+### Phase 01 recommendation and proof-of-concept gates
+
+1. Prototype NautilusTrader first, pinned to a stable release/commit (not nightly docs); do not add it as a dependency yet.
+2. Compare its native adapter with CCXT REST plus a separately verified free WebSocket feed for one exchange.
+3. Select the first exchange based on testability and the user's lawful account access. Do not create credentials or connect an account without explicit approval.
+4. Test exact linear/inverse PnL, multipliers, precision, mark/index/last prices, funding timestamps/signs/missing-history rejection, maker/taker fees, spread/slippage, partial fills, liquidity consumption, stop/target ambiguity, gap-through stops, initial/maintenance margin, leverage brackets, liquidation, cancel/replace races, duplicate events, reconnect/restart recovery and deterministic replay hashes.
+5. Benchmark CPU/RAM/disk/egress on the candidate free worker. Testnet/paper adapter parity only; no mainnet order submission.
+
+**Phase 01 remains IN PROGRESS.** This review narrows the first experiment but does not authorise Phase 02, real-money trading, account linking, paid services or dependency adoption.
