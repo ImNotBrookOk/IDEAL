@@ -12,14 +12,19 @@ from nautilus_trader.execution import DefaultFillModel, MakerTakerFeeModel
 from nautilus_trader.model import (
     AccountType,
     AggressorSide,
+    BookAction,
+    BookOrder,
     BookType,
     Currency,
     Money,
     OmsType,
+    OrderBookDelta,
+    OrderBookDeltas,
     OrderSide,
     Price,
     Quantity,
     QuoteTick,
+    RecordFlag,
     TimeInForce,
     TradeId,
     TradeTick,
@@ -220,3 +225,113 @@ def test_l1_market_order_slippage_is_one_adverse_tick_when_probability_is_one():
         assert strategy.fill_events[0].last_px == Price.from_str("40001.1")
     finally:
         engine.dispose()
+
+
+
+class L2MarketBuyStrategy(Strategy):
+    def __init__(self, quantities: list[str]):
+        super().__init__()
+        self.quantities = quantities
+        self.fill_events = []
+        self.submitted = False
+
+    def on_start(self):
+        self.subscribe_quotes(INSTRUMENT.id)
+
+    def on_quote(self, quote):
+        if self.submitted:
+            return
+        self.submitted = True
+        for quantity in self.quantities:
+            self.submit_order(
+                self.order_factory.market(
+                    instrument_id=INSTRUMENT.id,
+                    order_side=OrderSide.BUY,
+                    quantity=Quantity.from_str(quantity),
+                ),
+            )
+
+    def on_order_filled(self, event):
+        self.fill_events.append(event)
+
+
+def make_l2_book(timestamp: int = 1):
+    """Create a two-sided L2 MBP book with two ask levels."""
+    deltas = []
+    entries = [
+        (OrderSide.BUY, "39999.0", "2.000"),
+        (OrderSide.SELL, "40001.0", "0.400"),
+        (OrderSide.SELL, "40002.0", "0.600"),
+    ]
+    for index, (side, price, size) in enumerate(entries):
+        sequence = index + 1
+        flags = RecordFlag.F_LAST.value if index == len(entries) - 1 else 0
+        deltas.append(
+            OrderBookDelta(
+                instrument_id=INSTRUMENT.id,
+                action=BookAction.ADD,
+                order=BookOrder(
+                    side,
+                    Price.from_str(price),
+                    Quantity.from_str(size),
+                    sequence,
+                ),
+                flags=flags,
+                sequence=sequence,
+                ts_event=timestamp,
+                ts_init=timestamp,
+            ),
+        )
+    return OrderBookDeltas(INSTRUMENT.id, deltas)
+
+
+def run_l2_market_case(quantities: list[str]):
+    engine = BacktestEngine(
+        BacktestEngineConfig(bypass_logging=True, run_analysis=False),
+    )
+    engine.add_venue(
+        venue=VENUE,
+        oms_type=OmsType.NETTING,
+        account_type=AccountType.MARGIN,
+        base_currency=USDT,
+        starting_balances=[Money(100_000, USDT)],
+        book_type=BookType.L2_MBP,
+        trade_execution=True,
+        liquidity_consumption=True,
+        fee_model=MakerTakerFeeModel(
+            maker_rate=Decimal("0"),
+            taker_rate=Decimal("0"),
+        ),
+    )
+    engine.add_instrument(INSTRUMENT)
+    strategy = L2MarketBuyStrategy(quantities)
+    try:
+        engine.add_strategy(strategy)
+        engine.add_data([make_l2_book(), make_quote(2)])
+        engine.run()
+        return strategy.fill_events
+    finally:
+        engine.dispose()
+
+
+def test_l2_market_order_walks_multiple_ask_levels_and_partially_fills():
+    fills = run_l2_market_case(["1.500"])
+
+    assert [event.last_qty for event in fills] == [
+        Quantity.from_str("0.400"),
+        Quantity.from_str("0.600"),
+    ]
+    assert [event.last_px for event in fills] == [
+        Price.from_str("40001.0"),
+        Price.from_str("40002.0"),
+    ]
+
+
+def test_competing_l2_market_orders_cannot_reuse_consumed_depth():
+    fills = run_l2_market_case(["0.750", "0.750"])
+
+    total_filled = sum(
+        (Decimal(str(event.last_qty)) for event in fills),
+        Decimal("0"),
+    )
+    assert total_filled == Decimal("1.000")
