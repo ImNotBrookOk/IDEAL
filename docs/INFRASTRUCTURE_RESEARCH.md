@@ -6,7 +6,7 @@
 
 Oracle Cloud Infrastructure (OCI) Always Free Ampere A1 is currently the leading candidate for a persistent, $0 general-purpose worker. It is not yet approved or verified: A1 capacity is region-dependent, idle instances may be reclaimed, and signup requires card verification with a temporary authorisation hold.
 
-The exact IDEAL NautilusTrader POC pin, `nautilus_trader==2.0.0rc9`, now installs and passes all 81 tests on both x86_64 and ARM64 under Ubuntu 24.04 / Python 3.14.10 ([CI run 43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953)); the prior 79-test run is [CI run 43760637330](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760637330). This removes a major ARM wheel compatibility risk, but does not prove performance on an actual A1 VM.
+The exact IDEAL NautilusTrader POC pin, `nautilus_trader==2.0.0rc9`, now installs and passes all 84 tests on both x86_64 and ARM64 under Ubuntu 24.04 / Python 3.14.10 ([CI run 43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188)); the prior 81-test run is [CI run 43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953), and the 79-test run is [CI run 43760637330](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760637330). This removes a major ARM wheel compatibility risk, but does not prove performance on an actual A1 VM.
 
 ## 1. Oracle Cloud Always Free
 
