@@ -23,6 +23,7 @@ Planning baseline. Implementation is not yet authorised. This repository is the 
 - TESTING.md — verification and evidence requirements.
 - SKILLS.md — persistent trading and research knowledge framework.
 - DECISIONS.md — append-only decisions and rationale.
+- docs/REPO_RESEARCH.md — open-source candidate shortlist, licence notes and Phase 01 due-diligence backlog.
 
 ## Delivery rule
 One approved task at a time: implement, test in isolation, integration-test with completed modules, run regression tests, audit, document evidence, then unlock the next task. No task is complete without recorded proof.
