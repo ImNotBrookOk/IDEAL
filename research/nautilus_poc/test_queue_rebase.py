@@ -255,3 +255,53 @@ def test_l3_order_size_increase_adds_to_queue_ahead():
     # NautilusTrader retains the order's FIFO slot and adds the 2-unit increase
     # to queue ahead: 12 ahead means 11 traded units cannot fill our order.
     assert fills == []
+
+
+def test_l3_snapshot_rebase_preserves_existing_order_ids_not_new_orders():
+    snapshot = OrderBookDeltas(
+        INSTRUMENT.id,
+        [
+            OrderBookDelta.clear(INSTRUMENT.id, 4, 4, 4),
+            delta(
+                BookAction.ADD,
+                OrderSide.SELL,
+                "40001.0",
+                "5.000",
+                101,
+                4,
+                RecordFlag.F_SNAPSHOT.value,
+            ),
+            delta(
+                BookAction.ADD,
+                OrderSide.SELL,
+                "40001.0",
+                "5.000",
+                102,
+                4,
+            ),
+            delta(
+                BookAction.ADD,
+                OrderSide.SELL,
+                "40001.0",
+                "50.000",
+                103,
+                4,
+                RecordFlag.F_LAST.value,
+            ),
+        ],
+    )
+    delete_first = delta(
+        BookAction.DELETE,
+        OrderSide.SELL,
+        "40001.0",
+        "5.000",
+        101,
+        5,
+    )
+    fills = run_l3_case([snapshot, delete_first], trade_size="6.000")
+
+    # The simulated order originally queued behind IDs 101 and 102. The
+    # replacement snapshot preserves those existing IDs, but the newly seen
+    # ID 103 is not retroactively inserted ahead. Deleting ID 101 leaves 5
+    # ahead, so six aggressive units fill exactly one.
+    assert [event.last_qty for event in fills] == [Quantity.from_str("1.000")]
