@@ -51,7 +51,7 @@ class BuyInverseOnce(Strategy):
 
 
 def make_quote(price: int, timestamp: int) -> QuoteTick:
-    value = Price.from_int(price)
+    value = Price.from_str(f"{price}.0")
     return QuoteTick(
         instrument_id=INSTRUMENT.id,
         bid_price=value,
