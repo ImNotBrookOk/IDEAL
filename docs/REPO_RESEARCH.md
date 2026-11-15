@@ -261,3 +261,30 @@ Oracle is not approved or activated. Its free allocation does not guarantee capa
 The earlier project plan specified that public market-data research and simulated paper execution should begin without requiring an exchange account. Exchange/API access must remain free. Therefore the first engine proof-of-concept should be exchange-neutral and use deterministic fixtures or public unauthenticated market data with a simulated execution venue. Do not create credentials, request API keys or connect an account as a prerequisite.
 
 Binance and Kraken were previously discussed as initial exchange candidates, with OKX as an additional candidate, but that discussion did not select a venue for this perpetual-futures implementation. Their regional product availability, derivatives endpoints, test environments and free access must be re-verified before any adapter is selected. The first proof-of-concept must not silently turn an earlier candidate list into an exchange decision.
+
+
+## NautilusTrader proof-of-concept execution record — 15 November 2026
+
+An isolated experiment has been added under `research/nautilus_poc/`; it is not imported by IDEAL and is not an adopted runtime dependency.
+
+- Exact package pin: `nautilus_trader==2.0.0rc9` (pre-release only).
+- CI target: Ubuntu 24.04 x86_64, Python 3.14, GitHub-hosted runner.
+- Data: synthetic, deterministic fixtures only.
+- No exchange adapters, API credentials, external market data, paid services, paper orders or live orders.
+- The test harness contains independent Decimal oracles for linear PnL, inverse PnL, fees and funding cashflow, plus native smoke tests for package identity, CryptoPerpetual construction, FundingRateUpdate construction and margin-venue/instrument registration.
+- Local arithmetic verification: six assertions passed, including zero-entry rejection. This was a focused arithmetic check, not a full pytest run.
+- Native NautilusTrader tests have **not yet been executed in this environment** because the package is not installed and outbound network access is unavailable. The GitHub Actions workflow was committed, but a completed run and logs have not yet been independently retrieved. Therefore no native engine behaviour is marked verified.
+
+Important version distinction: the upstream installation guide states that plain PyPI stable installs resolve to the 1.x API, while the 2.x docs require pre-release installation. The 2.0.0rc9 package is explicitly a pre-release and must not be treated as production-ready. Python 3.14/Linux x86_64 is selected because it is within the documented wheel support matrix. See [release 2.0.0rc9](https://github.com/nautechsystems/nautilus_trader/releases), [installation/version guidance](https://nautilustrader.io/docs/latest/getting_started/installation/), and [2.x funding/margin model](https://nautilustrader.io/docs/latest/concepts/backtesting/accounts-and-margin/).
+
+### POC gates still open
+
+1. Obtain a successful CI run and inspect complete logs; resolve any import/API incompatibility.
+2. Verify order submission → acknowledgement → fill → position/account state using synthetic market data.
+3. Verify funding settlement at a funding boundary and independently reconcile the resulting position and cash balance.
+4. Verify margin reservation, maintenance margin and liquidation behaviour against hand-calculated cases.
+5. Verify conservative fill assumptions, fees, slippage, partial fills, liquidity consumption and same-bar ambiguity.
+6. Replay the identical fixture twice and compare canonical event/order/position/account outputs.
+7. Record resource use and licence obligations before making any engine-selection recommendation.
+
+**Current result: POC harness committed; engine adoption not decided.** Phase 01 remains IN PROGRESS. No Phase 02 unlock, architecture adoption, exchange connection or trading permission follows from this experiment.
