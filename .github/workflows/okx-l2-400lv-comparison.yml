@@ -69,6 +69,20 @@ jobs:
             cat research-output/SHA256SUMS
           } > research-output/manifest.txt
 
+      - name: Audit both L2 archives with independent reconstruction
+        env:
+          PYTHONPATH: research
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/okx_archive_audit.py \
+            research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz \
+            research-output/BTC-USDT-SWAP-L2-5000-2026-11-11.tar.gz \
+            | tee research-output/audit-summary.jsonl
+          cat research-output/manifest.txt
+          # Retain hashes, headers, member listings and audit summaries only.
+          rm research-output/*.tar.gz
+
       - name: Retain exact archives and verification evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
