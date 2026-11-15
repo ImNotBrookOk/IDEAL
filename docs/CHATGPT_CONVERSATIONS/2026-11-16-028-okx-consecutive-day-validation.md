@@ -79,3 +79,6 @@ No venue is confirmed eligible. This is not a legal conclusion that all are proh
 ### Staleness sensitivity follow-up
 
 The age histogram was converted into retained-trade coverage for explicit cutoffs. At <=50 ms, 99.229% of 11 Nov trades and 99.492% of 12 Nov trades remain; at <=20 ms, 96.273% and 97.628%; at <=10 ms, 92.503% and 95.001%. This is a research sensitivity analysis, not an approved runtime threshold. Keep sample age as an explicit field and never interpolate stale book depth. Full table in historical validation section 12.12.
+
+
+The FMA's formal derivatives guidance also includes recurrently traded contracts commonly referred to as futures, swaps, CFDs, margin contracts or rolling spot contracts, regardless of duration. It does not specifically name every crypto perpetual product. Therefore the exact classification of a perpetual swap and the applicable retail/wholesale or other statutory treatment must be confirmed for the specific product and contracting entity; the exchange's product label is not a legal determination. Source: https://www.fma.govt.nz/business/services/derivatives-issuers/.
