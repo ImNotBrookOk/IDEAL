@@ -127,3 +127,14 @@ PR head commit at the time of this record: `6c7e3591dca93d6384200864863e0eef6cdd
 - **Paid infrastructure/billing:** not authorised.
 
 **One proposed next step:** Owner reviews PR #6 and either approves merging it or requests revisions. Wait for explicit owner response; do not start another research task or merge the PR before that response.
+
+
+## 6. Post-commit evidence addendum — 2026-11-15
+
+This addendum records the audit-record publication and index update. It supplements the conversation record without rewriting the transcript.
+
+- Conversation record creation commit: [`3ddec3fc9aefb93f1257276d00a665fa0bf5a0e1`](https://github.com/ImNotBrookOk/IDEAL/commit/3ddec3fc9aefb93f1257276d00a665fa0bf5a0e1).
+- Audit index update commit: [`034452d3f3bcc3d9066752181b47c4d45a55e892`](https://github.com/ImNotBrookOk/IDEAL/commit/034452d3f3bcc3d9066752181b47c4d45a55e892).
+- Final conversation record read-back verified after publication.
+- PR #6 remains open and unmerged. No merge action was performed.
+- No automated tests were required or run for these Markdown-only audit updates.
