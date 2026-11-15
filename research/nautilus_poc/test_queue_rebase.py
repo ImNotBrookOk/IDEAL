@@ -7,7 +7,7 @@ from decimal import Decimal
 
 from nautilus_trader.backtest import BacktestEngine
 from nautilus_trader.config import BacktestEngineConfig
-from nautilus_trader.execution import MakerTakerFeeModel
+from nautilus_trader.execution import MakerTakerFeeModel, OrderPriorityResetPolicy
 from nautilus_trader.model import (
     AccountType,
     AggressorSide,
@@ -316,3 +316,145 @@ def test_l3_queue_partial_fills_are_bounded_by_trade_volume():
         Quantity.from_str("2.000"),
         Quantity.from_str("3.000"),
     ]
+
+
+class PriorityResetStrategy(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.quote_count = 0
+        self.orders = []
+        self.fill_events = []
+
+    def on_start(self):
+        self.subscribe_quotes(INSTRUMENT.id)
+
+    def on_quote(self, quote_tick):
+        self.quote_count += 1
+        if self.quote_count == 1:
+            for _ in range(2):
+                order = self.order_factory.limit(
+                    instrument_id=INSTRUMENT.id,
+                    order_side=OrderSide.BUY,
+                    quantity=Quantity.from_str("5.000"),
+                    price=Price.from_str("40000.0"),
+                    time_in_force=TimeInForce.GTC,
+                )
+                self.orders.append(order)
+                self.submit_order(order)
+        elif self.quote_count == 2:
+            # Quantity-only increase after the external L2 update. The
+            # configured policy decides whether this order loses queue priority.
+            self.modify_order(
+                self.orders[0].client_order_id,
+                quantity=Quantity.from_str("7.000"),
+            )
+
+    def on_order_filled(self, event):
+        self.fill_events.append(event)
+
+
+def run_priority_reset_case(policy: OrderPriorityResetPolicy):
+    engine = BacktestEngine(
+        BacktestEngineConfig(bypass_logging=True, run_analysis=False),
+    )
+    engine.add_venue(
+        venue=VENUE,
+        oms_type=OmsType.NETTING,
+        account_type=AccountType.MARGIN,
+        base_currency=USDT,
+        starting_balances=[Money(100_000, USDT)],
+        book_type=BookType.L2_MBP,
+        trade_execution=True,
+        queue_position=True,
+        liquidity_consumption=True,
+        order_priority_reset_policy=policy,
+        fee_model=MakerTakerFeeModel(
+            maker_rate=Decimal("0"),
+            taker_rate=Decimal("0"),
+        ),
+    )
+    engine.add_instrument(INSTRUMENT)
+    strategy = PriorityResetStrategy()
+    try:
+        engine.add_strategy(strategy)
+        initial = OrderBookDeltas(
+            INSTRUMENT.id,
+            [
+                delta(BookAction.ADD, OrderSide.BUY, "40000.0", "10.000", 1, 1),
+                delta(
+                    BookAction.ADD,
+                    OrderSide.SELL,
+                    "40001.0",
+                    "10.000",
+                    2,
+                    1,
+                    RecordFlag.F_LAST.value,
+                ),
+            ],
+        )
+        # First trade reduces both resting orders' queue-ahead estimate from
+        # 10 to 4. The subsequent MBP update increases visible depth to 17.
+        deeper = delta(
+            BookAction.UPDATE,
+            OrderSide.BUY,
+            "40000.0",
+            "17.000",
+            1,
+            4,
+        )
+        sell_trade = TradeTick(
+            instrument_id=INSTRUMENT.id,
+            price=Price.from_str("40000.0"),
+            size=Quantity.from_str("6.000"),
+            aggressor_side=AggressorSide.SELL,
+            trade_id=TradeId("PRIORITY-PROGRESS"),
+            ts_event=3,
+            ts_init=3,
+        )
+        final_trade = TradeTick(
+            instrument_id=INSTRUMENT.id,
+            price=Price.from_str("40000.0"),
+            size=Quantity.from_str("5.000"),
+            aggressor_side=AggressorSide.SELL,
+            trade_id=TradeId("PRIORITY-FILL"),
+            ts_event=6,
+            ts_init=6,
+        )
+        engine.add_data([
+            initial,
+            quote(2),
+            sell_trade,
+            deeper,
+            quote(5),
+            final_trade,
+        ])
+        engine.run()
+        return strategy.orders, strategy.fill_events
+    finally:
+        engine.dispose()
+
+
+def test_quantity_increase_preserves_priority_under_price_change_policy():
+    orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.PRICE_CHANGE)
+
+    assert len(fills) == 1
+    assert fills[0].client_order_id == orders[0].client_order_id
+    assert fills[0].last_qty == Quantity.from_str("1.000")
+
+
+def test_quantity_increase_resets_priority_under_increase_policy():
+    orders, fills = run_priority_reset_case(
+        OrderPriorityResetPolicy.PRICE_OR_QUANTITY_INCREASE,
+    )
+
+    assert len(fills) == 1
+    assert fills[0].client_order_id == orders[1].client_order_id
+    assert fills[0].last_qty == Quantity.from_str("1.000")
+
+
+def test_any_modify_policy_resets_priority_on_quantity_increase():
+    orders, fills = run_priority_reset_case(OrderPriorityResetPolicy.ANY_MODIFY)
+
+    assert len(fills) == 1
+    assert fills[0].client_order_id == orders[1].client_order_id
+    assert fills[0].last_qty == Quantity.from_str("1.000")
