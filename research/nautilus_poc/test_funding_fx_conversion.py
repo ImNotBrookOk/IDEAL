@@ -346,7 +346,7 @@ def test_fresh_replay_with_restored_fx_quote_completes_funding():
     assert result["balance"] < Money.from_str("100000 USD")
 
 
-def test_same_engine_reset_replay_recovers_after_funding_fx_failure():
+def test_same_engine_reset_does_not_restore_purged_fx_instrument():
     class ResettableOpenInverseLong(OpenInverseLong):
         def on_reset(self):
             self.submitted = False
@@ -354,14 +354,9 @@ def test_same_engine_reset_replay_recovers_after_funding_fx_failure():
 
     engine = BacktestEngine(BacktestEngineConfig(bypass_logging=True, run_analysis=False))
     engine.add_venue(
-        venue=VENUE,
-        oms_type=OmsType.NETTING,
-        account_type=AccountType.MARGIN,
-        starting_balances=[Money.from_str("100000 USD")],
-        base_currency=USD,
-        book_type=BookType.L2_MBP,
-        trade_execution=False,
-        liquidity_consumption=True,
+        venue=VENUE, oms_type=OmsType.NETTING, account_type=AccountType.MARGIN,
+        starting_balances=[Money.from_str("100000 USD")], base_currency=USD,
+        book_type=BookType.L2_MBP, trade_execution=False, liquidity_consumption=True,
         fee_model=MakerTakerFeeModel(maker_rate=Decimal("0"), taker_rate=Decimal("0")),
     )
     engine.add_instrument(INSTRUMENT)
@@ -394,31 +389,22 @@ def test_same_engine_reset_replay_recovers_after_funding_fx_failure():
         assert len(strategy.fills) == 1
         assert engine.cache.positions_open_count() == 1
 
-        # Reset must clear the fatal funding error, reset strategy state and
-        # rewind the already-loaded data stream. With the same purge behaviour
-        # the deterministic replay should fail again rather than resume mid-run.
+        # Reset clears the fatal funding error and rewinds data, but the
+        # strategy purged BTCUSD from Cache after the first fill.
         engine.reset()
-        # purge_instrument removed the conversion definition from Cache.
-        # The exchange still knows the instrument, so engine.add_instrument()
-        # is a no-op; restore the definition through the Python Cache API.
-        engine.cache.add_instrument(BTCUSD_INSTRUMENT)
-        with pytest.raises(RuntimeError, match="Funding settlement failed"):
-            engine.run()
-        assert len(strategy.fills) == 1
-        assert engine.cache.positions_open_count() == 1
+        assert engine.cache.instrument(BTCUSD_INSTRUMENT.id) is None
+        assert engine.cache.load_instrument(BTCUSD_INSTRUMENT.id) is None
 
-        # Correct the replay condition: retain the BTC/USD conversion quote.
-        # Re-register the purged instrument after reset, then replay on the
-        # same engine with the conversion quote available through settlement.
-        strategy.purge_fx_after_fill = False
-        engine.reset()
-        engine.cache.add_instrument(BTCUSD_INSTRUMENT)
+        # The exchange still has this matching engine registered, so the
+        # BacktestEngine.add_instrument idempotency check returns early and
+        # does not repopulate the Python Cache.
+        engine.add_instrument(BTCUSD_INSTRUMENT)
+        assert engine.cache.instrument(BTCUSD_INSTRUMENT.id) is None
+
+        # The second run returns normally but the entry is denied for missing
+        # BTC/USD conversion. A successful run result is therefore misleading.
         engine.run()
-        account = engine.portfolio.account(venue=VENUE)
-        fresh = run_missing_fx_conversion(purge_fx_after_fill=False)
-
-        assert len(strategy.fills) == 1
-        assert engine.cache.positions_open_count() == 1
-        assert account.balance_total(USD) == fresh["balance"]
+        assert strategy.fills == []
+        assert engine.cache.positions_open_count() == 0
     finally:
         engine.dispose()
