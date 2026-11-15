@@ -117,7 +117,7 @@ def btcjpy_book(timestamp: int):
                 order=BookOrder(
                     OrderSide.SELL,
                     Price.from_str("6000000.0"),
-                    Quantity.from_str("5000"),
+                    Quantity.from_str("10000000"),
                     2,
                 ),
                 flags=RecordFlag.F_LAST.value,
