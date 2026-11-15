@@ -1,0 +1,54 @@
+name: Research — OKX BTC-USDT-SWAP 400-level comparison
+
+on:
+  push:
+    branches:
+      - research/okx-l2-sample-2026-11-16
+    paths:
+      - .github/workflows/okx-l2-400lv-comparison.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: okx-l2-400lv-comparison
+  cancel-in-progress: true
+
+jobs:
+  retrieve-and-verify:
+    name: Retrieve bounded 400-level archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Retrieve OKX 400-level BTC perpetual archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-output/headers research-output/integrity
+          name="BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz"
+          url="https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/20261112/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-12.tar.gz"
+          curl --fail --show-error --location --retry 3 --retry-all-errors \
+            --connect-timeout 20 --max-time 2400 \
+            --dump-header "research-output/headers/$name.headers" \
+            --output "research-output/$name" "$url"
+          wc -c < "research-output/$name" | tr -d ' ' > "research-output/integrity/$name.bytes"
+          sha256sum "research-output/$name" | tee research-output/SHA256SUMS
+          tar -tzf "research-output/$name" > research-output/integrity/tar-members.txt
+          wc -l research-output/integrity/tar-members.txt > research-output/integrity/tar-member-count.txt
+          {
+            echo "Retrieval timestamp (UTC): $(date -u +%FT%TZ)"
+            echo "Runner: $RUNNER_OS / $RUNNER_ARCH"
+            echo "Actual bytes: $(cat "research-output/integrity/$name.bytes")"
+            echo "SHA-256: $(cut -d' ' -f1 research-output/SHA256SUMS)"
+            echo "Tar members:"
+            cat research-output/integrity/tar-members.txt
+          } > research-output/manifest.txt
+
+      - name: Retain exact archive and verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: okx-btc-usdt-swap-400lv-comparison
+          path: research-output/
+          if-no-files-found: warn
+          retention-days: 3
