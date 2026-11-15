@@ -325,6 +325,12 @@ def run_missing_fx_conversion(*, purge_fx_after_fill: bool = True, reset_after_f
                 # its loaded data, and replay with the FX source restored.
                 strategy.purge_fx_after_fill = False
                 engine.reset()
+                # The test deliberately purged this instrument from Cache;
+                # reset retains registered instruments, so re-register it.
+                engine.add_instrument(BTCUSD_INSTRUMENT)
+                # Explicitly reset Python strategy-owned state for replay.
+                strategy.submitted = False
+                strategy.fills = []
                 engine.run()
         else:
             # Fresh deterministic replay with the required BTC/USD conversion
