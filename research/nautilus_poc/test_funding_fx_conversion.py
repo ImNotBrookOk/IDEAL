@@ -399,8 +399,9 @@ def test_same_engine_reset_replay_recovers_after_funding_fx_failure():
         # the deterministic replay should fail again rather than resume mid-run.
         engine.reset()
         # purge_instrument removed the conversion definition from Cache.
-        # Reset rewinds the data iterator but does not recreate that definition.
-        engine.add_instrument(BTCUSD_INSTRUMENT)
+        # The exchange still knows the instrument, so engine.add_instrument()
+        # is a no-op; restore the definition through the Python Cache API.
+        engine.cache.add_instrument(BTCUSD_INSTRUMENT)
         with pytest.raises(RuntimeError, match="Funding settlement failed"):
             engine.run()
         assert len(strategy.fills) == 1
@@ -411,7 +412,7 @@ def test_same_engine_reset_replay_recovers_after_funding_fx_failure():
         # same engine with the conversion quote available through settlement.
         strategy.purge_fx_after_fill = False
         engine.reset()
-        engine.add_instrument(BTCUSD_INSTRUMENT)
+        engine.cache.add_instrument(BTCUSD_INSTRUMENT)
         engine.run()
         account = engine.portfolio.account(venue=VENUE)
         fresh = run_missing_fx_conversion(purge_fx_after_fill=False)
