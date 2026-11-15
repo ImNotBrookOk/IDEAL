@@ -83,6 +83,7 @@ jobs:
           python research/okx_archive_audit.py \
             research-output/BTC-USDT-SWAP-L2-400-2026-11-11.tar.gz \
             research-output/BTC-USDT-SWAP-L2-400-2026-11-12.tar.gz \
+            research-output/BTC-USDT-SWAP-L2-400-2026-11-13.tar.gz \
             research-output/BTC-USDT-SWAP-L2-5000-2026-11-11.tar.gz \
             | tee research-output/audit-summary.jsonl
           cat research-output/manifest.txt
