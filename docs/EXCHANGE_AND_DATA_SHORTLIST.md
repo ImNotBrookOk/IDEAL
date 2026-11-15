@@ -108,4 +108,6 @@ Before any historical dataset is used for market-impact or fill calibration, ver
 4. If free historical L2 proves insufficient, begin collecting public live L2 only after venue/product eligibility is approved; accumulate a forward dataset rather than silently weakening the execution-realism standard.
 5. Keep Hummingbot (Apache-2.0) and CCXT (MIT) as connector references already identified in `docs/REPO_RESEARCH.md`. Treat CCXT Pro as a separate paid WebSocket feature. Cryptofeed's AGPL licence and attribution condition require a separate legal review before direct reuse.
 
+**Sample retrieval status:** the documentation confirms that first-of-month CSV samples are available without an API key, including the documented `binance-futures` dataset family. The current execution container could not resolve the external dataset host, so no binary sample was downloaded or parsed in this pass. This is an environment/network limitation, not evidence that the vendor endpoint is unavailable. No sample-quality claim is made.
+
 **Next task:** validate one free historical L2 sample end-to-end and produce a data-quality report. No venue selection or account connection is implied.
