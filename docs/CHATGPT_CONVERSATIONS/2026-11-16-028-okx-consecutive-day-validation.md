@@ -74,3 +74,8 @@ Public-source review:
 Sources: FMA derivatives guidance https://www.fma.govt.nz/consumer/investing/types-of-investments/derivatives ; FMA crypto guidance https://www.fma.govt.nz/consumer/investing/types-of-investments/cryptocurrencies/ ; Binance entity/services https://www.binance.com/en-GB/legal/licenses ; Bybit NZ addendum https://www.bybit.global/common-static/compliance/legal/BYBIT/700f3662d5d08a2d6cc9e75b47e381f0.pdf ; OKX disclosure https://www.okx.com/help/risk-compliance-disclosure .
 
 No venue is confirmed eligible. This is not a legal conclusion that all are prohibited; exact entity, product, retail/wholesale classification and any licence/exemption require authoritative confirmation and independent legal advice. No exchange account, API key or trading action is authorised.
+
+
+### Staleness sensitivity follow-up
+
+The age histogram was converted into retained-trade coverage for explicit cutoffs. At <=50 ms, 99.229% of 11 Nov trades and 99.492% of 12 Nov trades remain; at <=20 ms, 96.273% and 97.628%; at <=10 ms, 92.503% and 95.001%. This is a research sensitivity analysis, not an approved runtime threshold. Keep sample age as an explicit field and never interpolate stale book depth. Full table in historical validation section 12.12.
