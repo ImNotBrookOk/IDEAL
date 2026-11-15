@@ -67,7 +67,7 @@ class AuditTests(unittest.TestCase):
         records = [
             {"ts": "1000", "action": "snapshot", "bids": [["100", "1", "1"]], "asks": [["101", "1", "1"]]},
             {"ts": "2000", "action": "update", "bids": [["100", "2", "1"]], "asks": []},
-            {"ts": "4000", "action": "update", "bids": [], "asks": [["101", "0", "0"]]},
+            {"ts": "4000", "action": "update", "bids": [], "asks": [["101", "0", "0"], ["102", "1", "1"]]},
         ]
         result = audit_records(records)
         self.assertEqual(result["records"], 3)
