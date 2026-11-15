@@ -46,7 +46,7 @@ Any new component, changed requirement, altered risk parameter or reordered depe
 
 - Planning baseline: foundational documents exist; owner approval of the complete planning baseline is still required before implementation.
 - Phase 01: IN PROGRESS. The open-source shortlist, source-level findings, engine comparison and free-tier deployment constraints are recorded in [docs/REPO_RESEARCH.md](docs/REPO_RESEARCH.md).
-- Phase 01 remaining: pin exact stable versions/commits; complete an exchange-neutral engine/execution-semantics proof-of-concept using deterministic fixtures or public unauthenticated market data; verify licence obligations and candidate worker account/capacity constraints; assess exchange adapters only after regional access and free endpoints are verified; produce final component selection matrix with evidence and rejection reasons; obtain owner approval.
+- Phase 01 remaining: complete the isolated exchange-neutral NautilusTrader POC in `research/nautilus_poc/` (harness committed; native CI run and order/funding/margin/replay tests still unverified); pin exact stable versions/commits for all shortlisted components; verify licence obligations and candidate worker account/capacity constraints; assess exchange adapters only after regional access and free endpoints are verified; produce final component selection matrix with evidence and rejection reasons; obtain owner approval.
 - Phase 02: LOCKED until Phase 01 exit criteria and owner approval are satisfied.
 - No third-party dependencies have been adopted. No exchange account has been connected. No paper or live orders have been authorised.
 
