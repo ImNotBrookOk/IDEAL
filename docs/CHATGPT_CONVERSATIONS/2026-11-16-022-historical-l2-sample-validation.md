@@ -135,3 +135,15 @@ Updated docs:
 - Audit index row for record 022.
 
 No candidate passed actual-file validation. No vendor, venue, dependency, API key or account was selected or connected.
+
+
+## 7. Alternative-source documentation publication and verification
+
+Sequential documentation commits on `main`:
+- Historical L2 validation report: `7b6bb89e72331ccf5ed2483a428220ed4afe0b66`.
+- Exchange/data shortlist: `23c35938aa4048fe3367a129a67f8f3d8a915f3c`.
+- Roadmap: `fe50cd7fa5b834adf256923d31be1df5772ee4ca`.
+- Audit index: `d5cc17a1dc5566f53de4a4687800f24a617b045f`.
+- This audit record: `4d5b74d201cb4ba4a4209203b1375140d5e45791`.
+
+All five files were fetched again from `main`. Read-back checks confirmed the report and shortlist contain the alternative-source screening, the roadmap retains the BLOCKED validation gate, the audit record contains the addendum, and the index contains record 022 with normal line breaks. This final record append follows.
