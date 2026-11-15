@@ -120,6 +120,19 @@ jobs:
             --start-ms 1794441600000 \
             --end-ms 1794528000000 \
             | tee research-output/trade-book-alignment.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary = json.loads(Path("research-output/trade-book-alignment.json").read_text())
+          assert summary["aligned_trades"] > 0
+          assert summary["no_preceding_book"] == 0
+          assert summary["invalid_book_trades"] == 0
+          assert summary["sample_age_ms"]["p95"] <= 20
+          assert summary["side_consistency_pct"] >= 98.0
+          print("Initial research acceptance checks: PASS")
+          print("Age tail:", summary["sample_age_threshold_counts"])
+          print("Side consistency:", summary["side_consistency_pct"])
+          PY
           cat research-output/manifest.txt
           rm research-output/*.tar.gz research-output/*.zip
 
