@@ -93,6 +93,10 @@ All implementation phases remain LOCKED pending completion and approval of the p
 
 - **Staleness sensitivity quantified:** on the two aligned OKX days, a <=50 ms preceding-book-age cutoff retains 99.229%/99.492% of trades; <=20 ms retains 96.273%/97.628%; <=10 ms retains 92.503%/95.001%. This is research coverage only, not a runtime policy. Preserve sample age, test sensitivity and never interpolate stale depth. Full counts in [Historical L2 validation](docs/HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.12.
 
+
+
+- **Tardis Machine repository assessed (16 November 2026):** current repo metadata shows 313 stars, 60 forks, zero open issues, latest push/release 10 November 2026 (v18.9.0), MPL-2.0 and Node 24.22.1+; it provides replay, normalization, local caching and realtime APIs, but depends on the Tardis.dev data service and adds a second runtime stack. Useful as a reference/isolated sidecar candidate, not adopted. Public sample data access does not prove rights for commercial redistribution/product use. Full licence, maintenance and dependency assessment: [REPO_RESEARCH.md](docs/REPO_RESEARCH.md).
+
 ## Deferred future scope — not active
 
 The owner has asked to preserve two future ideas in [Deferred Future Scope Ideas](docs/FUTURE_SCOPE_IDEAS.md): (F-001) a macro-regime-aware, separately risk-budgeted crypto spot accumulation sleeve, potentially using a bounded portion of eligible realised profits for staged DCA; and (F-002) later evaluation of equities using reusable platform capabilities but market-specific data, execution, accounting and regulatory adapters. These are deferred proposals only. They do not amend D-001, change the active crypto-perpetual scope, alter Phase 01 priorities, authorise implementation or unlock any phase. Decision D-014 is Proposed, not Accepted.
