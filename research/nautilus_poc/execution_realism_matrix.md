@@ -422,7 +422,7 @@ Changed `.github/workflows/nautilus-poc.yml` to a two-runner matrix:
 - `ubuntu-24.04` x86_64
 - `ubuntu-24.04-arm` ARM64
 
-[CI run 43757287905](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43757287905) completed both jobs successfully:
+[final PR-head CI run 43757428845](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43757428845) completed both jobs successfully:
 - x86_64: **71 passed in 0.40s**
 - ARM64: **71 passed in 0.49s**
 - Exact `nautilus_trader==2.0.0rc9`, Python 3.14.10, Ubuntu 24.04 / glibc 2.39.
