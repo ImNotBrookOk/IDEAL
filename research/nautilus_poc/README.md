@@ -72,11 +72,11 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **35 tests passed in 0.22s** in [GitHub Actions run 43697425596](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697425596) on the L2 research branch, using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. Both used the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The three added tests cover L1 queue depletion/partial fills, shared trade consumption across competing limit orders, and one-tick probabilistic L1 slippage. Full findings and caveats are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **35 tests passed in 0.22s** in [GitHub Actions run 43697425596](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43697425596) on the L2 research branch, using the exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes five execution-realism tests: three L1 queue/consumption/slippage cases and two L2 depth/competing-order cases. Full findings, test history and caveats are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
-Partial fills, queue position, liquidity consumption and slippage findings are recorded in [execution_realism_matrix.md](execution_realism_matrix.md). Three new IDEAL POC tests pass on the exact pinned wheel; this verifies selected L1 trade/queue/consumption and one-tick slippage paths only. L2 multi-level depth and L3 MBO queue scenarios remain open. No production code or dependency was added.
+The POC reproduces selected L1 queue depletion, partial trade-driven fills, shared trade-volume consumption and one-tick L1 slippage. It also reproduces L2 multi-level depth walking and finite displayed-depth consumption across competing market orders. L2 snapshot rebasing and L3 MBO queue scenarios remain open. No production code or dependency was added.
 
 ## Exchange-specific liquidation and recovery gap
 
