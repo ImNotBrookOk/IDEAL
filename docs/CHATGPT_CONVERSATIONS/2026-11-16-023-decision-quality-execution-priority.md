@@ -128,3 +128,14 @@ After publishing the execution-quality decision, the Hugging Face dataset was in
 - The public API returned metadata and sample rows, but no Parquet bytes were downloaded or locally parsed. One depth row-preview request returned HTTP 502. No sequence-completeness, reconstruction or data-quality pass is claimed.
 
 Updated `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md` section 9, `docs/EXCHANGE_AND_DATA_SHORTLIST.md` section 11 and ROADMAP Phase 01 status. The earlier “spot/perpetual unclear” statement is superseded. Historical perpetual L2 gate remains BLOCKED.
+
+
+## 9. Follow-up publication and read-back verification
+
+Follow-up commits on `main`:
+- Historical L2 validation report section 9: `e8634f26bde38e8da1edef48b31dd8d6a5e2a016`.
+- Exchange/data shortlist section 11: `829c2cd22b5dcb90e15d8049d5c286cd62f47dca`.
+- ROADMAP Phase 01 correction: `525c2e34177387db6d244c03baf7d91de3483e49`.
+- This audit record addendum: `b75e97c5e003ee998ffe99bed3e2ffecbe0c8a61`.
+
+All four files were fetched again from `main`. The report records the dataset's spot-only adapter identity, public API row schemas/counts, initial snapshot-anchor warning, the 43-minute hard reset, and the explicit absence of local Parquet parsing/reconstruction. The shortlist includes the correction; the roadmap now describes the candidate as spot-only and keeps the perpetual-data gate BLOCKED; the audit record contains this follow-up. No binary data-quality pass is claimed.
