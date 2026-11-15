@@ -58,3 +58,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-017-order-amendment-priority.md](2026-11-16-017-order-amendment-priority.md) | Price-change queue rebasing, quantity-decrease priority and no-op modification rejection; 77 tests pass on x86_64 and ARM64; PR #23 merged; venue-specific amendment priority remains open |
 
 | [2026-11-16-018-same-engine-funding-reset.md](2026-11-16-018-same-engine-funding-reset.md) | Same-engine reset after funding FX failure; reset rewinds but does not restore purged FX instrument; false-success replay with zero fills/positions; fresh-engine reconstruction remains the verified recovery path; 78 tests pass on x86_64 and ARM64; PR #24 merged |
+
+| [2026-11-16-019-multi-currency-margin-funding.md](2026-11-16-019-multi-currency-margin-funding.md) | Multi-currency margin account with no base currency; inverse BTCJPY funding debits BTC, linear BTCUSDT funding debits USDT, USD unchanged; portfolio equity remains per-currency; 79 tests pass on x86_64 and ARM64; PR #25 merged |
