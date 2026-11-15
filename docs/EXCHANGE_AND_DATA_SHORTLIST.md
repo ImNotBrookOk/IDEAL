@@ -172,3 +172,14 @@ The 400-level and 5,000-level archives have materially different reported sizes,
 Sources: [OKX API change log, endpoint introduced](https://www.okx.com/docs-v5/log_en/#2025-09-02), [OKX API change log, query limit](https://www.okx.com/docs-v5/log_en/#2026-08-06), [MIT OKX.Api implementation](https://github.com/burakoner/OKX.Api), [OKX historical-data portal](https://www.okx.com/historical-data).
 
 **Disposition:** OKX is now the highest-priority direct-download candidate for the next bounded sample test. It is not a selected venue or data vendor; no file has been downloaded or validated. The acceptance gate remains BLOCKED. See [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 11.
+
+
+### 13.5 Bounded OKX 2026-11-12 sample: actual bytes inspected
+
+The isolated GitHub Actions retrieval run [#43766633587](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43766633587) retrieved the 5,000-level BTC-USDT-SWAP L2 archive and the two matching UTC+8 trade archives. The artifact was independently downloaded and its SHA-256 matched GitHub's artifact digest. HTTP 200/content-length, source SHA-256, TAR/GZIP and ZIP integrity checks passed.
+
+The L2 archive expands to 891,030,123 bytes and contains 86,400 NDJSON records: 96 snapshots (5,000 levels per side each) and 86,304 updates. Reconstructing from snapshots and absolute quantity updates/deletions produced no empty, crossed or locked states. The archive is sampled at approximately one-second intervals, not tick-by-tick; it has no sequence IDs or per-record checksums. Fourteen timestamp intervals are outside 900–1,100 ms and occur as seven long/short pairs. The historical row has three fields per level; do not infer the third field's meaning from the four-field live WebSocket format.
+
+Both trade archives contain 8,703,176 parsed rows in total. Correct timestamp filtering across UTC+8 files yields 3,224,415 trades for the 2026-11-12 UTC L2 day. IDs are strictly increasing across both files and no invalid trade rows were observed. This validates basic pairing, not exact event-level alignment.
+
+**Disposition:** a partial data-quality pass for archive integrity and coarse one-second L2 reconstruction. Potentially useful for coarse spread/depth/imbalance analysis after further checks; insufficient on its own for FIFO queue-position or high-fidelity passive-fill/market-impact calibration. Sequence continuity, timestamp provenance, event-level trade/BBO alignment and multi-day representativeness remain blocked. No venue/vendor selection or runtime adoption. Full results: [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.
