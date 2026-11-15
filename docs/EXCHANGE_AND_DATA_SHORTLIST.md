@@ -183,3 +183,14 @@ The L2 archive expands to 891,030,123 bytes and contains 86,400 NDJSON records: 
 Both trade archives contain 8,703,176 parsed rows in total. Correct timestamp filtering across UTC+8 files yields 3,224,415 trades for the 2026-11-12 UTC L2 day. IDs are strictly increasing across both files and no invalid trade rows were observed. This validates basic pairing, not exact event-level alignment.
 
 **Disposition:** a partial data-quality pass for archive integrity and coarse one-second L2 reconstruction. Potentially useful for coarse spread/depth/imbalance analysis after further checks; insufficient on its own for FIFO queue-position or high-fidelity passive-fill/market-impact calibration. Sequence continuity, timestamp provenance, event-level trade/BBO alignment and multi-day representativeness remain blocked. No venue/vendor selection or runtime adoption. Full results: [Historical L2 Sample Validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.
+
+
+### 13.6 Follow-up audit: update density and unresolved level field
+
+A second structural pass found 39,035,798 price-level rows, including 7,504,519 zero-quantity deletions. Across 86,304 update messages, changed levels range from 47 to 7,586, with a median of **283 total bid-plus-ask levels per message**. All 96 snapshots have exactly 5,000 levels per side. Of 86,399 adjacent timestamps, 86,349 intervals are exactly 1,000 ms; 50 differ, including the 14 outliers outside 900–1,100 ms.
+
+Each historical price-level tuple has exactly three fields. The third is an integer but its meaning is not authoritatively established. Current live OKX RPI documentation uses a four-field schema and legacy general WS documentation also describes four fields; neither is sufficient to infer the historical archive's third field. Treat it as opaque until the historical module-5 schema is confirmed.
+
+Trade-file recheck confirms 3,222,603 rows in the 12 Nov UTC+8 file and 5,480,573 in the 13 Nov file, with strictly increasing and continuous trade IDs across the file boundary. No malformed or invalid rows were observed. The 2026-11-12 UTC book-day filter yields 3,224,415 trades.
+
+A second BBO alignment attempt exceeded the local execution limit; no alignment metric is claimed. The data remains a partial pass for archive integrity and coarse one-second visible-book analysis only. Execution calibration remains blocked.
