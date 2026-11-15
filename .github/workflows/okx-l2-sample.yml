@@ -77,7 +77,7 @@ jobs:
                   if not names:
                       raise SystemExit(f"{path}: empty ZIP archive")
                   out = Path("research-output/integrity") / f"{path.name}.members.txt"
-                  out.write_text("\\n".join(names) + "\\n", encoding="utf-8")
+                  out.write_text("\n".join(names) + "\n", encoding="utf-8")
                   print(f"{path.name}: ZIP integrity OK; members={len(names)}")
           PY
 
