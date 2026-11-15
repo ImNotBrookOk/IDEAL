@@ -32,6 +32,7 @@ Create an auditable record of what was requested, what was proposed, what was ch
 | [2026-11-15-004-long-short-liquidation-spread-side.md](2026-11-15-004-long-short-liquidation-spread-side.md) | Standing Phase 01 authorisation; long/short quote-side tests and Binance/Bybit/OKX liquidation recovery research; 30 tests pass; PRs #7 and #8 squash-merged |
 | [2026-11-15-005-execution-realism-partial-fills-queue.md](2026-11-15-005-execution-realism-partial-fills-queue.md) | Execution realism research: L1 partial fills, queue depletion, shared trade consumption and slippage; 33 tests pass; PR #9 merged; L2/L3 POC work remains open |
 | [2026-11-15-006-l2-depth-competing-orders.md](2026-11-15-006-l2-depth-competing-orders.md) | L2 multi-level depth walking, partial market fills and finite liquidity consumption across competing orders; 35 tests pass; PR #11 merged; L2 snapshot rebasing/L3 MBO queue work remains open |
+| [2026-11-15-007-l2-l3-queue-impact-calibration.md](2026-11-15-007-l2-l3-queue-impact-calibration.md) | L2 snapshot rebasing, L3 MBO order identity/cancel/size updates, three simulated amendment-priority policies and offline impact-calibration utility; 49 tests pass; PR #13 merged; empirical calibration remains blocked pending venue-specific historical data |
 
 ## Completion standard
 A conversation record is complete when the available transcript, operational evidence, decisions, unresolved items and approval boundary are documented and committed to the repository. A task is not approved merely because its conversation record is committed.
