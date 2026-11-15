@@ -223,3 +223,15 @@ This supports structural repeatability over two consecutive days. It is not proo
 The third tuple field is now **strongly corroborated as order count**, but not fully archive-spec-confirmed. OKX's official API guide defines the three-element array in GET /api/v5/market/books-full as price, quantity and number of orders at that price (https://app.okx.com/docs-v5/en/, “GET / Full order book”). Historical archive rows also contain three elements and the third is a nonnegative integer. However, OKX's currently documented 400-level WebSocket books/books-l2-tbt format has four elements, including a deprecated zero field followed by order count. We therefore retain the raw field and treat it as an optional, provisionally interpreted order-count feature until OKX confirms the downloadable archive schema. It cannot be used to infer FIFO position.
 
 **Shortlist status remains:** OKX module 4 400-level L2 is the leading research candidate for short-horizon sampled market-quality and conservative taker-impact work; module 5 is the deeper one-second reference. No venue selected, no runtime adoption, Phase 01 remains open.
+
+
+## 13.9 Historical/live OKX feed entitlement mismatch (16 November 2026)
+
+OKX's official WebSocket guide distinguishes:
+- `books-l2-tbt`: 400 levels, incremental updates every 10 ms, restricted to VIP4+;
+- `books`: 400 levels, incremental updates every 100 ms;
+- `bbo-tbt`: one level, 10 ms snapshots on change.
+
+Source: https://app.okx.com/docs-v5/en/, “WS / Order book channel”.
+
+Thus, the public historical 400-level 10 ms archive is a credible research-data source, but equivalent live full-depth data is not established for an ordinary account tier. Any venue shortlist must separately score historical data access and live feed entitlement. A 100 ms book or 10 ms BBO fallback changes the information set and requires separate calibration; it cannot be assumed execution-equivalent to 10 ms full depth. No VIP entitlement or live connection is assumed.
