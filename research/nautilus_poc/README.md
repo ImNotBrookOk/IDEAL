@@ -75,7 +75,7 @@ python -m pytest -q
 
 CI runs the same command on GitHub-hosted Linux runners. No paid service or secret is used.
 
-Latest verification: **49 tests passed in 0.18s** in [PR-head GitHub Actions run 43699506563](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43699506563), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios and impact-calibration utility tests. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
+Latest verification: **52 tests passed in 0.19s** in [GitHub Actions run 43753234096](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753234096), exact `nautilus_trader==2.0.0rc9` pin on Ubuntu 24.04 / Python 3.14. The suite includes L1/L2 depth, L2 snapshot rebasing, L3 MBO queue/cancel/amend/partial-fill scenarios, impact-calibration utility tests and stop/target OHLC path/gap-through cases. Full findings and the empirical-data blocker are in [execution_realism_matrix.md](execution_realism_matrix.md).
 
 ## Execution realism research
 
@@ -90,7 +90,7 @@ A source comparison of Binance Futures, Bybit UTA derivatives and OKX derivative
 - Empirical slippage/market-impact calibration using representative venue-specific historical L2, trade and execution data. The analysis utility is implemented and tested on synthetic fixtures only; it cannot generate empirical results without that dataset.
 - Amendment tests currently cover quantity increases under `PRICE_CHANGE`, `PRICE_OR_QUANTITY_INCREASE` and `ANY_MODIFY`. Price changes, quantity decreases and no-op modifications remain untested end-to-end; venue-specific amendment/cancel priority is unknown until a venue is selected.
 - Spread widening, latency races, stale book updates, hidden liquidity and adverse selection.
-- Stop/target same-bar ordering/gap-through.
+- Stop/target same-bar ordering and stop-loss gap-through are now reproduced in `test_stop_target_bar.py`. Default O-H-L-C selects TP when both OCO exits are inside one bar; adaptive low-first ordering selects SL on an equidistant high/low bar. A stop-market gap-through fills at the synthetic bar-open price. OHLC does not reveal actual intrabar chronology or executable spread/depth, so ambiguous dual-touch bars must remain uncertainty-labelled.
 - Funding with missing mark prices, missing exchange rates, multiple positions and multiple currencies.
 - Full canonical event/account replay hashes and restart/recovery semantics.
 - Resource benchmarks on the intended free worker.

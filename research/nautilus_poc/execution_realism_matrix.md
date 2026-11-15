@@ -176,3 +176,34 @@ Upstream source tests also cover L1 partial queue depletion and shared trade bud
 - Unknown aggressor side, missing depth, stale data, or a synthetic liquidity fallback must be labelled as uncertainty and must not silently improve backtest fills.
 - The IDEAL POC now reproduces L2 snapshot rebasing, L3 MBO order identity, queue partial fills, external order deletion and size amendments, plus all three configured simulated-order priority policies for quantity increases. Keep empirical calibration blocked until venue-specific historical data is available; do not substitute synthetic fixtures.
 - No exchange, adapter, account, testnet, paper or live trading authorization is implied.
+
+
+## 6. Stop-loss / take-profit bar ordering and gap-through
+
+Pinned source: NautilusTrader `v2.0.0rc9`, `crates/execution/src/matching_engine/mod.rs`:
+
+- `process_bar` accepts external time-aggregated Last/Mid bars for L1 bar execution and synthesises trade ticks from OHLC legs.
+- The default path is Open → High → Low → Close.
+- With `bar_adaptive_high_low_ordering=True`, `bar_high_first` selects high-first only when `high - open < open - low`; otherwise low-first. A tie therefore resolves low-first.
+- The default config is `bar_adaptive_high_low_ordering=False`.
+- Stop-market orders triggered by the synthetic bar path are executed by the simulator's synthetic L1 execution state. This is not a venue order-book replay.
+
+New IDEAL POC file: [`test_stop_target_bar.py`](test_stop_target_bar.py)
+
+| Test | OHLC path | Expected observed exit |
+|---|---|---|
+| Ambiguous dual-touch, default | O-H-L-C | Take-profit limit fills at 40,010; OCO stop is cancelled |
+| Ambiguous dual-touch, adaptive | O-L-H-C (high/low distances tie) | Stop-market fills at 39,990; OCO take-profit is cancelled |
+| Stop-loss gap-through | Opens at 39,980 below 39,990 stop | Stop-market fills at synthetic bar open 39,980 |
+
+The first two tests use the same OHLC range and bracket; only the bar-ordering configuration changes. They produce different exits. The candle itself cannot establish which extreme occurred first. A backtest that silently chooses the favourable path can materially overstate performance. IDEAL must label dual-touch OHLC bars as path-ambiguous and must not assume the profitable exit. A conservative policy, lower-timeframe reconstruction or tick/order-book replay must be selected and documented before strategy validation.
+
+The gap-through test proves only the pinned simulator's synthetic L1 behavior: a stop-market exit is priced at the bar open when the open is already beyond the stop. It does not establish real executable bid/ask, spread, market impact, latency or exchange stop-trigger reference semantics.
+
+### Verification
+
+- Exact pin: `nautilus_trader==2.0.0rc9`
+- Ubuntu 24.04 x86_64 / Python 3.14
+- Final branch CI: [run 43753234096](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43753234096), **52 passed in 0.19s**.
+- One initial assertion expected the synthetic stop-market fill to be strictly worse than the stop trigger. The engine filled exactly at the stop trigger in the intrabar-touch fixture; the assertion was corrected to the observed exact trigger price. The separate gap-through test expects and verifies the open price. The final 52-test suite passed.
+- Research/test/documentation changes only. No runtime logic, dependency or venue selection changed.
