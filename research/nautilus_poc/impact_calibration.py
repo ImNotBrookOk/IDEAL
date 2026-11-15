@@ -73,8 +73,8 @@ def _bucket(value: Decimal | None, bounds: tuple[Decimal, ...], labels: tuple[st
 
 
 def _summarize(rows: list[dict]):
-    slippage = [row["slippage_bps"] for row in rows]
-    impact = [row["impact_bps"] for row in rows]
+    slippage = [row["slippage_bps"] for row in rows if row["slippage_bps"] is not None]
+    impact = [row["impact_bps"] for row in rows if row["impact_bps"] is not None]
     fill_ratios = [row["fill_ratio"] for row in rows]
     filled = [row for row in rows if row["fill_qty"] > 0]
     return {
@@ -199,6 +199,8 @@ def load_csv(path: str | Path):
 
 
 def analyze(rows: list[dict], metadata: dict):
+    if len(rows) < 2:
+        raise ValueError("at least two parent-order observations are required for a chronological split")
     split = max(1, int(len(rows) * 0.70))
     if split == len(rows):
         split = len(rows) - 1
