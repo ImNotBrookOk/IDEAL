@@ -643,5 +643,6 @@ def test_no_op_quantity_amendment_does_not_create_a_priority_reset(policy):
     assert len(fills) == 1
     # NautilusTrader rejects/ignores an unchanged quantity rather than treating
     # it as a successful modify, so even ANY_MODIFY does not move the order.
+    assert no_op_rejected is True
     assert fills[0].client_order_id == orders[0].client_order_id
     assert fills[0].last_qty == Quantity.from_str("1.000")
