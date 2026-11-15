@@ -78,3 +78,19 @@ A trade-to-sampled-BBO alignment attempt did not complete in the local analysis 
 ## Governance outcome
 
 Phase 01 remains IN PROGRESS. Historical-data acceptance remains BLOCKED for execution calibration. Phase 02 remains LOCKED. No vendor/venue selected, no runtime component adopted, no credentials/accounts connected, and no trading authorised.
+
+
+## Follow-up audit addendum (16 November 2026)
+
+A follow-up pass refined update density and independently rechecked both trade files.
+
+- 39,035,798 total L2 price-level rows; 7,504,519 zero-quantity deletion rows.
+- 86,304 update messages; 47–7,586 changed levels per message; median 283 combined bid+ask changes per message.
+- 86,349 of 86,399 adjacent L2 timestamp intervals are exactly 1,000 ms; 50 differ, 14 outside 900–1,100 ms.
+- All 96 snapshots contain exactly 5,000 levels per side.
+- Historical price-level rows have exactly three fields. The third integer is opaque pending authoritative historical module-5 schema confirmation. Current live RPI and legacy WebSocket documentation show four-field schemas, so neither may be projected onto this archive.
+- 12 Nov UTC+8 trade file: 3,222,603 rows, IDs 3,064,471,065–3,067,693,667.
+- 13 Nov UTC+8 trade file: 5,480,573 rows, IDs 3,067,693,668–3,073,174,240.
+- Trade IDs strictly increase and continue exactly across the file boundary; no malformed/invalid rows or adjacent duplicate IDs observed. Matching UTC-day trade count remains 3,224,415.
+
+A second BBO alignment attempt exceeded the local analysis execution limit. No trade-to-BBO alignment statistic is claimed. Execution calibration remains blocked. Updated test priorities: authoritative historical field semantics, module 4 vs 5 comparison, adjacent-day continuity, efficient BBO alignment and independent completeness evidence.
