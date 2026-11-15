@@ -117,6 +117,13 @@ def build_replay_engine():
 def capture_replay_snapshot(engine, strategy):
     result = engine.get_result()
     account = engine.portfolio.account(venue=VENUE)
+    identity_map = {}
+    canonical_fills = []
+    for fill in strategy.fills:
+        raw_id = fill["client_order_id"]
+        if raw_id not in identity_map:
+            identity_map[raw_id] = "order-" + str(len(identity_map) + 1).zfill(4)
+        canonical_fills.append({**fill, "client_order_id": identity_map[raw_id]})
     return {
         "schema": SCHEMA,
         "run": {
@@ -126,7 +133,7 @@ def capture_replay_snapshot(engine, strategy):
             "total_positions": int(result.total_positions),
         },
         "summary": dict(result.summary),
-        "fills": list(strategy.fills),
+        "fills": canonical_fills,
         "account": {
             "currency": "USDT",
             "balance_total": str(account.balance_total(USDT)),
@@ -164,12 +171,16 @@ def test_engine_reset_replay_produces_identical_canonical_digest():
         engine.run()
         first = capture_replay_snapshot(engine, strategy)
         first_digest = canonical_digest(first)
+        first_raw_ids = [fill["client_order_id"] for fill in strategy.fills]
 
         # v2.0.0rc9 reset retains loaded data and resets iterator cursors.
+        # Its order ID generator continues, so raw IDs differ after reset.
         engine.reset()
         engine.run()
         second = capture_replay_snapshot(engine, strategy)
+        second_raw_ids = [fill["client_order_id"] for fill in strategy.fills]
 
+        assert first_raw_ids != second_raw_ids
         assert first == second
         assert first_digest == canonical_digest(second)
     finally:
