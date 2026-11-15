@@ -458,3 +458,172 @@ def test_any_modify_policy_resets_priority_on_quantity_increase():
     assert len(fills) == 1
     assert fills[0].client_order_id == orders[1].client_order_id
     assert fills[0].last_qty == Quantity.from_str("1.000")
+
+
+class AmendmentEdgeStrategy(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.quote_count = 0
+        self.mode = None
+        self.orders = []
+        self.fill_events = []
+
+    def on_start(self):
+        self.subscribe_quotes(INSTRUMENT.id)
+
+    def on_quote(self, quote_tick):
+        self.quote_count += 1
+        if self.quote_count == 1:
+            if self.mode == "price_change":
+                prices = ["39999.0", "40000.0"]
+            else:
+                prices = ["40000.0", "40000.0"]
+            for price in prices:
+                order = self.order_factory.limit(
+                    instrument_id=INSTRUMENT.id,
+                    order_side=OrderSide.BUY,
+                    quantity=Quantity.from_str("5.000"),
+                    price=Price.from_str(price),
+                    time_in_force=TimeInForce.GTC,
+                )
+                self.orders.append(order)
+                self.submit_order(order)
+        elif self.quote_count == 2:
+            if self.mode == "price_change":
+                self.modify_order(
+                    self.orders[0].client_order_id,
+                    price=Price.from_str("40000.0"),
+                )
+            elif self.mode == "quantity_decrease":
+                self.modify_order(
+                    self.orders[0].client_order_id,
+                    quantity=Quantity.from_str("3.000"),
+                )
+            elif self.mode == "no_op":
+                # An explicit same-quantity amend probes whether the engine
+                # accepts no-op updates and whether ANY_MODIFY resets priority.
+                self.modify_order(
+                    self.orders[0].client_order_id,
+                    quantity=Quantity.from_str("5.000"),
+                )
+
+    def on_order_filled(self, event):
+        self.fill_events.append(event)
+
+
+def run_amendment_edge_case(
+    policy: OrderPriorityResetPolicy,
+    mode: str,
+):
+    engine = BacktestEngine(
+        BacktestEngineConfig(bypass_logging=True, run_analysis=False),
+    )
+    engine.add_venue(
+        venue=VENUE,
+        oms_type=OmsType.NETTING,
+        account_type=AccountType.MARGIN,
+        base_currency=USDT,
+        starting_balances=[Money(100_000, USDT)],
+        book_type=BookType.L2_MBP,
+        trade_execution=True,
+        queue_position=True,
+        liquidity_consumption=True,
+        order_priority_reset_policy=policy,
+        fee_model=MakerTakerFeeModel(
+            maker_rate=Decimal("0"),
+            taker_rate=Decimal("0"),
+        ),
+    )
+    engine.add_instrument(INSTRUMENT)
+    strategy = AmendmentEdgeStrategy()
+    strategy.mode = mode
+    try:
+        engine.add_strategy(strategy)
+        initial = OrderBookDeltas(
+            INSTRUMENT.id,
+            [
+                delta(BookAction.ADD, OrderSide.BUY, "40000.0", "10.000", 1, 1),
+                delta(
+                    BookAction.ADD,
+                    OrderSide.SELL,
+                    "40001.0",
+                    "10.000",
+                    2,
+                    1,
+                    RecordFlag.F_LAST.value,
+                ),
+            ],
+        )
+        if mode == "price_change":
+            progress = make_sell_trade(3, "10.000")
+            final_trade = make_sell_trade(5, "1.000")
+            data = [initial, quote(2), progress, quote(4), final_trade]
+        else:
+            progress = make_sell_trade(3, "6.000")
+            deeper = delta(
+                BookAction.UPDATE,
+                OrderSide.BUY,
+                "40000.0",
+                "17.000",
+                1,
+                4,
+            )
+            final_trade = make_sell_trade(6, "5.000")
+            data = [initial, quote(2), progress, deeper, quote(5), final_trade]
+        engine.add_data(data)
+        engine.run()
+        return strategy.orders, strategy.fill_events
+    finally:
+        engine.dispose()
+
+
+@pytest.mark.parametrize(
+    "policy",
+    [
+        OrderPriorityResetPolicy.PRICE_CHANGE,
+        OrderPriorityResetPolicy.PRICE_OR_QUANTITY_INCREASE,
+        OrderPriorityResetPolicy.ANY_MODIFY,
+    ],
+)
+def test_price_change_resets_queue_priority_under_all_policies(policy):
+    orders, fills = run_amendment_edge_case(policy, "price_change")
+
+    assert len(fills) == 1
+    # The older order was originally resting at 39999.0. After repricing it to
+    # 40000.0, every policy treats the successful price change as priority loss.
+    assert fills[0].client_order_id == orders[1].client_order_id
+    assert fills[0].last_qty == Quantity.from_str("1.000")
+
+
+@pytest.mark.parametrize(
+    "policy,expected_order_index",
+    [
+        (OrderPriorityResetPolicy.PRICE_CHANGE, 0),
+        (OrderPriorityResetPolicy.PRICE_OR_QUANTITY_INCREASE, 0),
+        (OrderPriorityResetPolicy.ANY_MODIFY, 1),
+    ],
+)
+def test_quantity_decrease_preserves_or_resets_priority_by_policy(policy, expected_order_index):
+    orders, fills = run_amendment_edge_case(policy, "quantity_decrease")
+
+    assert len(fills) == 1
+    assert fills[0].client_order_id == orders[expected_order_index].client_order_id
+    assert fills[0].last_qty == Quantity.from_str("1.000")
+
+
+@pytest.mark.parametrize(
+    "policy",
+    [
+        OrderPriorityResetPolicy.PRICE_CHANGE,
+        OrderPriorityResetPolicy.PRICE_OR_QUANTITY_INCREASE,
+        OrderPriorityResetPolicy.ANY_MODIFY,
+    ],
+)
+def test_no_op_quantity_amendment_does_not_create_a_priority_reset(policy):
+    orders, fills = run_amendment_edge_case(policy, "no_op")
+
+    assert len(fills) == 1
+    # NautilusTrader rejects/ignores an unchanged quantity rather than treating
+    # it as a successful modify, so even ANY_MODIFY does not move the order.
+    assert fills[0].client_order_id == orders[0].client_order_id
+    assert fills[0].last_qty == Quantity.from_str("1.000")
