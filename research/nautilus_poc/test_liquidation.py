@@ -27,9 +27,9 @@ INSTRUMENT = TestInstrumentProvider.btcusd_bybit()
 
 
 class BuyInverseOnce(Strategy):
-    def __init__(self, side=OrderSide.BUY):
+    def __init__(self):
         super().__init__()
-        self.side = side
+        self.side = OrderSide.BUY
         self.submitted = False
         self.fill_events = []
 
@@ -180,7 +180,8 @@ def make_spread_quote(bid: int, ask: int, timestamp: int) -> QuoteTick:
 
 def run_spread_liquidation_case(position_side: OrderSide):
     engine = build_engine()
-    strategy = BuyInverseOnce(side=position_side)
+    strategy = BuyInverseOnce()
+    strategy.side = position_side
     try:
         engine.add_strategy(strategy)
         engine.add_data([
