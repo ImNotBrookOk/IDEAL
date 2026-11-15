@@ -64,7 +64,7 @@ class OpenInverseLong(Strategy):
         self.fills = []
 
     def on_start(self):
-        # Trigger the BTCUSD order from a different instrument so no BTC/USD
+        # Trigger the BTCJPY order from a different instrument so no BTC/JPY
         # quote is cached for later funding conversion.
         self.subscribe_quotes(TRIGGER_INSTRUMENT.id)
 
@@ -84,7 +84,7 @@ class OpenInverseLong(Strategy):
         self.fills.append(event)
 
 
-def btcusd_book(timestamp: int):
+def btcjpy_book(timestamp: int):
     return OrderBookDeltas(
         INSTRUMENT.id,
         [
@@ -120,7 +120,7 @@ def btcusd_book(timestamp: int):
     )
 
 
-def clear_btcusd_book(timestamp: int):
+def clear_btcjpy_book(timestamp: int):
     return OrderBookDeltas(
         INSTRUMENT.id,
         [
@@ -129,7 +129,7 @@ def clear_btcusd_book(timestamp: int):
                 action=BookAction.CLEAR,
                 order=BookOrder(
                     OrderSide.BUY,
-                    Price.from_str("39999.5"),
+                    Price.from_str("5999999.5"),
                     Quantity.from_str("0"),
                     0,
                 ),
@@ -143,7 +143,7 @@ def clear_btcusd_book(timestamp: int):
                 action=BookAction.CLEAR,
                 order=BookOrder(
                     OrderSide.SELL,
-                    Price.from_str("40000.0"),
+                    Price.from_str("6000000.0"),
                     Quantity.from_str("0"),
                     0,
                 ),
@@ -231,7 +231,7 @@ def run_missing_fx_conversion():
         funding_ts = BASE_NS + 3_100_000_000
         boundary = BASE_NS + 4_000_000_000
         engine.add_data([
-            btcusd_book(BASE_NS + 1_000_000_000),
+            btc jpy + 1_000_000_000),
             trigger_book(BASE_NS + 1_500_000_000),
             trigger_quote(BASE_NS + 2_000_000_000),
             MarkPriceUpdate(
@@ -248,7 +248,7 @@ def run_missing_fx_conversion():
                 interval=480,
                 next_funding_ns=boundary,
             ),
-            clear_btcusd_book(BASE_NS + 3_500_000_000),
+            clear_btcyjpy_book(BASE_NS + 3_500_000_000),
         ])
         with pytest.raises(RuntimeError, match="Funding settlement failed"):
             engine.run()
