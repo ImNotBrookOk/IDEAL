@@ -237,3 +237,16 @@ Research supports a future Tax Intelligence and Tax Accounting bounded context f
 IRD Gateway Services include income-tax return submission/status, income retrieval and tax-account data for approved integrations. Registration, due diligence, security assessment and technical onboarding are mandatory. IRD docs describe in-house software providers, but IDEAL's private single-user approval path remains to be confirmed. Public payment guidance documents internet banking and myIR direct debit; no public generic payment-initiation API was identified. Direct payment automation remains unconfirmed.
 
 Details: docs/PERSONAL_FINANCE_RESEARCH.md section 20; future-scope F-005 is Proposed only. No new decision accepted, no IRD account linked, no filing/payment, no code/dependency changes. D-017 remains Proposed. Phase 02 only; Phases 03–19 remain LOCKED.
+
+
+### Phase 02 architecture checkpoint — user autonomy, multi-asset future scope and data trust plane (17 November 2026)
+
+Owner clarified that IDEAL must remain user-directed. Tax reserve figures are optional informational designations only: no mandatory cash segregation, lock, escrow, deduction, forced payment, or trade/investment restriction. Users may deploy funds that IDEAL recommends reserving; the system must explain and update estimated tax exposure, obligations and due dates without controlling capital. This is recorded as accepted principle D-018.
+
+The owner reiterated that future architecture must account for long-term crypto spot, stock/ETF investing, commodity exposure and cross-asset hedging, alongside the initial crypto perpetual engine. D-014/D-016 remain future proposals; D-001 remains the sole active initial trading scope. No asset-class implementation or venue/provider/account is approved.
+
+The owner identified trustworthy data as more foundational than individual engines and requested continuously checked, current/live where available data, system-wide self-health/self-audit, deterministic automation and minimal AI/token use. D-019 records the accepted design principle. Proposed cross-domain data trust plane and independent deterministic health supervisor are documented in ARCHITECTURE.md and docs/DATA_INTEGRITY_AND_HEALTH.md. Market-specific freshness contracts, feed entitlements, fallback policy, health thresholds, deployment topology and implementation remain to be researched/designed.
+
+Phone-first remains an interaction preference, not a compute constraint. The architecture must be portable to future PC/server deployment without requiring a mobile device to stay awake. No host, always-on worker, paid data provider, PC/server provisioning, runtime code or dependencies are authorised.
+
+Status: Phase 02 architecture/contracts only. Phases 03–19 remain LOCKED. D-018/D-019 accepted as design principles; D-014/D-016/F-004/F-005 remain proposals. No runtime implementation or external account integration occurred.
