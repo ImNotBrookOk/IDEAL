@@ -137,3 +137,22 @@ Fetch-back verification and audit index update are still pending at the time thi
 - No runtime code, broker, venue, account, credentials, paper/live execution, paid service or risk-policy change was authorised.
 - **Next step:** verify repository writes and checkpoint/index readback, then continue the asset-class and repository deep audit.
 - **Owner approval pending:** any later change to active asset-class scope, implementation or external connectivity.
+
+
+## Verification addendum — 16 November 2026
+
+Fetch-back completed after the initial writes:
+- `docs/FUTURE_SCOPE_IDEAS.md`: fetched blob SHA `1f1f42f14b0087d3803ad62790689dcbdd6b180d`; F-003 and cross-asset hedging sections present.
+- `DECISIONS.md`: fetched blob SHA `ea9347427ffa6924f127a71aae5d96fc8c8b2552`; D-016 present with status Proposed; D-001 remains accepted.
+- `ROADMAP.md`: fetched blob SHA `1e02cd2e2bfea3d45a94e0e236a65388deba1623`; dated research note present and Phase 02 only / Phases 03–19 LOCKED boundary verified.
+- This checkpoint: fetched blob SHA `010c444cc2a268a8029dcd79ab5d77b76f50e118`; commit references, proposed status and scope boundary present.
+- Conversation index: fetched blob SHA `15713c7ff3fab8079ced9c50140c2fadfdd3f09b`; checkpoint 043 entry present.
+
+Repository commit SHAs:
+- Future scope document: `ba575cb898d6f696b6d7e8888e036a96894b3724`
+- Decision register: `36b0da92f0c2093643284af65d0371c5254d1c2a`
+- Roadmap: `fe77e61be0f54a0c73281f7251e3eb81c8a31601`
+- Checkpoint: `a5ccf367cc02b728ab816f2e864c44120c701aad`
+- Conversation index: `410149de2f10bd91313db2f6e2bb88816b7f7824`
+
+All five files were fetched from `main` after writes. The text checks passed. No code or dependencies were changed.
