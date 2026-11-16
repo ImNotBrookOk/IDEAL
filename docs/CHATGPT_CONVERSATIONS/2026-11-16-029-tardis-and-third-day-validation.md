@@ -90,3 +90,24 @@ Created `docs/COMPONENT_SELECTION_MATRIX.md`, a draft consolidating candidate st
 Added explicit rules to RULES.md and TESTING.md: raw market data must never be committed; cleanup must be a separate unconditional workflow step before artifact upload; only small manifests/hashes/summaries may be retained; test the failure path.
 
 The earlier failed alignment run artifact 14187155843 (1,739,958,772 bytes) temporarily contains raw archives because the old in-step cleanup was bypassed by the failing assertion. It expires 18 November 2026 at 23:55 UTC. The available GitHub connector has no artifact-delete action; no deletion is claimed. Subsequent rerun artifact 14187715114 is only 3,348 bytes, confirming the corrected cleanup path for the alignment workflow.
+
+
+## 10. Three-day OKX structural reconstruction passed
+
+Workflow [#43777630729](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777630729) independently reconstructed 19,626,176 module-4 records across 11–13 Nov, with zero empty/crossed/locked states and exactly 400 levels per side in all 288 snapshots. Exact 10 ms interval shares were 85.929%, 85.957%, 91.069%; max adjacent intervals 508/520/517 ms. The 13 Nov stream was more active (7.39m records, 152.57m price-level rows, 29.62m deletions, median 8 changes/update). Artifact 14186803944 (7,033 bytes; SHA-256 90a39d1d5c042d970e899a391833dd6f6bba01a22c8fa155d23d685361cde13e; expires 19 Nov 00:10 UTC) contains summaries only; cleanup passed.
+
+**Interpretation:** three-day structural reconstruction is passed. Three-day trade/BBO directional alignment is not: 13 Nov remains below the 98% side screen. The higher update activity may contribute to more demanding conditions, but this is not proven as the cause.
+
+## 11. Draft component matrix updated
+
+Created and linked docs/COMPONENT_SELECTION_MATRIX.md. It consolidates candidate components, licences, evidence, blockers and Phase 01 exit criteria. The matrix remains draft and explicitly states no runtime dependency is selected or adopted. Phase 02 remains locked.
+
+## 12. Direct BBO comparison implementation
+
+Added test-first BBO extraction from both Tardis normalized CSV and official OKX archive, plus a strict/inclusive same-timestamp comparator. The comparator reports:
+- strict preceding official BBO match (no look-ahead);
+- inclusive same-timestamp match as a separate upper bound;
+- exact bid/ask/BBO match rates;
+- official BBO age and no-preceding/tie counts.
+
+The first red test exposed a unit error in the test expectation (500,000 microseconds is 500 ms); the expectation was corrected, not the implementation. Workflow [#43778824863](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43778824863) is queued to rerun the full test suite, regenerate both BBO series and produce the direct source comparison. No result is claimed yet.
