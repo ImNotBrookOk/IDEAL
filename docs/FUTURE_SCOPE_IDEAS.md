@@ -169,3 +169,58 @@ Deferred future research. Owner has requested investigation and architectural co
 ## Governance
 
 These ideas are deliberately separate from active requirements. They must not expand Phase 01, alter current testing priorities, unlock Phase 02, or be treated as implied approval to build. Revisit them only at a future scope-review point after the initial platform's research and validation gates are complete, or earlier only if the owner explicitly requests a scope review.
+
+## F-004 — Private personal finance and banking domain
+
+### Owner direction captured 16 November 2026
+
+The owner wants IDEAL to become a private, single-user platform for their own financial management: bank-account visibility where lawful and technically viable, manual and file-based account/transaction entry, budgeting, bills, subscriptions, debt, savings goals, cash-flow forecasting, net-worth tracking and a consolidated view of investments. This is initially for the owner's personal use only. A future multi-user/public product may be considered only if the private system proves valuable and a separate legal, security, privacy, licensing and operational review is approved. It is not a current product commitment.
+
+### Architectural direction to research
+
+- Treat personal finance as a separate domain alongside (not inside) trading/investment engines.
+- Provide manual account/asset/liability entry and statement imports independently of bank connectivity.
+- Model accounts, transactions, transfers, categories, budgets, recurring bills, debts, savings goals and valuations with traceable source/provenance and correction history.
+- Keep a native-currency double-entry ledger and explicit reporting-currency conversion; do not silently overwrite source transactions or rates.
+- Consolidate net worth and investment exposure through read-only projections; retain separate authoritative ledgers and permissions for each engine.
+- Start with read-only bank-data access. Payment initiation, transfers, brokerage orders and trading remain separate capabilities requiring independent explicit approval and legal/security gates.
+- Design for local/private use first. A later web deployment must include strong authentication, MFA, TLS, network isolation, encrypted secrets/backups, least privilege, monitoring, restore drills and an explicit threat model.
+- Keep all financial records exportable and deletable under a documented retention policy. Never send credentials, tokens or raw financial records to GitHub or conversation transcripts.
+
+### Preliminary New Zealand bank-data path
+
+Akahu is a leading candidate for personal-use investigation, not yet selected. Its developer documentation describes a free Personal App restricted to one user's own Akahu account, with ongoing account-information access, daily scheduled refresh, manual refresh subject to a one-hour rest period, and no payments or webhooks. Akahu describes this as Tier 0; full ongoing personal-finance/budgeting apps are separately classified Tier 2 and require a full app review. The exact terms and applicability to a self-hosted IDEAL instance must be confirmed before use. Akahu says personal apps are unsuitable as a production-ready multi-user application. Official CDR access via an accredited intermediary is a different pathway; IDEAL itself must not claim accreditation.
+
+MoneyMatter's v0.33.6 release (29 October 2026) added New Zealand bank sync through Akahu and specifically instructs users to create a Personal App and enter its App Token and User Token. This is a useful implementation reference for the single-user use case. Tokens are secrets and must be stored only in a protected local secret store or encrypted server-side configuration, never in source control, logs, prompts or audit transcripts.
+
+### Initial feasibility assessment — research only
+
+| Capability | Preliminary viability | Constraints / next evidence |
+|---|---|---|
+| Manual accounts, assets, liabilities and transactions | High | Define canonical ledger, import formats, correction/reversal semantics and reconciliation |
+| CSV/OFX/QFX statement import | High | Test real export formats, duplicate detection, transfer matching and provenance |
+| Budgets, bills, subscriptions, debt and cash-flow views | High | Define period/calendar rules, recurring transaction handling and forecast uncertainty |
+| Net worth and investment aggregation | High | Native-currency ledger, point-in-time prices, stale-price flags, FX lineage and no assumed cash pooling |
+| Akahu Personal App for owner's own bank data | Plausible / high-priority test candidate | One-user own-account restriction; daily sync and no payment initiation/webhooks; verify current supported banks, data fields, refresh behaviour, terms and token controls |
+| Direct IDEAL accreditation for public open banking | Not justified for personal-only use | CDR accreditation includes organisational, security, insurance/liability and complaints requirements; no need to pursue unless product direction changes |
+| Payment initiation or automatic transfers | Defer | Separate permission, provider tier, strong confirmation, limits, fraud controls and legal review |
+| Public multi-user SaaS | Out of current scope | Would materially change privacy, CDR accreditation, security, support, incident response and legal obligations |
+| Always-on public web hosting | Technically possible later, not currently justified | Requires threat model, hardened deployment, backups/restore, MFA, TLS, monitoring, patching and recurring-cost approval; phone-only/free hosting is not yet established as reliable |
+
+### MoneyMatter reference assessment
+
+[MoneyMatter](https://github.com/letehaha/moneymatter) is a strong reference for account aggregation, transactions, categories, transfers/refunds, budgets, bills, subscriptions, loans, investments, net worth, imports/exports, multi-currency reporting, mobile layout and self-hosting. Its current README describes Vue 3/Vite/TypeScript, Node/Express, Sequelize, PostgreSQL, Redis/BullMQ, better-auth and Docker. Its licence is AGPL-3.0; earlier pre-relicensing versions were under CC BY-NC-SA 4.0. Treat it as a reference or isolated trial, not an IDEAL dependency, until exact version provenance, licence obligations, security, data model, tests, dependency health, backups and migration behaviour are audited. Do not copy code or adopt containers by default.
+
+### Non-goals and safeguards
+
+- No public-user product, commercial launch, financial-advice service or regulatory accreditation programme is authorised.
+- No bank credentials, API tokens or account access are to be created or connected as part of this research.
+- No payment initiation, bank transfers, brokerage orders or automatic movement of capital.
+- No reliance on browser scraping or storing online-banking passwords.
+- No assumption that budgeting data is investment permission or available trading capital.
+- AI may classify, explain and propose; it cannot alter ledger truth, approve payments, change permissions or execute trades.
+- Every import, sync, classification, correction, valuation, forecast and proposed action must carry source/time/version metadata and be reconstructable. Corrections use reversals or superseding records, not silent mutation.
+
+### Status
+
+Proposed private-use domain; Phase 02 architecture research only. No implementation, account connection, credential use, provider selection, payment capability, hosting choice or public release is approved. D-001 remains unchanged. See docs/PERSONAL_FINANCE_RESEARCH.md for the focused research plan and current evidence.
