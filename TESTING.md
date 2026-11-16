@@ -42,3 +42,20 @@ A test is VERIFIED only when its command was actually run and its output recorde
 ### 16 November 2026 — cleanup failure-path verification
 
 The three-day OKX alignment workflow [#43777626875](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777626875) intentionally failed the original 98% side-consistency acceptance screen on 13 November, but its separate unconditional cleanup step completed before artifact upload. Resulting artifact 14187715114 was only 3,348 bytes and contained summaries/manifests, not raw archives. This verifies the corrected failure path. The earlier artifact 14187155843 remains a documented one-off cleanup defect and expires 18 November 2026 at 23:55 UTC.
+
+
+## Risk-weighted acceptance policy (16 November 2026)
+
+Classify evidence by failure consequence rather than applying one pass percentage to every test:
+
+- **Hard correctness and safety invariants:** require 100% pass. Examples include valid/non-crossed book state, monotonic event ordering where required, deterministic risk limits, order validation, idempotency, ledger reconciliation and fail-closed behaviour. A percentage pass rate is not acceptable for these controls.
+- **Strong component evidence:** quality diagnostics at or above 98% are preferred, but the exact metric and sample coverage still matter.
+- **Conditional research evidence:** 95% to below 98% may be retained as a bounded research candidate when structural invariants pass and the residual error is measured.
+- **Exploratory evidence:** 90% to below 95% may justify further research, but not production selection or execution claims.
+- **Below 90%:** normally reject or isolate the component until the cause is understood.
+
+These are evidence classifications, not universal pass/fail thresholds. Never average away a failing day or a critical subpopulation. Report per-day and per-regime results, denominators, missing observations and tail distributions. Do not silently discard failures.
+
+For market-data freshness, preserve observation age and source-quality flags. A stale observation may remain useful for slower historical context, but it must be excluded or explicitly down-weighted for a model whose freshness budget it exceeds. A research-data classification does not establish queue position, fill fidelity, sequence continuity, live venue eligibility or paper/live readiness.
+
+The 90% principle applies only to non-critical component-quality evidence. Risk controls, execution correctness, accounting and fail-closed behaviour remain hard gates.
