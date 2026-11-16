@@ -59,3 +59,15 @@ These are evidence classifications, not universal pass/fail thresholds. Never av
 For market-data freshness, preserve observation age and source-quality flags. A stale observation may remain useful for slower historical context, but it must be excluded or explicitly down-weighted for a model whose freshness budget it exceeds. A research-data classification does not establish queue position, fill fidelity, sequence continuity, live venue eligibility or paper/live readiness.
 
 The 90% principle applies only to non-critical component-quality evidence. Risk controls, execution correctness, accounting and fail-closed behaviour remain hard gates.
+
+
+## Seven-day OKX market-data freshness classification (16 November 2026)
+
+The 7–13 November 2026 BTC-USDT-SWAP 400-level L2/trade alignment is classified as **conditional historical market-structure research data**, not execution-grade calibration data. The original strict screen passed 5/7 days and failed 7 Nov and 8 Nov; those results remain unchanged.
+
+- 7 Nov's only unmatched trade timestamp is 2 ms before the first snapshot; exclude that one boundary row from BBO-dependent metrics, retain it in coverage diagnostics, and fail any later unmatched trade.
+- 7 Nov p95 book age is 32 ms. 92.094% of aligned trades are <=20 ms old, 97.625% <=50 ms, 99.432% <=100 ms and 99.979% <=250 ms.
+- 8 Nov has zero missing/invalid matches but 96.453% taker-side/preceding-BBO consistency; the mismatch is concentrated in <=10 ms book-age observations. This is a BBO sampling/event-order diagnostic, not proof of incorrect taker labels.
+- Across 19,918,682 aligned trades, 97.726% are <=20 ms old, 99.525% <=50 ms, 99.924% <=100 ms and 99.995% <=250 ms. Daily maxima reach 475–519 ms.
+
+Any downstream feature must declare its own maximum observation age, exclude or down-weight stale states, and preserve per-day source-quality flags. A 20 ms freshness budget excludes 7.906% of 7 Nov observations; it is not acceptable to silently use those stale states as current. The data does not establish exact cross-channel event ordering, FIFO queue position, passive-fill accuracy or exchange-equivalent execution. See `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md` section 12.20 and audit checkpoint 034.
