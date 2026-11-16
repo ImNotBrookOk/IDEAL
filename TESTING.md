@@ -29,5 +29,12 @@ Every task must define acceptance criteria before implementation and record exac
 - Gate demotion revokes permissions while preserving history and lessons.
 - AI failure or malformed output cannot bypass deterministic controls.
 
+## Research artifact retention
+- CI jobs must delete raw market-data files in a separate unconditional cleanup step before uploading artifacts.
+- Cleanup must run even if retrieval, parsing, reconstruction or acceptance assertions fail.
+- Upload only hashes, manifests and small audit summaries; do not upload raw market data.
+- Use explicit short retention for temporary research artifacts and record artifact IDs/expiry in the audit log.
+- Test the failure path: force an acceptance assertion to fail and verify that the resulting artifact contains no raw archives.
+
 ## Evidence standard
 A test is VERIFIED only when its command was actually run and its output recorded. Report skipped tests explicitly. No paper/live readiness claim without full end-to-end evidence and an approved operational checklist.
