@@ -783,3 +783,54 @@ Interpretation:
 - The maximum age remains roughly 0.5 seconds on every day despite p95 mostly 10–18 ms; the tail must be characterized before using this data for execution calibration.
 
 **Disposition:** seven-day trade/BBO gate remains BLOCKED. Do not weaken thresholds or silently exclude failing days. Preserve the failed run and repeat only after diagnosing 7 Nov coverage and 8 Nov side-consistency. Cleanup ran successfully despite the acceptance failure; raw archives were not retained in the artifact.
+
+
+## 12.20 Seven-day OKX trade/BBO timestamp-boundary revalidation and classification (16 November 2026)
+
+Follow-up workflow [#43803546192](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43803546192) reran the same 7–13 November 400-level L2 and UTC+8 trade archives with first/last timestamp diagnostics. The original strict quality gates were not changed. The run failed those gates on 7 Nov and 8 Nov, but completed all seven daily calculations, ran unconditional cleanup, deleted raw archives/intermediate files and uploaded summary-only artifact [14198101057](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43803546192/artifacts/14198101057) (7,243 bytes; artifact ZIP SHA-256 `a289e133ff5d8284ca96d29260c3f54f12c347f9606e54ab9ad46bde92126f18`).
+
+### 7 November boundary diagnosis
+
+- First trade: `1794009600006` ms; first L2 snapshot: `1794009600008` ms.
+- Exactly one trade (out of 497,188) precedes the initial snapshot by 2 ms; 497,187 trades align.
+- Zero invalid-book trades.
+- p95 preceding-book age 32 ms; maximum 519 ms.
+- Age tail: 39,315 observations >20 ms; 11,809 >50 ms; 2,824 >100 ms; 105 >250 ms.
+- Side consistency 99.42698%.
+
+This is a known initial-coverage boundary, not a mid-session missing-book event. Exclude that one unmatched trade from BBO-dependent calculations while retaining it in coverage diagnostics. Any unmatched trade after the initial snapshot remains a structural failure. The independent age distribution remains conditional quality: 92.094% <=20 ms, 97.625% <=50 ms, 99.432% <=100 ms, 99.979% <=250 ms.
+
+### 8 November side/BBO diagnosis
+
+- 1,521,255 trades aligned; zero missing/invalid book matches.
+- p95 age 15 ms; maximum 506 ms.
+- Side consistency 96.45299%; same-timestamp subset 94.93731%; strict-preceding subset 96.60610%.
+- Side consistency by age: <=10 ms 96.23000%; 10–20 ms 99.79272%; 20–50 ms 99.84022%; >50 ms 99.88234%.
+- Age tail: 53,299 >20 ms; 16,998 >50 ms; 4,214 >100 ms; 208 >250 ms.
+
+OKX public trade `side` is taker direction. This screen compares taker direction with the opposite-side quote in the preceding sampled BBO; it is not a direct test of whether the exchange taker label is correct. The mismatch is concentrated in <=10 ms observations and same-timestamp ties, which is consistent with sampled-book/trade event-ordering and fast BBO movement, but does not prove the cause. Do not use the metric as an execution-grade fill validator.
+
+### Aggregate seven-day age profile
+
+Total aligned trades: 19,918,682. Across all seven days, 97.7260% have preceding-book age <=20 ms; 99.5248% <=50 ms; 99.9238% <=100 ms; and 99.9948% <=250 ms. Maximum per-day age ranges from 475 to 519 ms. Age flags and model-specific freshness budgets are mandatory.
+
+| Day | Aligned trades | p95 age | Max age | Side consistency | Original strict result |
+|---|---:|---:|---:|---:|---|
+| 7 Nov | 497,187 | 32 ms | 519 ms | 99.4270% | FAIL: one initial-boundary trade; p95 age |
+| 8 Nov | 1,521,255 | 15 ms | 506 ms | 96.4530% | FAIL: side/BBO diagnostic |
+| 9 Nov | 3,283,080 | 10 ms | 475 ms | 99.1492% | PASS |
+| 10 Nov | 3,238,578 | 10 ms | 489 ms | 98.2971% | PASS |
+| 11 Nov | 2,597,825 | 18 ms | 497 ms | 99.1181% | PASS |
+| 12 Nov | 3,224,415 | 10 ms | 509 ms | 98.5424% | PASS |
+| 13 Nov | 5,556,342 | 10 ms | 507 ms | 98.1102% | PASS |
+
+### Risk-weighted disposition
+
+The seven-day dataset is accepted as a **conditional historical market-structure research candidate**:
+- 9–13 Nov are preferred-quality under the original per-day screens.
+- 7 Nov is conditional due to freshness tail and one explicitly identified pre-snapshot row.
+- 8 Nov is conditional due to the taker-side/preceding-BBO diagnostic.
+- The original strict result remains 5/7 days passed; this is not a retroactive pass and no threshold was lowered.
+- Do not claim passive-fill accuracy, queue position, sequence continuity, exact book/trade event order or execution-grade market-impact calibration.
+
+Full audit: [checkpoint 034](CHATGPT_CONVERSATIONS/2026-11-16-034-okx-seven-day-boundary-and-risk-classification.md).
