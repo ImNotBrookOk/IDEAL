@@ -49,7 +49,7 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 3. **Sequence continuity:** OKX historical archive schema lacks sequence IDs/checksums; live books/book-rpi continuity uses seqId/prevSeqId because checksum is deprecated. Tardis normalized CSV omits exchange sequence IDs. Reconstructed valid books do not prove no lost updates.
 4. **Passive fills:** L2 market-by-price is not L3; no true FIFO queue position. Do not claim passive-fill accuracy.
 5. **Execution-quality gate:** 11–12 Nov OKX aggregate side-consistency passed; 13 Nov missed the original 98% threshold at 97.835%. Diagnose timestamp ties and age buckets without relaxing the gate.
-6. **Independent source comparison:** Tardis Binance and OKX normalized samples reconstructed; same-day OKX comparison showed 99.85065% strict-preceding exact BBO match (100% inclusive same-timestamp upper bound), but ~6.90x fewer messages and fewer snapshots; raw channel provenance and multi-day repeatability remain pending.
+6. **Independent source comparison:** Tardis Binance and OKX normalized samples reconstructed; same-day OKX comparison showed 99.85065% strict-preceding exact BBO match (100% inclusive same-timestamp upper bound), but ~6.90x fewer messages, 13 vs 96 snapshots and a 3,800 ms max exchange-time gap vs 584 ms official; raw channel provenance and multi-day repeatability remain pending.
 7. **$0 runtime feasibility:** GitHub Actions is CI only; Oracle A1 capacity, region and resource performance remain unverified. No paid infrastructure.
 8. **Licensing and version pins:** exact commits, transitive dependency licences, stable releases, vulnerability posture and commercial data rights must be rechecked before adoption.
 
