@@ -86,10 +86,10 @@ D-001 remains in force: initial active market scope is crypto perpetual futures 
 
 ## Verification status
 
-GitHub accepted all five content updates and returned commit SHAs. A final fetch/read-back of every changed file is the next verification action; do not treat the documentation work as fully verified until that read-back is complete.
+GitHub accepted all five content updates and returned commit SHAs. **Completed:** all seven files (the six changed documents plus this audit record) were fetched from `main` after their writes. Their returned blob SHAs were recorded in the working verification output, and targeted checks confirmed the owner-approved dispositions, Phase 01 CLOSED, Phase 02 UNLOCKED, D-015, audit index entry and closure record are present. This is repository read-back verification, not merely a successful write response.
 
 ## Current state and next step
 
 **Phase 01: CLOSED. Phase 02: UNLOCKED, architecture/contracts only.**
 
-Next step: fetch every changed document from `main`, verify the committed text and phase state, then begin Phase 02 architecture/contracts research and design. No runtime work is in scope without further approval.
+Next step: begin Phase 02 architecture/contracts research and design, preserving the approved scope and approval boundaries. No runtime work is in scope without further approval.
