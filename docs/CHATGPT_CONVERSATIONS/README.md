@@ -133,3 +133,5 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-052-security-as-foundational-pillar.md](2026-11-17-052-security-as-foundational-pillar.md) | Owner adds security as a fourth foundational pillar; security monitoring integrates with system health but remains separately assessed; D-021 accepted; threat model, least privilege, secrets, privacy, supply chain, AI isolation, vulnerability lifecycle and incident recovery added to Phase 02; documentation-only, no runtime changes |
+
+| [2026-11-17-053-architecture-first-research-plan.md](2026-11-17-053-architecture-first-research-plan.md) | Owner confirms architecture-first development as IDEAL's primary objective: fully design and challenge the four integrated foundations and their contracts before implementation research; then evaluate GitHub/Hugging Face/open-source candidates and prepare a traceable implementation blueprint; D-022 accepted; weekly research review scheduled; Phase 02 remains active, Phases 03–19 locked; documentation-only, no implementation or runtime authority |
