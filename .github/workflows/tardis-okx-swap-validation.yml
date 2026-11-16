@@ -10,6 +10,7 @@ on:
       - research/compare_bbo_series.py
       - research/tests/**
       - research/requirements.txt
+      - research/requirements.lock
 
 permissions:
   contents: read
@@ -35,7 +36,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install pinned research JSON parser
-        run: python -m pip install --disable-pip-version-check -r research/requirements.txt
+        run: python -m pip install --disable-pip-version-check --require-hashes -r research/requirements.lock
 
       - name: Run full research unit suite
         env:
