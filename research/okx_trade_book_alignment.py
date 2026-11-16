@@ -40,6 +40,9 @@ def align_records(book_records, trade_records):
     current_trade = next(trades, None)
     previous_book_ts = None
     previous_trade_ts = None
+    first_book_ts = None
+    first_trade_ts = None
+    first_no_preceding_book_trade_ts = None
 
     book_records_count = 0
     trade_rows = 0
@@ -66,6 +69,7 @@ def align_records(book_records, trade_records):
 
     def consume(trade, boundary_ts=None):
         nonlocal previous_trade_ts, trade_rows, aligned
+        nonlocal first_trade_ts, first_no_preceding_book_trade_ts
         nonlocal no_preceding_book, invalid_book_trades, same_timestamp_trades
         nonlocal outside_count, outside_distance_max_bps
 
@@ -75,6 +79,8 @@ def align_records(book_records, trade_records):
         if previous_trade_ts is not None and ts < previous_trade_ts:
             raise ValueError("trade timestamps are not monotonic")
         previous_trade_ts = ts
+        if first_trade_ts is None:
+            first_trade_ts = ts
         trade_rows += 1
 
         if not math.isfinite(price) or price <= 0:
@@ -84,6 +90,8 @@ def align_records(book_records, trade_records):
 
         if previous_book_ts is None:
             no_preceding_book += 1
+            if first_no_preceding_book_trade_ts is None:
+                first_no_preceding_book_trade_ts = ts
             return
         if ts < previous_book_ts:
             raise ValueError("trade precedes the currently applied book state")
@@ -146,6 +154,8 @@ def align_records(book_records, trade_records):
 
     for record in book_records:
         ts = int(record["ts"])
+        if first_book_ts is None:
+            first_book_ts = ts
         if previous_book_ts is not None and ts < previous_book_ts:
             raise ValueError("book timestamps are not monotonic")
 
@@ -180,6 +190,9 @@ def align_records(book_records, trade_records):
 
     return {
         "book_records": book_records_count,
+        "book_timestamp_ms": {"first": first_book_ts, "last": previous_book_ts},
+        "trade_timestamp_ms": {"first": first_trade_ts, "last": previous_trade_ts},
+        "first_no_preceding_book_trade_ms": first_no_preceding_book_trade_ts,
         "trade_rows": trade_rows,
         "aligned_trades": aligned,
         "no_preceding_book": no_preceding_book,
