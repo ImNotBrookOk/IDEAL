@@ -733,3 +733,27 @@ Current OKX documentation changes the live-feed assumptions that must be carried
 **Implication for IDEAL:** do not model the 10 ms books-l2-tbt historical archive as complete executable liquidity without separately establishing RPI coverage and the intended account's permission/order flags. If the selected account can access RPI, capture the organic 10 ms book and consolidated 100 ms RPI book as separate streams, preserve each sequence chain, and model the additional 100 ms observation lag. The historical three-field archive schema does not establish whether RPI is included or expose total/non-RPI quantity separately.
 
 The 10 ms channel's VIP4+ requirement is documented, but no account entitlement is known or assumed. Venue eligibility in New Zealand remains a separate legal gate.
+
+
+### 12.18 Direct Tardis-to-official OKX BBO comparison (1 November 2026)
+
+The first direct same-day comparison completed in workflow [#43778824863](https://github.com/ImNotBrookOk/IDEAL). It compared 844,982 reconstructed Tardis BBO message states with the official OKX module-4 BBO series using exchange timestamps in microseconds and a strict no-lookahead merge.
+
+| Metric | Result |
+|---|---:|
+| Tardis BBO samples compared | 844,982 |
+| Samples with no preceding official state | 0 |
+| Samples sharing an official timestamp | 597,102 (70.664%) |
+| Strict-preceding official exact BBO match | 99.85065% |
+| Strict-preceding bid match | 99.85159% |
+| Strict-preceding ask match | 99.85136% |
+| Strict-preceding official BBO age, median | 10 ms |
+| Strict-preceding official BBO age, p95 | 60 ms |
+| Strict-preceding official BBO age, maximum | 529 ms |
+| Inclusive same-timestamp exact BBO match | 100.000% |
+
+All 844,982 Tardis BBO samples matched the official BBO when the official update at the same exchange timestamp was included. Under the conservative strict-preceding rule, 0.14935% differed; 70.664% of Tardis samples had an official update at exactly the same timestamp. This indicates the normalized Tardis feed is a highly accurate sampled BBO representation of the official OKX feed on this day, with the small strict-preceding discrepancy consistent with same-timestamp event-order ambiguity.
+
+**Important clock distinction:** the previously reported Tardis 3,803.897 ms gap is measured using Tardis local receive timestamps; the official 584 ms interval is measured using exchange timestamps. They are not directly comparable. The updated parser now reports both local receive gaps and exchange timestamp gaps separately. The lower Tardis message count (844,983 versus 5,827,935 official records) still establishes a substantially sparser observation set, but the exact source channel and effective cadence remain to be confirmed.
+
+**Disposition:** Tardis OKX is validated as a high-BBO-agreement, lower-density reference feed for this sample, not as a substitute for the official 10 ms archive. The 100% inclusive result is an upper bound, not a no-lookahead result; use 99.85065% as the conservative strict-preceding match rate. Full audit artifact ID `14187915961`, 2,991 bytes, SHA-256 `74d5c38cee84ced1e398fc51ea81a2d6b06152482e99689dc21d0229b0b95e69`, expires 19 November 2026 at 00:16 UTC and contains summaries/manifests only.
