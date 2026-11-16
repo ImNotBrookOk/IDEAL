@@ -68,3 +68,10 @@ Phase 01 closure does not itself authorise exchange credentials, account access,
 - [Checkpoint 034 — OKX seven-day boundary and risk classification](CHATGPT_CONVERSATIONS/2026-11-16-034-okx-seven-day-boundary-and-risk-classification.md)
 - [Checkpoint 035 — free-tier hosting alternatives](CHATGPT_CONVERSATIONS/2026-11-16-035-free-tier-hosting-alternatives.md)
 - [Checkpoint 036 — Tardis multi-day BBO validation](CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md)
+
+
+## Owner decision — seven-day dataset (16 November 2026)
+
+The owner has explicitly accepted the seven-day OKX dataset as conditional historical market-structure research and directed that the project move on without another run of the same test. Workflow #43803546192 completed all daily calculations and unconditional cleanup; its original strict result remains 5/7 days passed, with 7 and 8 November conditional-quality exceptions. The classification gate is therefore **closed by owner decision**, not by a retroactive strict-test pass. The limits in checkpoint 039 are binding.
+
+This decision does not approve the remaining Phase 01 gates, close Phase 01, unlock Phase 02, authorise venue selection/connectivity, runtime integration, paper/live trading or paid infrastructure.
