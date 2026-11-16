@@ -383,3 +383,8 @@ Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK
 ### Phase 02 research checkpoint — risk management, Stage 6 (17 November 2026)
 
 Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with a governed inventory for strategies, statistical/ML/risk/execution models and AI agents; separation of prediction, strategy, portfolio allocation, risk authority and execution; backtest-selection/overfitting controls; validation and monitoring; regime uncertainty; execution-model risk; drift and retirement; AI-specific prompt-injection, data-leakage and permission boundaries; model lifecycle/promotion gates; aggregate correlated model risk; and independent verification. Federal Reserve model-risk guidance and NIST AI RMF are methodological references only, not regulatory applicability or certification for IDEAL. No model, strategy, agent or framework selected or approved. No online self-learning or self-modification authorised. Phase 02 only.
+
+
+### Phase 02 research checkpoint — risk management, Stage 7 (17 November 2026)
+
+Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with independent emergency-control-plane requirements, financial/security incident classification, safe-state/action ordering, NIST-aligned incident lifecycle, evidence preservation, containment/eradication, isolated recovery, account reconciliation, backup/restore, manual fallback and technical/tabletop exercises. NIST SP 800-61r3, CISA playbooks and FIA controls are methodological references. No emergency action, credential operation, exchange integration, backup service, external scan or runtime change authorised. Phase 02 only.
