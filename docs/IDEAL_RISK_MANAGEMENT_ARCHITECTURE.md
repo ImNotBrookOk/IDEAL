@@ -624,3 +624,182 @@ The most important owner clarification remains: **what did D-006 mean by "equity
 ### 13.8 Next tranche
 
 Continue with portfolio stress methodology, correlation and concentration; margin/collateral/liquidation buffers; liquidity-adjusted close-out; and loss/drawdown control layers. No numerical limits, venue, account mode or runtime implementation are adopted by this tranche.
+
+
+## 14. Research tranche 3 — portfolio stress, correlation, concentration and liquidity (17 November 2026)
+
+**Status:** Provisional research findings. No numerical thresholds, venue, account mode, margin methodology or risk-policy change is approved.
+
+### 14.1 Evidence reviewed
+
+- CME SPAN assesses portfolio loss across a set of market scenarios rather than treating each position independently. https://www.cmegroup.com/solutions/risk-management/performance-bonds-margins/span-methodology.html
+- CME SPAN 2 describes a portfolio-margin framework combining historical risk, stress risk, liquidity and concentration. Its historical component uses volatility/correlation scaling; stress includes historical and hypothetical events; liquidity cost uses bid/ask evidence; concentration add-ons relate to holdings relative to market activity/average daily volume. https://www.cmegroup.com/clearing/risk-management/span-overview/span-2-methodology.html
+- CME's SPAN reference materials describe a 16-scenario risk array. This is an example of a defined scenario grid, not a sufficient crypto stress set. https://www.cmegroup.com/solutions/risk-management/performance-bonds-margins/span-reference-documents.html
+- A 2026 SSRN working paper examining Hyperliquid around the 10 October 2025 liquidation event reports that quoted spreads recovered faster than inside depth; the authors report persistent depth contraction in four of five studied contracts. This is a single-event, single-venue working paper and must be replicated before operational use. https://papers.ssrn.com/sol3/Delivery.cfm/6636998.pdf?abstractid=6636998&mirid=1&type=2
+- A 2026 SSRN working paper on Bybit BTCUSDT reports that displayed depth was an incomplete proxy for executable liquidity during a studied liquidation cascade and that hidden liquidity estimates changed during the event. This is an author-specific inference from one venue/contract/event window, not a universal liquidity rule. https://papers.ssrn.com/sol3/Delivery.cfm/6891658.pdf?abstractid=6891658&mirid=1&type=2
+- A 2026 SSRN working paper on the 10 October 2025 crash reports sharp intraday basis, spread and mark/reference-price dislocations across selected assets/venues. Treat as a scenario-generation lead, not independently established universal behaviour. https://papers.ssrn.com/sol3/Delivery.cfm/6579278.pdf?abstractid=6579278&mirid=1&type=2
+- A 2026 peer-reviewed journal article studies temporal dynamics of funding-rate correlations and market integration across 26 exchanges and 812 symbols over November 2025–January 2026. Its reported gradual drift and heterogeneous integration support measuring dependence dynamically rather than assuming fixed cross-market relationships. https://www.mdpi.com/2227-7072/14/5/103
+- A 2026 study of funding markets across 26 CEX/DEX venues reports materially different integration and information-flow patterns. Its sample is short relative to full market cycles, so it is evidence of fragmentation, not a stable long-run correlation matrix. https://www.mdpi.com/2227-7390/14/2/346
+
+Institutional margin frameworks are references for methodology only. IDEAL is not a clearing house, exchange or financial market infrastructure and must not claim equivalent validation or regulatory status.
+
+### 14.2 Portfolio risk must be scenario-based and multi-dimensional
+
+A portfolio risk view should combine distinct measurements rather than compressing everything into one score:
+
+1. **Deterministic exposure:** gross and net notional, direction, leverage/effective leverage, settlement currency, venue, strategy and risk-cluster exposure.
+2. **Historical distribution:** realised portfolio P&L under point-in-time historical returns and observed cross-asset co-movements.
+3. **Tail-risk statistics:** VaR and Expected Shortfall as supplementary distributional summaries with explicit horizon, confidence, sample and estimator.
+4. **Hypothetical stress:** coherent shocks not adequately represented in the historical sample.
+5. **Liquidity-adjusted close-out:** estimated cost and time to reduce exposure under normal and stressed market conditions.
+6. **Concentration add-ons:** incremental risk from large participation, crowded exposure, shared factors, collateral, venue or settlement dependencies.
+7. **Operational/venue stress:** delayed/corrupt data, exchange outage, margin-tier changes, mark/index divergence, funding changes and liquidation mechanics.
+
+These measures answer different questions. A low historical VaR does not override a hard exposure limit, a severe scenario loss or an inability to exit. A high estimated correlation does not justify automatic netting, and a low recent correlation does not prove diversification.
+
+### 14.3 Dependence and correlation treatment
+
+A single static Pearson correlation matrix is inadequate as the sole portfolio diversification model. Research and define a layered dependence representation:
+
+- rolling and exponentially weighted correlations as descriptive monitoring;
+- downside/conditional correlation during negative market returns and volatility expansion;
+- common-factor exposures (BTC beta, broad crypto market, sector/theme, stablecoin/settlement asset, funding and basis);
+- stress-period co-movement and conditional dependence;
+- liquidity correlation: whether several positions become difficult to exit at the same time;
+- venue/counterparty dependence: shared venue, oracle/reference source, custody, collateral pool and infrastructure;
+- strategy dependence: multiple strategies using the same features, signals, market data or trade direction.
+
+Correlation estimates must be point-in-time and carry sample size, lookback, missing-data policy, shrinkage/estimator version, regime and confidence/uncertainty. Do not infer independence from insufficient history. New or illiquid assets should receive conservative exposure treatment until evidence supports otherwise.
+
+**Conservative hedge-credit rule:** no diversification or hedge credit should be granted solely because two instruments have historically low or negative correlation. Credit requires economic rationale, reliable point-in-time data, executable hedge legs, basis/funding/settlement modelling, venue independence analysis and stress tests. Otherwise use gross exposure and adverse joint-fill scenarios.
+
+### 14.4 Concentration taxonomy
+
+Concentration should be measured across overlapping dimensions, because a portfolio can be diversified in one dimension and concentrated in another:
+
+- single instrument and underlying;
+- correlated underlyings, sectors, narratives and common market beta;
+- long/short gross exposure and one-sided directional exposure;
+- strategy, model, signal family and shared feature dependency;
+- venue, account, margin pool, counterparty and execution route;
+- collateral asset, stablecoin, settlement currency and FX conversion source;
+- funding payer/receiver side and settlement-time clustering;
+- order-book liquidity, market participation and close-out horizon;
+- common oracle, mark/index source, data provider, network or operational dependency.
+
+The portfolio state should preserve both gross and net values. Netting can conceal large offsetting gross positions that carry separate liquidation, funding, liquidity, venue and basis risks.
+
+### 14.5 Coherent stress scenario design
+
+Stress scenarios must apply internally consistent shocks across all affected positions and risk factors. Do not shock each instrument independently and then sum impossible combinations; equally, do not assume that historically correlated instruments will maintain a hedge in stress.
+
+Initial scenario families to research and later parameterise:
+
+**Market and correlation**
+- BTC market-wide shock with altcoin beta and downside correlations increasing;
+- simultaneous BTC/ETH/major-altcoin gaps and volatility expansion;
+- sector/theme-specific shock with contagion to correlated tokens;
+- correlation inversion or hedge breakdown;
+- abrupt basis divergence between spot, index, mark and perpetual prices.
+
+**Liquidity and execution**
+- spread widening plus multi-level depth depletion;
+- displayed depth cancellation before or during the close-out;
+- market impact increasing non-linearly with participation;
+- partial fills, delayed fills and failed hedge leg;
+- liquidation flow competing with IDEAL's exit orders;
+- venue-specific liquidity fragmentation and cross-venue price dislocation;
+- time-to-liquidate extending beyond the intended risk horizon.
+
+**Funding, collateral and margin**
+- funding-rate shock, interval shortening and adverse payer-side exposure;
+- stablecoin depeg or collateral haircut increase;
+- settlement-currency depreciation against the risk-accounting currency;
+- risk-tier migration that increases initial/maintenance margin or lowers maximum position size;
+- isolated position liquidation versus cross-margin contagion;
+- collateral or transfer unavailable when needed.
+
+**Venue and operational**
+- exchange outage, API throttling, WebSocket gap and delayed order/cancel acknowledgements;
+- stale or divergent mark/index inputs;
+- venue withdrawal restrictions, counterparty impairment or insolvency;
+- simultaneous liquidation/ADL and degraded market data;
+- internal risk monitor or audit storage unavailable during stress.
+
+Each scenario must define shock source, calibration date, factor mapping, horizon, affected positions, price/volatility/funding/liquidity/margin assumptions, valuation and conversion rules, close-out sequence, and known limitations. Preserve both scenario results and the exact input versions.
+
+### 14.6 Liquidity-adjusted close-out model
+
+Displayed order-book depth is an observation, not a guarantee of executable liquidity. The model should not assume all displayed orders remain available, and should not assume hidden liquidity will be present. Historical liquidation-event papers provide reasons to test both effects, but not enough evidence to hard-code a universal adjustment.
+
+Estimate close-out cost and capacity by:
+- side-aware spread and depth at the intended decision time;
+- walking multiple book levels for the proposed size;
+- participation relative to recent traded volume and volume distribution;
+- empirical impact/slippage residuals where representative parent-order/fill data exists;
+- order-book update age, gaps, sequence integrity and feed-source reliability;
+- volatility, spread and depth response under stress;
+- time-to-liquidate under conservative participation limits;
+- partial-fill and residual-position risk;
+- multi-venue execution only if venue access, legal eligibility and transfer/hedge assumptions are separately approved.
+
+Normal conditions and stress conditions need separate liquidity estimates. A static percentage haircut on current top-of-book depth is not adequate. If reliable liquidity evidence is absent, apply a conservative cap or reject the risk increase rather than inventing capacity.
+
+Concentration charges should reflect the incremental close-out cost of larger positions. Average daily volume can inform a threshold but is not immediate executable capacity; intraday volume seasonality, order-book depth, market impact and event conditions also matter.
+
+### 14.7 Historical risk, VaR and Expected Shortfall limitations
+
+Historical VaR/Expected Shortfall can summarise observed losses but cannot guarantee coverage of unobserved tails. Their outputs are sensitive to lookback, sampling frequency, horizon, missing data, regime mix, stale/biased venue prices and the quality of point-in-time instrument universe data.
+
+Provisional requirements:
+- use point-in-time universe and delisted/expired instruments where available;
+- avoid look-ahead, survivorship and revised-data leakage;
+- retain full return and portfolio-construction provenance;
+- distinguish close-to-close, intraday and event-driven horizons;
+- assess tail estimates with confidence intervals and sample sufficiency;
+- supplement historical scenarios with hypothetical and reverse stress tests;
+- use filtered/scaled historical shocks only with documented calibration and independent validation;
+- never allow VaR/ES to override hard limits or fail-closed controls.
+
+A short, highly overlapping sample can create an illusion of a large sample. Effective independent observations and regime coverage matter more than raw row count. Crypto's continuous market, structural breaks, token listings/delistings, venue fragmentation and liquidation mechanics require explicit handling.
+
+### 14.8 Proposed portfolio risk outputs
+
+The portfolio risk state should expose auditable, separately named values rather than a black-box score:
+- gross and net notional by instrument, underlying, factor, strategy and venue;
+- current and stressed directional/factor exposure;
+- concentration measures and applicable limits;
+- base and stress portfolio P&L/loss by scenario;
+- historical VaR and Expected Shortfall with model metadata;
+- liquidity-adjusted close-out cost, participation and estimated liquidation horizon;
+- funding and basis exposure;
+- collateral, settlement-currency and venue concentration;
+- margin and stressed liquidation buffer by venue/account mode;
+- unallocated risk capacity and reserved order risk;
+- data/model freshness, confidence/coverage and explicit unknowns.
+
+The decision authority must preserve the component outputs and reason codes behind any restriction. It must not let an opaque composite score hide a failed hard control.
+
+### 14.9 Verification requirements
+
+Add independent tests and scenario fixtures for:
+- correlated downside shocks and correlation convergence during stress;
+- diversification disappearing under joint market/liquidity stress;
+- no hedge credit when history is insufficient or inputs are stale;
+- common factor and shared venue/collateral concentration;
+- gross exposure remaining visible despite net offsets;
+- nonlinear market impact and depth depletion at increasing order sizes;
+- displayed depth vanishing, partial fills and time-to-liquidate extension;
+- liquidity cost sensitivity to order size, spread, volatility and participation;
+- funding shock plus adverse price/basis movement;
+- collateral depeg/haircut and risk-tier migration;
+- scenario reproducibility from immutable point-in-time inputs;
+- VaR/ES backtesting and exception analysis without using it as sole risk control;
+- reverse stress tests identifying conditions that breach capital, margin or close-out capacity;
+- independent recomputation and metamorphic invariants for portfolio aggregation.
+
+### 14.10 Research limitations and next tranche
+
+CME materials describe mature listed-derivatives margin methodologies; they are not direct crypto perpetual implementations. Recent liquidation-event and liquidity studies include working papers, single-event windows and single-venue samples. They are useful for identifying failure modes and scenario candidates, not for adopting fixed haircuts or thresholds.
+
+Next research: margin/collateral/liquidation-buffer mechanics across account modes; risk-limit migration; liquidity horizon calibration; drawdown and loss-containment layers; model/strategy risk; and independent assurance. No numerical policy, venue, account mode or implementation is adopted.
