@@ -4,7 +4,8 @@ name: NautilusTrader isolated proof of concept
 on:
   push:
     paths:
-      - "research/nautilus_poc/**"
+      - "research/nautilus_poc/**/*.py"
+      - "research/nautilus_poc/requirements.lock"
       - ".github/workflows/nautilus-poc.yml"
   pull_request:
     paths:
