@@ -224,3 +224,14 @@ MoneyMatter's v0.33.6 release (29 October 2026) added New Zealand bank sync thro
 ### Status
 
 Proposed private-use domain; Phase 02 architecture research only. No implementation, account connection, credential use, provider selection, payment capability, hosting choice or public release is approved. D-001 remains unchanged. See docs/PERSONAL_FINANCE_RESEARCH.md for the focused research plan and current evidence.
+
+### F-004 research update — comparative open-source screen (16 November 2026)
+
+A first-pass comparison is now recorded in `docs/PERSONAL_FINANCE_RESEARCH.md`:
+- Actual Budget (MIT) is the leading candidate for an isolated synthetic-data budgeting trial: local-first, mature, statement imports, server-based browser/mobile and documented Akahu support. Bank credentials are stored server-side outside budget E2E encryption, so self-hosting and secret controls matter.
+- MoneyMatter (AGPL-3.0) remains the broadest feature/reference candidate and includes NZ Akahu support, but its heavier stack, licence history and unverified data/security implementation mean it is not selected.
+- Firefly III (AGPL-3.0) is a serious alternative for personal-finance tracking and transaction workflows.
+- Beancount (GPL-2.0-only) and hledger (GPL-3.0) are useful double-entry accounting/import design references, not turnkey user-facing budgeting apps.
+- Akahu Personal App's own documentation confirms daily refresh, one-hour manual-refresh rest period, account data only, no payments/webhooks, one user/own account, and developer terms plus identity verification/MFA. Generic Akahu refresh defaults differ by app class; use Personal App-specific limits.
+
+Disposition remains research-only: no installation, bank account, credentials, real statements, dependency, runtime integration or provider selection approved. Actual is only a candidate for an isolated synthetic-data evaluation after the relevant architecture/security gate.
