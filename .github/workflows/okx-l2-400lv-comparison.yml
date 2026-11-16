@@ -5,6 +5,9 @@ on:
     branches:
       - research/okx-l2-sample-2026-11-16
     paths:
+      - research/okx_archive_audit.py
+      - research/tests/test_okx_archive_audit.py
+      - research/requirements.lock
 
 permissions:
   contents: read
