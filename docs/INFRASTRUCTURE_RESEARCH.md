@@ -97,3 +97,13 @@ If A1 capacity is unavailable, remain in GitHub Actions/manual research mode. No
 8. No implementation/runtime deployment until Phase 01 exit and separate owner approval.
 
 **Decision:** Oracle A1 remains a candidate only. No cloud resources have been provisioned, and $0 operation has not been proven.
+
+
+### 2.1 Later NautilusTrader POC expansion (15 November 2026)
+
+The 71-test compatibility run above is an earlier checkpoint. The isolated POC was subsequently expanded to 84 tests and the exact 2.0.0rc9 pin passed on both x86_64 and ARM64:
+- 79 tests: [CI #43760637330](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43760637330).
+- 81 tests: [CI #43761762953](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43761762953).
+- 84 tests: [CI #43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188).
+
+The additional tests cover FX freshness/fail-closed conversion and a BTC-collateral/USDT-settled liquidation boundary. They do not prove consolidated reporting equity, cross-collateral accounting, exchange-equivalent liquidation or actual Oracle A1 performance. NautilusTrader remains a POC candidate, not an adopted runtime.
