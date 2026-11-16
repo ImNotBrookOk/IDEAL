@@ -72,3 +72,18 @@ The following paths were created or updated for this checkpoint:
 ## Verification
 
 Every changed or created path must be fetched from `main` after the write and checked for the expected content. Record the resulting commit/blob identifiers in this audit record only after successful read-back. No code, tests, dependencies, runtime configuration, credentials, external services, infrastructure or financial records are changed by this checkpoint.
+
+## Final read-back verification
+
+All eight paths below were fetched from `main` after the writes. The expected checkpoint markers were present in every fetched file. Blob SHAs are recorded from those read-back responses.
+
+| Path | Read-back blob SHA | Marker check |
+|---|---|---|
+| `docs/IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md` | `a06078f0a7558aa6ba474bc9cc57382206a2431b` | PASS |
+| `ROADMAP.md` | `9771a77a6b99599b6f2c23bebb26387be5ee9e5b` | PASS |
+| `README.md` | `297bc209aefb2581e4bb226ed335b298a08f2b83` | PASS |
+| `REQUIREMENTS.md` | `8568ad8c4f3214159a3bbe2c924cfd3cc8ca93c0` | PASS |
+| `docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md` | `c767f82b61055650c4c2db52ffe1834a8b8fe0da` | PASS |
+| `DECISIONS.md` | `5bb802e3160c80176e5e0eee50afbe063cc00457` | PASS |
+| `docs/CHATGPT_CONVERSATIONS/2026-11-17-053-architecture-first-research-plan.md` | `cccbd8ed2ea7c44231fca7b3dea590f75154d90d` | PASS |
+| `docs/CHATGPT_CONVERSATIONS/README.md` | `bae77644bfc92e6b230bd1b95bc3536090757af9` | PASS |
