@@ -56,3 +56,18 @@ Prefer deterministic scripts, rules, tests and scheduled jobs for ingestion, val
 Phone-first is the current interaction preference, not a permanent compute constraint. Architecture must separate user interface/control plane from data ingestion, scheduled work, storage and compute. A mobile client must not need to stay awake or connected for reliable ingestion/monitoring. Keep deployment portable across a future Windows/Linux PC and a later private server, with explicit adapters/configuration rather than phone-specific business logic. No PC/server/cloud provisioning, paid service, always-on worker or hosting choice is authorised by this requirement.
 
 See `docs/DATA_INTEGRITY_AND_HEALTH.md` for the proposed data contracts, health model, failure behaviour and research questions.
+
+
+## Integrated core protection architecture
+
+IDEAL is one integrated system of specialised bounded engines. The shared protection foundation consists of risk management (protection/permission), data integrity (evidence) and system health (independent oversight). These are mutually reinforcing requirements across domains, not three optional services or features attached to one trading engine.
+
+Risk is a mandatory independent gate for any activity that creates or increases financial exposure. Strategy engines propose; risk evaluates against approved policy and current exposure; health/data interlocks establish whether the decision's dependencies remain trustworthy; authorised adapters enforce only permitted actions. Risk policies cannot be weakened by AI, strategy output or a component's self-reported state.
+
+Data contracts must carry provenance, timestamps, completeness, freshness, quality and lineage. Raw evidence, canonical observations, derived intelligence, research artefacts and decision evidence remain distinct. Corrections are versioned rather than silently overwriting historical facts.
+
+A deterministic health supervisor observes sources, data pipelines, components, dependencies, storage, reconciliation, backups and audit integrity independently wherever practical. It may trigger predefined restrictive interlocks but cannot change financial risk policy, approve trades or initiate financial actions. A component cannot solely certify its own health.
+
+Each engine must declare dependencies, authority, state ownership, acceptable input quality, failure modes, degraded behaviour, recovery prerequisites and audit events. Failure is contained to dependent consumers where safe; a market-data outage must not automatically disable unrelated personal-finance functions. Critical unknown or invalid state fails closed. Recovery requires gap disposition/backfill, replay where appropriate, reconciliation and verified continuity.
+
+The complete owner-approved direction, including the authority model, feedback loops, failure boundaries and Phase 02 design backlog, is in [docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md](docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md). This remains a design contract only; no runtime implementation is authorised.
