@@ -48,14 +48,14 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 2. **Live data entitlement:** OKX 400-level 10 ms books-l2-tbt requires VIP4+; standard books is 100 ms. Separate books-rpi is 400 levels/100 ms; rpiTakerAccess defaults false and instrument permission must be checked. Historical access does not imply live entitlement.
 3. **Sequence continuity:** OKX historical archive schema lacks sequence IDs/checksums; live books/book-rpi continuity uses seqId/prevSeqId because checksum is deprecated. Tardis normalized CSV omits exchange sequence IDs. Reconstructed valid books do not prove no lost updates.
 4. **Passive fills:** L2 market-by-price is not L3; no true FIFO queue position. Do not claim passive-fill accuracy.
-5. **Execution-quality gate:** 11–12 Nov OKX aggregate side-consistency passed; 13 Nov missed the original 98% threshold at 97.835%. Diagnose timestamp ties and age buckets without relaxing the gate.
+5. **Execution-quality gate:** the expanded 7–13 Nov strict-preceding trade/BBO alignment passed per-day gates on 9–13 Nov, but failed 7 Nov (some trades have no preceding book; p95 age 32 ms) and 8 Nov (side consistency 96.453%). The original 98% gate remains unchanged. Diagnose coverage, trade-side semantics, timestamp ties and age tails; do not drop failing days or relax thresholds.
 6. **Independent source comparison:** Tardis Binance and OKX normalized samples reconstructed; same-day OKX comparison showed 99.85065% strict-preceding exact BBO match (100% inclusive same-timestamp upper bound), but ~6.90x fewer messages, 13 vs 96 snapshots and a 3,800 ms max exchange-time gap vs 584 ms official; raw channel provenance and multi-day repeatability remain pending.
 7. **$0 runtime feasibility:** GitHub Actions is CI only; Oracle A1 capacity, region and resource performance remain unverified. No paid infrastructure.
 8. **Licensing and version pins:** exact commits, transitive dependency licences, stable releases, vulnerability posture and commercial data rights must be rechecked before adoption.
 
 ## Phase 01 exit criteria
 
-- [ ] Third-day OKX side-consistency failure explained; original failed result retained.
+- [ ] Seven-day OKX trade/BBO alignment gate passed after diagnosing 7 Nov missing preceding-book coverage and 8 Nov 96.453% side-consistency; original failed result retained.
 - [x] Third consecutive OKX archive structural reconstruction passed (workflow #43777630729).
 - [x] Direct timestamp-aligned Tardis OKX vs official OKX BBO comparison completed (99.85065% strict-preceding exact match; 100% inclusive same-timestamp upper bound).\n- [ ] Exact Tardis OKX raw channel provenance and multi-day BBO agreement confirmed.
 - [x] Historical and live feed entitlement documented separately (10 ms live channel VIP4+; standard 100 ms channel).
