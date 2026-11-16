@@ -105,6 +105,10 @@ All implementation phases remain LOCKED pending completion and approval of the p
 
 - **Draft component selection matrix created (16 November 2026):** [COMPONENT_SELECTION_MATRIX.md](docs/COMPONENT_SELECTION_MATRIX.md) consolidates candidate stack, licence, evidence, gaps, disposition and Phase 01 exit gates. It is a draft only; no runtime dependency is selected or adopted. Remaining exit blockers include third-day OKX alignment diagnosis, Tardis/OKX same-day comparison, NZ derivatives eligibility, live feed entitlement, $0 worker capacity and explicit owner approval.
 
+
+
+- **Same-day Tardis OKX Swap vs official archive reconstruction (16 November 2026):** workflow [#43777769642](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777769642) reconstructed both sources for 1 Nov 2026 with zero invalid book states. Tardis normalized CSV had 844,983 messages, 13 snapshots and max gap 3,803.897 ms; official OKX module 4 had 5,827,935 records, 96 snapshots, 84.546% exact 10 ms intervals and max interval 584 ms. Tardis therefore has ~6.90x fewer message groups and a materially longer gap tail; its normalized CSV does not expose the raw WS channel ID. Treat as coarser reference, not 10ms-equivalent. Direct timestamp-aligned BBO comparison and channel provenance remain open. Full evidence: [Historical L2 validation](docs/HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.14.
+
 ## Deferred future scope — not active
 
 The owner has asked to preserve two future ideas in [Deferred Future Scope Ideas](docs/FUTURE_SCOPE_IDEAS.md): (F-001) a macro-regime-aware, separately risk-budgeted crypto spot accumulation sleeve, potentially using a bounded portion of eligible realised profits for staged DCA; and (F-002) later evaluation of equities using reusable platform capabilities but market-specific data, execution, accounting and regulatory adapters. These are deferred proposals only. They do not amend D-001, change the active crypto-perpetual scope, alter Phase 01 priorities, authorise implementation or unlock any phase. Decision D-014 is Proposed, not Accepted.
