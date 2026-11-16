@@ -101,6 +101,10 @@ All implementation phases remain LOCKED pending completion and approval of the p
 
 - **Independent Tardis public L2 sample validated (16 November 2026):** the first-of-month Binance Futures BTCUSDT sample (2026-11-01) downloaded without an API key. The 6.46 GB uncompressed normalized incremental-L2 file (79.44m rows, 3.242m message groups) reconstructed with one initial snapshot, 7.26m deletions and zero invalid book states; max message gap 276.101 ms. The 1.19m-row trade file passed schema, side, positive price/amount and local timestamp monotonicity checks. Full evidence/hashes: [Historical L2 validation](docs/HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.13; workflow [#43777192211](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777192211). This validates the public sample and parser only—not commercial rights, paid API economics, sequence continuity, L3 or trade/BBO alignment. Tardis is not selected or adopted.
 
+
+
+- **Draft component selection matrix created (16 November 2026):** [COMPONENT_SELECTION_MATRIX.md](docs/COMPONENT_SELECTION_MATRIX.md) consolidates candidate stack, licence, evidence, gaps, disposition and Phase 01 exit gates. It is a draft only; no runtime dependency is selected or adopted. Remaining exit blockers include third-day OKX alignment diagnosis, Tardis/OKX same-day comparison, NZ derivatives eligibility, live feed entitlement, $0 worker capacity and explicit owner approval.
+
 ## Deferred future scope — not active
 
 The owner has asked to preserve two future ideas in [Deferred Future Scope Ideas](docs/FUTURE_SCOPE_IDEAS.md): (F-001) a macro-regime-aware, separately risk-budgeted crypto spot accumulation sleeve, potentially using a bounded portion of eligible realised profits for staged DCA; and (F-002) later evaluation of equities using reusable platform capabilities but market-specific data, execution, accounting and regulatory adapters. These are deferred proposals only. They do not amend D-001, change the active crypto-perpetual scope, alter Phase 01 priorities, authorise implementation or unlock any phase. Decision D-014 is Proposed, not Accepted.
