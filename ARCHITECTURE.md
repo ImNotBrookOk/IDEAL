@@ -71,3 +71,12 @@ A deterministic health supervisor observes sources, data pipelines, components, 
 Each engine must declare dependencies, authority, state ownership, acceptable input quality, failure modes, degraded behaviour, recovery prerequisites and audit events. Failure is contained to dependent consumers where safe; a market-data outage must not automatically disable unrelated personal-finance functions. Critical unknown or invalid state fails closed. Recovery requires gap disposition/backfill, replay where appropriate, reconciliation and verified continuity.
 
 The complete owner-approved direction, including the authority model, feedback loops, failure boundaries and Phase 02 design backlog, is in [docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md](docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md). This remains a design contract only; no runtime implementation is authorised.
+
+
+## Security architecture constraint
+
+Security is the fourth foundational pillar and a cross-cutting constraint across every domain and component. Identity, authorisation, secrets, sensitive data, network boundaries, dependencies, CI/CD, host/runtime, audit and AI tools must be threat-modelled and protected by least-privilege deterministic controls. AI instructions are not an authorisation boundary; tools and actions must be constrained outside the model.
+
+Security telemetry and security-control status feed the independent health supervisor. However, security assurance remains separate from operational health: a process can be available while compromised, and a monitor can be disabled or deceived. The design must include independent evidence, tamper detection, vulnerability management, incident response and tested recovery. No scanner or test can guarantee that all vulnerabilities are found.
+
+The detailed requirements and Phase 02 backlog are in [docs/IDEAL_SECURITY_ARCHITECTURE.md](docs/IDEAL_SECURITY_ARCHITECTURE.md). This is a design requirement only; no security tooling, dependency or runtime change is authorised.
