@@ -38,3 +38,7 @@ Every task must define acceptance criteria before implementation and record exac
 
 ## Evidence standard
 A test is VERIFIED only when its command was actually run and its output recorded. Report skipped tests explicitly. No paper/live readiness claim without full end-to-end evidence and an approved operational checklist.
+
+### 16 November 2026 — cleanup failure-path verification
+
+The three-day OKX alignment workflow [#43777626875](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777626875) intentionally failed the original 98% side-consistency acceptance screen on 13 November, but its separate unconditional cleanup step completed before artifact upload. Resulting artifact 14187715114 was only 3,348 bytes and contained summaries/manifests, not raw archives. This verifies the corrected failure path. The earlier artifact 14187155843 remains a documented one-off cleanup defect and expires 18 November 2026 at 23:55 UTC.
