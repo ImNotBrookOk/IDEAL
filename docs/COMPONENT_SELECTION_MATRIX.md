@@ -56,9 +56,9 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 ## Phase 01 exit criteria
 
 - [ ] Third-day OKX side-consistency failure explained; original failed result retained.
-- [ ] Third consecutive OKX archive structural reconstruction passed.
+- [x] Third consecutive OKX archive structural reconstruction passed (workflow #43777630729).
 - [ ] Direct timestamp-aligned Tardis OKX vs official OKX BBO comparison and channel provenance completed.
-- [ ] Historical and live feed entitlement documented separately.
+- [x] Historical and live feed entitlement documented separately (10 ms live channel VIP4+; standard 100 ms channel).
 - [ ] New Zealand product/entity/legal eligibility confirmed or venue explicitly excluded.
 - [ ] $0 persistent worker feasibility proven on a permitted region/resource plan, or a viable alternative identified.
 - [ ] Final dependency pins and licence/security review completed.
