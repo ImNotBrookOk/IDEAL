@@ -51,7 +51,7 @@ The owner remains the final authority. Consequential actions require explicit pe
 
 ## Current project status — 17 November 2026
 
-<badge color="success">Phase 02 — active</badge> <badge color="secondary">Design and research only</badge>
+**Current status:** Phase 02 — active | Design and research only
 
 - Phase 01 open-source and infrastructure research is closed.
 - Phase 02 architecture and contract design is active. The current priority is completing and challenging the four shared foundations, beginning with the risk-management architecture.
