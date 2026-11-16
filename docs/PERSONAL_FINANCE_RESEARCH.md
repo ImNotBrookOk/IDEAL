@@ -540,3 +540,156 @@ A second pinned-source pass inspected MoneyMatter v0.33.7 encryption and backup/
 - MoneyMatter has a stronger explicit credential-at-rest and secret-safe backup/restore story in the pinned source than the Firefly Akahu importer path inspected. Its encryption key is deployment-critical and its attachment exclusion must be handled operationally.
 - Firefly remains attractive for double-entry accounting but its Akahu connector needs a deployment-specific secrets review and a synthetic restore/reconciliation exercise before any real data is considered.
 - Neither backup system has been runtime-tested by IDEAL. No backup was created, no restore executed, and no application installed.
+
+## 18. Additional open-source component audit — 17 November 2026
+
+This audit looked for reusable components that solve the remaining gaps: durable source identity, statement ingestion, exact accounting, correction/reversal handling, portfolio read models, backup/restore, and mobile-first personal-finance UX. Source was inspected through repository READMEs, schemas, license files, official documentation and selected implementation files. No repository was installed or executed.
+
+### 18.1 Shortlist and disposition
+
+| Project | Licence / observed activity | Useful capability | IDEAL disposition |
+|---|---|---|---|
+| [astt](https://github.com/mike840609/assets_tracker) | MIT; 26 stars and 861 commits in the inspected GitHub snapshot; CI and E2E workflows documented | Mobile PWA, accounts, cash, liabilities, holdings, goals, recurring cash/DCA, net worth, backup/restore | Best permissively licensed product/UI reference; not an authoritative ledger |
+| [krbob/portfolio](https://github.com/krbob/portfolio) | 2 stars; 763 commits; activity recorded from 2024-07 to 2026-11-01; no root LICENSE file found in inspected tree | Transactions as canonical source, rebuildable read models, decimal-text persistence, audit trail, backup/restore preview, stale/partial data states | Strongest portfolio-domain architecture reference; do not copy/reuse code unless licence is clarified |
+| [Formance Ledger](https://github.com/formancehq/ledger) | MIT; 1.4k stars, 2,289 commits, 18 open issues in inspected repository snapshot; v2.4.18 latest stable, v3.0.0-rc.3 pre-release | Double-entry ledger, immutable log/audit chain, idempotent writes, deterministic state machine and rebuildable projections | Study invariants and API patterns; do not adopt as a single-user runtime dependency now |
+| [TigerBeetle](https://github.com/tigerbeetle/tigerbeetle) | Apache-2.0 | Immutable financial transfers, strict account/ledger invariants, pending/post/void and compensating corrections | Excellent correctness reference; purpose-built high-throughput database is excessive for IDEAL's initial personal-finance domain |
+| [Akahu JavaScript SDK](https://github.com/akahu-io/akahu-sdk-js) | ISC; package metadata inspected at v2.6.0; 225 commits and 34 stars in repository snapshot | Typed API client, OAuth helpers, cursor pagination, settled and pending transaction methods, webhook signature verification | Potential adapter helper if IDEAL's eventual backend is Node/TypeScript; otherwise use the REST contract. Server-side only. No dependency added |
+| [OFX Statement](https://github.com/kedder/ofxstatement) | GPL-3.0; 367 stars, 667 commits; Coveralls reported 95.27% line coverage on 22 Aug 2026 | Plugin-based conversion of bank-specific exports to OFX; sample statement fixtures | Useful import architecture and test-fixture reference; licence review required before reuse or embedding |
+| [Beangulp](https://github.com/beancount/beangulp) | GPL-2.0-only; 145 stars, 468 commits; no published GitHub releases in inspected snapshot | Importer framework for Beancount 2.3/3.0 and document ingestion | Importer design reference only; GPL and Beancount coupling make it unsuitable as an assumed IDEAL dependency |
+| [rotki](https://github.com/rotki/rotki) | AGPL-3.0; latest inspected release v1.44.2 dated 22 Oct 2026 | Self-hosted crypto portfolio accounting, exchange/blockchain event decoding, PnL and analytics | Specialist crypto accounting reference; not household finance ledger |
+| [Ghostfolio](https://github.com/ghostfolio/ghostfolio) | AGPL-3.0; 9.3k stars; release 3.99.0 dated 7 Nov 2026 | Mature investment dashboard, multi-account portfolio views and mobile-first PWA | Strong investment UX reference; not budgeting or a complete double-entry household ledger |
+| [Flowfolio](https://github.com/lukasbloom/flowfolio) | AGPL-3.0 | Exact decimal arithmetic, transaction-history performance, multi-currency and backup concepts | Secondary research reference only; no adoption or licence-compatible reuse assumed |
+
+Repository metrics are discovery context, not security or correctness ratings. The inspected source and license files are the controlling evidence for the specific observations below.
+
+### 18.2 astt — best permissive product reference, with ledger limitations
+
+Repository: https://github.com/mike840609/assets_tracker
+
+The inspected root LICENSE is MIT. The repository documents CI, unit/integration/E2E tests, Docker self-hosting, PostgreSQL, a responsive PWA and a private single-owner authentication option. Its product scope covers cash accounts, liabilities, holdings, recurring cash flows, recurring investments, net-worth snapshots, goals and portfolio views.
+
+Important source-level limitations:
+- Its README explicitly distinguishes it from Firefly III and Actual Budget: astt does not provide a budgeting/double-entry bookkeeping ledger.
+- Its Prisma schema stores Account.cashBalance, CashTransaction and HoldingTransaction as separate product models. This is useful for a tracker but is not a complete double-entry journal.
+- The account and holding transaction relations use cascading deletes. The inspected account DELETE route directly deletes the account; dependent holdings and transactions are removed by the database cascade. That behaviour is unacceptable for IDEAL's authoritative audit ledger unless replaced with archival/closure semantics.
+- The database stores money/quantity as DECIMAL(28,8), but its API accepts JSON IEEE-754 numbers. Its own database documentation correctly explains that eight fractional decimals are not preserved at every supported magnitude. IDEAL should send canonical decimal strings at financial API boundaries.
+- Manual account balance corrections are represented as EDIT cash transactions. This is a useful UX pattern, but IDEAL should model a correction as an explicit, immutable journal adjustment.
+- The product is a useful candidate for a synthetic-data UX review, not for importing its persistence model as IDEAL's source of truth.
+
+Disposition: retain as a permissively licensed UI/product reference. Any later code reuse requires a separate compatibility, architecture and security review. No source code was copied.
+
+### 18.3 krbob/portfolio — strong portfolio architecture, reuse blocked pending licence
+
+Repository: https://github.com/krbob/portfolio
+
+The README and financial-methodology document describe a strong pattern: canonical transactions are replayed to derive holdings, allocation, contributions and performance; snapshots/read models can be rebuilt; values are persisted as canonical decimal text; stale, partial and unavailable market data are explicit; backup/restore includes preview and audit records.
+
+The repository reports 763 commits and a low star count (2) in the inspected snapshot. It is active but small and appears to be a single-investor project. It is a portfolio tracker, not a complete budgeting/bank aggregation system. A root LICENSE file was not found in the inspected repository tree; therefore its code is not cleared for reuse. Public visibility is not a licence grant.
+
+Disposition: use its published methodology and operational documentation as architecture study material only. Ask for licence clarification before any code reuse. Do not adopt its application or cross-repository service stack.
+
+### 18.4 Formance Ledger — powerful but wrong-sized runtime dependency
+
+Repository: https://github.com/formancehq/ledger
+
+The inspected LICENSE is MIT. Its current main branch is Ledger v3 architecture, but the releases page identifies v2.4.18 as the latest stable release while v3.0.0-rc.3 remains a release candidate. Do not treat v3 main as a stable release.
+
+The v3 architecture documents a deterministic state machine, replicated audit history, integrity checking and rebuildable read-side projections. Its idempotency implementation hashes request content, returns the original result for a repeated key and rejects reuse of the same key with different content. The default key TTL is 24 hours; policy value zero means no expiry.
+
+Important distinction: an API idempotency key is not the same as a durable external transaction identity. IDEAL still needs a persistent uniqueness mapping keyed by provider + connection + source account + provider transaction ID, together with observation versions and source deletion/replacement handling. A short-lived retry key cannot replace that registry.
+
+Disposition: study its immutability, correction, idempotency conflict and projection patterns. A replicated Raft cluster is unnecessary operational complexity for a private single-user finance system. No runtime dependency selected.
+
+### 18.5 TigerBeetle — correctness reference, not a household ledger application
+
+Repository: https://github.com/tigerbeetle/tigerbeetle
+
+The inspected LICENSE is Apache-2.0. Official documentation describes immutable accounts and transfers, balanced posted/pending debit-credit totals, explicit two-phase pending/post/void transfers and corrections using additional transfers rather than mutation or deletion.
+
+These properties align with IDEAL's audit requirements. However, TigerBeetle is a specialised financial transactions database with its own data model, server process and operational requirements. It does not solve bank-source reconciliation, transaction categorisation, budgeting, investment holdings, statement import or user-facing personal finance. Its amount/ledger primitives also require explicit modelling of currency and scale.
+
+Disposition: use as a source of ledger invariants and correction patterns. Do not add TigerBeetle to the initial stack.
+
+### 18.6 Import standards and libraries
+
+- Akahu's official JavaScript SDK package metadata reports ISC licensing and version 2.6.0. The SDK exposes cursor-paginated settled and pending transaction methods, OAuth helpers and webhook signature validation. App secrets must remain server-side. Personal Apps do not provide webhooks, so webhook-driven reconciliation cannot be assumed for the private Personal App route.
+- Akahu's current Getting Started page explicitly says Personal Apps are useful for exploring one's own data but are unsuitable for a production-ready application. The page says a full app and accreditation are required before releasing an Akahu integration to production. This tightens the earlier feasibility assessment: Personal App access may support personal experimentation, but IDEAL must not assume it is a permitted production connector. Obtain provider confirmation before any real account connection or deployed integration.
+- OFX Statement is a plugin-based conversion tool for bank-specific exports. Its GPL-3.0 licence means it should not be embedded into an IDEAL-owned distribution without a deliberate licence decision. The ofxstatement-iso20022 plugin README describes its implementation as trivial/naive; it is not a production-ready NZ CAMT parser.
+- Beangulp provides a useful importer lifecycle and document-ingestion pattern, but it is GPL-2.0-only and tied to Beancount. Reuse is not assumed.
+- Prefer an IDEAL-owned import adapter contract with isolated parsers and golden fixtures. Accept CSV first; add OFX and ISO 20022 CAMT.053/CAMT.054 parsers only when supported statement samples and test fixtures are available. Do not infer that all NZ banks expose these formats.
+
+### 18.7 Overall reuse decision
+
+No inspected repository is a safe, complete drop-in solution for IDEAL's required combination of private single-user operation; NZD-first multi-currency personal accounts and liabilities; robust source-observation reconciliation; immutable double-entry accounting and correction history; bank statement imports and a possible Akahu adapter; investment and crypto portfolio visibility; mobile-first UI; and strict separation from the perpetual-futures trading ledger.
+
+Recommended reuse boundary:
+1. Study Formance/TigerBeetle for ledger invariants and idempotency/correction semantics.
+2. Study Beancount/Beangulp and OFX Statement for statement ingestion and reconciliation workflows, respecting their licences.
+3. Study astt/Ghostfolio/rotki for user experience and investment reporting; astt is the most permissively licensed candidate, but its schema is not IDEAL's ledger.
+4. Keep the authoritative source-observation registry, reconciliation policy and accounting journal IDEAL-owned.
+5. Do not install or add any dependency during Phase 02.
+
+## 19. Feasibility and proposed IDEAL data contract
+
+### 19.1 Feasibility conclusion
+
+A private single-user personal-finance domain is technically viable within IDEAL's approved modular-monolith direction. It should be a distinct bounded context with its own ledger and permissions, not a feature bolted into the perpetual-futures engine. A read-only net-worth projection may aggregate balances and valuations from separately governed domains; it must not pool cash, collateral, margin or execution permissions.
+
+The largest feasibility risk is not the dashboard or arithmetic. It is source reconciliation and long-term operational responsibility for sensitive financial data. Manual entry and file import are feasible without bank aggregation. Akahu must remain a conditional future adapter until provider terms and the Personal App production limitation are resolved.
+
+### 19.2 Proposed data flow
+
+Source adapter -> import batch -> immutable source observations -> reconciliation decisions -> immutable journal entries/postings -> rebuildable balance, budget and net-worth projections.
+
+Keep three different records separate:
+- Source observation: what a bank, statement or user supplied at a particular observation time.
+- Reconciliation decision: how IDEAL matched, versioned, ignored, superseded or escalated that observation.
+- Accounting journal: the financial effect accepted by IDEAL. It is not silently rewritten when a provider changes its data.
+
+### 19.3 Required contract invariants
+
+1. **Durable source identity:** unique key scoped by provider, connection, source account and external transaction ID. Keep it independently of any short-lived API idempotency cache.
+2. **Immutable observations:** retain each changed source payload as a new version with received time, source version/hash, adapter version and import-batch reference. Minimise raw payload retention and protect any retained payload as sensitive data.
+3. **Safe retries:** at-least-once fetch plus durable idempotent persistence. Replaying the same page/batch must not create another observation or journal posting.
+4. **Correction handling:** same-ID changed data creates a new observation version and reconciliation decision. If the old version has been posted, correct it with a traceable adjustment/reversal, not silent mutation.
+5. **Deletion handling:** never infer deletion from absence in an incomplete page, incremental overlap or provider outage. Require an explicit source deletion signal or a complete, bounded authoritative re-fetch before creating a tombstone. A tombstone does not delete the accounting history.
+6. **Replacement IDs:** a changed provider ID may represent a replacement of an old transaction. Correlate conservatively; uncertain cases require review rather than automatic duplicate suppression.
+7. **Pending/settled separation:** pending rows are provisional snapshots, not posted journal entries. Reconcile them to settled rows; preserve state transitions and avoid double-counting.
+8. **Exact numbers:** financial APIs use decimal strings, not binary floating-point JSON numbers. Keep money, asset quantity, unit price and FX rate as separate precision domains. Preserve source scale and ISO currency code; do not hardcode two decimals for all currencies or crypto quantities.
+9. **FX provenance:** retain original amount/currency, converted amount/currency, rate, rate source, rate timestamp and any fee where provided. Missing FX makes a valuation incomplete; never guess using today's rate for historical transactions.
+10. **Double-entry journal:** posted journal entries are immutable; postings balance per commodity/currency or use explicit FX clearing/conversion accounts. Account balances are derived projections, not independently editable truths.
+11. **Transfer matching:** identify candidate cross-account transfers using amount, currency, dates and counterparty metadata. Pairing confidence is explicit; ambiguous matches require review. Never categorise both sides as income/expense.
+12. **Balance reconciliation:** provider-reported current/available balances are observations. Compare them with ledger-derived balances and record discrepancies; do not overwrite journal entries to force a match.
+13. **Deterministic replay:** same ordered observations, reconciliation decisions, accounting rules and versions must produce the same ledger and projections.
+14. **Backup/recovery:** versioned, checksummed backups; restore preview; atomic restore; documented key rotation; tested recovery. Never put bank credentials or private financial records in GitHub.
+15. **Credential isolation:** if a bank adapter is ever approved, use a dedicated encryption key separate from authentication/JWT signing secrets, with rotation/re-encryption procedure. Keep credentials out of logs and exports.
+
+### 19.4 Minimum synthetic acceptance matrix
+
+Before any real source is connected, a separately approved synthetic-only prototype must test:
+- duplicate page, repeated file and retry after a simulated crash;
+- same external ID with unchanged data, corrected amount/date/description and source deletion;
+- incomplete pagination, missing page, provider timeout and a full bounded rescan;
+- pending -> settled, pending amount change, pending disappearance and settled replacement ID;
+- identical same-day purchases, refunds, chargebacks and reversals;
+- transfer pairs across accounts, one-sided transfer and ambiguous match;
+- NZD/AUD/USD and zero-, two- and three-decimal currencies, fractional crypto quantities and high-precision FX;
+- timezone offsets, UTC boundaries, daylight-saving changes and effective dates;
+- stale account balance, available-vs-current balance and ledger/provider discrepancy;
+- deterministic replay, per-currency debit/credit balance and correction without deletion;
+- backup, restore preview, atomic restore, encryption-key rotation and secret-free export.
+
+Required properties: import replay is idempotent; no incomplete fetch can create a deletion; posted journal history is never silently overwritten; decimal values round-trip exactly; journal entries balance; a rebuild reproduces the same projections.
+
+### 19.5 Build-vs-reuse recommendation
+
+Build the source-observation registry, reconciliation engine and journal as IDEAL-owned modules. Reuse only small, licence-compatible provider/parser libraries after a pinned-version audit. Do not adopt a distributed ledger database or an external personal-finance app as the source of truth.
+
+A staged future path, subject to owner approval and phase gates:
+1. Complete Phase 02 contracts and ADRs.
+2. Later, if separately authorised, implement synthetic fixtures and pure domain tests.
+3. Add manual accounts and file imports before any live bank adapter.
+4. Evaluate Akahu only after written provider confirmation and an explicit account-connection approval.
+5. Add budgets, bills, goals, valuations and consolidated read-only net worth as separate modules/projections.
+
+This recommendation does not accept D-017, unlock Phase 03, select a provider, authorise implementation or permit real financial data.
