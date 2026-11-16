@@ -73,6 +73,99 @@ However, an equities system is not simply a crypto adapter. It requires market-s
 
 Deferred. No equities broker, data vendor, market universe, account or implementation is approved. Crypto perpetual futures remain the only active initial market scope under D-001.
 
+
+## F-003 — Multi-asset investment and portfolio domain research
+
+### Owner direction captured 16 November 2026
+
+The owner requests deep research into future crypto spot portfolio management and a separate equities investment engine, with the architecture also considering commodity-linked exposure and cross-asset hedging. This is a research and architecture-planning request only. It does not amend D-001 or authorise implementation, broker/venue selection, accounts, credentials, paper/live execution or paid data/services.
+
+### Architectural principle
+
+IDEAL should be designed as a modular, multi-domain investment platform, not as one universal strategy engine. Reusable platform capabilities may include identity, event contracts, point-in-time data lineage, audit, replay, portfolio-level exposure aggregation, risk reporting, notifications and orchestration. Market-specific engines and adapters retain their own semantics, state and controls.
+
+Potential future domains:
+- Crypto spot portfolio: strategic allocation, macro/regime-aware accumulation, DCA, rebalancing, custody/wallet and exchange reconciliation.
+- Equities and ETFs: long-horizon investment and/or systematic strategies, broker integration, corporate actions, dividends, exchange calendars, settlement, tax-lot and FX accounting.
+- Commodity exposure: gold, silver, copper and other instruments, distinguishing physical bullion, physically backed funds/ETFs, exchange-traded futures, options, CFDs and tokenised claims. These are not interchangeable products.
+- Other future research candidates: FX, rates/fixed income, options, REITs and energy/agricultural commodities. These are candidates for screening, not commitments to build.
+
+### Shared platform services versus domain-specific engines
+
+Potential shared services:
+- Canonical instrument/security master with immutable instrument IDs, venue, currency, contract multiplier, tick/lot sizes, expiry, settlement and trading calendar metadata.
+- Point-in-time market/fundamental/macro data with source, publication time, revision vintage, licensing and quality metadata.
+- Event journal, deterministic replay, idempotency, provenance and audit.
+- Native-currency double-entry accounting primitives and controlled FX translation.
+- Consolidated read-only portfolio exposure, factor, currency, liquidity and stress reporting.
+- Capital allocation and transfer workflow with explicit authorisation, immutable references and reconciliation.
+
+Domain-specific capabilities must remain separate where their semantics differ: perpetual funding and liquidation; spot custody and on-chain transfers; equity dividends, splits and corporate actions; commodity futures delivery, expiry, rolls, basis and margin. A common interface must not erase these differences.
+
+### Cross-asset hedging — separate future capability
+
+Research a portfolio-level hedge and exposure-management module rather than making hedging an implicit feature of every strategy engine. It may eventually:
+- Measure exposures by underlying economic risk, not just ticker or instrument.
+- Estimate hedge ratios using beta, covariance, factor sensitivities, duration/DV01, FX delta or commodity sensitivities as appropriate.
+- Propose hedge instruments and sizes subject to liquidity, basis, margin, collateral, concentration and cost constraints.
+- Track hedge effectiveness, residual risk, basis risk, carry/roll cost and hedge drift.
+- Enforce independent limits and human approval boundaries.
+
+Gold, silver or copper positions must not automatically be labelled hedges. Their effectiveness depends on the exposure being hedged, horizon, instrument structure, correlation stability, basis, currency and funding. Commodity futures can introduce expiry, delivery, roll yield, contango/backwardation and margin risks. Physical metal, ETF shares, futures, CFDs and tokenised claims carry materially different ownership, custody and counterparty risks.
+
+### Additional design questions to investigate
+
+- Separate legal account, strategy sleeve, engine and portfolio hierarchy; capital transfer and attribution.
+- Consolidated risk without pooling cash, collateral or permissions by assumption.
+- Native currency versus reporting currency; FX source, timestamp, stale-rate handling and conservative valuation.
+- Double-entry ledger, immutable transaction history, corrections/reversals, cost basis, realised/unrealised PnL and reconciliation.
+- Dividends, withholding tax, splits, mergers, spin-offs, rights issues, symbol changes, delistings and other corporate actions.
+- Crypto deposits/withdrawals, chain fees, forks, staking rewards, custody, wallet attribution and exchange insolvency risk.
+- Commodity contract specifications, delivery notices, first/last notice dates, expiry, settlement type, contract rolls, forward curves and storage/financing effects.
+- Market calendars, holidays, auctions, halts, price limits, daylight-saving changes, overnight/weekend gaps and cross-market asynchronous sessions.
+- Shorting, borrow availability/cost, funding, margin, collateral haircuts, liquidation and counterparty exposure.
+- Data entitlements, redistribution restrictions, survivorship bias, delisted securities, point-in-time fundamentals and revised macroeconomic data.
+- NZ tax classification and recordkeeping across crypto, shares, FIF interests, derivatives and commodity-linked instruments; obtain professional advice before any real-money expansion.
+- Broker/venue eligibility for a New Zealand resident, account type, custody, client-money protections, product disclosure, API terms and data costs.
+- Portfolio-level stress scenarios: crypto crash, equity drawdown, USD/NZD shock, rates/inflation surprise, commodity supply shock, liquidity freeze, venue outage and correlated liquidation.
+
+### Preliminary open-source research shortlist — not adopted
+
+| Project | Initial research value | Licence / boundary | Preliminary disposition |
+|---|---|---|---|
+| [QuantConnect LEAN](https://github.com/QuantConnect/Lean) | Modular event-driven multi-asset research/backtest engine; equities, futures, FX, options and crypto concepts | Apache-2.0; data and hosted cloud services are separate; fill/slippage/impact assumptions require independent audit | High-priority architecture and simulation reference; do not assume broker/data coverage or realism |
+| [NautilusTrader](https://github.com/nautechsystems/nautilus_trader) | Deterministic event-driven execution/replay and portfolio mechanics | LGPL-3.0; existing IDEAL POC is pinned to 2.0.0rc9 and limited to isolated research | Continue existing scoped evaluation; separately assess asset-class coverage and licence obligations |
+| [Hummingbot](https://github.com/hummingbot/hummingbot) | Exchange connector patterns and crypto spot/perpetual execution | Apache-2.0; strategy focus is automated trading/market making, not a complete long-term investment ledger | Reuse/reference connector and execution ideas only after connector-specific audit |
+| [Freqtrade](https://github.com/freqtrade/freqtrade) | Crypto spot/futures bot, backtesting, dry-run, persistence and position adjustment/DCA patterns | GPL-3.0; crypto-focused bot, not general equities/commodities portfolio architecture | Research reference; GPL boundary and strategy/execution coupling require review |
+| [rotki](https://github.com/rotki/rotki) | Crypto portfolio tracking, transaction decoding, accounting and PnL reporting | AGPL-3.0; commercial licensing available from project | Strong accounting-domain reference; do not embed before licence and accounting-method audit |
+| [Portfolio Performance](https://github.com/portfolio-performance/portfolio) | Multi-account investment tracking, time-weighted/IRR performance, allocation and rebalancing, dividends/fees and multicurrency concepts | EPL-1.0; desktop portfolio-analysis application, not an automated execution engine | High-priority equities/portfolio accounting reference; inspect data model and import/export boundaries |
+| [Deltabadger](https://github.com/deltabadger/deltabadger) | Crypto DCA, rebalancing, direct indexing, portfolio tracking and tax-reporting workflows | AGPL-3.0; verify current maintenance, exchange support and implementation depth | Focused DCA workflow reference; not a core platform dependency candidate yet |
+| [CCXT](https://github.com/ccxt/ccxt) | Unified crypto exchange REST API patterns | MIT; exchange-specific support and semantic differences remain | Potential crypto adapter reference, not a multi-asset broker abstraction |
+
+The shortlist is discovery-stage only. Before any selection, record current commit/release activity, licence and transitive obligations, open issues, test quality, supported instrument types, exchange/broker limitations, security posture, data rights and reproducible POC evidence. Stars are a discovery signal, not a quality gate.
+
+### Preliminary research observations
+
+- LEAN's own documentation describes a modular engine, but its simulation defaults are not automatically conservative: some default brokerage models use zero slippage, fill models may assume complete fills, and market impact is not modelled by default. IDEAL must independently validate fill, slippage, impact, fees, borrow, funding and corporate-action behaviour.
+- Hummingbot's connector abstraction is useful for exchange integration patterns, but connector availability does not prove NZ eligibility, account suitability, data rights or execution quality.
+- Freqtrade's DCA/position adjustment is a strategy callback and bot workflow; it is not a substitute for an independently governed profit-allocation and long-term portfolio ledger.
+- rotki and Portfolio Performance are portfolio/accounting references, not evidence that one package should become IDEAL's source of financial truth.
+- Commodity futures are not equivalent to holding spot metal. Contract size, tick value, expiry, delivery/settlement and roll schedule are essential instrument metadata. Futures curve structure and basis can materially change long-horizon returns.
+
+### New Zealand research boundary
+
+Initial source screening indicates:
+- IRD requires crypto transaction records including asset type, date, transaction type, units, NZD value, opening/closing units, exchange records and wallet addresses, retained for at least seven years.
+- IRD guidance says foreign shares may fall under FIF rules; the commonly referenced NZ$50,000 threshold and applicable exemptions/methods require current case-specific verification.
+- IRD share-sale tax treatment can depend on acquisition purpose, dealing activity or a profit-making scheme; a simplistic assumption that all share-sale gains are tax-free is unsafe.
+- FMA states derivatives issuers making regulated offers to NZ retail investors require an FMA licence. The FMA also describes derivatives as complex/high-risk products. Product, provider, account and territorial scope must be checked independently before any venue or broker selection.
+
+Sources: [IRD crypto recordkeeping](https://www.ird.govt.nz/cryptoassets/taxing/record-keeping), [IRD crypto taxation](https://www.ird.govt.nz/cryptoassets/taxing), [IRD share investments](https://www.ird.govt.nz/income-tax/income-tax-for-individuals/types-of-individual-income/share-investments), [IRD FIF](https://www.ird.govt.nz/fif), [FMA derivatives](https://www.fma.govt.nz/consumer/investing/types-of-investments/derivatives), [FMA derivatives issuer licensing](https://www.fma.govt.nz/business/services/derivatives-issuers/). This is issue-spotting, not tax or legal advice.
+
+### Status and approval boundary
+
+Deferred future research. Owner has requested investigation and architectural consideration, not activation. D-001 remains unchanged: crypto perpetual futures are the only active initial market scope. F-001 spot accumulation, F-002 equities, commodity exposure and cross-asset hedging remain proposals. No instrument universe, broker, venue, data vendor, hedge policy, capital allocation, account, strategy or implementation is approved.
+
 ## Governance
 
 These ideas are deliberately separate from active requirements. They must not expand Phase 01, alter current testing priorities, unlock Phase 02, or be treated as implied approval to build. Revisit them only at a future scope-review point after the initial platform's research and validation gates are complete, or earlier only if the owner explicitly requests a scope review.
