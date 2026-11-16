@@ -7,11 +7,12 @@
 
 ## Executive position
 
-Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. It is not ready to close. The remaining blockers are now concentrated in three areas:
+Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. It is not ready to close. The remaining blockers are now concentrated in two areas:
 
-1. **Persistent $0 core compute:** no reliable free cloud worker is proven. An existing Windows PC/laptop is available as a fallback, but phone-data bandwidth/caps/tethering, stable uptime, power and safe remote administration are unverified; the owner prefers phone-first operation, so host selection is deferred.
-2. **IDEAL-specific dependency and workflow security:** scoped parser/POC vulnerability scans, hash-pinned locks, SBOMs and online zizmor auditor-persona checks now pass. This evidence covers the two current research environments and nine workflows, not a future product dependency graph; orjson 3.11.6 MPL obligations remain relevant before distribution.
-3. **Owner approval:** the component matrix and explicit accepted/rejected/deferred choices still require final review and approval.
+1. **Persistent $0 core compute:** no reliable free cloud worker is proven. An existing Windows PC/laptop is available as a fallback, but phone-data bandwidth/caps/tethering, stable uptime, power and safe remote administration are unverified; the owner prefers phone-first operation, so host selection is explicitly deferred unless a concrete requirement forces it.
+2. **Owner approval:** the component matrix and explicit accepted/rejected/deferred choices still require final review and approval.
+
+The scoped research dependency/security gates now pass: both locked Python environments have zero known vulnerabilities, hash-pinned locks and CycloneDX SBOMs are retained, and online zizmor auditor-persona analysis reports no findings after a concurrency-control fix. These controls cover the two current research environments and nine workflows, not a future product dependency graph. orjson 3.11.6 MPL obligations remain relevant before distribution.
 
 The seven-day OKX dataset is conditionally accepted for historical market-structure research, and the Tardis multi-day comparison is complete with a secondary-reference-only disposition. These are evidence classifications, not execution-readiness claims. Tardis use is limited to internal research under the published terms; external product use requires separate written rights.
 
