@@ -250,3 +250,14 @@ The owner identified trustworthy data as more foundational than individual engin
 Phone-first remains an interaction preference, not a compute constraint. The architecture must be portable to future PC/server deployment without requiring a mobile device to stay awake. No host, always-on worker, paid data provider, PC/server provisioning, runtime code or dependencies are authorised.
 
 Status: Phase 02 architecture/contracts only. Phases 03–19 remain LOCKED. D-018/D-019 accepted as design principles; D-014/D-016/F-004/F-005 remain proposals. No runtime implementation or external account integration occurred.
+
+
+### Phase 02 architecture checkpoint — data archive, controlled learning and local AI research (17 November 2026)
+
+Owner is leaning toward IDEAL maintaining its own historical data archive, recognising that collected history may later support research and learning. The archive-first principle is now documented: preserve source provenance, timestamps, revisions and data quality; curate separate point-in-time research datasets; respect provider licensing and retention restrictions; separate market data, private financial records and AI traces. Do not assume unlimited full-depth retention is economical or legally permitted.
+
+Learning is split into assistant/agent improvement (routing, retrieval, tools and workflow traces) and quantitative model research (market observations, mature labels, forecasting/risk/strategy evaluation). Any market-model training must be offline, reproducible and out-of-sample validated with realistic fees, funding, spread, slippage, latency and sizing. No online weight updates or self-modifying live strategies. No model promotion without separate approval.
+
+Preliminary AI research identified OpenJarvis (Apache-2.0) as the strongest local-first assistant architecture candidate for further study; Hermes Agent (MIT) as a comparator; llama.cpp and Ollama as interchangeable local inference runtime candidates; Chronos-2, TimesFM and IBM Granite Time Series as numerical forecasting research candidates; FinGPT for financial text analysis; and Qlib as an offline quant research framework. OpenJarvis's documented security caveats (host shell execution, sandbox/capability defaults and a confirmation setting not enforced in every entry point) are recorded. No framework/model is adopted.
+
+New proposals: F-007 historical data archive and controlled learning; F-008 local AI runtime and agent framework research. Both remain Proposed. D-001 remains the only active initial trading scope. D-018/D-019 remain accepted. Phase 02 only; Phases 03–19 remain LOCKED. No runtime changes, data subscriptions, model downloads, hardware purchases, training jobs or account integrations authorised.
