@@ -224,6 +224,46 @@ Investigate complementary methods rather than relying on a single score:
 
 Statistical models are estimates, not guarantees. Correlations can change abruptly, historical data may omit new regimes, and tail events may be underrepresented. Risk decisions must retain explicit scenario and model limitations.
 
+### 6.7 Funding and perpetual basis risk
+
+Funding is a direct cash-flow component of holding perpetual contracts, not a cosmetic market indicator. Official venue documentation shows that:
+- funding is calculated from position value and the applicable funding rate;
+- positive and negative funding reverse which side pays;
+- position value is venue/contract-specific and may use mark price, contract multiplier and inverse conversion;
+- funding is charged only to positions held at the applicable funding time;
+- settlement intervals and rate limits can vary by contract and may be adjusted during extreme market conditions;
+- funding deductions can reduce available collateral or isolated margin and move liquidation risk closer.
+
+Sources:
+- Binance funding rates and settlement intervals: https://www.binance.com/en/support/faq/detail/360033525031
+- Binance funding interval updates: https://www.binance.com/en/support/announcement/detail/98d6b24d3e5c4f84a8ed04087997d8d0
+- Bybit funding fee calculation and dynamic interval behaviour: https://www.bybit.com/en/help-center/article/Funding-fee-calculation
+- OKX funding fee mechanism, including linear/inverse valuation and dynamically adjusted settlement frequency: https://www.okx.com/help/perps-funding-fee-mechanism
+
+Provisional implications:
+- Funding estimates must be versioned with contract, rate, interval, settlement timestamp and source.
+- The risk model should calculate projected funding cash flows under base and stressed funding scenarios, in the settlement asset and a reporting currency.
+- It must distinguish predicted rates from final settled rates and reconcile actual funding events into capital state.
+- It must not assume the usual funding interval remains fixed. A venue may change interval or limits.
+- Funding received must not be treated as guaranteed income or assumed to offset unrelated funding liabilities.
+- Funding costs should enter planned holding-period risk, stress loss and net expected trade economics.
+- Perpetual basis risk must be measured separately from spot/index movement. A hedge can remain directionally neutral while suffering basis divergence, funding imbalance or venue-specific pricing dislocation.
+
+### 6.8 Dynamic venue risk parameters
+
+Bybit's published risk-limit material states that market-liquidity assessments can lead to changes in risk limits, initial and maintenance margin rates, maximum leverage and position limits. The applicable risk tier can also change as marked position value changes.
+
+Source: https://www.bybit.com/en/help-center/article/Risk-Limit-Perpetual-and-Expiry-Contracts
+
+Provisional implications:
+- Instrument and account risk parameters are time-varying inputs, not static constants.
+- Venue parameter changes need source, effective time, retrieval time, version and affected instruments/accounts.
+- Risk calculations must recompute after a tier or parameter change.
+- A risk-increasing proposal must be rejected or restricted if current applicable parameters cannot be established.
+- Existing positions require continuous re-evaluation when maintenance margin, leverage caps, position limits or funding schedules change.
+- Historical research and backtests must use point-in-time venue parameters where available, not today's values applied retrospectively.
+
+
 ### 6.6 Capital and equity semantics
 
 Official exchange documentation demonstrates that wallet balance, total equity, adjusted equity, margin balance and available balance are different measures with different purposes. Binance's Futures documentation distinguishes wallet balance (including realised P&L, funding and commissions) from margin balance (wallet balance plus unrealised P&L) and available balance. Bybit distinguishes total equity, margin balance and available balance, including collateral haircuts. OKX distinguishes total equity, adjusted equity after collateral haircuts and available equity.
