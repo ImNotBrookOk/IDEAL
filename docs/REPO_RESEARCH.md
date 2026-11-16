@@ -334,3 +334,40 @@ Constraints:
 5. The tool's data normalization cannot create exchange sequence IDs or L3 queue identity that the underlying source does not provide.
 
 **Disposition:** strong reference implementation and possible isolated sidecar candidate, but not selected or adopted. Reuse ideas and test the public sample parser independently first; do not add it as an IDEAL dependency. Current repo and licence evidence: GitHub API metadata, repository LICENSE and package.json; latest release 18.9.0. Data access/terms references: https://docs.tardis.dev/downloadable-csv-files and https://docs.tardis.dev/legal/terms-of-service.
+
+
+## Zero-cost persistent worker feasibility recheck — 16 November 2026
+
+Oracle's current Always Free documentation advertises Ampere A1 capacity of 1,500 OCPU-hours and 9,000 GB-hours per month (2 OCPUs / 12 GB RAM for an Always Free tenancy), plus 200 GB combined block volume. This is enough capacity to justify a bounded benchmark, but it does not establish reliable production hosting.
+
+Constraints from Oracle's official documentation:
+- Compute must be created in the tenancy's home region; out-of-host-capacity errors can prevent provisioning.
+- Oracle may reclaim Always Free instances when, over a seven-day period, CPU p95 is below 20%, network utilization is below 20%, and (for A1) memory utilization is below 20%.
+- Free Tier has no SLA.
+- Most signups require card verification; Oracle says it does not charge unless the account is upgraded, but temporary authorization holds may occur.
+- The 200 GB block-volume quota includes boot disks; default boot volume is about 50 GB.
+- Always Free is an account quota, not guaranteed regional capacity or an uptime commitment.
+
+Sources:
+- https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
+- https://www.oracle.com/cloud/free/faq/
+- https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier.htm
+
+**Assessment:** Oracle A1 is a $0 experiment candidate, not a dependable sole host for a trading engine. The idle-reclamation criteria are particularly relevant to a low-activity system; intentionally consuming resources to defeat reclamation is not an acceptable design. GitHub Actions is validated for ephemeral CI only, and Cloudflare Workers remains a supporting edge service rather than a persistent Python/Rust engine host. A self-hosted always-on machine could avoid cloud subscription fees but is unverified until hardware, power, internet, backup and monitoring are confirmed.
+
+**Disposition:** no cloud account or resource provisioning. Keep $0 persistent worker feasibility OPEN; do not bind Phase 02 architecture to Oracle. No paid infrastructure without explicit approval.
+
+## NautilusTrader upstream maturity recheck — 16 November 2026
+
+Upstream release and PyPI pages were rechecked:
+- Latest v2 release is `2.0.0rc9`, published 10 November 2026, and marked pre-release.
+- Latest stable PyPI release remains 1.231.0 (2 August 2026), with a materially different 1.x API.
+- Upstream 2.x installation guidance explicitly warns against using release candidates in production environments controlling real capital.
+- IDEAL's isolated `nautilus_trader==2.0.0rc9` POC has 84 deterministic tests passing on x86_64 and ARM64; this is not a production selection. Liquidation/recovery, partial fills, queue position, multi-currency funding edge cases and free-worker performance remain unproven.
+
+Sources:
+- https://github.com/nautechsystems/nautilus_trader/releases
+- https://pypi.org/project/nautilus-trader/
+- https://nautilustrader.io/docs/latest/getting_started/installation/
+
+**Disposition:** retain as leading engine candidate for later architecture comparison, not an adopted dependency. Recheck stable release status and complete the remaining POC gaps before runtime integration.
