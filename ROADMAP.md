@@ -393,3 +393,8 @@ Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK
 ### Phase 02 research checkpoint — risk management, Stage 8 (17 November 2026)
 
 Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with independent assurance cases (claim/context/argument/evidence/residual risk), effective challenge, requirements-to-control-to-test traceability, layered verification, critical safety invariants, mutation resistance, quantitative model assurance, operational control monitoring and release/change-control gates. FIA, CFTC, Federal Reserve and NIST sources are methodological references; no regulatory applicability or certification is claimed. Open cross-foundation contract and independent review gaps remain. No implementation, validator invocation, test environment, exchange integration, deployment or phase advancement authorised.
+
+
+### Phase 02 research checkpoint — risk management, Stage 9 (17 November 2026)
+
+Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with conceptual cross-foundation interface contracts: risk evaluation request/decision envelopes, exact action-bound approvals, reservation/execution handshake, data-integrity evidence semantics, independent health interlocks, security/policy integrity, telemetry, degraded-mode/failure propagation and contract verification. These are provisional semantic contracts; no API schema is frozen. Phase 02 remains active pending consolidation against the core protection, data/health, security, requirements and architecture documents, independent challenge and owner acceptance.
