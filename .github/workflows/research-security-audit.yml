@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: research-security-audit-v4
+  group: research-security-audit-v5
   cancel-in-progress: true
 
 jobs:
@@ -105,6 +105,15 @@ jobs:
                       ids.append(lic.get("id") or lic.get("name") or "NOASSERTION")
                   print("  ", component.get("name"), component.get("version"), ",".join(ids))
           PY
+          {
+            echo "SBOM_BEGIN_PARSER"
+            cat research-output/parser-sbom.json
+            echo "SBOM_END_PARSER"
+            echo "SBOM_BEGIN_NAUTILUS_POC"
+            cat research-output/nautilus-poc-sbom.json
+            echo "SBOM_END_NAUTILUS_POC"
+          } > research-output/sbom-files.txt
+          cat research-output/sbom-files.txt
 
       - name: Run Python vulnerability and GitHub Actions workflow audits
         shell: bash
