@@ -373,3 +373,8 @@ Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK
 ### Project identity and README scope clarification (17 November 2026)
 
 The repository front page now describes IDEAL's overall objective as a private integrated financial intelligence and decision-support platform. Crypto perpetual futures are explicitly described as the initial research domain rather than the entire product purpose. The README outlines the longer-term specialised domains (market/quant research, trading and investment analysis, portfolio/capital oversight, personal finance and tax-aware information), four shared foundations, owner authority, AI boundaries, architecture-first governance, current phase status and future-domain gates. These are vision and research scope, not a claim that future engines are built or authorised.
+
+
+### Phase 02 research checkpoint — risk management, Stage 5 (17 November 2026)
+
+Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with a layered loss-control hierarchy; separate realised/unrealised, daily/rolling, high-water-mark drawdown and stress-loss semantics; capital-flow accounting; deterministic containment states; distinct emergency actions; anti-reset protections; capital-preservation controls; and adversarial verification requirements. FIA and SEC market-access controls are methodological references only; no claim of direct regulatory applicability to IDEAL. D-006 and D-008 remain unchanged. No new loss thresholds, cooldown policy, kill-switch scope, flattening authority or recovery rule approved. Phase 02 only.
