@@ -298,3 +298,14 @@ The 13 November sample aligned 4,544,561 trades with zero missing preceding book
 ## 13.15 Three-day OKX structural reconstruction passed (16 November 2026)
 
 Workflow [#43777630729](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777630729) reconstructed all 19,626,176 book records across 11–13 November with zero invalid states; all 288 snapshots contained exactly 400 levels per side. Exact 10 ms interval shares were 85.929%, 85.957% and 91.069%; maximum adjacent intervals were 508, 520 and 517 ms. 13 Nov had higher activity (7.39m records, 152.57m level rows, median 8 changed levels/update) but its separate trade/BBO side-consistency gate still failed at 97.835%. Structural data quality is passed for these three days; directional trade alignment is not passed on all days. Details: historical validation sections 12.15–12.16.
+
+
+## 13.16 OKX live channel and RPI execution-data requirements (16 November 2026)
+
+Current official documentation confirms:
+- JSON books-l2-tbt (400-level, 10 ms) is available from VIP4+ following the 7 April 2026 fee-tier change; books50-l2-tbt (50-level, 10 ms) is also VIP4+.
+- Since 23 June 2026, checksum fields for books/books-l2-tbt/books50-l2-tbt are fixed to zero; live continuity must use seqId/prevSeqId.
+- books-rpi is a separate public 400-level, 100 ms consolidated organic+RPI book, with totalQty, nonRpiQty and count per level. Its stream also uses seqId/prevSeqId, not checksum.
+- rpiTakerAccess defaults false. RPI taker access requires explicit order flag and instrument permission (rpi=2 means enabled and permitted; rpi=1 means enabled but user lacks permission).
+
+The 10 ms historical archive has no seqId/prevSeqId and no documented RPI/non-RPI quantity split. It must not be treated as a complete representation of executable liquidity without an RPI coverage/permission decision. If the selected account can access RPI, retain the 10 ms organic stream and 100 ms consolidated RPI stream separately and account for the latter's sampling lag. Official source: https://www.okx.com/docs-v5/log_en/ (7 Apr, 23 Jun and 28 Jul 2026 changes). Full implications: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.17.
