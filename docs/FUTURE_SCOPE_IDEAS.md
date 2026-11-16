@@ -324,3 +324,10 @@ No data provider, archive policy, model, AI framework, GPU/PC, package, subscrip
 Investigate local-first AI frameworks and open-weight models as optional IDEAL assistant/research components. Initial candidates include OpenJarvis (Apache-2.0), Hermes Agent (MIT), llama.cpp (MIT), Ollama (MIT), Chronos-2 (Apache-2.0), TimesFM (Apache-2.0), IBM Granite Time Series PatchTST-FM-r2 (dual licence), FinGPT and Qlib (MIT). Model licences, dataset licences, security boundaries, hardware needs, performance, energy and maintenance must be independently checked. Salesforce Moirai 2.0-R-Small currently declares CC-BY-NC-4.0 and is not a default candidate for commercial-compatible use.
 
 OpenJarvis is the strongest current architectural research candidate for local-first assistant primitives and trace-driven model/tool routing, but its documented security caveats (host shell execution, sandbox/capability defaults and a confirmation setting not enforced in every entry point) require hardening; it is not approved as an IDEAL execution authority or supervisor. Hermes is a useful comparator but has a broad host-access tool model. Quantitative time-series models are research baselines, not assumed predictive edges. No framework/model is adopted and no AI usage is authorised in a critical trading/data path.
+
+
+## Shared architectural constraint for every future domain
+
+All future proposals in this register inherit the owner-approved IDEAL Core Protection Architecture. Any future spot, equities, commodity, hedging, personal-finance, tax or other domain must remain separately bounded in its accounting, data semantics, permissions and implementation approval, while using the common risk-management, data-integrity, system-health and audit contracts applicable to its activity.
+
+A future consolidated portfolio view may support risk analysis, but it must not imply pooled collateral, shared cash, automatic transfers or shared permissions. No proposal in this register is promoted to active scope by D-020. See [the Core Protection Architecture](IDEAL_CORE_PROTECTION_ARCHITECTURE.md) and [D-020](../DECISIONS.md).
