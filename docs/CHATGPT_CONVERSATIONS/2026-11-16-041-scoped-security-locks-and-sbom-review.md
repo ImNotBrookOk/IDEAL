@@ -59,3 +59,24 @@ The successful run audited nine workflow files and reported no findings, with on
 - **Phase 01 security/supply-chain gate: PARTIALLY CLOSED**, not globally closed. Remaining work: inspect the suppressed finding, decide on online workflow analysis, review the full repository's other scripts/tooling and document whether they are in-scope dependencies, and ensure the audit workflow itself is covered by its own policy.
 
 No runtime dependency adoption, paid service, exchange access, paper/live execution or Phase 02 work is authorised.
+
+
+## Follow-up: online auditor-persona workflow scan and remediation
+
+The initial regular-persona online scan [#43825525763](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43825525763) passed: both pip-audit environments had zero vulnerability records and zizmor reported no findings. To remove the offline-mode limitation and inspect the earlier suppressed result, the audit workflow was updated to pass the least-privilege `GITHUB_TOKEN` (contents: read) and run zizmor in its `auditor` persona.
+
+The auditor-persona run [#43825594880](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43825594880) surfaced one low-severity `concurrency-limits` finding in `.github/workflows/nautilus-poc.yml`: multiple superseding POC runs could run concurrently. This was a genuine efficiency/race-control weakness, not dismissed as noise. Added a workflow concurrency group keyed by workflow and ref with `cancel-in-progress: true`.
+
+Final verification on commit `2911ec3bd05221b7434257d528bf8a7ccee19ffa`:
+- Security audit [#43825684618](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43825684618): **SUCCESS**. Hash-lock regeneration/comparison, locked installs, both SBOM generations, both pip-audit scans (zero vulnerability records) and online zizmor auditor-persona scan all passed. Zizmor reported **no findings** across nine workflow files.
+- Nautilus POC CI [#43825684604](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43825684604): **SUCCESS**, 84 tests passed on x86_64 and 84 on ARM64; SQLite journal benchmark step also completed.
+- The temporary malformed workflow edit in commit `ccf4a91963fd43a7db796fb31cf6d4a065615e32` failed before any job started; corrected in the next commit and superseded by successful online run #43825525763. No research code or dependency lock was changed by that transient failure.
+
+## Updated disposition
+
+- Scoped parser/POC vulnerability scan: **PASS**.
+- Hash-pinned research dependency locks: **PASS**.
+- Scoped CycloneDX SBOMs and package licence inventory: **PASS WITH LIMITS**; only the two current research environments, not a future product dependency graph.
+- Online zizmor auditor-persona scan: **PASS** after fixing the low-severity concurrency finding.
+- Research CI concurrency: bounded for Nautilus POC by workflow/ref group; no overlapping superseded runs.
+- Remaining supply-chain boundary: runtime/product dependencies do not yet exist and are not certified by this scoped audit. Retain the orjson 3.11.6 MPL-2.0 notice review before distribution.
