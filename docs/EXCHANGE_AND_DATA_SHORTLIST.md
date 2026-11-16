@@ -321,3 +321,12 @@ A strict no-lookahead comparison of 844,982 Tardis OKX BBO states against the of
 - strict-preceding official BBO age median 10 ms, p95 60 ms, max 529 ms.
 
 This shows strong BBO state agreement on the sampled day. It does not make the Tardis feed 10 ms-equivalent: it had 844,983 message groups versus 5,827,935 official records and only 13 snapshots versus 96. The updated parser measured the Tardis maximum exchange-time gap at 3,800 ms (zero exchange timestamp backsteps), versus the official 584 ms maximum exchange-time interval; the Tardis local receive gap was 3,803.897 ms. The normalized CSV does not expose the raw OKX channel ID. Keep Tardis as an accurate but sparser BBO reference, not a replacement for the official 10 ms stream. Full evidence: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), sections 12.14 and 12.18.
+
+
+## Tardis OKX multi-day BBO disposition — 16 November 2026
+
+The September and October 2026 first-of-month comparisons now supplement the 1 November baseline. Strict-preceding exact BBO match rates were 99.35174% (1 Sep), 99.31758% (1 Oct) and 99.85065% (1 Nov); inclusive same-timestamp exact match was 100% on all three dates. No Tardis sample lacked a preceding official state.
+
+Tardis is materially sparser than the official module-4 400-level archives: ~6.86x fewer messages on 1 Sep, ~8.44x fewer on 1 Oct and ~6.90x fewer on 1 Nov. Tardis max exchange-time gaps were 16.5s, 2.4s and 3.8s respectively. It is accepted as a secondary sampled BBO reference for market-structure research, not as a substitute for the official 10ms execution-calibration feed. Normalized CSV lacks raw channel ID; exact per-message source channel remains unproven.
+
+Evidence: [workflow #43804760777](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43804760777), artifact 14198581255, and [audit checkpoint 036](CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md).
