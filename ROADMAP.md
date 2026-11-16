@@ -354,3 +354,8 @@ Phase 02 is not complete until the repository contains and the owner has reviewe
 - verification strategy and explicit owner acceptance.
 
 **Immediate research task:** begin with the risk-management architecture, designed from the outset to integrate with data integrity, system health and security. Phase 02 remains design/research only. Phase 03–19 remain locked. This workstream does not authorise code, runtime changes, dependencies, external services, exchange access, paper/live execution or paid infrastructure.
+
+
+### Phase 02 research checkpoint — risk management, Stage 2 (17 November 2026)
+
+Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with official OKX/Bybit/Binance evidence on equity fields, collateral haircuts, contract specifications, risk tiers and linear/inverse P&L. Added provisional capital semantics, a risk-adjusted-equity recommendation for D-006 (not owner-approved), contract-aware discrete sizing, cost/funding/FX treatment, risk-vs-margin ceilings, reservation transitions and additional verification requirements. D-006 and D-008 remain unchanged; the meaning of D-006 "equity" remains an owner decision. No venue/account mode selected and no implementation, exchange access or runtime authority granted. Continue Stage 3 research on portfolio stress, correlation, concentration, margin/liquidation buffers and liquidity.
