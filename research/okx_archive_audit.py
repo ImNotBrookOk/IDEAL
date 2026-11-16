@@ -102,7 +102,7 @@ class BookState:
         return "valid"
 
 
-def audit_records(records):
+def audit_records(records, bbo_writer=None):
     book = BookState()
     actions = collections.Counter()
     statuses = collections.Counter()
@@ -144,7 +144,10 @@ def audit_records(records):
             negative_or_invalid += 1
             raise
 
-        statuses[book.status()] += 1
+        book_status = book.status()
+        statuses[book_status] += 1
+        if bbo_writer is not None and book_status == "valid":
+            bbo_writer.writerow([ts * 1000, str(book.best_bid()), str(book.best_ask())])
         if action == "snapshot":
             snapshot_bid_depths.append(len(book.bids))
             snapshot_ask_depths.append(len(book.asks))
@@ -175,30 +178,41 @@ def audit_records(records):
     }
 
 
-def audit_archive(path):
+def audit_archive(path, bbo_output=None):
     path = Path(path)
-    with tarfile.open(path, mode="r|gz") as archive:
-        member = archive.next()
-        while member is not None and not member.isfile():
+    bbo_stream = None
+    try:
+        if bbo_output is not None:
+            bbo_stream = Path(bbo_output).open("w", encoding="utf-8", newline="")
+            bbo_writer = csv.writer(bbo_stream)
+            bbo_writer.writerow(["timestamp_us", "bid", "ask"])
+        else:
+            bbo_writer = None
+        with tarfile.open(path, mode="r|gz") as archive:
             member = archive.next()
-        if member is None or not member.name.endswith((".data", ".jsonl", ".ndjson")):
-            raise ValueError("expected one NDJSON data member in the tar archive")
-        stream = archive.extractfile(member)
-        if stream is None:
-            raise ValueError("unable to read archive data member")
+            while member is not None and not member.isfile():
+                member = archive.next()
+            if member is None or not member.name.endswith((".data", ".jsonl", ".ndjson")):
+                raise ValueError("expected one NDJSON data member in the tar archive")
+            stream = archive.extractfile(member)
+            if stream is None:
+                raise ValueError("unable to read archive data member")
 
-        summary = audit_records(records_from_stream(stream))
-        extra = archive.next()
-        while extra is not None:
-            if extra.isfile() and extra.name.endswith((".data", ".jsonl", ".ndjson")):
-                raise ValueError("expected exactly one NDJSON data member")
+            summary = audit_records(records_from_stream(stream), bbo_writer=bbo_writer)
             extra = archive.next()
+            while extra is not None:
+                if extra.isfile() and extra.name.endswith((".data", ".jsonl", ".ndjson")):
+                    raise ValueError("expected exactly one NDJSON data member")
+                extra = archive.next()
 
-        summary["archive"] = str(path)
-        summary["archive_bytes"] = path.stat().st_size
-        summary["member"] = member.name
-        summary["member_uncompressed_bytes"] = member.size
-        return summary
+            summary["archive"] = str(path)
+            summary["archive_bytes"] = path.stat().st_size
+            summary["member"] = member.name
+            summary["member_uncompressed_bytes"] = member.size
+            return summary
+    finally:
+        if bbo_stream is not None:
+            bbo_stream.close()
 
 
 def records_from_stream(stream):
@@ -212,9 +226,12 @@ def records_from_stream(stream):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("archives", nargs="+")
+    parser.add_argument("--bbo-output")
     args = parser.parse_args()
+    if args.bbo_output and len(args.archives) != 1:
+        parser.error("--bbo-output requires exactly one archive")
     for path in args.archives:
-        print(orjson.dumps(audit_archive(path), option=orjson.OPT_SORT_KEYS).decode())
+        print(orjson.dumps(audit_archive(path, args.bbo_output), option=orjson.OPT_SORT_KEYS).decode())
 
 
 if __name__ == "__main__":
