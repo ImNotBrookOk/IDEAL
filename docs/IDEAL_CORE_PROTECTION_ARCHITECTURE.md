@@ -200,3 +200,15 @@ This document does not authorise:
 Security is a fourth foundational pillar under D-021. Its detailed architecture and assurance lifecycle are documented in `docs/IDEAL_SECURITY_ARCHITECTURE.md`.
 
 Phase 02 remains active. Phases 03–19 remain LOCKED until the relevant exit criteria and explicit owner approvals are satisfied.
+
+## 7. Architecture-first integration and acceptance
+
+The four pillars must be designed as one integrated protection system before implementation. Each pillar has distinct responsibilities and authority, while critical interfaces are explicit contracts rather than informal assumptions.
+
+For every cross-pillar or domain interface, document producer/consumer and ownership; schema, units, identity and version; timestamps and ordering; authentication and authorisation; provenance, integrity, quality and freshness; unknown/invalid states; timeout, retry, duplicate and partial-result semantics; safe response to dependency failure; blast radius and escalation; audit evidence; and recovery verification.
+
+The architecture must be challenged as a whole through threat modelling, abuse cases, failure-mode analysis, dependency/blast-radius review, edge cases and independent design review. Requirements must trace to an owning component or policy, an interface, a verification method and an expected failure response. Unresolved questions and residual risks remain explicit.
+
+The architecture-first process, implementation-candidate due-diligence standard and acceptance gate are specified in [IDEAL Architecture-First Research and Design Plan](IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md). The first detailed research task is the risk-management architecture, with data integrity, system health and security integrated from the beginning. Implementation ecosystem research follows architecture acceptance; code availability must not dictate the protection model.
+
+This section records design requirements only. It does not authorise runtime implementation, dependency adoption, deployment, external testing or phase advancement.
