@@ -33,6 +33,12 @@ These rules are mandatory for every contributor and agent.
 - Risk, permissions, progression gates and execution invariants are deterministic and independently enforced.
 - AI cannot edit its own limits, gate thresholds, permissions, kill switches or execution rules.
 
+## Research data handling
+- Never commit raw market-data archives, private exchange/account data or secrets to the repository.
+- Research workflows may retain only manifests, hashes, validation summaries and small reproducibility metadata as CI artifacts.
+- Raw data cleanup must be a separate unconditional workflow step (for example, GitHub Actions if: always()) that executes before artifact upload, so a failed test/assertion cannot bypass cleanup.
+- Keep artifact retention short and explicit (default maximum three days for temporary research evidence). Record any accidental raw-data artifact exposure, expiry and corrective action in the audit log; never claim deletion unless verified.
+
 ## Research integrity
 - Include fees, spread, slippage, funding, partial fills and realistic latency assumptions.
 - Prevent look-ahead, survivorship and selection bias; separate training, validation and untouched out-of-sample data.
