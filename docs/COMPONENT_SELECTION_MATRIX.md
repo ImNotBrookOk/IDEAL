@@ -44,7 +44,7 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 
 ## Cross-cutting hard gates
 
-1. **New Zealand derivatives eligibility:** FMA guidance requires a derivatives issuer licence for retail derivative offers; the exact classification of a crypto perpetual swap and exact contracting entity/product require product-specific legal confirmation. No venue is verified as eligible. No account or API key.
+1. **New Zealand derivatives eligibility:** The FMA defines derivatives broadly (including recurrently traded futures/swaps) and requires the issuer/offeror to hold the relevant derivatives issuer licence when making a regulated offer to retail investors. This is not a licence requirement on the user merely operating a personal trading system. Whether a specific offshore venue/entity is making a regulated offer into NZ, the exact perpetual-swap product classification and cross-border application require independent legal confirmation. No venue is verified as eligible. No account or API key.
 2. **Live data entitlement:** OKX 400-level 10 ms books-l2-tbt requires VIP4+; standard books is 100 ms. Separate books-rpi is 400 levels/100 ms; rpiTakerAccess defaults false and instrument permission must be checked. Historical access does not imply live entitlement.
 3. **Sequence continuity:** OKX historical archive schema lacks sequence IDs/checksums; live books/book-rpi continuity uses seqId/prevSeqId because checksum is deprecated. Tardis normalized CSV omits exchange sequence IDs. Reconstructed valid books do not prove no lost updates.
 4. **Passive fills:** L2 market-by-price is not L3; no true FIFO queue position. Do not claim passive-fill accuracy.
