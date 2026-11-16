@@ -1347,3 +1347,175 @@ Required test families:
 - Model changes, drift and dependency failures require controlled restriction, revalidation, rollback or retirement.
 
 No strategy/model is selected or promoted by this research. No AI runtime, framework, model weights, trading integration or execution capability is approved. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 18. Research tranche 7 — emergency control, incident response and verified recovery (17 November 2026)
+
+**Status:** Provisional architecture research. No emergency execution, credential revocation, exchange connection, automatic flattening or recovery authority is approved.
+
+### 18.1 Evidence reviewed
+
+- NIST SP 800-61 Rev. 3 (final April 2025) integrates incident response into the NIST Cybersecurity Framework 2.0 and describes preparation, detection, response, recovery and continuous improvement across cybersecurity risk management. It supersedes SP 800-61 Rev. 2. https://csrc.nist.gov/pubs/sp/800/61/r3/final
+- NIST's incident-response project explains that preparation (Govern, Identify, Protect) supports the incident lifecycle (Detect, Respond, Recover), while lessons learned feed continuous improvement. https://csrc.nist.gov/projects/incident-response
+- CISA's incident and vulnerability response playbooks emphasise coordinated containment, evidence preservation, eradication of persistence, rebuilding from clean sources, credential resets and monitoring for re-entry before restoring normal operations. These are federal-government playbooks and are used as technical reference material, not a claim of applicability to IDEAL. https://www.cisa.gov/sites/default/files/2024-08/Federal_Government_Cybersecurity_Incident_and_Vulnerability_Response_Playbooks_508C.pdf
+- FIA's automated trading risk-control guidance describes cancel-on-disconnect as best-effort and notes that the scope of cancellation depends on session semantics. It also notes that a kill switch may block new orders, cancel working orders and/or permit risk-reducing orders; cancellation of protective orders can itself add risk. https://www.fia.org/sites/default/files/2024-07/FIA_WP_AUTOMATED%20TRADING%20RISK%20CONTROLS_FINAL_0.pdf
+
+### 18.2 Emergency control plane must be independent
+
+Provisional architecture recommendation: critical risk containment should not depend on the strategy process, model, agent or primary user interface that may have failed or been compromised.
+
+Define a small, deterministic emergency-control plane with:
+- independently observable heartbeat and health state;
+- a separately controlled permission to request emergency actions;
+- immutable policy/configuration and bounded action scope;
+- idempotent action requests and explicit action acknowledgement states;
+- durable audit evidence independent of the affected component;
+- a minimal dependency footprint and a safe behaviour when dependencies are unavailable;
+- no AI authority to activate, disable, override or release hard emergency controls.
+
+A control plane is not independent merely because it runs in another process if it shares the same credentials, host failure domain, mutable configuration, data source or compromised administrator identity. Independence must be assessed across software, identity, network, storage, credentials and operational dependencies.
+
+### 18.3 Incident classes and triggers
+
+The risk and security foundations should share a classified incident model. Examples include:
+
+**Market/data incidents**
+- stale, missing, out-of-order or corrupted market data;
+- mark/index/last price divergence beyond approved tolerance;
+- funding, contract specification, risk tier or collateral metadata changed without verified update;
+- historical data or account reconciliation mismatch;
+- abnormal spread/depth, volatility, liquidity or market dislocation.
+
+**Trading/account incidents (future capability only)**
+- order acknowledgement unknown, duplicate or contradictory;
+- cancellation request not confirmed;
+- position/working-order mismatch;
+- unexpected manual/external position or trade;
+- unexpected margin ratio, collateral haircut or liquidation estimate;
+- venue outage, API throttling, WebSocket loss or session disconnect.
+
+**System/security incidents**
+- risk engine, health supervisor, audit storage or critical dependency unavailable;
+- unauthorised login, permission escalation, secret leakage or suspicious API use;
+- code/dependency tampering, malicious update or supply-chain compromise;
+- agent prompt injection, tool misuse or attempted policy modification;
+- ransomware, destructive malware, data exfiltration or backup integrity failure;
+- backup restore failure or unexplained data hash mismatch.
+
+Each incident type requires severity, confidence, scope, affected domains, evidence, containment owner, permitted actions, communication path and recovery criteria. Unknown or conflicting critical state is itself a risk event.
+
+### 18.4 Safe-state design and action ordering
+
+A safe state must be defined for each failure mode rather than assuming "stop everything" is always safe.
+
+The control decision should distinguish:
+1. preventing new risk-increasing activity;
+2. retaining or cancelling existing working orders according to their verified purpose and venue semantics;
+3. allowing only validated risk-reducing actions where position/order state is reliable;
+4. isolating compromised components and revoking compromised credentials;
+5. preserving positions and evidence when an action could worsen risk;
+6. invoking an owner-controlled manual venue process when IDEAL cannot safely determine or execute the required action.
+
+For example, cancelling all orders can remove protective exits. Cancelling only risk-increasing orders may be impossible if order purpose cannot be determined. A market close can incur extreme slippage or fail during outage. Disabling a credential may prevent new malicious orders but may also prevent IDEAL from cancelling existing venue orders. The correct response depends on incident type, venue capability, state certainty and the separately approved playbook.
+
+Do not assume a local "cancel all" button can cancel orders after a network or exchange outage. Do not equate a cancellation request with confirmed cancellation. Maintain conservative exposure reservations until authoritative terminal state is reconciled.
+
+### 18.5 Incident lifecycle and evidence
+
+Proposed controlled lifecycle:
+
+1. **Prepare:** maintain threat/failure scenarios, current system maps, contact and account-recovery procedures, clean recovery artefacts, tested backups and incident runbooks.
+2. **Detect and validate:** collect telemetry and source evidence; classify severity; distinguish false positive, degraded service and confirmed compromise.
+3. **Contain:** isolate affected component/session/credential/domain; stop relevant risk-increasing activity; preserve safe access for response and account-state verification.
+4. **Preserve evidence:** snapshot logs, event sequences, hashes, code/configuration versions, access records, order/account observations and relevant timestamps before destructive remediation where feasible.
+5. **Eradicate:** remove malicious persistence, revoke/rotate compromised credentials, patch root cause, rebuild affected components from verified clean sources and validate dependencies.
+6. **Recover in isolation:** restore data/services into a restricted state; validate integrity and provenance; reconcile authoritative external account state; test controls before reconnecting dependencies.
+7. **Return to service:** require explicit release conditions and owner approval for consequential capabilities; monitor heightened telemetry after restoration.
+8. **Learn:** document root cause, impact, timeline, control failure, recovery evidence and corrective actions; update threat model, risk controls, tests and roadmap.
+
+For a security compromise, restoring service before understanding persistence and credential exposure can reintroduce the attacker. For a trading/account incident, restoring the application without reconciling venue orders, positions and collateral can recreate unknown exposure.
+
+### 18.6 Recovery is not restart
+
+A process restart, new deployment or healthy status indicator does not establish that a system is safe to resume.
+
+Before any future trading capability can leave recovery-pending:
+- identify the complete incident scope and root cause or document residual uncertainty;
+- verify all relevant identities, credentials, sessions and permissions;
+- prove affected code, dependencies, configuration and model artefacts are clean and version-pinned;
+- verify data integrity, audit sequence and backup provenance;
+- reconcile positions, working/conditional orders, fills, balances, fees, funding, collateral and margin against authoritative venue records;
+- account for manual/external activity during the outage;
+- verify no stale or duplicated order can unexpectedly execute;
+- validate risk, security, health and data controls independently;
+- run required replay/conformance/recovery tests;
+- document residual risk and obtain the required owner approval.
+
+If authoritative account state cannot be obtained or reconciled, the system remains restricted. It must not infer a flat position from missing data.
+
+### 18.7 Backup, restore and disaster-recovery boundaries
+
+Backups must protect both data and the ability to trust the restored system:
+- encrypted, access-controlled, versioned and integrity-checked backups;
+- separate backup credentials and failure domains where feasible;
+- immutable/tamper-resistant audit and configuration snapshots;
+- tested restoration of application state, ledger/events, model artefacts, configuration and audit history;
+- recovery-point and recovery-time objectives defined by data criticality and future approved use;
+- restore into isolation before reconnecting exchange, bank or other external integrations;
+- detect rollback, missing event ranges, duplicate events and sequence gaps;
+- reconcile restored state with external source-of-truth records.
+
+A backup that has never been restored is not proven. A restored backup can contain malware, stale permissions or corrupted source data; restore verification must include security and integrity, not just file availability.
+
+### 18.8 Manual fallback and owner procedures
+
+The system should document a manual fallback path for situations where IDEAL is unavailable or cannot be trusted. This may include:
+- how the owner identifies the correct venue/account and obtains current position/order state independently;
+- how to secure account access and revoke compromised sessions/keys using the venue's own controls;
+- how to identify protective vs risk-increasing orders;
+- how to avoid duplicate actions during uncertain acknowledgement;
+- how to preserve statements, fills, timestamps and evidence;
+- how to record manual actions so the system can reconcile them after restoration.
+
+This is a future design requirement only. No exchange account, credentials or live procedures are being configured now.
+
+### 18.9 Verification and incident exercises
+
+Required scenario tests:
+- strategy crash with working orders and an open position;
+- risk supervisor failure while market data continues;
+- market-data stale/divergent while account state is current;
+- exchange outage with unknown cancellation state;
+- partial acknowledgement, duplicated message and delayed fill;
+- compromised API key with active working orders;
+- compromised agent attempting tool/permission escalation;
+- malicious dependency or update with persistence;
+- corrupted database/audit sequence and invalid backup;
+- ransomware or host loss with restore from clean source;
+- manual intervention while the system is offline;
+- restore followed by duplicate-event/order detection;
+- emergency control-plane dependency failure;
+- false-positive emergency trigger and safe release;
+- no automatic return to normal after process restart.
+
+Exercise tabletop and technical scenarios with synthetic data first. Record detection time, containment time, recovery time, lost/uncertain data, control coverage, decision points, failed assumptions and corrective actions. Testing an emergency process must not involve real funds or exchange credentials without separate explicit authorisation.
+
+### 18.10 Cross-foundation responsibility
+
+- **Risk management** defines financial safe states, exposure restrictions and approved emergency action classes.
+- **Data integrity** preserves authoritative evidence, sequence, provenance and reconciliation.
+- **System health** detects loss of control, degraded dependencies, heartbeat failures and recovery readiness.
+- **Security** investigates compromise, isolates affected trust boundaries, manages credentials and validates clean recovery.
+
+One pillar cannot certify another. A health monitor can report that a service is responsive but cannot certify that its data is authentic. A risk engine can block new exposure but cannot prove credentials are uncompromised. A security scan cannot prove the portfolio is reconciled. Release requires all relevant foundations to provide their own evidence.
+
+### 18.11 Conclusions and boundaries
+
+- Emergency control must be independent of strategy/AI and designed across failure domains, not just as a UI button.
+- Cancel-on-disconnect is best-effort and venue/session-specific; it is not a guaranteed global cancellation mechanism.
+- Containment actions can create new risk; cancel-all and flatten are not universal safe defaults.
+- Incident response requires evidence preservation, scope identification, eradication, isolated recovery, reconciliation and explicit release.
+- Restart or a green health signal cannot clear a financial or security incident.
+- Manual fallback and recovery procedures are necessary for external account state that IDEAL cannot observe during outages.
+
+No emergency action, credential operation, exchange integration, backup service, external scan or runtime change is approved. Phase 02 remains active; Phases 03–19 remain locked.
