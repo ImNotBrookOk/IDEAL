@@ -1,4 +1,6 @@
 import unittest
+import csv
+import io
 
 from tardis_l2_audit import audit_rows
 
@@ -78,6 +80,21 @@ class TardisAuditTests(unittest.TestCase):
         ]
         with self.assertRaises(ValueError):
             audit_rows(rows)
+
+    def test_bbo_writer_emits_one_state_per_processed_message(self):
+        rows = [
+            row(1000, True, "bid", 100, 2),
+            row(1000, True, "ask", 101, 2),
+            row(2000, False, "bid", 100, 3),
+        ]
+        output = io.StringIO()
+        writer = csv.writer(output)
+        audit_rows(rows, bbo_writer=writer)
+        parsed = list(csv.reader(io.StringIO(output.getvalue())))
+        self.assertEqual(parsed, [
+            ["1000", "100", "101"],
+            ["2000", "100", "101"],
+        ])
 
     def test_invalid_side_and_negative_amount_are_rejected(self):
         with self.assertRaises(ValueError):
