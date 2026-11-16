@@ -115,3 +115,16 @@ Recommended direction (not a formal accepted ADR): keep Personal Finance as a di
 
 ## Verification and next step
 Fetch back all modified files and verify exact blob SHAs, section presence, D-017 Proposed, D-001 unchanged and Phase 02 / Phases 03–19 gates. No executable code changed, so no tests were run. Next research step: inspect Firefly v2.3.5 Akahu integration against a synthetic/mock account and compare it with MoneyMatter's pinned Akahu provider and backup/restore model. Do not connect a real bank account or create tokens.
+
+
+## Fetch-back verification addendum — 16 November 2026
+
+- All six files were fetched back from main after the documentation writes.
+- PASS: D-017 remains Proposed.
+- PASS: D-001 remains accepted and unchanged.
+- PASS: F-004 comparative audit summary is present.
+- PASS: docs/PERSONAL_FINANCE_RESEARCH.md sections 11–16 are present.
+- PASS: ROADMAP.md still states Phase 02 architecture/contracts only and Phases 03–19 remain LOCKED.
+- PASS: this checkpoint and its README index entry are present.
+- Verified blob SHAs at readback: DECISIONS.md ec5ce6c80e098607b62cecc67bf0cb2dfbc833c4; docs/FUTURE_SCOPE_IDEAS.md 39c67b85a732db02b9307f5727eaaf25064718ab; docs/PERSONAL_FINANCE_RESEARCH.md 340917cb0cbd4d2663f2fe7168aa61cb9881c834; ROADMAP.md 1490bc846d896b112b476c720b5ce9242e357514; this checkpoint before this addendum d6b0172cbfb0f2535597ab625df7753c2006960d; conversation index 46dfd2a995483bbdd75f4498a0146e6ad1336d24.
+- No code or dependency changed; no executable tests were applicable. No live financial data or credentials were used.
