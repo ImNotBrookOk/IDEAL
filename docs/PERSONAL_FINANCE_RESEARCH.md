@@ -810,3 +810,16 @@ IRD currently documents payment through internet banking, myIR direct debit and 
 Add a proposed Tax Intelligence and Tax Accounting domain to future scope, with a downstream interface into Personal Finance. Treat IRD filing as a conditional later integration subject to approval. Treat direct payment initiation as unconfirmed and out of scope until a supported mechanism and authorisation path are verified.
 
 This is a research proposal only. It does not accept D-017, approve a new tax decision, authorise code or dependencies, permit IRD account linking, filing, payment or hosting, or unlock any phase.
+
+
+## 21. User-controlled tax awareness and capital autonomy (17 November 2026)
+
+The owner explicitly rejects a mandatory tax reserve or any mechanism that makes funds unavailable. IDEAL must calculate and display tax estimates and may display a recommended reserve as an informational accounting designation, but it must not:
+- lock, escrow, ring-fence or technically segregate the user's money;
+- deduct a percentage from income, deposits, realised PnL or investment proceeds;
+- prevent or limit trading, spot accumulation, stock investing, hedging or withdrawals because an estimate is unpaid;
+- automatically initiate tax payments or silently move funds.
+
+The user may choose to deploy funds shown as a recommended reserve. IDEAL should then update available-balance views and estimated tax coverage/shortfall, explain relevant tax obligations and deadlines, and record the user's decision only where useful and authorised. It must not moralise or obstruct. A tax estimate is not an IRD assessment; a recommended reserve is not money held by IDEAL; software permission is not a statement about legal tax obligations.
+
+Tax Intelligence remains responsible for calculations, classifications, provenance and due-date estimates. Personal Finance remains responsible for representing actual cash movements and confirmed payments. No automatic payment or custody function is implied. This owner clarification is accepted as D-018 and applies across IDEAL, not only the Personal Finance domain.
