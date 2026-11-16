@@ -39,7 +39,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | NautilusTrader 2.0.0rc9 | Preferred engine POC candidate; pre-release and not adopted |
 | HftBacktest | Execution-model research/reference only; no FIFO claim |
 | Cloudflare Workers / Durable Objects | Supporting edge, API, notification or low-volume relay only |
-| Oracle A1 | Bounded $0 compute experiment candidate only; not sole production host |
+| Oracle A1 | Not selected; host selection deferred by owner. No provisioning authorised |
 | Render Free / GCP e2-micro | Rejected for core trading engine |
 | Venue/exchange connectivity | Explicitly excluded pending NZ legal review |
 | Runtime, paper or live trading | Not authorised |
@@ -67,13 +67,14 @@ Phase 01 closure does not itself authorise exchange credentials, account access,
 - [Checkpoint 035 — free-tier hosting alternatives](CHATGPT_CONVERSATIONS/2026-11-16-035-free-tier-hosting-alternatives.md)
 - [Checkpoint 036 — Tardis multi-day BBO validation](CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md)
 - [Checkpoint 041 — scoped security, locks and SBOM review](CHATGPT_CONVERSATIONS/2026-11-16-041-scoped-security-locks-and-sbom-review.md)
+- [Checkpoint 042 — Phase 01 approval and Phase 02 unlock](CHATGPT_CONVERSATIONS/2026-11-16-042-phase-01-approval-and-phase-02-unlock.md)
 
 
 ## Owner decision — seven-day dataset (16 November 2026)
 
 The owner has explicitly accepted the seven-day OKX dataset as conditional historical market-structure research and directed that the project move on without another run of the same test. Workflow #43803546192 completed all daily calculations and unconditional cleanup; its original strict result remains 5/7 days passed, with 7 and 8 November conditional-quality exceptions. The classification gate is therefore **closed by owner decision**, not by a retroactive strict-test pass. The limits in checkpoint 039 are binding.
 
-This decision does not approve the remaining Phase 01 gates, close Phase 01, unlock Phase 02, authorise venue selection/connectivity, runtime integration, paper/live trading or paid infrastructure.
+At the time checkpoint 039 was recorded, this dataset decision alone did not close Phase 01 or unlock Phase 02. The later owner approval recorded in D-015 and checkpoint 042 closes Phase 01 and unlocks Phase 02 architecture/contracts; venue selection/connectivity, runtime integration, paper/live trading and paid infrastructure remain unauthorised.
 
 
 ## Hosting constraint update — phone-first (16 November 2026)
@@ -94,9 +95,7 @@ The final parser pin is orjson 3.11.6. It fixes the uncontrolled-recursion issue
 
 ## Consolidated component recommendations for owner review
 
-A concise recommendation set is now available in [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md). It consolidates preferred research candidates, conditional data-source acceptance, holds/rejections, deferred infrastructure and Phase 02 handoff candidates. It is explicitly a draft and does not approve integration or phase advancement.
-
-The remaining owner task is to review this recommendation set and the full [component matrix](COMPONENT_SELECTION_MATRIX.md), request any changes, and explicitly approve or defer Phase 01 closure. Phase 02 remains locked.
+The recommendation set in [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md) consolidates preferred research candidates, conditional data-source acceptance, holds/rejections, deferred infrastructure and Phase 02 handoff candidates. It was explicitly approved by the owner on 16 November 2026. No runtime integration or venue selection is approved.
 
 
 ## Owner closure decision — 16 November 2026
