@@ -19,18 +19,18 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 
 | Gate | Status | Evidence / disposition |
 |---|---|---|
-| Open-source component research | <badge color="success">Research complete</badge> | Component matrix covers engine, replay, data, risk, orchestration, UI, edge services and execution methods. No engine/runtime dependency adopted. |
-| OKX historical L2 structural reconstruction | <badge color="success">Passed</badge> | Three consecutive archive reconstructions and 400-level seven-day reconstruction; book validity checks passed. Historical archive still lacks live seqId/prevSeqId continuity proof. |
-| Seven-day trade/BBO alignment | <badge color="warning">Conditional research acceptance</badge> | 19,918,682 aligned trades; original strict screen 5/7 days. 7 Nov one unmatched trade is 2 ms before first snapshot; 8 Nov side/BBO diagnostic 96.453%. Research use accepted with per-day age/source flags; not execution-grade calibration. |
-| Independent Tardis comparison | <badge color="success">Passed with limits</badge> | 1 Sep, 1 Oct, 1 Nov strict-preceding exact BBO match >99.3%; inclusive 100%. Tardis is materially sparser and has multi-second gaps; secondary sampled BBO only. |
-| Live feed entitlement | <badge color="success">Documented</badge> | OKX 10 ms books-l2-tbt VIP4+; standard books 100 ms; RPI channel separate and permissioned. Historical archives do not prove live entitlement. |
-| NZ legal / venue eligibility | <badge color="success">Contained by exclusion</badge> | No venue selected; venue selection, exchange accounts and connectivity explicitly excluded pending independent product/entity-specific NZ legal review. |
-| $0 persistent worker | <badge color="warning">Open</badge> | Oracle A1 is highest-capacity free VM but no SLA, home-region capacity and idle reclamation. GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO useful only as supporting edge/relay. Self-hosted host unconfirmed. |
-| Engine POC | <badge color="warning">Research candidate only</badge> | NautilusTrader 2.0.0rc9, LGPL-3.0-only, pre-release; 84 tests pass on x86_64 and ARM64 using pytest 9.2.0. Known liquidation/accounting/queue and worker gaps remain. |
-| Direct dependency licences | <badge color="success">Reviewed</badge> | NautilusTrader LGPL-3.0-only; pytest MIT; orjson 3.11.3 Apache-2.0 OR MIT. Newer orjson 3.13.0 has MPL-2.0-covered files; not adopted. |
-| IDEAL-specific security / SBOM | <badge color="warning">Open</badge> | First audit found 4 known vulnerabilities in 2 packages; exact findings and remediation pending. Zizmor workflow analysis and CycloneDX SBOM generated, but report must be inspected. Transitive dependency hash lock and complete licence/SBOM review remain open. |
-| Documentation / audit trail | <badge color="success">Verified</badge> | Checkpoint audits 031–036, historical data validation, component matrix, roadmap, shortlist and research docs saved to main and fetched back for verification. |
-| Owner approval | <badge color="warning">Open</badge> | Final component selections/rejections and residual risk acceptance require explicit owner review. |
+| Open-source component research | PASS — research complete | Component matrix covers engine, replay, data, risk, orchestration, UI, edge services and execution methods. No engine/runtime dependency adopted. |
+| OKX historical L2 structural reconstruction | PASS | Three consecutive archive reconstructions and 400-level seven-day reconstruction; book validity checks passed. Historical archive still lacks live seqId/prevSeqId continuity proof. |
+| Seven-day trade/BBO alignment | CONDITIONAL — research acceptance | 19,918,682 aligned trades; original strict screen 5/7 days. 7 Nov one unmatched trade is 2 ms before first snapshot; 8 Nov side/BBO diagnostic 96.453%. Research use accepted with per-day age/source flags; not execution-grade calibration. |
+| Independent Tardis comparison | PASS WITH LIMITS | 1 Sep, 1 Oct, 1 Nov strict-preceding exact BBO match >99.3%; inclusive 100%. Tardis is materially sparser and has multi-second gaps; secondary sampled BBO only. |
+| Live feed entitlement | DOCUMENTED | OKX 10 ms books-l2-tbt VIP4+; standard books 100 ms; RPI channel separate and permissioned. Historical archives do not prove live entitlement. |
+| NZ legal / venue eligibility | CONTAINED BY EXCLUSION | No venue selected; venue selection, exchange accounts and connectivity explicitly excluded pending independent product/entity-specific NZ legal review. |
+| $0 persistent worker | OPEN | Oracle A1 is highest-capacity free VM but no SLA, home-region capacity and idle reclamation. GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO useful only as supporting edge/relay. Self-hosted host unconfirmed. |
+| Engine POC | RESEARCH CANDIDATE ONLY | NautilusTrader 2.0.0rc9, LGPL-3.0-only, pre-release; 84 tests pass on x86_64 and ARM64 using pytest 9.2.0. Known liquidation/accounting/queue and worker gaps remain. |
+| Direct dependency licences | REVIEWED | NautilusTrader LGPL-3.0-only; pytest MIT; orjson 3.11.3 Apache-2.0 OR MIT. Newer orjson 3.13.0 has MPL-2.0-covered files; not adopted. |
+| IDEAL-specific security / SBOM | OPEN | First audit found 4 known vulnerabilities in 2 packages; exact findings and remediation pending. Zizmor workflow analysis and CycloneDX SBOM generated, but report must be inspected. Transitive dependency hash lock and complete licence/SBOM review remain open. |
+| Documentation / audit trail | VERIFIED | Checkpoint audits 031–036, historical data validation, component matrix, roadmap, shortlist and research docs saved to main and fetched back for verification. |
+| Owner approval | OPEN | Final component selections/rejections and residual risk acceptance require explicit owner review. |
 
 ## Current component dispositions
 
