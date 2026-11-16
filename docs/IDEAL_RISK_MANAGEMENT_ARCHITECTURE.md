@@ -803,3 +803,184 @@ Add independent tests and scenario fixtures for:
 CME materials describe mature listed-derivatives margin methodologies; they are not direct crypto perpetual implementations. Recent liquidation-event and liquidity studies include working papers, single-event windows and single-venue samples. They are useful for identifying failure modes and scenario candidates, not for adopting fixed haircuts or thresholds.
 
 Next research: margin/collateral/liquidation-buffer mechanics across account modes; risk-limit migration; liquidity horizon calibration; drawdown and loss-containment layers; model/strategy risk; and independent assurance. No numerical policy, venue, account mode or implementation is adopted.
+
+
+## 15. Research tranche 4 — margin, collateral and liquidation-buffer architecture (17 November 2026)
+
+**Status:** Provisional research findings. No venue, margin mode, collateral asset, margin parameter, numerical buffer or execution control is selected or approved.
+
+### 15.1 Official evidence and limits
+
+- Bybit's UTA documentation describes isolated, cross and portfolio margin modes with materially different liquidation scopes. Its isolated process uses mark price, tier-dependent maintenance margin and a staged response that can cancel position-increasing orders, partially reduce positions and then liquidate. https://www.bybit.com/en/help-center/article/UTA-Trading-Rules-Liquidation-Process
+- Bybit's collateral value ratio documentation explains that supported assets are valued using an index price and an asset-specific collateral ratio, with tiered ratios and periodic changes. Positive balances may receive discounted collateral value; negative balances are treated differently. https://www.bybit.com/en/help-center/article/Assets-Collateral-Value-Ratio-List-UTA
+- Bybit's UTA FAQ distinguishes margin balance from available balance and explains that margin valuation includes index-price conversion and collateral ratios; unrealised profit may be available for trading but not transferable. https://www.bybit.com/en/help-center/article/FAQ-Unified-Trading-Account
+- OKX API documentation identifies separate account modes (futures, multi-currency margin and portfolio margin), and exposes account configuration, margin-mode and leverage scopes. Account mode and margin scope are not universal account-wide constants. https://www.okx.com/docs-v5/en/
+- Binance's liquidation protocol describes cancellation of open orders, an IOC reduction attempt and transfer of residual bankrupt position to its insurance fund to the extent possible. The insurance fund is part of the venue's loss-allocation mechanism; it is not a guarantee that a trader's own position will exit at a chosen price. https://www.binance.com/en/support/faq/detail/360033525271
+- The Bank of England's near-final supervisory statement published 16 November 2026 for supervised CCPs explains that large unexpected increases in initial margin can amplify liquidity strains. It discusses a trade-off among margin coverage, margin cost and margin reactivity, and anti-procyclicality measures. This is a supervisory reference for CCPs, not a rule directly applying to IDEAL. https://www.bankofengland.co.uk/paper/2026/ss/near-final-supervisory-statement-on-ccp-margin
+- CPSS-IOSCO PFMI materials emphasise conservative collateral haircuts, concentration limits, risk-based margin and liquidity resources. These are principles for financial market infrastructures, not a classification of IDEAL. https://www.federalreserve.gov/frrs/regulations/appendix-cpss-iosco-principles-for-financial-market-infrastructures.htm
+- CME SPAN 2 describes distinct historical/stress risk, liquidity and concentration components; its liquidity and concentration components illustrate why margin adequacy is not just a volatility calculation. https://www.cmegroup.com/clearing/risk-management/span-overview/span-2-methodology.html
+
+### 15.2 Margin concepts that must remain separate
+
+The system model must distinguish:
+- **Initial margin (IM):** venue- or model-defined collateral requirement to open/increase exposure.
+- **Maintenance margin (MM):** minimum equity/collateral requirement for maintaining exposure under the venue's rules.
+- **Venue margin ratio / utilisation:** venue-defined account or position risk ratio; exact numerator, denominator and thresholds vary by mode and venue.
+- **IDEAL risk budget:** owner-approved loss/exposure capacity. It is not derived from the amount of margin the venue permits.
+- **Liquidation trigger estimate:** venue-reported or independently reconstructed estimate under current assumptions. It is not a guaranteed exit price.
+- **Liquidation buffer:** distance and loss capacity between current market state and a modelled liquidation threshold, assessed under adverse changes in price, margin, fees, funding, collateral and liquidity.
+- **Available margin:** venue-reported capacity for additional margin use, after venue-specific reservations and restrictions.
+
+A position can be within its planned trade-loss budget and still be dangerously close to venue liquidation because the venue's collateral, margin tier, account mode or mark price differs from the assumptions used in sizing. Conversely, abundant venue margin does not mean the position is within IDEAL's portfolio risk budget.
+
+### 15.3 Account and margin mode semantics
+
+The adapter must discover and version actual account configuration rather than infer it from a default:
+- isolated margin generally allocates margin to a position or instrument scope, limiting direct collateral contagion to other positions but not eliminating venue, settlement, liquidity or operational risk;
+- cross margin shares eligible collateral across a defined venue account/currency scope, so a loss or haircut change in one position/asset may reduce the margin supporting others;
+- portfolio margin applies a venue-specific portfolio risk model and may recognise offsets; its margin outcome is model-dependent and can change sharply if correlations, risk arrays, offsets, eligible products or model parameters change.
+
+Do not assume that "hedged" positions cancel margin or liquidation risk. Venue hedge-mode semantics, netting, offsets, collateral pools and liquidation sequencing must be captured explicitly. Cross-venue netting or collateral transfer is never assumed.
+
+For the initial architecture, model isolated, cross and portfolio margin as distinct adapter capabilities. Unsupported or incompletely understood modes must be rejected for risk-increasing actions, not approximated by a generic margin formula. The eventual supported subset is an owner decision after the venue and product scope are researched.
+
+### 15.4 Collateral quality and haircut model
+
+Collateral is not equivalent to cash at spot mark. For each collateral asset, preserve:
+- native units and liability/borrow balance;
+- valuation price/index and independent reference sources;
+- settlement and conversion currency;
+- venue eligibility and collateral scope;
+- current venue collateral ratio/haircut and tier boundaries;
+- IDEAL's separate conservative risk haircut;
+- market depth, spread, volatility, stressed liquidity and time-to-liquidate;
+- issuer, custodian, chain, bridge, reserve and redemption dependencies where applicable;
+- concentration and wrong-way risk with the portfolio and the positions being margined;
+- source, version, effective timestamp, retrieval timestamp and validity/freshness.
+
+Venue haircuts are venue rules, not IDEAL's risk assessment. IDEAL may apply a more conservative internal haircut; it must never assume the venue will recognise the internal valuation. Collateral eligibility can change, and the value of an asset can fall at the same time its haircut worsens or the venue removes it from eligible collateral. This is a wrong-way / wrong-time liquidity risk.
+
+Stablecoins must not be treated as risk-free cash. Model depeg, redemption/issuer stress, venue-specific conversion basis, liquidity gaps and collateral ratio changes. Correlated exposure matters: collateral that falls with the underlying position can fail precisely when margin is needed.
+
+Tiered haircuts require marginal treatment at the correct quantity/value bands; applying one average ratio to the entire holding can overstate collateral. Negative balances, borrowings, liabilities and accrued fees/funding must be represented separately and not hidden by net asset presentation.
+
+### 15.5 Collateral stress and availability
+
+Stress collateral jointly with the portfolio:
+- market price shock and volatility increase;
+- spread/depth deterioration and delayed conversion;
+- stablecoin depeg or loss of redemption access;
+- collateral haircut increase or eligible-asset removal;
+- oracle/index/FX divergence or stale pricing;
+- venue withdrawal, transfer or internal conversion suspension;
+- chain congestion, bridge impairment or custody/issuer failure;
+- concentration tier crossing;
+- simultaneous adverse movement in collateral and the margined positions.
+
+Do not count funds as immediately available merely because they appear in economic equity. Distinguish owned, settled, venue-held, pledged, borrowed, encumbered, transferable, withdrawable and actually available margin. A transfer between wallets/accounts is not complete until confirmed by authoritative source evidence. Do not assume collateral can be moved between venues quickly enough to meet a margin shortfall.
+
+### 15.6 Liquidation buffer and distance-to-liquidation
+
+IDEAL should calculate more than a single liquidation price. Proposed separately named outputs:
+
+1. Venue-reported liquidation trigger/price and timestamp, if available.
+2. Independently reconstructed venue liquidation estimate using versioned venue rules and inputs.
+3. Price-distance buffer in absolute and percentage terms, with direction-specific interpretation.
+4. Equity/collateral buffer above estimated maintenance requirement.
+5. Stressed liquidation buffer after joint price, mark/index basis, funding, fees, collateral haircut and risk-tier shocks.
+6. Liquidity-adjusted buffer after estimated close-out impact, spread, depth depletion and gap-through.
+7. Estimated time-to-liquidate under normal and stressed participation assumptions.
+8. Model disagreement between venue-reported and independently reconstructed estimates.
+
+A simple price distance can be misleading for cross/portfolio margin, inverse contracts, multi-currency collateral or tiered risk limits. In those cases, scenario-recompute account equity and maintenance requirement under each shock; do not rely on a one-dimensional price distance.
+
+The venue's liquidation trigger is a last-resort boundary, not IDEAL's target operating boundary. IDEAL's own warning, restrict, reduce and stop states must activate with enough stressed headroom to act before the venue begins its liquidation process. Exact thresholds require later calibration and explicit approval; no numerical buffer is adopted here.
+
+### 15.7 Venue liquidation mechanics and loss-allocation waterfall
+
+For each venue/product/account mode, document the actual sequence and trigger semantics:
+- mark/index/price source and trigger;
+- order cancellation scope (risk-increasing only, all orders, instrument, currency or account);
+- partial reduction / staged liquidation rules;
+- close-out order type, time-in-force, price and execution assumptions;
+- bankruptcy price / residual position treatment;
+- insurance fund use and limitations;
+- auto-deleveraging (ADL) or other counterparty loss-allocation mechanism;
+- fees, penalties, settlement and residual liability treatment;
+- event notifications, state transitions and reconciliation evidence.
+
+Do not assume insurance funds protect a trader against losses or guarantee full recovery. Do not assume ADL will be predictable or avoidable. Venue liquidation can execute at materially different prices from a displayed estimate during fast markets, gaps or liquidity failures. IDEAL must model the trader's own adverse close-out path and residual loss; it must not rely on the venue's waterfall as a personal safety mechanism.
+
+### 15.8 Independent shadow margin and reconciliation
+
+Provisional architecture recommendation: maintain an IDEAL-side shadow calculation of venue margin and liquidation state, independently derived from versioned official rules and current account/position/instrument state. It is a monitoring and discrepancy-detection model, not a claim that IDEAL can reproduce every proprietary venue calculation exactly.
+
+Reconcile at least:
+- venue account mode and position/margin mode;
+- wallet, equity, adjusted equity and available margin fields;
+- positions, average entry, mark price, unrealised P&L and settlement currency;
+- active orders, conditional orders and reserved margin;
+- risk tier, IMR/MMR, maintenance deduction and leverage scope;
+- collateral balances, haircuts, liabilities and borrowings;
+- funding, fees, session settlement and other account adjustments;
+- liquidation estimate and account risk ratios.
+
+Compare the independent estimate with venue outputs using a versioned tolerance model. Explain differences caused by timing, rounding, hidden venue adjustments or incomplete public rules. If critical disagreement, stale inputs, missing positions/orders, unknown account mode or unversioned margin parameters exist, risk-increasing actions fail closed. Preserve the last known state but mark it stale; never silently substitute it as current.
+
+### 15.9 Margin procyclicality and liquidity preparedness
+
+Margin can rise when volatility, concentration or risk tiers worsen—exactly when liquidity is scarce and collateral is falling. The Bank of England's 2026 CCP guidance highlights the trade-off among coverage, cost and reactivity. IDEAL is not a CCP and should not copy regulatory initial-margin buffers mechanically, but should incorporate the failure mode into its own capital planning.
+
+Requirements:
+- simulate plausible margin increases before they occur;
+- monitor margin parameter/tier changes and collateral haircuts;
+- stress simultaneous position loss, collateral depreciation and higher maintenance requirements;
+- retain liquidity headroom for adverse margin changes rather than sizing to the current minimum;
+- do not assume margin can be funded by selling the same stressed asset at its displayed mark;
+- avoid a risk policy that automatically increases position size whenever current margin appears cheap;
+- review model responsiveness, false comfort in calm periods and sudden capacity collapse in stress.
+
+A conservative buffer is not a cap on venue margin increases. If the venue increases requirements beyond IDEAL's capacity, the correct response is to reduce or prohibit risk increases and follow the approved containment process—not to weaken the model.
+
+### 15.10 Verification and adversarial test requirements
+
+Add deterministic fixtures and independent checks for:
+- isolated, cross and portfolio margin semantics and their distinct contagion scopes;
+- tiered initial/maintenance margin and threshold crossing in both directions;
+- simultaneous position P&L, funding, fee, liability and collateral changes;
+- collateral haircut tiers, concentration thresholds and eligible-asset removal;
+- negative balance treatment and borrowed/encumbered collateral;
+- stablecoin depeg and correlated collateral/position shock;
+- stale, divergent or unavailable mark/index/FX prices;
+- venue-reported vs independently reconstructed liquidation estimate;
+- inverse contract, multi-currency and portfolio-margin nonlinearity;
+- active/conditional orders and pending cancellations in margin calculations;
+- liquidation ladder, IOC partial fill, failed close and residual position;
+- insurance-fund/ADL event interpretation without assuming user protection;
+- abrupt margin requirement increase under low liquidity;
+- no risk increase when account mode, margin tier, collateral ratio or key state is unknown;
+- fail-closed behaviour and audit trail under reconciliation failure.
+
+Use boundary-value, property-based, metamorphic and fault-injection tests. Where venue-specific formulas are published, compare with official examples and independently implemented calculations. Any unresolved venue-specific calculation must be marked unsupported, not approximated without disclosure.
+
+### 15.11 Research conclusions and unresolved choices
+
+Provisional conclusions:
+- Margin capacity is a venue constraint, not IDEAL's risk budget.
+- Collateral quality, concentration, liquidity and wrong-way risk are first-class portfolio risks.
+- Account mode determines the scope of margin contagion and liquidation; it must be discovered and modelled explicitly.
+- Liquidation price is a moving estimate, not a guaranteed execution price or adequate standalone control.
+- IDEAL should maintain independent shadow margin estimates and reconcile them against venue state, while treating proprietary/undocumented mechanics as uncertainty.
+- Stress margin increases and collateral haircuts jointly with market losses and reduced liquidity.
+- Venue insurance funds and ADL are loss-allocation mechanisms, not user guarantees.
+
+Unresolved and deliberately not selected:
+- exchange/venue and legal availability for the owner;
+- account mode and margin mode;
+- collateral assets or collateral concentration limits;
+- internal haircut methodology and values;
+- warning/restrict/reduce thresholds and liquidation-buffer minimums;
+- whether any portfolio-margin or hedge offset capability will ever be supported;
+- operational actions permitted during a margin or liquidation emergency.
+
+Next tranche: drawdown controls, loss containment and capital preservation; then strategy/model risk and emergency controls. No numerical limits, venue, account mode or implementation is adopted by this tranche.
