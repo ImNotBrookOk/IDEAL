@@ -92,3 +92,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-035-free-tier-hosting-alternatives.md](2026-11-16-035-free-tier-hosting-alternatives.md) | Compared Oracle A1, Google e2-micro, Render Free, Cloudflare Workers/Durable Objects and GitHub Actions; no dependable free full-engine cloud host; self-hosted existing hardware is the only plausible no-subscription core path but availability unconfirmed; no account/resource provisioned |
 
 | [2026-11-16-036-tardis-multiday-bbo-validation.md](2026-11-16-036-tardis-multiday-bbo-validation.md) | September/October 2026 Tardis-vs-official OKX BBO comparison passed; strict-preceding exact match 99.35174%/99.31758%, 100% inclusive; sparse cadence and multi-second gaps confirm secondary-reference-only disposition; multi-day comparison gate closed |
+
+| [2026-11-16-038-tardis-data-rights-and-usage-boundary.md](2026-11-16-038-tardis-data-rights-and-usage-boundary.md) | Reviewed Tardis Terms of Service; internal research only, no raw/sub-10-minute redistribution or product embedding without separate written licence; raw samples deleted, summary-only evidence retained |
