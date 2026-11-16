@@ -10,7 +10,7 @@
 Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. It is not ready to close. The remaining blockers are now concentrated in three areas:
 
 1. **Persistent $0 core compute:** no reliable free cloud worker is proven. An existing Windows PC/laptop is available as a fallback, but phone-data bandwidth/caps/tethering, stable uptime, power and safe remote administration are unverified; the owner prefers phone-first operation, so host selection is deferred.
-2. **IDEAL-specific dependency and workflow security:** direct licences are reviewed and a first vulnerability/SBOM/workflow audit is running, but the audit has found four known vulnerabilities in two packages in its first run; the exact packages and fixes must be examined before acceptance.
+2. **IDEAL-specific dependency and workflow security:** scoped parser/POC vulnerability scans, hash-pinned locks, SBOMs and online zizmor auditor-persona checks now pass. This evidence covers the two current research environments and nine workflows, not a future product dependency graph; orjson 3.11.6 MPL obligations remain relevant before distribution.
 3. **Owner approval:** the component matrix and explicit accepted/rejected/deferred choices still require final review and approval.
 
 The seven-day OKX dataset is conditionally accepted for historical market-structure research, and the Tardis multi-day comparison is complete with a secondary-reference-only disposition. These are evidence classifications, not execution-readiness claims. Tardis use is limited to internal research under the published terms; external product use requires separate written rights.
@@ -27,8 +27,8 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | NZ legal / venue eligibility | CONTAINED BY EXCLUSION | No venue selected; venue selection, exchange accounts and connectivity explicitly excluded pending independent product/entity-specific NZ legal review. |
 | $0 persistent worker | OPEN — deferred | Oracle A1 remains an unreliable sole host; GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO is supporting edge/relay only. Existing Windows PC/laptop is a fallback, but mobile-data limits, uptime/power and remote-access safety are unverified; phone-first preferred. |
 | Engine POC | RESEARCH CANDIDATE ONLY | NautilusTrader 2.0.0rc9, LGPL-3.0-only, pre-release; 84 tests pass on x86_64 and ARM64 using pytest 9.2.0. Known liquidation/accounting/queue and worker gaps remain. |
-| Direct dependency licences | REVIEWED | NautilusTrader LGPL-3.0-only; pytest MIT; orjson 3.11.3 Apache-2.0 OR MIT. Newer orjson 3.13.0 has MPL-2.0-covered files; not adopted. |
-| IDEAL-specific security / SBOM | OPEN | First audit found 4 known vulnerabilities in 2 packages; exact findings and remediation pending. Zizmor workflow analysis and CycloneDX SBOM generated, but report must be inspected. Transitive dependency hash lock and complete licence/SBOM review remain open. |
+| Direct dependency licences | REVIEWED WITH LIMITS | NautilusTrader LGPL-3.0-only; pytest 9.2.0 MIT; orjson 3.11.6 MPL-2.0 AND (Apache-2.0 OR MIT), selected to fix CVE-2025-67221 affecting 3.11.3. Review MPL file-level obligations before distribution. |
+| IDEAL-specific security / SBOM | PASS WITH LIMITS | Scoped parser and Nautilus POC scans each report zero known vulnerabilities; universal hash locks and CycloneDX SBOMs retained. Online zizmor auditor-persona scan reports no findings across nine workflows after fixing a concurrency-limits issue. Future product dependency graph is not covered. |
 | Documentation / audit trail | VERIFIED | Checkpoint audits 031–036, historical data validation, component matrix, roadmap, shortlist and research docs saved to main and fetched back for verification. |
 | Owner approval | OPEN | Final component selections/rejections and residual risk acceptance require explicit owner review. |
 
@@ -48,9 +48,9 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 
 ## Work required before Phase 01 can close
 
-- [ ] Inspect exact pip-audit findings, distinguish direct vs transitive and runtime vs dev exposure, upgrade/mitigate or document bounded exceptions; rerun until no unresolved high/critical findings.
-- [ ] Inspect Zizmor output, fix actionable workflow security findings, and rerun.
-- [ ] Produce and review a reproducible transitive dependency lock (hash-pinned) for the research POC/parser; preserve the generated CycloneDX SBOM and complete licence inventory.
+- [x] Scoped pip-audit review: parser and Nautilus POC locked environments report zero known vulnerabilities; orjson 3.11.6 replaces vulnerable 3.11.3 (CVE-2025-67221). Current product/runtime dependency graph does not yet exist and must be scanned when introduced.
+- [x] Online zizmor auditor-persona scan completed; one low-severity concurrency-limits finding in Nautilus POC workflow was fixed with workflow/ref concurrency cancellation. Final run #43825684618 reports no findings across nine workflows.
+- [x] Hash-pinned universal locks and CycloneDX SBOMs generated, installed/compared and retained for parser and Nautilus POC environments on the research branch. Review checkpoint 041; repeat for every future runtime/product dependency set.
 - [ ] Keep host selection deferred unless a concrete requirement forces it. If the Windows PC becomes necessary, measure mobile-data allowance/tethering and representative bandwidth first; then assess sleep/power, uptime, backup and outbound-only secure remote access. No provisioning or paid service without approval.
 - [ ] Final pass over every row in `docs/COMPONENT_SELECTION_MATRIX.md`; approve preferred candidates, reject alternatives, and record deferred items.
 - [ ] Confirm all final Phase 01 evidence and decisions are documented, indexed and fetched back from `main`.
@@ -68,6 +68,7 @@ Phase 01 closure does not itself authorise exchange credentials, account access,
 - [Checkpoint 034 — OKX seven-day boundary and risk classification](CHATGPT_CONVERSATIONS/2026-11-16-034-okx-seven-day-boundary-and-risk-classification.md)
 - [Checkpoint 035 — free-tier hosting alternatives](CHATGPT_CONVERSATIONS/2026-11-16-035-free-tier-hosting-alternatives.md)
 - [Checkpoint 036 — Tardis multi-day BBO validation](CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md)
+- [Checkpoint 041 — scoped security, locks and SBOM review](CHATGPT_CONVERSATIONS/2026-11-16-041-scoped-security-locks-and-sbom-review.md)
 
 
 ## Owner decision — seven-day dataset (16 November 2026)
