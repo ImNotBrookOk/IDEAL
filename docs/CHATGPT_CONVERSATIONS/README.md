@@ -117,3 +117,6 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-16-045-personal-finance-repository-audit.md](2026-11-16-045-personal-finance-repository-audit.md) | Comparative source-level audit of MoneyMatter, Actual Budget, Firefly III/Data Importer, Money Manager Ex, GnuCash, Beancount and hledger; security/licence/test findings; Akahu refresh/history/data-quality constraints; revised shortlist and Phase 02-only recommendation |
 
 | [2026-11-17-046-akahu-connector-source-audit.md](2026-11-17-046-akahu-connector-source-audit.md) | Pinned source audit of MoneyMatter v0.33.7 and Firefly III Data Importer v2.3.5 Akahu paths; idempotency vs update/delete reconciliation, pending transactions, transfer mapping, FX precision, mocked test coverage, credential handling and synthetic POC acceptance matrix; no code/runtime/bank connection authorised |
+
+
+| [2026-11-17-047-personal-finance-component-and-contract-research.md](2026-11-17-047-personal-finance-component-and-contract-research.md) | Expanded open-source audit (astt, krbob/portfolio, Formance, TigerBeetle, Akahu SDK, OFX Statement, Beangulp, rotki, Ghostfolio); licence and reuse dispositions; feasibility assessment; proposed source-observation, reconciliation and journal contract; no implementation or bank connection authorised |
