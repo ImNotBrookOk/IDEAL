@@ -224,73 +224,6 @@ Investigate complementary methods rather than relying on a single score:
 
 Statistical models are estimates, not guarantees. Correlations can change abruptly, historical data may omit new regimes, and tail events may be underrepresented. Risk decisions must retain explicit scenario and model limitations.
 
-### 6.9 Leverage, notional and liquidation buffer are distinct measures
-
-Leverage should not be used as a standalone proxy for risk. The design must distinguish:
-- **Configured leverage:** venue setting that influences initial margin and maximum permitted notional.
-- **Gross notional exposure:** total absolute market exposure, before offsets.
-- **Net directional exposure:** signed exposure after explicitly permitted aggregation.
-- **Effective leverage:** a named exposure measure divided by a named equity basis.
-- **Initial-margin utilisation:** initial margin consumed by positions and orders relative to the relevant venue margin base.
-- **Maintenance-margin utilisation:** maintenance requirement relative to the venue's applicable margin equity.
-- **Liquidation buffer/distance:** current mark-price distance to estimated liquidation, with the estimate's assumptions and freshness.
-- **Stress liquidation buffer:** remaining buffer after applying stressed price, funding, fee, collateral and margin-tier changes.
-
-A position with low configured leverage can still be too large relative to portfolio equity or liquidity. Conversely, raising configured leverage does not itself change the P&L sensitivity of an unchanged notional position, but it reduces initial margin posted and can reduce the loss buffer before liquidation. Therefore, risk policy must separately constrain notional/exposure, planned loss, portfolio stress loss, margin utilisation and liquidation distance.
-
-The venue's liquidation price is an estimate under its current assumptions, not a guaranteed exit price or a fixed boundary. IDEAL must not treat distance to liquidation as a substitute for stop/exit risk, nor assume it can close at the liquidation price.
-
-### 6.10 Margin mode, netting and hedge assumptions
-
-Isolated and cross margin change how losses propagate through collateral:
-- Isolated margin separates the collateral/risk assessment of a position, but the position can still be liquidated independently.
-- Cross margin shares equity across positions using the applicable collateral pool; one position's loss can impair other positions.
-- Portfolio margin may recognise offsets using a venue-specific model; those offsets are not automatically valid under IDEAL's own stress assumptions.
-
-The architecture must represent the actual account and position mode, collateral scope, settlement currency and venue-specific treatment of long/short legs. It must not assume that opposite positions cancel risk or funding. It must not assume that margin is netted across separate accounts or venues.
-
-Hedge credit should be granted only where the relationship is economically justified, executable under stress, supported by reliable data and explicitly represented in the stress model. Basis, correlation breakdown, funding mismatch, execution leg risk, venue failure and liquidation asymmetry can make a nominal hedge fail.
-
-### 6.7 Funding and perpetual basis risk
-
-Funding is a direct cash-flow component of holding perpetual contracts, not a cosmetic market indicator. Official venue documentation shows that:
-- funding is calculated from position value and the applicable funding rate;
-- positive and negative funding reverse which side pays;
-- position value is venue/contract-specific and may use mark price, contract multiplier and inverse conversion;
-- funding is charged only to positions held at the applicable funding time;
-- settlement intervals and rate limits can vary by contract and may be adjusted during extreme market conditions;
-- funding deductions can reduce available collateral or isolated margin and move liquidation risk closer.
-
-Sources:
-- Binance funding rates and settlement intervals: https://www.binance.com/en/support/faq/detail/360033525031
-- Binance funding interval updates: https://www.binance.com/en/support/announcement/detail/98d6b24d3e5c4f84a8ed04087997d8d0
-- Bybit funding fee calculation and dynamic interval behaviour: https://www.bybit.com/en/help-center/article/Funding-fee-calculation
-- OKX funding fee mechanism, including linear/inverse valuation and dynamically adjusted settlement frequency: https://www.okx.com/help/perps-funding-fee-mechanism
-
-Provisional implications:
-- Funding estimates must be versioned with contract, rate, interval, settlement timestamp and source.
-- The risk model should calculate projected funding cash flows under base and stressed funding scenarios, in the settlement asset and a reporting currency.
-- It must distinguish predicted rates from final settled rates and reconcile actual funding events into capital state.
-- It must not assume the usual funding interval remains fixed. A venue may change interval or limits.
-- Funding received must not be treated as guaranteed income or assumed to offset unrelated funding liabilities.
-- Funding costs should enter planned holding-period risk, stress loss and net expected trade economics.
-- Perpetual basis risk must be measured separately from spot/index movement. A hedge can remain directionally neutral while suffering basis divergence, funding imbalance or venue-specific pricing dislocation.
-
-### 6.8 Dynamic venue risk parameters
-
-Bybit's published risk-limit material states that market-liquidity assessments can lead to changes in risk limits, initial and maintenance margin rates, maximum leverage and position limits. The applicable risk tier can also change as marked position value changes.
-
-Source: https://www.bybit.com/en/help-center/article/Risk-Limit-Perpetual-and-Expiry-Contracts
-
-Provisional implications:
-- Instrument and account risk parameters are time-varying inputs, not static constants.
-- Venue parameter changes need source, effective time, retrieval time, version and affected instruments/accounts.
-- Risk calculations must recompute after a tier or parameter change.
-- A risk-increasing proposal must be rejected or restricted if current applicable parameters cannot be established.
-- Existing positions require continuous re-evaluation when maintenance margin, leverage caps, position limits or funding schedules change.
-- Historical research and backtests must use point-in-time venue parameters where available, not today's values applied retrospectively.
-
-
 ### 6.6 Capital and equity semantics
 
 Official exchange documentation demonstrates that wallet balance, total equity, adjusted equity, margin balance and available balance are different measures with different purposes. Binance's Futures documentation distinguishes wallet balance (including realised P&L, funding and commissions) from margin balance (wallet balance plus unrealised P&L) and available balance. Bybit distinguishes total equity, margin balance and available balance, including collateral haircuts. OKX distinguishes total equity, adjusted equity after collateral haircuts and available equity.
@@ -330,6 +263,72 @@ At minimum, investigate coherent combinations of:
 - failed hedge execution;
 - ADL or other venue loss-allocation events;
 - exchange insolvency, withdrawal restrictions or counterparty impairment.
+
+### 6.7 Leverage, notional and liquidation buffer are distinct measures
+
+Leverage should not be used as a standalone proxy for risk. The design must distinguish:
+- **Configured leverage:** venue setting that influences initial margin and maximum permitted notional.
+- **Gross notional exposure:** total absolute market exposure, before offsets.
+- **Net directional exposure:** signed exposure after explicitly permitted aggregation.
+- **Effective leverage:** a named exposure measure divided by a named equity basis.
+- **Initial-margin utilisation:** initial margin consumed by positions and orders relative to the relevant venue margin base.
+- **Maintenance-margin utilisation:** maintenance requirement relative to the venue's applicable margin equity.
+- **Liquidation buffer/distance:** current mark-price distance to estimated liquidation, with the estimate's assumptions and freshness.
+- **Stress liquidation buffer:** remaining buffer after applying stressed price, funding, fee, collateral and margin-tier changes.
+
+A position with low configured leverage can still be too large relative to portfolio equity or liquidity. Conversely, raising configured leverage does not itself change the P&L sensitivity of an unchanged notional position, but it reduces initial margin posted and can reduce the loss buffer before liquidation. Therefore, risk policy must separately constrain notional/exposure, planned loss, portfolio stress loss, margin utilisation and liquidation distance.
+
+The venue's liquidation price is an estimate under its current assumptions, not a guaranteed exit price or a fixed boundary. IDEAL must not treat distance to liquidation as a substitute for stop/exit risk, nor assume it can close at the liquidation price.
+
+### 6.8 Margin mode, netting and hedge assumptions
+
+Isolated and cross margin change how losses propagate through collateral:
+- Isolated margin separates the collateral/risk assessment of a position, but the position can still be liquidated independently.
+- Cross margin shares equity across positions using the applicable collateral pool; one position's loss can impair other positions.
+- Portfolio margin may recognise offsets using a venue-specific model; those offsets are not automatically valid under IDEAL's own stress assumptions.
+
+The architecture must represent the actual account and position mode, collateral scope, settlement currency and venue-specific treatment of long/short legs. It must not assume that opposite positions cancel risk or funding. It must not assume that margin is netted across separate accounts or venues.
+
+Hedge credit should be granted only where the relationship is economically justified, executable under stress, supported by reliable data and explicitly represented in the stress model. Basis, correlation breakdown, funding mismatch, execution leg risk, venue failure and liquidation asymmetry can make a nominal hedge fail.
+
+### 6.9 Funding and perpetual basis risk
+
+Funding is a direct cash-flow component of holding perpetual contracts, not a cosmetic market indicator. Official venue documentation shows that:
+- funding is calculated from position value and the applicable funding rate;
+- positive and negative funding reverse which side pays;
+- position value is venue/contract-specific and may use mark price, contract multiplier and inverse conversion;
+- funding is charged only to positions held at the applicable funding time;
+- settlement intervals and rate limits can vary by contract and may be adjusted during extreme market conditions;
+- funding deductions can reduce available collateral or isolated margin and move liquidation risk closer.
+
+Sources:
+- Binance funding rates and settlement intervals: https://www.binance.com/en/support/faq/detail/360033525031
+- Binance funding interval updates: https://www.binance.com/en/support/announcement/detail/98d6b24d3e5c4f84a8ed04087997d8d0
+- Bybit funding fee calculation and dynamic interval behaviour: https://www.bybit.com/en/help-center/article/Funding-fee-calculation
+- OKX funding fee mechanism, including linear/inverse valuation and dynamically adjusted settlement frequency: https://www.okx.com/help/perps-funding-fee-mechanism
+
+Provisional implications:
+- Funding estimates must be versioned with contract, rate, interval, settlement timestamp and source.
+- The risk model should calculate projected funding cash flows under base and stressed funding scenarios, in the settlement asset and a reporting currency.
+- It must distinguish predicted rates from final settled rates and reconcile actual funding events into capital state.
+- It must not assume the usual funding interval remains fixed. A venue may change interval or limits.
+- Funding received must not be treated as guaranteed income or assumed to offset unrelated funding liabilities.
+- Funding costs should enter planned holding-period risk, stress loss and net expected trade economics.
+- Perpetual basis risk must be measured separately from spot/index movement. A hedge can remain directionally neutral while suffering basis divergence, funding imbalance or venue-specific pricing dislocation.
+
+### 6.10 Dynamic venue risk parameters
+
+Bybit's published risk-limit material states that market-liquidity assessments can lead to changes in risk limits, initial and maintenance margin rates, maximum leverage and position limits. The applicable risk tier can also change as marked position value changes.
+
+Source: https://www.bybit.com/en/help-center/article/Risk-Limit-Perpetual-and-Expiry-Contracts
+
+Provisional implications:
+- Instrument and account risk parameters are time-varying inputs, not static constants.
+- Venue parameter changes need source, effective time, retrieval time, version and affected instruments/accounts.
+- Risk calculations must recompute after a tier or parameter change.
+- A risk-increasing proposal must be rejected or restricted if current applicable parameters cannot be established.
+- Existing positions require continuous re-evaluation when maintenance margin, leverage caps, position limits or funding schedules change.
+- Historical research and backtests must use point-in-time venue parameters where available, not today's values applied retrospectively.
 
 ## 7. Provisional control lifecycle
 
