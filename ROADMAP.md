@@ -207,3 +207,10 @@ Current assessment:
 - GnuCash, Beancount and hledger are accounting/ledger references, not full phone-first bank-connected platforms.
 
 Recommended architecture remains a separate IDEAL Personal Finance domain with its own ledger, manual/file import first, read-only bank sync only after separate approval, and read-only aggregation from investment/trading engines. No external app is selected or adopted. No code, dependencies, bank accounts, credentials, payments or hosting are approved. D-017 remains Proposed; D-001 unchanged; Phase 02 architecture/contracts only; Phases 03–19 remain LOCKED.
+
+
+### Phase 02 research checkpoint — pinned NZ bank connector audit (17 November 2026)
+
+Pinned source-level audit completed for MoneyMatter v0.33.7 and Firefly III Data Importer v2.3.5. Findings are recorded in docs/PERSONAL_FINANCE_RESEARCH.md, section 17. MoneyMatter has stronger mocked Akahu E2E coverage, pagination, 14-day overlap, ID idempotency, unlink/relink recovery and balance history, but skips changed rows with an existing ID, does not reconcile upstream deletions, does not fetch pending rows, marks imported rows not-transfer and omits explicit Akahu FX conversion fields. Firefly has Akahu external-ID deduplication but much thinner Akahu integration test coverage; it also lacks update/delete/pending reconciliation and has a two-decimal FX conversion assumption.
+
+No candidate connector satisfies IDEAL's source-reconciliation requirements. MoneyMatter remains an integration/UX reference; Firefly remains an external accounting reference. Future synthetic fixture tests are specified in section 17.5. No app was installed, no fixture was executed, no code/dependency changed, no credentials or real bank data used, and no runtime/provider adopted. D-017 remains Proposed; D-001 unchanged; Phase 02 only; Phases 03–19 remain LOCKED.
