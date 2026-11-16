@@ -1519,3 +1519,166 @@ One pillar cannot certify another. A health monitor can report that a service is
 - Manual fallback and recovery procedures are necessary for external account state that IDEAL cannot observe during outages.
 
 No emergency action, credential operation, exchange integration, backup service, external scan or runtime change is approved. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 19. Research tranche 8 — independent risk assurance and architecture acceptance evidence (17 November 2026)
+
+**Status:** Provisional assurance design. No test suite, validator, implementation or deployment is approved by this research.
+
+### 19.1 Evidence reviewed
+
+- FIA's July 2024 best-practices paper says trading software and infrastructure should be tested before new systems, versions or updates enter production, and identifies exchange conformance testing as an important practice. It also covers pre-trade controls, post-trade drop-copy reconciliation and operational safeguards. https://www.fia.org/sites/default/files/2024-07/FIA_WP_AUTOMATED%20TRADING%20RISK%20CONTROLS_FINAL_0.pdf
+- CFTC's 2013 automated trading concept release discussed pre-trade controls, post-trade reports, system safeguards, development/testing/supervision and testing under stressed conditions. It is a historical concept release, not a statement that every discussed proposal became binding law or applies to IDEAL. https://www.cftc.gov/PressRoom/PressReleases/6683-13
+- Federal Reserve model-risk guidance describes effective challenge, conceptual soundness, outcome analysis and ongoing monitoring; these provide useful independent assurance patterns for IDEAL's risk and quantitative models, without implying banking regulatory applicability. https://www.federalreserve.gov/frrs/guidance/supervisory-guidance-on-model-risk-management.htm
+- NIST SP 800-61 Rev. 3 integrates incident response and continuous improvement into cybersecurity risk management; it supports testing incident and recovery controls, not just normal operations. https://csrc.nist.gov/pubs/sp/800/61/r3/final
+
+### 19.2 Assurance objective
+
+Every material risk control should have a demonstrable assurance case:
+- **Claim:** what safety property the control is intended to guarantee.
+- **Context:** scope, operating assumptions, dependencies and failure conditions.
+- **Argument:** why the design and implementation should achieve the claim.
+- **Evidence:** tests, source review, independent calculation, replay, fault injection, operational telemetry and approval records.
+- **Residual risk:** what remains unproven, unobservable or outside the test boundary.
+
+A green test summary is not sufficient without traceability to the control, requirement, exact code/configuration version, test data and expected property. Evidence must be reproducible and attributable.
+
+### 19.3 Independence and effective challenge
+
+Independent review must challenge:
+- the requirement and risk assumption, not merely whether the code matches the author's interpretation;
+- the mathematical model and implementation separately;
+- the source data and its point-in-time correctness;
+- the strategy/backtest selection process;
+- venue adapter semantics and undocumented assumptions;
+- control failure and recovery behaviour;
+- the tests themselves, including whether they would detect a plausible defect.
+
+The same implementation must not be the sole oracle for its own correctness. Use independent reference calculations, hand-checked examples, alternative implementations, invariants and external primary documentation. Where independent reviewers are unavailable, record the limitation and require a higher level of conservative restriction; do not describe self-review as independent assurance.
+
+### 19.4 Requirements-to-control-to-test traceability
+
+Maintain a traceability matrix linking:
+- owner-approved requirement and decision;
+- hazard/threat/failure mode;
+- risk-control owner and authority boundary;
+- inputs, freshness and provenance contract;
+- deterministic calculation/policy version;
+- expected safe state and action;
+- test case and test data fixture;
+- evidence artifact and result;
+- reviewer/approval and residual risk.
+
+Every hard limit and every fail-closed condition must map to at least one positive test, one boundary test, one negative/adversarial test and one relevant failure/recovery test. Critical controls require independent recomputation or a second verification path where feasible.
+
+### 19.5 Testing layers
+
+A complete verification strategy should combine:
+
+1. **Static analysis and source review:** type/contract checks, dependency/security checks, policy immutability and code review.
+2. **Unit and mathematical tests:** exact formula, decimal precision, boundary and rounding correctness.
+3. **Property-based/metamorphic tests:** invariants across broad generated inputs and transformations.
+4. **Contract tests:** adapters, data schemas, order/account semantics and version compatibility.
+5. **Integration tests:** risk, data, health and security interactions using deterministic synthetic services.
+6. **Historical replay:** point-in-time market/account data replay with event ordering and realistic costs.
+7. **Scenario and stress tests:** market gaps, correlated shocks, collateral depeg, funding, liquidity and margin changes.
+8. **Fault injection:** stale data, partial failures, disconnects, delayed acknowledgements, duplicate messages, clock drift, corrupted state and dependency outages.
+9. **Recovery/restore tests:** clean rebuild, backup integrity, account-state reconciliation and no automatic resumption.
+10. **Independent review and adversarial challenge:** challenge assumptions, bypasses, shared dependencies and test blind spots.
+
+Testing levels are complementary. Passing unit tests does not prove venue semantics; passing a backtest does not prove execution; passing a security scan does not prove risk controls; passing an exchange conformance test does not prove IDEAL's portfolio risk model.
+
+### 19.6 Critical safety invariants
+
+The following are candidate invariants to formalise and test; they do not create new numeric policy:
+
+- No risk-increasing action is approved when critical input, account state, instrument metadata, policy version or required risk service is missing, stale, contradictory or unauthenticated.
+- An approval is bound to the exact action parameters, account/instrument scope, policy version, evidence snapshot, validity interval and idempotency key; a changed order requires a new approval.
+- Total reserved plus filled exposure cannot exceed the applicable allocation; partial fills transfer reservation to position exposure exactly once.
+- Unknown order/cancel state retains conservative reservation; a timeout cannot release risk.
+- No strategy, model or AI agent can change hard limits, permission scope, approval state or risk policy.
+- A risk-control or security incident cannot be cleared by process restart, clock reset, UTC rollover, account switch or model identifier change.
+- A daily loss reset cannot clear rolling loss or peak-to-trough drawdown.
+- A risk-reducing action must be verified against current position and venue semantics; labels such as reduce-only are not trusted without validation.
+- Missing or stale collateral/FX/margin data cannot be interpreted as additional free capital.
+- All material risk decisions and control transitions produce durable, ordered, attributable audit evidence.
+- A failure in one foundation cannot be silently certified by another foundation's health state.
+
+### 19.7 Test quality and mutation resistance
+
+Tests must prove that controls fail when they should. For critical logic:
+- introduce deliberate mutations such as removing a limit check, reversing a comparison, using stale data, dropping a fee, rounding quantity up, releasing reservation on cancel request, or allowing an AI permission change;
+- confirm that tests detect these mutations;
+- test both the expected rejection and the reason code/evidence;
+- ensure test fixtures cover values immediately below, at and above boundaries;
+- use randomized/property-based inputs with recorded seeds and reproducible failing examples;
+- avoid brittle tests that merely repeat the implementation's own formula line-for-line.
+
+Coverage percentage alone is not a safety metric. Prioritise hazard/control coverage, mutation detection, independent calculation and fault-path coverage.
+
+### 19.8 Quantitative model assurance
+
+For each model/strategy, assurance evidence should include:
+- exact experiment population and selection count;
+- immutable data/code/environment manifest;
+- point-in-time dataset and universe validation;
+- leakage and survivorship checks;
+- baseline and no-trade comparisons;
+- out-of-sample, walk-forward and regime-specific results;
+- realistic fee/funding/slippage/latency/liquidity assumptions;
+- uncertainty intervals and sensitivity to assumptions;
+- drawdown, tail loss, exposure and capital usage;
+- independent reimplementation or cross-check of critical metrics;
+- performance monitoring and suspension criteria;
+- known limitations and conditions under which the model must not be used.
+
+Performance metrics must be recalculated from raw or canonical return series independently. A strategy report generated by the same pipeline being evaluated is not sufficient evidence on its own.
+
+### 19.9 Control effectiveness monitoring
+
+After any future approval, monitor control operation and not just market outcomes:
+- risk checks invoked, passed, rejected and bypass attempts;
+- stale/missing input rejection counts;
+- policy/configuration changes and approvals;
+- order reservation and reconciliation mismatches;
+- venue margin and shadow model disagreement;
+- kill-switch activation, acknowledgement and recovery;
+- model drift and validation exceptions;
+- audit pipeline completeness and clock/sequence integrity;
+- backup/restore test results;
+- security control and access anomalies.
+
+A control that has never triggered may be functioning—or may be disconnected, misconfigured or untested. Use synthetic canary tests and periodic controlled exercises where safe and authorised.
+
+### 19.10 Release and change-control gates
+
+A material change to risk code, policy, data contract, instrument metadata, venue adapter, execution logic, model, dependency or permission requires impact assessment and appropriate regression/revalidation.
+
+A release evidence package should contain:
+- exact source commit and build artefact hash;
+- dependency lock and security scan results;
+- requirement/decision/test traceability;
+- full test results and reproducibility instructions;
+- independent review findings and resolution;
+- risk-control and model validation evidence;
+- known issues, residual risk and rollback plan;
+- owner approval and scope of authorised capability.
+
+No test or review process may be weakened to obtain a pass. A failed critical test blocks the affected capability. A waiver must not conceal a failed hard safety invariant.
+
+### 19.11 Architecture assurance gaps still open
+
+- Define the independent risk service boundary and failure-domain separation.
+- Formalise exact D-006 equity denominator and D-008 reset/valuation semantics.
+- Define account/venue state source-of-truth hierarchy and reconciliation tolerances.
+- Define critical input freshness/clock rules and risk-service availability policy.
+- Define risk decision/approval record schema and idempotency contract.
+- Define exact emergency control authority and owner recovery workflow.
+- Complete cross-foundation interface contracts and traceability.
+- Independently challenge every provisional assumption, including whether the proposed architecture is proportionate and implementable.
+
+### 19.12 Conclusions and boundaries
+
+Risk assurance is an ongoing evidence system, not a one-time sign-off. The architecture must prove both normal operation and safe failure, use independent challenge, and preserve the exact evidence that justifies each approval.
+
+No implementation, validator invocation, test environment, exchange integration, deployment or phase advancement is authorised. Phase 02 remains active; Phases 03–19 remain locked.
