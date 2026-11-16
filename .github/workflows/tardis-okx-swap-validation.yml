@@ -75,9 +75,11 @@ jobs:
             --bbo-output research-output/official-okx-bbo.csv \
             research-output/okx-official-BTC-USDT-SWAP-L2-400-2026-11-01.tar.gz \
             | tee research-output/okx-official-l2-summary.json
+          LC_ALL=C sort -s -t, -k1,1n research-output/tardis-okx-bbo.csv -o research-output/tardis-okx-bbo-sorted.csv
+          LC_ALL=C sort -s -t, -k1,1n research-output/official-okx-bbo.csv -o research-output/official-okx-bbo-sorted.csv
           python research/compare_bbo_series.py \
-            --tardis-bbo research-output/tardis-okx-bbo.csv \
-            --official-bbo research-output/official-okx-bbo.csv \
+            --tardis-bbo research-output/tardis-okx-bbo-sorted.csv \
+            --official-bbo research-output/official-okx-bbo-sorted.csv \
             | tee research-output/tardis-vs-official-bbo.json
           python - <<'PY'
           import csv, gzip, json
@@ -114,7 +116,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-          rm -f research-output/*.csv.gz research-output/*.tar.gz research-output/*-bbo.csv
+          rm -f research-output/*.csv.gz research-output/*.tar.gz research-output/*-bbo.csv research-output/*-bbo-sorted.csv
 
       - name: Upload audit summaries only
         if: always()
