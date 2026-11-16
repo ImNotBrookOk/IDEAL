@@ -511,3 +511,32 @@ The architecture recommendation is therefore:
 4. No runtime, dependency, credential, bank connection, installation, host or implementation is selected by this audit.
 
 **Approval boundary unchanged:** D-017 remains Proposed; D-001 remains accepted and unchanged; Phase 02 architecture/contracts only; Phases 03–19 remain LOCKED.
+
+
+### 17.7 Backup, restore and credential-key lifecycle follow-up
+
+A second pinned-source pass inspected MoneyMatter v0.33.7 encryption and backup/restore code.
+
+**MoneyMatter credential encryption**
+- Akahu credentials are stored as an encrypted JSON object. The pinned encryption helper uses AES-256-GCM with a random IV and authentication tag.
+- The AES key is derived as SHA-256 of `APPLICATION_JWT_SECRET`. This means the deployment must preserve this secret securely and include it in disaster-recovery planning. Changing it without a migration/re-encryption process will make existing ciphertext undecryptable. No key-rotation workflow was identified in the inspected source; this remains an open security/operational question.
+- This is application-level encryption at rest for the credential field, not end-to-end encryption of the financial database.
+
+**MoneyMatter backup/restore**
+- The backup export E2E source explicitly tests that plaintext bank tokens, encrypted credential blobs and AI API keys are absent from every archive file. Bank connection rows remain for account linkage, but credentials are set to null.
+- The restore E2E source explicitly tests that a restored bank connection is inactive with a `RESTORED` reason, appears in the reauthentication-required list, and becomes active only after valid credentials are re-entered.
+- Restore tests cover same-user round-trip consistency, cross-user remapping, transaction/transfer/holding data, import-batch undo state, foreign-reference handling, checksums, malformed/newer archives and rollback on invalid data. These are source-level test observations; the suite was not executed here.
+- Attachments are explicitly excluded from the backup/restore registry because their binary files are not included. They require a separate backup and restore procedure if used.
+- The self-hosted deployment is a multi-service PostgreSQL/Redis/Docker stack. Redis is queue-only; database and attachment storage require their own backup strategy. Backup archives should be encrypted off-host by the operator and restore drills should verify ledger totals, balances, transfer pairs, attachment availability and credential reauthentication.
+
+**MoneyMatter transfer capability clarification**
+- The product supports manual/explicit transfer records generally, but the pinned Akahu provider still creates bank-imported transactions with `transferNature: not_transfer`. General product transfer capability must not be confused with automatic bank-feed transfer pairing. Any matching service elsewhere in the product would need a distinct provider-path test before relying on it for Akahu.
+
+**Firefly comparison**
+- The Akahu note builder preserves other-account details as notes, not as a resolved destination/source account relationship. The converter still maps the bank row to a deposit or withdrawal and does not demonstrate automatic two-sided transfer pairing.
+- The Data Importer stores Akahu tokens in server-side session or environment-backed configuration in the inspected path. The deployment must protect session storage, environment secrets, logs and the Firefly API token. No application-level encryption of Akahu credentials is visible in this importer SecretManager.
+
+**Updated security/recovery disposition**
+- MoneyMatter has a stronger explicit credential-at-rest and secret-safe backup/restore story in the pinned source than the Firefly Akahu importer path inspected. Its encryption key is deployment-critical and its attachment exclusion must be handled operationally.
+- Firefly remains attractive for double-entry accounting but its Akahu connector needs a deployment-specific secrets review and a synthetic restore/reconciliation exercise before any real data is considered.
+- Neither backup system has been runtime-tested by IDEAL. No backup was created, no restore executed, and no application installed.
