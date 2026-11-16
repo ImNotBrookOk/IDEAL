@@ -62,3 +62,31 @@ Corrective change: both OKX workflows now place raw archive removal in a separat
 ## Disposition
 
 The Tardis Binance Futures public sample/parser subgate passed. The OKX 11–12 November aggregate alignment gates passed; 13 November failed the aggregate side-consistency threshold and remains under diagnosis. No venue is selected. Live 10 ms full-depth entitlement, NZ derivatives eligibility, sequence continuity, passive-fill fidelity, free worker capacity and final component selection remain open. Phase 01 remains IN PROGRESS; Phase 02 and implementation phases remain LOCKED.
+
+
+## 6. Completed three-day side-consistency diagnostics
+
+The expanded workflow [#43777626875](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777626875) retained the original 98% aggregate gate and completed the diagnostic split:
+- 11 Nov: aggregate 99.1181%; same-timestamp 98.8713%; strict-preceding 99.1437%.
+- 12 Nov: aggregate 98.5424%; same-timestamp 98.0914%; strict-preceding 98.5905%.
+- 13 Nov: aggregate 97.8348%; same-timestamp 97.3518%; strict-preceding 97.8877%.
+
+For 13 Nov, side consistency by preceding-book age was 97.7814% for <=10 ms (4,412,377 trades), 99.6772% for 10–20 ms, 99.5023% for 20–50 ms and 99.5662% for >50 ms. Timestamp ties accounted for only 11,895 of 98,400 total mismatches; the strict-preceding group also missed the gate. The cause is not resolved. Possible explanations include sub-ms/ms event ordering, fast-market movement between samples, missed updates or unverified exchange trade-side semantics. Do not lower the threshold; retain the failure as a data-quality warning.
+
+The rerun artifact ID 14187715114 (3,348 bytes; SHA-256 3bab0de9a9659691165d0339d851fe70ebd9fb60cd557c66de2ac4492683d53b; expires 19 November 00:05 UTC) contains summaries/manifests only. The unconditional raw-data cleanup step succeeded.
+
+## 7. Same-day Tardis OKX Swap sample and official archive reconstructed
+
+Workflow [#43777769642](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777769642) reconstructed Tardis OKX Swap normalized L2 and the official OKX module-4 archive for 1 November 2026. Both produced valid books, but Tardis had 844,983 message groups, 13 snapshots and a 3,803.897 ms maximum gap; official OKX had 5,827,935 records, 96 snapshots and a 584 ms maximum interval, with 84.546% exact 10 ms intervals. Tardis normalized CSV has no raw WebSocket channel ID. It is therefore not proven to represent the VIP4+ 10 ms books-l2-tbt feed and must not be treated as equivalent. Direct BBO time-series comparison was then implemented test-first and is now part of the next rerun.
+
+Artifact ID 14186673619 (2,596 bytes; SHA-256 33d6a8fc07b1360683a8ada3cca0db7030012b9a906953ab320c82ce197ab734; expires 19 November 00:03 UTC) contains summaries/manifests only; cleanup passed.
+
+## 8. New draft component selection matrix
+
+Created `docs/COMPONENT_SELECTION_MATRIX.md`, a draft consolidating candidate stacks, licences, evidence, blockers and Phase 01 exit criteria. It makes no runtime selections and does not unlock Phase 02. Linked from ROADMAP.md.
+
+## 9. Governance and artifact-handling correction
+
+Added explicit rules to RULES.md and TESTING.md: raw market data must never be committed; cleanup must be a separate unconditional workflow step before artifact upload; only small manifests/hashes/summaries may be retained; test the failure path.
+
+The earlier failed alignment run artifact 14187155843 (1,739,958,772 bytes) temporarily contains raw archives because the old in-step cleanup was bypassed by the failing assertion. It expires 18 November 2026 at 23:55 UTC. The available GitHub connector has no artifact-delete action; no deletion is claimed. Subsequent rerun artifact 14187715114 is only 3,348 bytes, confirming the corrected cleanup path for the alignment workflow.
