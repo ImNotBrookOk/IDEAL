@@ -135,3 +135,22 @@ Fetch-back verification is required after this record is committed.
 - No real bank data, account, token or credential accessed.
 - No provider, external product, hosting or runtime adopted.
 - No live trading, paper execution or financial transaction authorised.
+
+
+## Fetch-back verification addendum
+
+Fetched all five changed paths from the GitHub main branch after the commits. Verified:
+- research sections 18 and 19 are present;
+- F-004 research update is present and D-017 remains Proposed;
+- ROADMAP Phase 02 checkpoint is present and Phases 03–19 remain LOCKED;
+- conversation index includes checkpoint 047;
+- this conversation record is present with the governance state and source list.
+
+Fetched blob SHAs:
+- PERSONAL_FINANCE_RESEARCH.md: 54726a549f74f6eb58230e09837b4de48b43bb0c
+- FUTURE_SCOPE_IDEAS.md: bb66d850dbc47be150d299ab6b43ae53abd8b589
+- ROADMAP.md: 14ec2ed427235b9f26d9717cadf7a722aa48173e
+- conversation README: 1d5889206dc046a7e3dfedcfe6867b4aef16138d
+- checkpoint 047: 6fbc8594865192abc20390151e58fcae70bc7523
+
+No code, dependencies, tests, runtime, credentials, bank connections or financial records were changed or used.
