@@ -80,3 +80,12 @@ This decision does not approve the remaining Phase 01 gates, close Phase 01, unl
 ## Hosting constraint update — phone-first (16 November 2026)
 
 The owner prefers phone-only operation and has an existing Windows PC/laptop available only as a fallback if materially necessary. Internet access is via mobile phone data, so data caps, tethering policy, variable connectivity and bandwidth cost must be treated as constraints. The PC is not selected or provisioned. Do not assume it is an always-on host or expose it directly to the internet. Prefer phone as control/monitoring client, GitHub Actions for offline research/CI, compressed/incremental transfers and low-bandwidth summaries. Host selection remains OPEN and deferred; revisit PC feasibility only after a concrete requirement and measured bandwidth case. See [checkpoint 040](CHATGPT_CONVERSATIONS/2026-11-16-040-phone-first-hosting-constraints.md).
+
+
+## Scoped dependency/security audit update — 16 November 2026
+
+The latest completed audit [#43807450930](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43807450930) generated and installed universal hash-pinned locks, generated CycloneDX SBOMs, and ran pip-audit and zizmor. The parser environment (orjson 3.11.6) and Nautilus POC environment (six resolved packages) each reported **zero known vulnerabilities**. Zizmor reported no findings across nine workflow files, but ran offline and reported one suppressed finding; some online checks are unavailable offline.
+
+The hash locks and two SBOMs are retained on the research branch under `research/requirements.lock`, `research/nautilus_poc/requirements.lock`, and `research/sbom/`. This closes the scoped reproducible-lock gate and scoped vulnerability scan. It does not constitute a complete future-product SBOM or repository-wide security clearance. Inspect the suppressed Zizmor finding and decide whether online workflow analysis is warranted before closing Phase 01.
+
+The final parser pin is orjson 3.11.6. It fixes the uncontrolled-recursion issue affecting 3.11.3 (CVE-2025-67221), but introduces MPL-2.0-covered source files alongside Apache-2.0 OR MIT. Retain 3.11.6 for internal research; review MPL file-level obligations before distribution/product integration. See [checkpoint 041](CHATGPT_CONVERSATIONS/2026-11-16-041-scoped-security-locks-and-sbom-review.md).
