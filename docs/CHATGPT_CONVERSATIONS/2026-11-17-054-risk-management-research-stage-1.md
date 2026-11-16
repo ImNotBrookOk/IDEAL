@@ -101,37 +101,14 @@ Phase 01 remains closed. Phase 02 remains active. Phases 03–19 remain locked. 
 
 All created/updated paths must be fetched from `main` after writing and checked for expected content. Read-back evidence and blob SHAs will be appended after successful verification.
 
-## Read-back verification
+## Final read-back verification
 
-All five paths below were fetched from `main` after the writes. Expected checkpoint markers were present in each response.
+All five paths below were fetched from `main` after the latest research updates. Expected checkpoint markers were present in every fetched response.
 
 | Path | Read-back blob SHA | Check |
 |---|---|---|
 | `docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md` | `c8c0faac3a57a6bfadb3503fef0e56d7cccc3d28` | PASS |
-| `docs/CHATGPT_CONVERSATIONS/2026-11-17-054-risk-management-research-stage-1.md` | `9cd7f2f8c2c41d931bf694f1ec58afb23a3cc663` | PASS |
+| `docs/CHATGPT_CONVERSATIONS/2026-11-17-054-risk-management-research-stage-1.md` | `9fe40e04255d26147e9658997ac06de78984e38a` | PASS |
 | `ROADMAP.md` | `0524a7954d8b7455bcbee030c2e980fab95bc67e` | PASS |
 | `README.md` | `6721b17425f106fbcfcdc504a5025012179021b2` | PASS |
 | `docs/CHATGPT_CONVERSATIONS/README.md` | `18270ab71bcb622c40838bb477646d6f82ddf62b` | PASS |
-
-## Research extensions added to the working draft
-
-After the initial checkpoint write, the risk research document was expanded to cover:
-- distinct capital measures: economic equity, risk-adjusted equity, venue margin equity and available margin, with immutable financial events separated from time-varying valuations;
-- leverage, gross/net notional, margin utilisation and liquidation buffer as distinct risk measures;
-- isolated/cross/portfolio margin, collateral scope, netting and hedge assumptions;
-- funding cash flows, contract-specific valuation, settlement timing and dynamic funding intervals;
-- time-varying venue risk tiers, margin rates, leverage caps and position limits;
-- risk-policy classes and owner-controlled policy change governance;
-- hierarchical risk budgets and conservative reservations for working orders, partial fills and uncertain order states.
-
-Additional primary sources:
-- Binance Futures balance definitions: https://www.binance.com/en/blog/futures/457299340443288694
-- Bybit V5 wallet balance API: https://bybit-exchange.github.io/docs/v5/account/wallet-balance
-- Bybit Unified Trading Account glossary: https://www.bybit.com/en/help-center/article/Glossary-Unified-Trading-Account
-- OKX account overview: https://www.okx.com/docs-v5
-- Binance funding rates: https://www.binance.com/en/support/faq/detail/360033525031
-- Bybit funding fee calculation: https://www.bybit.com/en/help-center/article/Funding-fee-calculation
-- OKX perpetual funding mechanism: https://www.okx.com/help/perps-funding-fee-mechanism
-- Bybit risk limits: https://www.bybit.com/en/help-center/article/Risk-Limit-Perpetual-and-Expiry-Contracts
-
-The document remains a working research draft. No final risk architecture, venue, margin mode or new numerical policy has been approved.
