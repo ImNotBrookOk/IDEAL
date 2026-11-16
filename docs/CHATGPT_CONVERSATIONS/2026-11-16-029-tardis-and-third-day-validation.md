@@ -143,3 +143,8 @@ The earlier Tardis maximum gap of 3,803.897 ms is based on local receive timesta
 ## 16. Current OKX feed/RPI constraints
 
 Official OKX documentation confirms VIP4+ for the 400-level 10 ms books-l2-tbt channel (7 Apr 2026 change); checksum is deprecated and live feeds must use seqId/prevSeqId (23 Jun 2026); books-rpi is a separate public 400-level 100 ms consolidated organic+RPI stream with totalQty/nonRpiQty/count (28 Jul 2026). rpiTakerAccess defaults false and account/instrument permission must be checked. Historical module-4 archives lack live sequence IDs and an RPI/non-RPI split. These requirements are recorded in section 12.17 and the component matrix.
+
+
+## 17. New Zealand derivatives licensing scope clarified
+
+Current FMA guidance states that a derivatives issuer making a regulated offer of derivatives to retail investors must hold the relevant licence; its derivative definition includes recurrently traded futures and swaps. This is an issuer/offeror obligation, not a licence requirement on the user merely operating a personal trading system. The cross-border application to a specific offshore exchange, contracting entity and crypto perpetual-swap product still requires independent legal confirmation. No venue eligibility is asserted. Sources: https://www.fma.govt.nz/business/services/derivatives-issuers/ and https://www.fma.govt.nz/business/services/derivatives-issuers/?stage=Live. The component matrix now states this distinction.
