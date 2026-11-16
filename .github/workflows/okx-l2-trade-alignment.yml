@@ -7,6 +7,7 @@ on:
     paths:
       - research/okx_trade_book_alignment.py
       - research/tests/test_okx_trade_book_alignment.py
+      - research/requirements.lock
 
 permissions:
   contents: read
