@@ -284,10 +284,10 @@ This proves Tardis's public first-of-month sample can be acquired and the docume
 ## 13.13 Same-day Tardis OKX sample is not equivalent to official 10 ms archive (16 November 2026)
 
 The same-day 1 November 2026 Tardis normalized OKX Swap L2 and official module-4 archive were both reconstructed successfully in [workflow #43777769642](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777769642). Both had zero invalid reconstructed states, but the data cadence differed materially:
-- Tardis: 844,983 message groups, 28.22m level rows, 13 snapshots, maximum message gap 3,803.897 ms.
-- Official OKX module 4: 5,827,935 records, 54.55m level rows, 96 snapshots, maximum record interval 584 ms; 84.546% of intervals were exactly 10 ms.
+- Tardis: 844,983 message groups, 28.22m level rows, 13 snapshots, maximum local receive-time gap 3,803.897 ms.
+- Official OKX module 4: 5,827,935 records, 54.55m level rows, 96 snapshots, maximum exchange-timestamp interval 584 ms; 84.546% of intervals were exactly 10 ms.
 
-The Tardis sample therefore has ~6.90x fewer message groups and substantially longer gaps. The CSV does not expose the raw OKX WebSocket channel identifier, so it is not proven to be the 10 ms VIP4+ books-l2-tbt stream. Treat it as a validated normalized/coarser reference, not as a substitute for official 10 ms history. Direct timestamp-aligned BBO comparison and exact channel provenance remain open. Artifact 14186673619 (2,596 bytes) contains summaries only; unconditional cleanup passed before upload. Full details: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.14.
+The Tardis sample therefore has ~6.90x fewer message groups. The listed gap metrics use different clocks (Tardis local receive time versus official exchange timestamps) and are not directly comparable. The CSV does not expose the raw OKX WebSocket channel identifier, so it is not proven to be the 10 ms VIP4+ books-l2-tbt stream. A later direct BBO comparison found 99.85065% exact match under strict preceding/no-lookahead and 100.000% when same-timestamp official updates are included. Treat it as an accurate but sparser reference, not as a substitute for official 10 ms history; exact channel provenance remains open. Artifact 14186673619 (2,596 bytes) contains summaries only; unconditional cleanup passed before upload. Full details: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.14.
 
 
 ## 13.14 Third-day trade/BBO quality gate did not pass (16 November 2026)
@@ -309,3 +309,15 @@ Current official documentation confirms:
 - rpiTakerAccess defaults false. RPI taker access requires explicit order flag and instrument permission (rpi=2 means enabled and permitted; rpi=1 means enabled but user lacks permission).
 
 The 10 ms historical archive has no seqId/prevSeqId and no documented RPI/non-RPI quantity split. It must not be treated as a complete representation of executable liquidity without an RPI coverage/permission decision. If the selected account can access RPI, retain the 10 ms organic stream and 100 ms consolidated RPI stream separately and account for the latter's sampling lag. Official source: https://www.okx.com/docs-v5/log_en/ (7 Apr, 23 Jun and 28 Jul 2026 changes). Full implications: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.17.
+
+
+## 13.17 Direct Tardis/official OKX BBO match is strong, but sample is sparser (16 November 2026)
+
+A strict no-lookahead comparison of 844,982 Tardis OKX BBO states against the official 1 Nov module-4 archive completed in [workflow #43778824863](https://github.com/ImNotBrookOk/IDEAL):
+- 99.85065% exact BBO match using only the strictly preceding official state;
+- 100.000% exact match when official updates with the same exchange timestamp are included as an upper bound;
+- 70.664% of Tardis samples shared an exact official timestamp;
+- no Tardis samples lacked a preceding official state;
+- strict-preceding official BBO age median 10 ms, p95 60 ms, max 529 ms.
+
+This shows strong BBO state agreement on the sampled day. It does not make the Tardis feed 10 ms-equivalent: it had 844,983 message groups versus 5,827,935 official records and only 13 snapshots versus 96. The Tardis local receive-gap metric and official exchange timestamp-gap metric are different clocks; do not compare them directly. The normalized CSV does not expose the raw OKX channel ID. Keep Tardis as an accurate but sparser BBO reference, not a replacement for the official 10 ms stream. Full evidence: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), sections 12.14 and 12.18.
