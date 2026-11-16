@@ -115,6 +115,19 @@ The following is a design hypothesis for review, not an accepted final contract.
 
 A lower level cannot override a higher-level rejection. Venue rules may be stricter than IDEAL policy; IDEAL must respect the stricter effective constraint.
 
+### 4.4 Risk policy classes and change governance
+
+Research should distinguish at least four classes of constraints:
+
+- **Hard policy constraints:** owner-approved boundaries that cannot be weakened by strategies, models, automated optimisation or ordinary runtime configuration.
+- **Warning/escalation thresholds:** earlier signals that trigger alerts, throttles, strategy restrictions or review before a hard boundary is reached.
+- **Dynamic conservative constraints:** deterministic reductions in permitted risk when volatility, liquidity, concentration, data quality or venue conditions deteriorate. These may reduce capacity within pre-approved rules but must not silently increase hard limits.
+- **Venue constraints:** instrument/account-specific requirements and limits imposed by the venue. The effective permitted action must satisfy both IDEAL policy and venue rules; the stricter applicable constraint governs.
+
+Policy changes should be versioned, attributable, reasoned, effective-dated and auditable. A strategy or AI agent cannot change risk policy, thresholds, allocation or permission. No automated policy tuning may weaken hard constraints. Temporary exceptions, if ever allowed, require a separate owner-controlled process with scope, reason, expiry and audit evidence.
+
+The existing D-009 principle that progression gates are predefined and deterministic is relevant: strategy eligibility and risk allocation cannot be changed by an AI component to bypass a gate. Unknown regime or absence of an eligible strategy remains a no-trade condition under D-004.
+
 ### 4.2 Action classification
 
 Every proposed action should be classified by its effect, not merely by its order type:
@@ -329,6 +342,23 @@ Provisional implications:
 - A risk-increasing proposal must be rejected or restricted if current applicable parameters cannot be established.
 - Existing positions require continuous re-evaluation when maintenance margin, leverage caps, position limits or funding schedules change.
 - Historical research and backtests must use point-in-time venue parameters where available, not today's values applied retrospectively.
+
+### 6.11 Risk-budget hierarchy and reservation
+
+Research a hierarchical risk-budget model:
+1. owner-approved total portfolio risk capacity;
+2. portfolio allocations by instrument, risk cluster or strategy family;
+3. bounded strategy allocations;
+4. per-trade planned and stressed risk budgets;
+5. order-level reservations for all potentially executable quantity.
+
+The sum of allocations and reservations must not exceed the applicable parent budget. An unused allocation must not be silently borrowed by another strategy. A reserve for model error, execution uncertainty and correlated stress should be considered explicitly rather than allocating the entire nominal risk budget.
+
+A risk budget should be reserved when an order becomes potentially executable, not only after it fills. For partial fills, filled exposure transitions into position risk and the unfilled remainder continues to reserve order risk. The reservation is released only after a confirmed terminal order state or other verified state transition. Unknown acknowledgement/cancellation state retains the conservative reservation.
+
+The risk engine must avoid double-counting a filled quantity as both an open order and a position, while preserving an auditable transition between the two. Multiple simultaneous orders must be tested under plausible fill combinations. Risk budgets should use explicit currency conversion sources, timestamps and conservative treatment of conversion uncertainty.
+
+Dynamic risk allocation, if eventually permitted, must be deterministic, bounded by owner-approved policy and capable of reducing risk as conditions deteriorate. Strategy performance, recent losses or AI-generated confidence must not automatically expand risk capacity. Any change to the accepted D-006 or D-008 numerical policies requires explicit owner approval and a superseding decision record.
 
 ## 7. Provisional control lifecycle
 
