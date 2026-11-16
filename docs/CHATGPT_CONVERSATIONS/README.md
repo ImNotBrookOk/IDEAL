@@ -100,3 +100,6 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-16-040-phone-first-hosting-constraints.md](2026-11-16-040-phone-first-hosting-constraints.md) | Owner prefers phone-first/phone-only; existing Windows PC is fallback only; mobile data bandwidth/caps/tethering are constraints; no host selected or provisioned; low-bandwidth research continues |
+
+
+| [2026-11-16-041-scoped-security-locks-and-sbom-review.md](2026-11-16-041-scoped-security-locks-and-sbom-review.md) | Scoped pip-audit clean for parser and Nautilus POC; universal hash locks and CycloneDX SBOMs retained on research branch; orjson 3.11.6 fixes CVE-2025-67221 but adds MPL-2.0-covered files; Zizmor offline scan no findings with one suppressed item |
