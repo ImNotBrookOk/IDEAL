@@ -71,3 +71,10 @@ The 7–13 November 2026 BTC-USDT-SWAP 400-level L2/trade alignment is classifie
 - Across 19,918,682 aligned trades, 97.726% are <=20 ms old, 99.525% <=50 ms, 99.924% <=100 ms and 99.995% <=250 ms. Daily maxima reach 475–519 ms.
 
 Any downstream feature must declare its own maximum observation age, exclude or down-weight stale states, and preserve per-day source-quality flags. A 20 ms freshness budget excludes 7.906% of 7 Nov observations; it is not acceptable to silently use those stale states as current. The data does not establish exact cross-channel event ordering, FIFO queue position, passive-fill accuracy or exchange-equivalent execution. See `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md` section 12.20 and audit checkpoint 034.
+
+
+## Owner disposition — seven-day OKX research dataset (16 November 2026)
+
+The owner accepts the 7–13 November 2026 OKX BTC-USDT-SWAP 400-level L2/trade sample for **conditional historical market-structure research** and directs that Phase 01 work continue without another rerun of the same seven-day test. The revalidation workflow [#43803546192](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43803546192) completed all calculations and unconditional cleanup, but the original strict screen remains 5/7 days passed and 2/7 failed. This owner disposition does not change those results or waive downstream freshness controls.
+
+Retain 7 and 8 November as conditional-quality days, preserve the one 7 November initial-snapshot boundary trade, and enforce model-specific age budgets. The dataset is not execution-grade fill calibration and does not establish event ordering, queue position, passive-fill fidelity, sequence continuity or live readiness. Reopen this test only if a materially new source, schema, alignment method or requirement justifies it. See checkpoint 039.
