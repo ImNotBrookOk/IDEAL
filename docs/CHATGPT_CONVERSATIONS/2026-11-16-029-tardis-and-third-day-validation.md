@@ -155,3 +155,15 @@ Current FMA guidance states that a derivatives issuer making a regulated offer o
 Workflow [#43779462348](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43779462348) passed the full research test suite and reran the Tardis/official OKX sample with separate local/exchange timestamp metrics and stable BBO sorting. Tardis OKX sample: 844,983 messages, 13 snapshots, max exchange gap 3,800 ms, max local receive gap 3,803.897 ms, zero exchange timestamp backsteps. Official archive: 5,827,935 records, 96 snapshots, max exchange interval 584 ms. The strict/inclusive BBO results were unchanged: 99.85065% strict-preceding and 100% inclusive same-timestamp.
 
 Artifact 14186924404 (3,022 bytes; SHA-256 592e4058eb28952f2b9c173bec75c51353c3c59408664d4da1c222975ffe2b74; expires 19 Nov 00:21 UTC) contains summaries/manifests only; cleanup passed.
+
+
+## 19. Updated Tardis Binance sample timestamp-gap audit
+
+The updated parser rerun [#43779443928](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43779443928) passed the full research unit suite and confirmed for the 1 Nov Binance Futures sample:
+- 3,242,436 message groups; 79,438,130 level rows; all 3,242,436 book states valid.
+- Maximum local receive-time gap 276.101 ms.
+- Maximum exchange-timestamp gap 56 ms.
+- Zero exchange-timestamp backsteps.
+- Trade sample remains 1,190,743 rows with validated sides, positive price/amount and monotonic local timestamps.
+
+This demonstrates why the two clocks must be tracked separately. Artifact 14188365266 (1,552 bytes; SHA-256 d685999f1e0015833abc82c3de141d78d2ed10a1af28dde70bc7ec7849b98b9a; expires 19 Nov 00:22 UTC) contains summaries only; cleanup passed.
