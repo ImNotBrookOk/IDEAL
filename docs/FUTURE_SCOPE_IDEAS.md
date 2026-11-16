@@ -301,3 +301,26 @@ Research/design scope:
 - Portable separation of mobile UI/control plane from ingestion, storage and compute, enabling later PC/private-server deployment.
 
 No provider, paid data feed, hosting, always-on compute, runtime code or dependency is selected or authorised. F-006 is architecture/research scope only and does not change D-001 or unlock any phase. See `docs/DATA_INTEGRITY_AND_HEALTH.md`.
+
+
+### F-007 — Historical Data Archive, Research Dataset and Controlled Learning (Proposed, 17 November 2026)
+
+The owner is leaning toward IDEAL collecting its own historical data, with the possibility of later using clean accumulated history to improve research, forecasting, risk models, strategy evaluation and assistant workflows. This is not approval for unlimited retention, paid feeds or model training.
+
+Research/design scope:
+- evidence-grade, versioned source archive with provenance, timestamps, revisions, content hashes and schema versions;
+- tiered retention by data class, volume, research value, licence and storage cost; no assumption that all tick/depth data must be stored forever;
+- strict separation of market data, private account/financial records, personal data and AI traces;
+- versioned point-in-time datasets, explicit label maturity and no look-ahead/survivorship leakage;
+- separate assistant/agent learning from quantitative market-model learning;
+- offline-only training and evaluation, model registry, immutable artefacts and reproducible experiments;
+- champion/challenger and shadow evaluation before any later paper/live promotion; no self-modifying live strategy;
+- deterministic automation as default; AI optional, local-first where practical, replaceable and never authoritative for data validation or risk.
+
+No data provider, archive policy, model, AI framework, GPU/PC, package, subscription, hosting or runtime is selected or authorised. See docs/DATA_INTEGRITY_AND_HEALTH.md and docs/AI_MODEL_AND_LEARNING_RESEARCH.md.
+
+### F-008 — Local AI Runtime and Agent Framework Research (Proposed, 17 November 2026)
+
+Investigate local-first AI frameworks and open-weight models as optional IDEAL assistant/research components. Initial candidates include OpenJarvis (Apache-2.0), Hermes Agent (MIT), llama.cpp (MIT), Ollama (MIT), Chronos-2 (Apache-2.0), TimesFM (Apache-2.0), IBM Granite Time Series PatchTST-FM-r2 (dual licence), FinGPT and Qlib (MIT). Model licences, dataset licences, security boundaries, hardware needs, performance, energy and maintenance must be independently checked. Salesforce Moirai 2.0-R-Small currently declares CC-BY-NC-4.0 and is not a default candidate for commercial-compatible use.
+
+OpenJarvis is the strongest current architectural research candidate for local-first assistant primitives and trace-driven model/tool routing, but its documented security caveats (host shell execution, sandbox/capability defaults and a confirmation setting not enforced in every entry point) require hardening; it is not approved as an IDEAL execution authority or supervisor. Hermes is a useful comparator but has a broad host-access tool model. Quantitative time-series models are research baselines, not assumed predictive edges. No framework/model is adopted and no AI usage is authorised in a critical trading/data path.
