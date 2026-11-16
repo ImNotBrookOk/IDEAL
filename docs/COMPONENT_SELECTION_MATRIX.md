@@ -78,3 +78,8 @@ On 16 November 2026, the owner explicitly accepted the seven-day OKX 400-level L
 ## Hosting constraint update — owner operating preference
 
 Phone-first operation is preferred. The owner has an existing Windows PC/laptop available only if required, but internet access is via mobile phone data. Treat mobile bandwidth, data caps, tethering and variable connectivity as material constraints. The PC is an unselected fallback, not a presumed always-on host. Do not provision or configure it, open inbound ports, or run continuous high-volume feeds without a measured need and explicit approval. GitHub Actions remains research CI only. Host selection remains OPEN and deferred. See [checkpoint 040](CHATGPT_CONVERSATIONS/2026-11-16-040-phone-first-hosting-constraints.md).
+
+
+## Dependency security and licence update — 16 November 2026
+
+The scoped audit [#43807450930](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43807450930) found zero known vulnerabilities in the locked parser environment (orjson 3.11.6) and NautilusTrader POC environment (six packages). Hash-pinned universal locks and CycloneDX SBOMs are retained on the research branch. orjson 3.11.6 is deliberately retained because 3.11.3 is affected by CVE-2025-67221; 3.11.6 adds MPL-2.0-covered files, so licence obligations must be reviewed before distribution/product use. Zizmor found no issues in offline mode, with one suppressed finding; online/full workflow security review remains limited. See [checkpoint 041](CHATGPT_CONVERSATIONS/2026-11-16-041-scoped-security-locks-and-sbom-review.md).
