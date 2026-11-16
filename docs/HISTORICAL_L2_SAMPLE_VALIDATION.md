@@ -656,3 +656,41 @@ The Tardis sample's 13 snapshots and 3.804-second maximum gap are consistent wit
 Artifact ID `14186673619`, 2,596 bytes, SHA-256 `33d6a8fc07b1360683a8ada3cca0db7030012b9a906953ab320c82ce197ab734`, contains only manifests, hashes and small summaries; expires 19 November 2026 at 00:03 UTC. The workflow's separate unconditional cleanup step completed before artifact upload.
 
 **Disposition:** Tardis's OKX Swap normalized sample is validated as a parseable source, but not as a 10 ms-equivalent source. Keep it as an independent coarser/reference dataset until direct BBO matching and channel provenance are established. The official OKX archive remains the stronger high-frequency historical candidate. No runtime vendor is selected.
+
+
+### 12.15 Third-day OKX alignment diagnostic — 13 November failed initial side gate (16 November 2026)
+
+Expanded three-day workflow [#43777626875](https://github.com/ImNotBrookOk/IDEAL) reran the full no-lookahead alignment and added side-consistency splits by timestamp tie and preceding-book age. The 13 November aggregate remains below the predeclared 98.0% initial side-consistency screen; no threshold was lowered.
+
+| Measurement | 13 Nov 2026 |
+|---|---:|
+| Aligned trades | 4,544,561 |
+| Book records | 7,391,929 |
+| Trades without preceding book | 0 |
+| Invalid book matches | 0 |
+| Median preceding-book age | 5 ms |
+| p95 preceding-book age | 10 ms |
+| Maximum preceding-book age | 507 ms |
+| Same-timestamp trades | 449,173 (9.884%) |
+| Aggregate side consistency | 97.8348% |
+| Aggregate side mismatch | 2.1652% |
+| Outside preceding sampled spread | 64.718% |
+| Outside-distance p95 | 1.89 bps |
+| Outside-distance max | 17.77 bps |
+
+**Side consistency split:**
+
+| Subset | Trades | Consistent | Mismatch | Consistency |
+|---|---:|---:|---:|---:|
+| Same timestamp as book update | 449,173 | 437,278 | 11,895 | 97.3518% |
+| Strictly preceding timestamp | 4,095,388 | 4,008,883 | 86,505 | 97.8877% |
+| Preceding-book age <=10 ms | 4,412,377 | 4,314,485 | 97,892 | 97.7814% |
+| Age 10–20 ms | 83,650 | 83,380 | 270 | 99.6772% |
+| Age 20–50 ms | 43,002 | 42,788 | 214 | 99.5023% |
+| Age >50 ms | 5,532 | 5,508 | 24 | 99.5662% |
+
+The same-timestamp subset is weaker, but only accounts for 11,895 of 98,400 mismatches (~12.1%). The strict-preceding subset also fails at 97.8877%. Mismatches are concentrated in the <=10 ms age bucket; older-age buckets are above 99.5%. Therefore this is not explained solely by same-timestamp ties or the long stale tail. Plausible explanations include sub-millisecond/millisecond event-order ambiguity, fast market movement between sampled updates, source-side sequencing gaps, or an unverified assumption about the meaning of the exchange trade-side field. The current evidence does not distinguish these causes.
+
+**Disposition:** retain the failed 98% result as a quality warning. Do not lower the threshold or claim three-day alignment acceptance. The 10 ms feed remains usable for sampled market-quality research with uncertainty bounds, but its trade/BBO directional alignment is not consistently within the initial target across all three days. Sequence IDs/checksums and exact event ordering remain absent. Further work must verify trade-side semantics, test more days/market regimes, and quantify BBO agreement against an independent source before this gate can be closed.
+
+The rerun artifact ID `14187715114` (3,348 bytes, SHA-256 `3bab0de9a9659691165d0339d851fe70ebd9fb60cd557c66de2ac4492683d53b`) contains summaries/manifests only and expires 19 November 2026 at 00:05 UTC. The separate unconditional cleanup step completed successfully before upload. The earlier failed-run artifact `14187155843` still temporarily contains raw archives and expires 18 November 2026 at 23:55 UTC; this was recorded in conversation audit 029 and the workflow cleanup defect is corrected.
