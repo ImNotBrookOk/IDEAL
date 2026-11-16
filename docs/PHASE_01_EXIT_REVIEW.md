@@ -9,8 +9,7 @@
 
 Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. It is not ready to close. The remaining blockers are now concentrated in two areas:
 
-1. **Persistent $0 core compute:** no reliable free cloud worker is proven. An existing Windows PC/laptop is available as a fallback, but phone-data bandwidth/caps/tethering, stable uptime, power and safe remote administration are unverified; the owner prefers phone-first operation, so host selection is explicitly deferred unless a concrete requirement forces it.
-2. **Owner approval:** the component matrix and explicit accepted/rejected/deferred choices still require final review and approval.
+1. **Owner approval:** the component recommendations and full matrix still require final review and explicit approval to close Phase 01. Infrastructure is now a documented deferral, not a reason to provision hardware: no reliable $0 cloud host is proven, and the owner prefers phone-first operation with a Windows PC only as fallback if a concrete requirement forces it.
 
 The scoped research dependency/security gates now pass: both locked Python environments have zero known vulnerabilities, hash-pinned locks and CycloneDX SBOMs are retained, and online zizmor auditor-persona analysis reports no findings after a concurrency-control fix. These controls cover the two current research environments and nine workflows, not a future product dependency graph. orjson 3.11.6 MPL obligations remain relevant before distribution.
 
@@ -26,7 +25,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | Independent Tardis comparison | PASS WITH LIMITS | 1 Sep, 1 Oct, 1 Nov strict-preceding exact BBO match >99.3%; inclusive 100%. Tardis is materially sparser and has multi-second gaps; secondary sampled BBO only. |
 | Live feed entitlement | DOCUMENTED | OKX 10 ms books-l2-tbt VIP4+; standard books 100 ms; RPI channel separate and permissioned. Historical archives do not prove live entitlement. |
 | NZ legal / venue eligibility | CONTAINED BY EXCLUSION | No venue selected; venue selection, exchange accounts and connectivity explicitly excluded pending independent product/entity-specific NZ legal review. |
-| $0 persistent worker | OPEN — deferred | Oracle A1 remains an unreliable sole host; GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO is supporting edge/relay only. Existing Windows PC/laptop is a fallback, but mobile-data limits, uptime/power and remote-access safety are unverified; phone-first preferred. |
+| $0 persistent worker | DEFERRED BY OWNER | Oracle A1 remains an unreliable sole host; GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO is supporting edge/relay only. Existing Windows PC/laptop is a fallback, but mobile-data limits, uptime/power and remote-access safety are unverified; phone-first preferred. |
 | Engine POC | RESEARCH CANDIDATE ONLY | NautilusTrader 2.0.0rc9, LGPL-3.0-only, pre-release; 84 tests pass on x86_64 and ARM64 using pytest 9.2.0. Known liquidation/accounting/queue and worker gaps remain. |
 | Direct dependency licences | REVIEWED WITH LIMITS | NautilusTrader LGPL-3.0-only; pytest 9.2.0 MIT; orjson 3.11.6 MPL-2.0 AND (Apache-2.0 OR MIT), selected to fix CVE-2025-67221 affecting 3.11.3. Review MPL file-level obligations before distribution. |
 | IDEAL-specific security / SBOM | PASS WITH LIMITS | Scoped parser and Nautilus POC scans each report zero known vulnerabilities; universal hash locks and CycloneDX SBOMs retained. Online zizmor auditor-persona scan reports no findings across nine workflows after fixing a concurrency-limits issue. Future product dependency graph is not covered. |
@@ -52,8 +51,8 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 - [x] Scoped pip-audit review: parser and Nautilus POC locked environments report zero known vulnerabilities; orjson 3.11.6 replaces vulnerable 3.11.3 (CVE-2025-67221). Current product/runtime dependency graph does not yet exist and must be scanned when introduced.
 - [x] Online zizmor auditor-persona scan completed; one low-severity concurrency-limits finding in Nautilus POC workflow was fixed with workflow/ref concurrency cancellation. Final run #43825684618 reports no findings across nine workflows.
 - [x] Hash-pinned universal locks and CycloneDX SBOMs generated, installed/compared and retained for parser and Nautilus POC environments on the research branch. Review checkpoint 041; repeat for every future runtime/product dependency set.
-- [ ] Keep host selection deferred unless a concrete requirement forces it. If the Windows PC becomes necessary, measure mobile-data allowance/tethering and representative bandwidth first; then assess sleep/power, uptime, backup and outbound-only secure remote access. No provisioning or paid service without approval.
-- [ ] Final pass over every row in `docs/COMPONENT_SELECTION_MATRIX.md`; approve preferred candidates, reject alternatives, and record deferred items.
+- [x] Host selection intentionally deferred by owner: phone-first control/monitoring, Windows PC/laptop only as fallback if a concrete need arises. If revisited, measure mobile-data allowance/tethering and representative bandwidth first; then assess sleep/power, uptime, backup and outbound-only secure remote access. No provisioning or paid service authorised.
+- [ ] Review [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md) and every row in `docs/COMPONENT_SELECTION_MATRIX.md`; approve preferred candidates, reject alternatives, and record any changes.
 - [ ] Confirm all final Phase 01 evidence and decisions are documented, indexed and fetched back from `main`.
 - [ ] Obtain explicit owner approval to close Phase 01 and unlock Phase 02.
 
