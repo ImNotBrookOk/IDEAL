@@ -8,8 +8,6 @@ on:
       - .github/workflows/okx-l2-trade-alignment.yml
       - research/okx_trade_book_alignment.py
       - research/tests/test_okx_trade_book_alignment.py
-      - research/okx_trade_book_alignment.py
-      - research/tests/test_okx_trade_book_alignment.py
 
 permissions:
   contents: read
@@ -22,7 +20,7 @@ jobs:
   align:
     name: Validate preceding-book trade alignment
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Check out research branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -45,13 +43,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p research-output
-          for day in 11 12 13; do
+          for day in 07 08 09 10 11 12 13; do
             curl --fail --show-error --location --retry 3 --retry-all-errors \
               --connect-timeout 20 --max-time 2400 \
               --output "research-output/BTC-USDT-SWAP-L2-400-2026-11-$day.tar.gz" \
               "https://static.okx.com/cdn/okx/match/orderbook/pro/L2/400lv/daily/202611$day/BTC-USDT-SWAP-L2orderbook-400lv-2026-11-$day.tar.gz"
           done
-          for day in 11 12 13 14; do
+          for day in 07 08 09 10 11 12 13 14; do
             curl --fail --show-error --location --retry 3 --retry-all-errors \
               --connect-timeout 20 --max-time 2400 \
               --output "research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-$day.zip" \
@@ -118,23 +116,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for day in 11 12 13; do
-            if [ "$day" = "11" ]; then
-              start_ms=1794355200000
-              end_ms=1794441600000
-            elif [ "$day" = "12" ]; then
-              start_ms=1794441600000
-              end_ms=1794528000000
-            else
-              start_ms=1794528000000
-              end_ms=1794614400000
-            fi
+          for day in 07 08 09 10 11 12 13; do
+            next_day=$(date -u -d "2026-11-$day +1 day" +%d)
+            start_ms=$(date -u -d "2026-11-$day 00:00:00" +%s%3N)
+            end_ms=$(date -u -d "2026-11-$next_day 00:00:00" +%s%3N)
             python research/okx_trade_book_alignment.py \
               --l2 "research-output/BTC-USDT-SWAP-L2-400-2026-11-$day.tar.gz" \
               --trades \
-                research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-11.zip \
-                research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-12.zip \
-                research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-13.zip \
+                "research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-$day.zip" \
+                "research-output/BTC-USDT-SWAP-trades-UTC8-2026-11-$next_day.zip" \
               --start-ms "$start_ms" \
               --end-ms "$end_ms" \
               | tee "research-output/trade-book-alignment-2026-11-$day.json"
@@ -142,17 +132,25 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          for day in ("11", "12", "13"):
+          failures = []
+          for day in ("07", "08", "09", "10", "11", "12", "13"):
               summary = json.loads(Path(f"research-output/trade-book-alignment-2026-11-{day}.json").read_text())
-              assert summary["aligned_trades"] > 0
-              assert summary["no_preceding_book"] == 0
-              assert summary["invalid_book_trades"] == 0
-              assert summary["sample_age_ms"]["p95"] <= 20
-              assert summary["side_consistency_pct"] >= 98.0
-              print(f"2026-11-{day}: acceptance PASS")
+              gates = {
+                  "aligned": summary["aligned_trades"] > 0,
+                  "no_missing_book": summary["no_preceding_book"] == 0,
+                  "no_invalid_book": summary["invalid_book_trades"] == 0,
+                  "p95_age_le_20ms": summary["sample_age_ms"]["p95"] <= 20,
+                  "side_consistency_ge_98pct": summary["side_consistency_pct"] >= 98.0,
+              }
+              failed = [name for name, passed in gates.items() if not passed]
+              print(f"2026-11-{day}: {'PASS' if not failed else 'FAIL'} gates={gates}")
               print("Trades:", summary["aligned_trades"], "age:", summary["sample_age_ms"])
               print("Age tail:", summary["sample_age_threshold_counts"])
               print("Side consistency:", summary["side_consistency_pct"])
+              if failed:
+                  failures.append((day, failed))
+          if failures:
+              raise SystemExit(f"Initial acceptance gates failed: {failures}")
           PY
           cat research-output/manifest.txt
 
