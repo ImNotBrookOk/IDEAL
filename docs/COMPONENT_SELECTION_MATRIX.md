@@ -49,7 +49,7 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 3. **Sequence continuity:** OKX historical archive schema lacks sequence IDs/checksums; live books/book-rpi continuity uses seqId/prevSeqId because checksum is deprecated. Tardis normalized CSV omits exchange sequence IDs. Reconstructed valid books do not prove no lost updates.
 4. **Passive fills:** L2 market-by-price is not L3; no true FIFO queue position. Do not claim passive-fill accuracy.
 5. **Execution-quality gate:** 11–12 Nov OKX aggregate side-consistency passed; 13 Nov missed the original 98% threshold at 97.835%. Diagnose timestamp ties and age buckets without relaxing the gate.
-6. **Independent source comparison:** Tardis Binance and OKX normalized samples reconstructed; same-day OKX comparison showed materially lower message volume/longer gaps than official archive; direct BBO matching and channel provenance remain pending.
+6. **Independent source comparison:** Tardis Binance and OKX normalized samples reconstructed; same-day OKX comparison showed 99.85065% strict-preceding exact BBO match (100% inclusive same-timestamp upper bound), but ~6.90x fewer messages and fewer snapshots; raw channel provenance and multi-day repeatability remain pending.
 7. **$0 runtime feasibility:** GitHub Actions is CI only; Oracle A1 capacity, region and resource performance remain unverified. No paid infrastructure.
 8. **Licensing and version pins:** exact commits, transitive dependency licences, stable releases, vulnerability posture and commercial data rights must be rechecked before adoption.
 
@@ -57,7 +57,7 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 
 - [ ] Third-day OKX side-consistency failure explained; original failed result retained.
 - [x] Third consecutive OKX archive structural reconstruction passed (workflow #43777630729).
-- [ ] Direct timestamp-aligned Tardis OKX vs official OKX BBO comparison and channel provenance completed.
+- [x] Direct timestamp-aligned Tardis OKX vs official OKX BBO comparison completed (99.85065% strict-preceding exact match; 100% inclusive same-timestamp upper bound).\n- [ ] Exact Tardis OKX raw channel provenance and multi-day BBO agreement confirmed.
 - [x] Historical and live feed entitlement documented separately (10 ms live channel VIP4+; standard 100 ms channel).
 - [ ] New Zealand product/entity/legal eligibility confirmed or venue explicitly excluded.
 - [ ] $0 persistent worker feasibility proven on a permitted region/resource plan, or a viable alternative identified.
