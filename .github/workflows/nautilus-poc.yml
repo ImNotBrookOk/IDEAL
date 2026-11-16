@@ -37,7 +37,6 @@ jobs:
           python-version: "3.14"
           cache: "pip"
           cache-dependency-path: research/nautilus_poc/requirements.lock
-      - research/nautilus_poc/requirements.lock
       - name: Install pinned research dependencies
         run: |
           python -m pip install --upgrade pip
