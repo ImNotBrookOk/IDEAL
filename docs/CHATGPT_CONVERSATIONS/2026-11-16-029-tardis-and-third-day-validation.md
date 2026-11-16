@@ -121,3 +121,25 @@ Official OKX change logs were checked:
 - 28 July 2026: books-rpi is a separate public 400-level 100 ms consolidated organic+RPI book; levels contain totalQty/nonRpiQty/count and sequence validation uses seqId/prevSeqId. rpiTakerAccess defaults false; instrument permission rpi=2 is required for a user with RPI permission.
 
 The 10 ms historical archive does not carry live sequence IDs or a documented RPI split. It cannot be assumed to represent all executable liquidity. If a selected account can access RPI, IDEAL must retain organic 10 ms and consolidated RPI 100 ms streams separately and account for RPI order flags and the slower sampling cadence. This is documented in validation report section 12.17 and the component matrix.
+
+
+## 14. Direct Tardis/official OKX BBO comparison completed
+
+Workflow [#43778824863](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43778824863) completed the direct exchange-timestamp comparison:
+- 844,982 Tardis BBO samples; zero without a preceding official state.
+- 597,102 samples (70.664%) shared an exact timestamp with an official update.
+- Strict-preceding/no-lookahead exact BBO match: 99.85065%; bid match 99.85159%; ask match 99.85136%.
+- Strict-preceding official BBO age: median 10 ms, p95 60 ms, maximum 529 ms.
+- Inclusive same-timestamp upper-bound exact BBO match: 100.000%.
+
+This validates strong sampled BBO agreement for the 1 Nov day, while the Tardis stream remains much sparser (844,983 messages vs 5,827,935 official records; 13 vs 96 snapshots). The 100% inclusive result is not the conservative result; retain 99.85065% strict-preceding. Exact raw WebSocket channel provenance and multi-day repeatability remain open.
+
+Artifact 14187915961 (2,991 bytes; SHA-256 74d5c38cee84ced1e398fc51ea81a2d6b06152482e99689dc21d0229b0b95e69; expires 19 Nov 00:16 UTC) contains only summaries/manifests; raw L2/trade/archive and BBO CSVs were removed before upload.
+
+## 15. Tardis timestamp-gap clock correction
+
+The earlier Tardis maximum gap of 3,803.897 ms is based on local receive timestamps, whereas the official archive's 584 ms maximum interval is based on exchange timestamps. These values must not be directly compared. A test-first parser update now reports local receive gaps and exchange timestamp gaps separately, plus exchange timestamp backsteps. The next Tardis run will regenerate the precise exchange-time gap metrics. The direct BBO comparator uses exchange timestamps and stable sorting.
+
+## 16. Current OKX feed/RPI constraints
+
+Official OKX documentation confirms VIP4+ for the 400-level 10 ms books-l2-tbt channel (7 Apr 2026 change); checksum is deprecated and live feeds must use seqId/prevSeqId (23 Jun 2026); books-rpi is a separate public 400-level 100 ms consolidated organic+RPI stream with totalQty/nonRpiQty/count (28 Jul 2026). rpiTakerAccess defaults false and account/instrument permission must be checked. Historical module-4 archives lack live sequence IDs and an RPI/non-RPI split. These requirements are recorded in section 12.17 and the component matrix.
