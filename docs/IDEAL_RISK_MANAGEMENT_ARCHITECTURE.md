@@ -984,3 +984,148 @@ Unresolved and deliberately not selected:
 - operational actions permitted during a margin or liquidation emergency.
 
 Next tranche: drawdown controls, loss containment and capital preservation; then strategy/model risk and emergency controls. No numerical limits, venue, account mode or implementation is adopted by this tranche.
+
+
+## 16. Research tranche 5 — drawdown controls, loss containment and capital preservation (17 November 2026)
+
+**Status:** Provisional architecture research. No new threshold, cooldown, drawdown policy or emergency execution authority is approved.
+
+### 16.1 Evidence reviewed
+
+- FIA's July 2024 automated trading controls paper describes pre-trade maximum order size, maximum intraday position, price tolerance, cancel-on-disconnect, kill switches, order management, post-trade drop-copy reconciliation and conformance testing. It reinforces layered controls before and after order entry. https://www.fia.org/sites/default/files/2024-07/FIA_WP_AUTOMATED%20TRADING%20RISK%20CONTROLS_FINAL_0.pdf
+- SEC Rule 15c3-5 guidance for US broker-dealers with securities market access requires pre-set aggregate credit/capital thresholds and rejection of erroneous/duplicative orders, access restrictions, immediate post-trade reports and regular control review. This rule does not directly apply to IDEAL's initial crypto-perpetual research scope; it is a control-design reference only. https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-questions/divisionsmarketregfaq-0
+- The SEC's market-access final rule explains the rationale for controls that systematically limit financial exposure and prevent erroneous orders before they enter a market. Again, this is not a claim that IDEAL is subject to this securities-market rule. https://www.sec.gov/rules-regulations/2011/06/risk-management-controls-brokers-or-dealers-market-access
+- FIA exchange risk-control material lists order/position limits, margin limits, kill switches, cancel-on-disconnect, throttles and order/trade drop-copy reconciliation as distinct controls. https://www.fia.org/sites/default/files/2025-01/Exchange%20Risk%20Controls%20%E2%80%93%20Overview%20of%20CME%20and%20ICE%20risk%20controls.pdf
+
+### 16.2 Loss-control hierarchy
+
+Risk controls should be layered from broad portfolio boundaries down to individual orders:
+
+1. **Owner-level capital protection:** approved maximum portfolio loss/drawdown and permitted domain authority.
+2. **Portfolio limits:** aggregate exposure, loss, concentration, liquidity, margin and correlated risk.
+3. **Strategy/family limits:** allocations and containment for shared signals, models, instruments or execution dependencies.
+4. **Instrument/position limits:** notional, direction, risk budget, leverage/margin and close-out constraints.
+5. **Order controls:** maximum size/notional, price collar, duplicate/repeat order, message rate, stale-price and potential-fill checks.
+6. **Runtime supervision:** market-data integrity, order/position reconciliation, loss and drawdown monitoring, heartbeat/disconnect controls.
+7. **Emergency containment:** stop new risk, cancel specified orders, preserve/restrict risk-reducing actions, and separately authorised close-out procedures.
+
+A lower-level control cannot override a higher-level boundary. Strategy-level stop logic is supplementary; the independent portfolio authority must be able to reject a strategy's risk increase even if the strategy believes its own stop remains valid.
+
+### 16.3 Loss and drawdown are different measurements
+
+Preserve separate metrics and baselines:
+
+- **Realised P&L:** booked trading outcomes after venue accounting rules, including realised fees and funding where applicable.
+- **Unrealised P&L:** current mark-based valuation with source, timestamp and price basis.
+- **Net trading P&L:** realised plus unrealised P&L after applicable fees, funding and charges, without double-counting settled events.
+- **Daily loss:** loss measured from a fixed UTC day-start baseline under the accepted D-008 definition.
+- **Rolling-period loss:** loss over a defined rolling window; this is not reset at UTC midnight.
+- **Peak-to-trough drawdown:** decline from a versioned equity high-water mark, with the peak and current equity measured on a consistent basis.
+- **Capital impairment:** reduction in owner-defined risk-adjusted capital after external flows and approved valuation changes are treated consistently.
+- **Stress loss:** scenario loss under specified adverse assumptions; it is not an observed P&L figure.
+
+Daily loss can reset while a larger drawdown persists. A portfolio can be below its high-water mark while today's loss is small or positive. No one metric is sufficient. Keep all measures visible and separately governed.
+
+### 16.4 Baseline, flow and accounting semantics
+
+Loss and drawdown calculations must define how to treat:
+- deposits and withdrawals;
+- transfers between internal accounts/venues;
+- realised P&L, unrealised P&L, fees, funding, rebates and liquidation charges;
+- settlement and session resets;
+- collateral revaluation and FX conversion;
+- stale/missing valuations and corrections;
+- account migration or venue reconciliation differences.
+
+External cash flows must not be misclassified as trading profit/loss. Internal transfers must not create profit or loss. High-water-mark updates should be based on a consistent equity definition and flow-adjustment method. The system must preserve both raw equity observations and adjusted performance series so that an accounting convention cannot hide an actual loss.
+
+D-008 remains unchanged: the hard daily-loss boundary is 10% of UTC day-start equity, realised plus unrealised P&L, followed by a 24-hour cooldown. Its precise reset, valuation, missing-data and recovery semantics must be formalised in the final contract before implementation; this research does not silently redefine them. This 10% is an outer hard boundary, not a target, a recommended normal drawdown or the only loss control.
+
+### 16.5 Proposed loss-containment states
+
+A deterministic state machine should govern the response. The final number and naming of states remain subject to architecture review, but the following separation is important:
+
+- **Normal:** all required evidence and controls valid; actions remain within every approved limit.
+- **Caution:** warning thresholds approached, volatility/liquidity deteriorating or loss accumulation abnormal; increase monitoring and constrain discretionary risk expansion.
+- **Restricted:** block new risk or reduce permissible size; allow only actions explicitly classified as risk-reducing under reliable state.
+- **Risk-off:** strategy-level activity stopped and risk-increasing orders prevented; cancel orders that could increase exposure where cancellation semantics are known.
+- **Emergency:** critical control/data/security/reconciliation failure, hard loss breach or imminent uncontrolled exposure; invoke the pre-approved emergency policy and preserve evidence.
+- **Recovery pending:** no automatic return to normal. Reconciliation, cause analysis, control-health checks and required owner approval must be completed.
+
+Transitions must be monotonic in severity when evidence degrades. Recovery must be explicit and evidence-backed. A brief improvement in P&L or a single healthy heartbeat must not clear a risk-off state.
+
+### 16.6 Separate the emergency actions
+
+These actions have different effects and must not be represented by one ambiguous "kill switch":
+
+1. **Block new risk:** reject new positions and orders that can increase exposure.
+2. **Cancel risk-increasing orders:** submit cancellation for identified working/conditional orders; retain reservations until terminal cancellation/fill is confirmed.
+3. **Cancel all orders:** may remove protective exits as well as risk-increasing orders. This must not be the default unless the approved emergency scenario requires it.
+4. **Permit risk-reducing orders:** allow only validated actions that reduce exposure under conservative fill assumptions; a nominal reduce-only flag is not sufficient if venue semantics/state are unknown.
+5. **Flatten/close positions:** market close-out can realise severe slippage and may be impossible during outage or illiquidity. It requires explicit pre-authorised policy, bounded execution logic and separate tests; it is not synonymous with stopping new orders.
+6. **Disable automation/credentials:** isolate a compromised or malfunctioning component; security incident response may require revoking credentials independently of portfolio liquidation.
+
+A kill switch should have defined scope (strategy, instrument, venue, account or entire system), trigger, authority, order/position treatment, timeout behaviour, audit record and recovery path. It must remain effective if the strategy process fails. No unapproved external operator or AI agent can release it.
+
+### 16.7 Drawdown response and capital preservation
+
+Potential controls to research and later calibrate:
+- reduce risk allocation as portfolio drawdown or stress loss increases;
+- prohibit risk-budget expansion during drawdown recovery;
+- cap simultaneous correlated exposure and new order reservations;
+- impose strategy-level loss and execution-error limits;
+- detect loss clustering, repeated stop slippage and abnormal funding/fee leakage;
+- suspend strategies whose realised execution diverges from the validated model;
+- require a fresh out-of-sample/replay review after material strategy or market-regime failure;
+- maintain unallocated risk capacity and collateral liquidity rather than using all available margin;
+- define maximum acceptable recovery time and capital impairment scenarios.
+
+Do not automatically increase size to recover losses, double after losing trades, widen stops to avoid booking losses or allow an AI/strategy to modify its own loss thresholds. Any dynamic risk scaling must be deterministic, bounded, monotonic in the conservative direction under worsening conditions, versioned and owner-approved. Improved recent performance cannot automatically raise hard risk limits.
+
+### 16.8 Trigger integrity and anti-reset protections
+
+Risk-limit state must not be bypassed by:
+- UTC day boundary or timezone changes;
+- process restart, app reinstall, machine reboot or lost local state;
+- venue/account/sub-account switching;
+- changing strategy identifiers or splitting one order into smaller orders;
+- moving collateral or positions between linked accounts;
+- resetting model state, rolling windows or high-water marks;
+- stale or delayed P&L updates;
+- partial fills or cancellation races;
+- manual trade activity outside IDEAL.
+
+The system should reconstruct portfolio-wide state from authoritative event history and reconcile venue evidence. A missing or conflicting state must trigger conservative restriction, not reset the loss counter to zero. External/manual positions and fees must be incorporated where the approved scope requires them; unknown external exposure must be treated as a material blind spot.
+
+### 16.9 Verification and independent assurance
+
+Required tests include:
+- exact D-008 baseline and boundary semantics, including realised/unrealised P&L and fees/funding;
+- daily reset while rolling drawdown remains active;
+- UTC/timezone changes, daylight-saving boundaries and leap/calendar edge cases;
+- deposits, withdrawals and internal transfers without P&L distortion;
+- high-water mark and flow-adjusted drawdown calculations;
+- process restart, state loss, account switching and external/manual trades;
+- simultaneous positions/orders and partial fills at the loss boundary;
+- stale mark prices, missing funding, late fee events and corrected venue history;
+- risk-state escalation and no premature de-escalation;
+- cancel-on-disconnect, cancel timeout, duplicate orders and uncertain order state;
+- kill-switch scope, idempotency and independence from the strategy process;
+- risk-reducing actions during restriction and emergency;
+- all-order cancellation accidentally removing protective exits;
+- close-out under gap, thin depth, exchange outage and partial fill;
+- compromised agent/strategy attempting to reset or weaken limits;
+- immutable audit evidence for trigger, decision, attempted action, venue acknowledgement and recovery approval.
+
+Use fault injection, replay, property-based tests and independent recomputation. A control is not proven merely because its normal path works; test race conditions, partial failures and contradictory sources.
+
+### 16.10 Policy preservation and open questions
+
+- D-006 remains 0.5% per trade; equity denominator unresolved.
+- D-008 remains exactly 10% of UTC day-start equity including realised and unrealised P&L, followed by 24-hour cooldown. No threshold changed.
+- Existing 1:3 reward/risk objective remains a research objective, not a guaranteed or independently validated result.
+- No new daily, rolling, weekly, monthly or peak-to-trough threshold is adopted.
+- No automatic flattening, cancellation scope, kill-switch trigger or restart/recovery authority is approved.
+- Drawdown thresholds, warning bands, cooldown extension, high-water mark basis, external/manual exposure capture and recovery criteria remain to be researched and owner-reviewed.
+
+Next tranche: strategy/model risk, including AI-generated strategies, model drift, validation and promotion gates; then emergency control and incident-recovery contracts. No runtime implementation or phase advancement is authorised.
