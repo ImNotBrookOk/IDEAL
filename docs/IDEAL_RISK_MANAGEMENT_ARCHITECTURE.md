@@ -505,3 +505,122 @@ Next research should deepen:
 12. cross-pillar contract review.
 
 No implementation or runtime work is authorised by this draft.
+
+
+## 13. Research tranche 2 — capital semantics and contract-aware sizing (17 November 2026)
+
+**Status:** Provisional research findings. No owner-approved change to D-006, D-008, venue selection, account mode or execution authority.
+
+### 13.1 Updated official evidence
+
+- OKX API documentation distinguishes `totalEq`, `adjEq` and `availEq`. Adjusted equity deducts collateral haircuts and is used in the venue's margin-ratio calculation; available equity has separate restrictions. The same documentation describes initial margin and maintenance margin as separate requirements, with pending orders included in relevant margin calculations. https://www.okx.com/docs-v5/en/
+- Bybit's V5 instrument endpoint exposes linear and inverse contract categories, contract type, settlement coin, leverage filters, price tick, quantity step, minimum notional, funding interval and funding-rate bounds. It warns that some order quantity limits are adjusted periodically and that market-data delivery can be delayed during extreme volatility. https://bybit-exchange.github.io/docs/v5/market/instrument
+- Bybit's risk-limit endpoint publishes risk tiers, position limits, initial and maintenance margin rates, maximum leverage and maintenance-margin deductions. https://bybit-exchange.github.io/docs/v5/market/risk-limit
+- Binance's official futures calculator documents different P&L and initial-margin equations for USDⓈ-margined linear contracts and COIN-margined inverse contracts. https://www.binance.com/en/support/faq/detail/360036498511
+- Binance's P&L documentation states that USDⓈ-M and COIN-M contracts settle in different collateral currencies; unrealised P&L uses mark price while realised P&L uses last price in the described calculation. https://www.binance.com/en-AU/support/faq/detail/3a55a23768cb416fb404f06ffedde4b2
+- Bybit's 12 August 2026 USDT-contract P&L guidance confirms average-entry-price treatment, settlement in USDT, and that leverage affects required collateral rather than directly multiplying P&L for unchanged position size. https://www.bybit.com/en/help-center/article/Profit-Loss-calculations-USDT-Contract
+- Bybit's inverse-contract P&L guidance demonstrates reciprocal-price P&L and settlement in the underlying coin; it also separates position P&L from fees and funding in closed/realised P&L calculations. https://www.bybit.com/en/help-center/article/Profit-Loss-calculations-Inverse-Contracts
+
+These are venue-specific examples. They must not be generalised across all products, contract specifications, account modes or future versions.
+
+### 13.2 Authoritative capital semantics — provisional recommendation
+
+The capital model should preserve at least four separately named measures:
+
+1. **Economic equity:** best estimate of net economic value of explicitly included assets and liabilities, with valuation source, timestamp and uncertainty.
+2. **Risk-adjusted equity:** conservative capital basis after approved deductions for collateral haircuts, liabilities, stale/uncertain valuations, concentration and conversion uncertainty.
+3. **Venue margin equity:** venue/account-mode-specific value used by that venue's margin and liquidation system.
+4. **Available margin/equity:** venue-reported capacity currently available for additional margin requirements, subject to venue rules and order reservations.
+
+Do not use available margin as wealth, portfolio equity or a standalone risk budget. Do not treat unrealised gains as cash or transferable collateral. Do not assume cross-venue collateral or margin netting.
+
+**Provisional recommendation for D-006:** if the existing 0.5% per-trade target is retained, define its denominator as an explicitly versioned IDEAL risk-adjusted equity measure, rather than venue available margin or a raw exchange headline equity field. This is a design recommendation only; the owner has not yet confirmed the intended equity basis. The 0.5% value itself is not validated by this research.
+
+**D-008 preservation:** the hard daily-loss boundary remains exactly as accepted: 10% of UTC day-start equity, realised plus unrealised P&L, followed by a 24-hour cooldown. This research does not redefine its denominator or reset semantics.
+
+Capital state should separate immutable financial events (deposits, withdrawals, realised trading P&L, fees, funding, rebates, liquidation charges and adjustments) from time-varying valuations (unrealised P&L, collateral marks and FX conversion). Internal transfers must not become P&L. A realised event must not be counted again in the valuation layer. Pending transfers must not be counted as settled spendable capital.
+
+For multi-currency accounts, retain native-currency balances and liabilities as first-class records. A reporting-currency aggregate must identify each conversion source, timestamp, haircut and uncertainty. Missing/stale conversion blocks risk-increasing use of the affected value; it must not silently become zero or use an unlabelled cached rate.
+
+### 13.3 Contract-aware P&L and position sizing
+
+A single universal quantity formula is unsafe. The calculation must be selected by an immutable, versioned instrument specification that defines contract family, linear/inverse payoff, contract multiplier/face value, quantity unit, quote currency, settlement currency, tick/lot increments, minimum notional, fee basis, funding basis and venue risk tier.
+
+For a simple linear contract, the venue's exact contract specification determines the payoff. A common base-quantity form is:
+
+`PnL_settlement = side × quantity × multiplier × (exit_price − entry_price)`
+
+For an inverse contract with fixed quote-currency face value, a common form is:
+
+`PnL_coin = side × contracts × face_value × (1 / entry_price − 1 / exit_price)`
+
+Here `side` is +1 for long and −1 for short, but the adapter must verify the venue's sign convention and contract multiplier. These equations are explanatory patterns, not universal venue formulas. The Binance and Bybit examples above show why settlement currency and inverse reciprocal-price conversion must be explicit.
+
+For each proposed trade, calculate total loss in a single explicitly named risk-accounting currency under a defined adverse exit scenario. Include, as applicable:
+- entry and exit taker/maker fees using the applicable fee tier and likely order type;
+- spread crossing and expected slippage;
+- depth-sensitive market impact and partial-fill/leg risk;
+- funding paid over the intended holding horizon, plus stressed interval/rate changes;
+- settlement-currency-to-risk-currency conversion at a conservative scenario rate;
+- stop gap-through and adverse exit-price reserve;
+- any venue-specific close, liquidation or other charges that can reasonably be modelled.
+
+Do not treat a stop trigger as a guaranteed execution price. Planned stop loss, adverse execution loss and portfolio stress loss remain separate outputs. If the stop is absent, invalid, stale or cannot be mapped to a credible exit scenario, ordinary stop-based sizing is not available; a separately approved risk model would be required.
+
+The general sizing contract should be:
+
+- determine the approved trade budget from the named equity basis and policy version;
+- calculate contract-specific loss for candidate quantity under base and adverse execution assumptions;
+- find the largest permitted quantity whose relevant loss measure remains within the applicable budget and all parent portfolio/strategy reservations;
+- round quantity down to the venue's valid lot increment using exact decimal arithmetic;
+- recalculate all risk after rounding and after applying minimum notional, maximum quantity, price bands and risk-tier constraints;
+- reject rather than round up if minimum executable size exceeds the permitted budget;
+- reject if any critical instrument parameter, fee tier, conversion rate, market input or venue constraint is unknown, stale or contradictory.
+
+For nonlinear inverse P&L, fee/funding conversion, tiered margin or other non-linearities, use a tested monotone search over valid discrete quantities rather than assuming a linear closed-form denominator. Verify monotonicity for the supported contract model; if it is not monotone, enumerate the bounded valid quantity domain or reject the unsupported case. Use decimal/fixed-point arithmetic with explicit rounding rules; binary floating point must not decide a hard limit.
+
+### 13.4 Risk budget is not margin capacity
+
+The sizing engine must calculate separate ceilings and use the strictest applicable result:
+- trade planned-loss budget;
+- stressed/adverse-execution loss budget;
+- portfolio and correlated-risk allocation;
+- gross/net exposure and concentration limits;
+- venue initial-margin and maintenance-margin constraints;
+- liquidation-buffer constraints under stressed prices, fees, funding and collateral haircuts;
+- instrument order/position limits and quantity filters;
+- liquidity/close-out capacity.
+
+Configured leverage only affects margin requirements and venue constraints; it does not make an unchanged notional position safer or reduce its price sensitivity. A strategy must not increase size because a venue offers a higher leverage setting. Available margin is a venue constraint, not a substitute for IDEAL's risk budget.
+
+### 13.5 Risk reservations and state transitions
+
+A proposed order reserves the risk of its potentially executable quantity before submission. On partial fill, the filled quantity transfers from order reservation to open-position exposure atomically in the risk state; residual quantity remains reserved. Avoid counting the filled amount twice. Release residual reservation only after confirmed terminal venue state. If acknowledgement, cancel or reconciliation state is unknown, retain the conservative reservation and block conflicting risk increases.
+
+Simultaneous orders must be assessed under plausible joint-fill combinations, including opposing orders, conditional triggers, hedge-mode legs and multiple strategies. Netting is allowed only under explicit, tested venue semantics and IDEAL stress assumptions. Otherwise, gross exposure and worst plausible fill state govern.
+
+### 13.6 New failure and verification requirements
+
+Add tests for:
+- linear and inverse P&L across long/short, partial close, add-to-position and exact settlement currency;
+- contract multipliers, quantity units, tick/lot rounding and minimum notional boundaries;
+- reciprocal-price conversion and FX rate freshness for inverse settlement;
+- maker/taker fee changes, funding interval changes and holding-period stress;
+- monotonic discrete sizing and proof that rounded quantity never exceeds the risk budget;
+- minimum executable quantity exceeding budget (must reject);
+- risk-tier transitions that alter margin requirements or max leverage;
+- collateral haircut changes, depeg scenarios and unavailable collateral;
+- pending transfers and internal transfers not being misclassified as P&L;
+- multi-currency equity without silent conversion or double-counting;
+- concurrent orders and all-fill/partial-fill/cancel-timeout combinations;
+- exact agreement with independently implemented venue formula examples.
+
+Every calculation result must retain the instrument-specification version, fee/risk-tier snapshot, source timestamps, FX inputs, policy/equity basis, scenario assumptions, rounding decisions and code/model version.
+
+### 13.7 Open owner decision
+
+The most important owner clarification remains: **what did D-006 mean by "equity" when the 0.5% per-trade risk target was accepted?** The current research recommendation is IDEAL risk-adjusted equity, calculated from explicitly included assets and liabilities with conservative collateral/valuation treatment. It is not yet accepted. No need to decide this during research; it can remain an explicit architecture decision until the capital-state contract is ready for review.
+
+### 13.8 Next tranche
+
+Continue with portfolio stress methodology, correlation and concentration; margin/collateral/liquidation buffers; liquidity-adjusted close-out; and loss/drawdown control layers. No numerical limits, venue, account mode or runtime implementation are adopted by this tranche.
