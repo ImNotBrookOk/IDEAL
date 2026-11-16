@@ -106,3 +106,5 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [PHASE_01_COMPONENT_RECOMMENDATIONS.md](../PHASE_01_COMPONENT_RECOMMENDATIONS.md) | Consolidated draft of preferred research candidates, holds/rejections, hosting deferral and proposed Phase 02 handoff; owner review required; no adoption or phase unlock |
+
+| [2026-11-16-042-phase-01-approval-and-phase-02-unlock.md](2026-11-16-042-phase-01-approval-and-phase-02-unlock.md) | Owner approves complete Phase 01 component dispositions and explicitly closes Phase 01/unlocks Phase 02 architecture/contracts; D-015 recorded; no runtime, venue, exchange, paper/live, risk-policy or paid-infrastructure authority granted |
