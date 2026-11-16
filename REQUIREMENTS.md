@@ -56,3 +56,16 @@ IDEAL is one integrated personal financial intelligence system composed of speci
 These requirements apply across the system, while domain-specific contracts and permissions remain separate. Future spot, equities, commodities, hedging, personal-finance and tax domains inherit the shared protections but remain proposals until separately authorised. See [Core Protection Architecture](docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md).
 
 No new numerical risk limits or execution permissions are introduced here. Existing scope and phase approval boundaries remain in force.
+
+
+### Security and assurance requirements
+
+9. **Security by design:** IDEAL must protect confidentiality, integrity, availability, authenticity and accountability across applications, data, identities, infrastructure, development and integrations.
+10. **Least privilege and explicit authority:** owner, service, agent and integration identities receive only scoped permissions. Authentication does not imply authorisation. AI prompts and model outputs are not security boundaries.
+11. **Secrets and data protection:** credentials and encryption keys require dedicated lifecycle management, rotation and revocation; sensitive data must be encrypted, minimised, access-controlled and excluded from ordinary logs/prompts.
+12. **Secure supply chain and development:** dependencies, build artefacts, CI/CD, configuration and source changes require provenance, scanning, review and reproducible verification.
+13. **Independent security monitoring:** security telemetry and control status integrate with system health, but security assurance is reported separately. Operational availability must never be presented as proof of security.
+14. **Vulnerability and incident lifecycle:** use threat modelling, static/dynamic analysis, dependency/secret scanning, fuzzing, authorised penetration testing, remediation tracking, incident response and verified recovery. No scan can guarantee discovery of every vulnerability.
+15. **Audit and privacy:** sensitive access, permission changes, key lifecycle, configuration changes and security incidents must be auditable and tamper-evident. Retention must respect purpose, privacy and provider/legal constraints.
+
+See [IDEAL Security Architecture and Assurance](docs/IDEAL_SECURITY_ARCHITECTURE.md). Security is a mandatory Phase 02 design workstream; this does not authorise implementation, external scanning or new integrations.
