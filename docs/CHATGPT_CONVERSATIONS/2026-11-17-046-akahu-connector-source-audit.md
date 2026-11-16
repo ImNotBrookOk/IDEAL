@@ -101,3 +101,18 @@ Pending commit and fetch-back verification in this record:
 Pinned source audit is complete at research level. The next useful research task is to inspect transfer semantics and backup/restore/credential-key lifecycle in both pinned projects, then produce a tighter architecture contract for source-observation reconciliation. Any executable POC remains separately gated and synthetic-only.
 
 Owner approval pending for any implementation, installation, account connection, provider adoption or phase advancement.
+
+
+## Dated addendum — backup, restore and credential-key review (17 November 2026)
+
+Further pinned-source inspection was completed after the initial record:
+
+- MoneyMatter v0.33.7 credential encryption uses AES-256-GCM; the key is SHA-256-derived from `APPLICATION_JWT_SECRET`. Preserve this secret securely. A key change without re-encryption would make existing stored tokens undecryptable; no rotation workflow was found in the inspected source.
+- MoneyMatter backup export tests prove bank credentials and AI keys are stripped from archives. Bank connection rows remain but with null credentials.
+- MoneyMatter restore tests prove bank connections return disabled with a `RESTORED` reason and require fresh credentials before reactivation.
+- Restore test source covers same-user consistency, cross-user remapping, transaction/transfer/holding round-trip, import-batch undo, foreign-reference handling, checksum validation and rollback cases. These tests were inspected, not executed.
+- Attachments are excluded from the backup archive and need a separate backup path.
+- Firefly's AkahuNoteBuilder writes other-account details into notes; it does not establish a resolved two-sided transfer. The Akahu importer SecretManager still uses session or environment-backed credentials without visible application-level encryption in that path.
+- MoneyMatter's product-wide transfer support does not change the Akahu provider's explicit `transferNature: not_transfer` import behaviour.
+
+Research document section 17.7 contains the detailed evidence. This addendum does not change any approval boundary: D-017 remains Proposed; Phase 02 only; no app installation, credential use, bank connection, runtime, provider selection or implementation.
