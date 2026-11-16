@@ -693,3 +693,120 @@ A staged future path, subject to owner approval and phase gates:
 5. Add budgets, bills, goals, valuations and consolidated read-only net worth as separate modules/projections.
 
 This recommendation does not accept D-017, unlock Phase 03, select a provider, authorise implementation or permit real financial data.
+
+
+## 20. Proposed New Zealand tax intelligence domain — 17 November 2026
+
+### 20.1 Concept and feasibility
+
+A dedicated Tax Intelligence and Tax Accounting bounded context is a viable future IDEAL capability. It should consume verified financial events from the separately governed trading, investment and personal-finance domains; calculate and explain tax estimates under versioned New Zealand rules; maintain evidence and reconciliation; and publish tax provisions and payment obligations into Personal Finance.
+
+Tax must not be embedded inside a trading strategy or execution engine. It must not alter trades, positions or accounting records. Its outputs should distinguish:
+- calculated estimate / forecast;
+- reviewed tax workpaper;
+- return prepared but not submitted;
+- return submitted and acknowledged;
+- IRD assessment / assessed balance;
+- payment initiated, pending, confirmed or reconciled.
+
+A calculated estimate is not an IRD-assessed tax debt. Personal Finance should label estimated provisions separately from assessed liabilities.
+
+### 20.2 New Zealand tax complexity: separate instrument tax treatments
+
+Do not apply one generic "crypto tax rate" to every event.
+
+- **Spot cryptoassets:** IRD treats cryptoassets as property. Tax treatment depends on characteristics and use, not the asset label. Amounts from selling, trading or exchanging are generally taxable in many common circumstances; NZD valuation, income and expenses, purpose and activity facts matter. Cryptoassets are generally excepted financial arrangements, except those economically equivalent to debt arrangements. Trading-stock treatment may apply where relevant.
+- **Crypto perpetual futures and derivatives:** do not assume spot-crypto guidance automatically determines derivative treatment. IRD material identifies futures contracts as financial arrangements, and the financial-arrangements rules may require accrual spreading and a base-price adjustment. The legal classification of a specific offshore crypto perpetual swap, settlement asset, funding payment, fee, collateral movement and close-out must be researched separately. This is a mandatory specialist tax review item before the engine can produce filing-grade results.
+- **Equities and offshore funds:** share and foreign investment fund (FIF) rules can apply. FIF income can arise without cash being received and several calculation methods exist. Do not implement a single default method without establishing residence, transitional-residence status, exemptions, holdings and elections.
+- **Other income and assets:** interest, dividends, staking/mining rewards, foreign exchange, lending, airdrops, fees and business income require distinct event classifications and evidence.
+
+IRD sources reviewed:
+- https://www.ird.govt.nz/crypto-currency
+- https://www.ird.govt.nz/cryptoassets/taxing
+- https://www.ird.govt.nz/cryptoassets/individual/buying-selling
+- https://www.ird.govt.nz/income-tax/income-tax-for-businesses-and-organisations/types-of-business-income/interest-and-dividends/financial-arrangements-rules
+- https://www.ird.govt.nz/fif
+- https://www.ird.govt.nz/-/media/project/ir/home/documents/forms-and-guides/ir1---ir99/ir3g/ir3g-2024.pdf
+
+The 2026–27 annual rates/FIF bill was introduced on 10 September 2026 and was at Select Committee stage in the IRD Tax Policy page snapshot inspected. A proposal to change FIF settings is not enacted law. Rule packs must track enacted effective dates, not draft bills or press summaries. https://www.taxpolicy.ird.govt.nz/bills/2026-fbt-simplification-tax-bill
+
+### 20.3 IRD integration: capability versus permission
+
+IRD publishes Gateway Services for software providers:
+- Income tax return service: prepopulate, submit new/amended returns, retrieve return/status/filing obligation and copies of filed returns.
+- Income service: retrieve income information reported to IRD for reconciliation.
+- Transaction Data Services: retrieve tax financial/transaction data under the documented models.
+- Account API: retrieve customer account metadata for appropriately authorised users.
+- Gateway services documentation describes OAuth authorisation with user consent and, depending on deployment, additional TLS/client-certificate security.
+
+Crucial constraints:
+- Gateway Services Terms of Use IR1269 (February 2026) require registration and IRD approval before use, followed by developer-portal integration, testing and production onboarding.
+- IRD performs due diligence and security assessment, including an Operational Security Framework questionnaire. Approval is not automatic.
+- IRD documentation permits software to be provided in-house by a client organisation, but it is not yet established that IDEAL's exact private single-user arrangement will be approved. Obtain written clarification before committing to the integration.
+- Gateway terms impose confidentiality, security, privacy, consent, audit and notification obligations and restrict changes in approved purpose/use.
+- The public payment guidance describes internet banking, myIR direct debit and other payment routes. No public IRD gateway operation for initiating an individual tax payment was identified in this research. Do not assume return-filing APIs imply a payment API.
+- The documented "transfer requests" in the income tax return service are tax-account transfer requests, not a general bank-payment initiation API.
+
+Sources:
+- https://www.ird.govt.nz/topics/intermediaries/gateway-services
+- https://www.ird.govt.nz/digital-service-providers/services-catalogue/returns-and-information/income-tax
+- https://www.ird.govt.nz/digital-service-providers/services-catalogue/customer-and-account/income
+- https://www.ird.govt.nz/digital-service-providers/services-catalogue/transaction-data-services
+- https://www.ird.govt.nz/digital-service-providers/services-catalogue/customer-and-account/customer-services-suite/account-api
+- https://www.ird.govt.nz/digital-service-providers/getting-started
+- https://www.ird.govt.nz/-/media/project/ir/home/documents/forms-and-guides/ir1200---ir1299/ir1269/gateway-services-terms-of-use.pdf
+- https://www.ird.govt.nz/managing-my-tax/make-a-payment/ways-of-paying
+- https://www.ird.govt.nz/managing-my-tax/make-a-payment/ways-of-paying/internet-banking
+
+### 20.4 Proposed tax architecture
+
+Financial domain event feeds -> Tax evidence and classification registry -> Versioned tax rule engine -> Tax workpapers and estimates -> Human review/approval -> Tax return package / approved IRD gateway adapter -> IRD acknowledgements and assessments -> Personal Finance tax provision and payment reconciliation.
+
+Tax calculation modules should be separated by regime and asset/event class:
+1. Spot crypto property disposals and income.
+2. Derivatives/financial arrangements, including perpetuals, only after specialist rule interpretation.
+3. Shares, dividends and FIF calculations.
+4. Interest, foreign income, withholding and FX.
+5. Fees, expenses, adjustments, losses and other income.
+
+Each calculation needs provenance: source event IDs, evidence, exchange rates and source/time, tax year, residence assumptions, classification, applicable legislation/guidance version, method/election, calculation version, exceptions, reviewer and approval. Rule packs must be effective-dated and old calculations reproducible under the exact historical rule version.
+
+### 20.5 Personal Finance interface
+
+Tax domain publishes:
+- estimated current-year tax provision (clearly marked estimate);
+- reviewed tax provision;
+- IRD-assessed amount and balance (where retrieved and authorised);
+- due dates and provisional-tax schedule;
+- amount reserved in cash;
+- payment instructions/reference and payment status;
+- submitted return/acknowledgement/assessment references.
+
+Personal Finance owns the cash movement and payment reconciliation. Tax owns the calculation and obligation evidence. The tax engine must never initiate a bank payment automatically.
+
+### 20.6 Payment workflow recommendation
+
+Phase the capability:
+- Initial: show tax reserve target, due date, tax type, period, amount and IRD payment reference details; link to IRD/myIR or display the bank's official Pay IRD instructions.
+- Later: if a compliant payment initiation mechanism is available, create a payment instruction only after explicit user confirmation, with amount/payee/reference rendered for review.
+- Final reconciliation: mark paid only after bank evidence or IRD account data confirms it. A click or browser redirect is not proof of payment.
+
+IRD currently documents payment through internet banking, myIR direct debit and other methods. It advises using bank "Pay Tax"/"Pay IRD" functionality and requires the correct IRD number, tax/payment type and period. No public payment-initiation endpoint was found in this research. https://www.ird.govt.nz/managing-my-tax/make-a-payment/ways-of-paying
+
+### 20.7 Safety and acceptance requirements
+
+- Tax estimates are not tax advice or an assessment; show confidence, unresolved classifications and material assumptions.
+- No filing without a reviewed, locked workpaper and explicit final approval.
+- No tax payment without explicit amount/payee/reference confirmation and bank/IRD confirmation.
+- No unsupported tax classification silently defaults to zero tax or a generic rate.
+- Preserve gross proceeds, cost, fees, funding, settlement, collateral, FX, dates and source references separately.
+- Never equate unrealised PnL, wallet transfers, collateral movements or deposits with taxable income without a rule-supported classification.
+- Support amended returns and reproducible prior-year calculations.
+- Include independent test vectors reviewed by a NZ tax professional, tax-year boundary tests, rounding tests, FX provenance, missing-data and correction tests.
+- Encrypt taxpayer records, minimise retention, implement access controls, secure backups and audit every rule change, calculation, review, submission and payment status transition.
+
+### 20.8 Disposition
+
+Add a proposed Tax Intelligence and Tax Accounting domain to future scope, with a downstream interface into Personal Finance. Treat IRD filing as a conditional later integration subject to approval. Treat direct payment initiation as unconfirmed and out of scope until a supported mechanism and authorisation path are verified.
+
+This is a research proposal only. It does not accept D-017, approve a new tax decision, authorise code or dependencies, permit IRD account linking, filing, payment or hosting, or unlock any phase.
