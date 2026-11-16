@@ -1,6 +1,6 @@
 # IDEAL
 
-IDEAL is an autonomous, evidence-driven crypto perpetuals research and paper-trading platform. AI discovers, tests, classifies and selects strategies; deterministic services enforce data integrity, risk, permissions and execution controls.
+IDEAL is an integrated, evidence-driven personal financial intelligence system. Its initial active scope is crypto perpetuals research and paper trading; future financial domains remain separately gated. Specialised engines operate under three shared foundations: deterministic risk management, trustworthy data and independent system-health oversight. AI may research and propose; deterministic controls govern evidence quality, risk, permissions and authorised actions.
 
 ## Status
 Planning baseline. Implementation is not yet authorised. This repository is the source of truth for scope, decisions, architecture, testing, trading knowledge and project accountability.
@@ -16,7 +16,8 @@ Planning baseline. Implementation is not yet authorised. This repository is the 
 - Deterministic risk and execution controls; AI cannot modify limits, gates or permissions.
 
 ## Source of truth
-- ROADMAP.md — gated implementation plan.
+- ROADMAP.md — gated implementation plan; Phase 02 prioritises the integrated risk, data-integrity and system-health foundation.
+- docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md — owner-approved integrated system vision, protection pillars, authority boundaries, failure model and Phase 02 design requirements.
 - RULES.md — mandatory engineering, accountability and trading constraints.
 - REQUIREMENTS.md — product and quantitative requirements.
 - ARCHITECTURE.md — provisional system boundaries and data flow.
