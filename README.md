@@ -18,6 +18,7 @@ Planning baseline. Implementation is not yet authorised. This repository is the 
 ## Source of truth
 - ROADMAP.md — gated implementation plan; Phase 02 prioritises the integrated risk, data-integrity and system-health foundation.
 - docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md — owner-approved integrated system vision, protection pillars, authority boundaries, failure model and Phase 02 design requirements.
+- docs/IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md — architecture-first research sequence, cross-pillar contracts, candidate due diligence and architecture/implementation acceptance criteria.
 - docs/IDEAL_SECURITY_ARCHITECTURE.md — security threat model, defensive controls, security-health integration, vulnerability assurance and incident recovery requirements.
 - RULES.md — mandatory engineering, accountability and trading constraints.
 - REQUIREMENTS.md — product and quantitative requirements.
