@@ -37,3 +37,22 @@ Target $0 recurring cost. Prefer open source and free tiers. Record free-tier li
 
 ## Unresolved decisions
 Exchange/data provider; deployment target; universe/liquidity filters; fee/slippage model; absolute statistical thresholds; minimum cohort size; portfolio and leverage limits; early loss warnings; progression gate thresholds; AI provider/token budget; retention/backup policy. Resolve through documented research and approval before dependent implementation.
+
+## Integrated system objective and foundational requirements
+
+IDEAL is one integrated personal financial intelligence system composed of specialised, bounded domains and engines. It is not a collection of independent trading bots. Every consequential capability must operate within shared risk, data-integrity, system-health and audit requirements. The integrity of the whole system takes precedence over the performance or autonomy of an individual engine.
+
+### Foundational protection requirements
+
+1. **Risk management:** a mandatory, deterministic and independently enforced gate for actions that create or increase financial exposure. It must account for position sizing, leverage/margin/collateral, liquidation, liquidity and execution costs, concentration, correlation, drawdown, portfolio exposure and operational risk as applicable to each authorised domain.
+2. **Data integrity:** decision inputs must have source identity, provenance, timestamps, schema, completeness, freshness, quality state, correction history and lineage. Raw evidence, canonical observations, derived intelligence, research artefacts and decision evidence remain distinguishable and reproducible.
+3. **System health:** a deterministic supervisor must independently monitor sources, data pipelines, engines, dependencies, storage, reconciliation, backups and audit integrity. A component's own health assertion is not sufficient proof.
+4. **Mutual reinforcement:** data quality and health state are inputs to risk validity; risk restrictions and health interlocks constrain dependent engines; reconciliation and audit findings feed back into system health and engineering research.
+5. **Failure containment:** critical missing, stale, invalid, contradictory or unknown inputs cause the affected consumer to enter a safe no-action state. Failures must be contained to their dependency blast radius; unrelated domains must not be disabled without a declared reason.
+6. **Authority separation:** strategy/AI components may analyse and propose but cannot change risk limits, approve their own permissions, certify their own data or bypass health interlocks. Consequential actions require explicit authority and deterministic enforcement.
+7. **Audit and recovery:** decisions, policy versions, inputs, quality states, incidents, overrides, reconciliation and recovery must be traceable. Recovery requires verified continuity and reconciliation, not merely a successful reconnect.
+8. **Design quality:** architecture, contracts, threat models, research and test criteria must be sufficiently complete and independently challenged before implementation. Schedule pressure must not lower the correctness, security or auditability bar.
+
+These requirements apply across the system, while domain-specific contracts and permissions remain separate. Future spot, equities, commodities, hedging, personal-finance and tax domains inherit the shared protections but remain proposals until separately authorised. See [Core Protection Architecture](docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md).
+
+No new numerical risk limits or execution permissions are introduced here. Existing scope and phase approval boundaries remain in force.
