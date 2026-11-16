@@ -293,3 +293,8 @@ The Tardis sample therefore has ~6.90x fewer message groups and substantially lo
 ## 13.14 Third-day trade/BBO quality gate did not pass (16 November 2026)
 
 The 13 November sample aligned 4,544,561 trades with zero missing preceding books and zero invalid book matches; median book age 5 ms, p95 10 ms, maximum 507 ms. However aggregate side consistency was 97.8348%, below the original 98.0% screen. The expanded diagnostic showed 97.3518% on same-timestamp trades and 97.8877% on strictly preceding trades; age <=10 ms was 97.7814%, while older age buckets were >99.5%. Timestamp ties and long stale tails therefore do not fully explain the mismatch. Potential causes include timestamp resolution/event ordering, fast market movement, missing updates or unverified trade-side semantics. The threshold is not being lowered. The three-day trade/BBO gate remains **OPEN**; the data remains a research candidate only. Full breakdown: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.15.
+
+
+## 13.15 Three-day OKX structural reconstruction passed (16 November 2026)
+
+Workflow [#43777630729](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777630729) reconstructed all 19,626,176 book records across 11–13 November with zero invalid states; all 288 snapshots contained exactly 400 levels per side. Exact 10 ms interval shares were 85.929%, 85.957% and 91.069%; maximum adjacent intervals were 508, 520 and 517 ms. 13 Nov had higher activity (7.39m records, 152.57m level rows, median 8 changed levels/update) but its separate trade/BBO side-consistency gate still failed at 97.835%. Structural data quality is passed for these three days; directional trade alignment is not passed on all days. Details: historical validation sections 12.15–12.16.
