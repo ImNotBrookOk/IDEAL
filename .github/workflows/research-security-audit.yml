@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: research-security-audit-v3
+  group: research-security-audit-v4
   cancel-in-progress: true
 
 jobs:
@@ -71,6 +71,7 @@ jobs:
             cat research/nautilus_poc/requirements.lock
             echo "LOCK_END_NAUTILUS_POC"
           } > research-output/lock-files.txt
+          cat research-output/lock-files.txt
 
       - name: Install exactly the hash-pinned dependency locks
         run: |
