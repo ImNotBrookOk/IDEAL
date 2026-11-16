@@ -628,3 +628,31 @@ Tardis's official CSV specification states that messages are grouped by local_ti
 Artifact ID `14187255879`, SHA-256 `e7ee6eac5ddaf65fd89c0c692690fe109861bc9cf110f370244803bf004735be`, contains only small audit summaries, hashes and manifests (1,521 bytes); expires 18 November 2026 at 23:58 UTC. Raw files were deleted before artifact upload and were not committed.
 
 **Disposition:** Tardis is now a validated independent historical-L2 sample source and normalized CSV reference for parser/reconstruction research. It is not yet a selected data vendor or runtime dependency. Public sample access does not establish commercial redistribution rights; paid historical access and terms remain separate checks.
+
+
+### 12.14 Same-day Tardis OKX Swap and official OKX archive reconstruction (16 November 2026)
+
+Workflow [#43777769642](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777769642) successfully downloaded and reconstructed both Tardis normalized L2 and the official OKX module-4 400-level archive for BTC-USDT-SWAP on 1 November 2026. The Tardis trade CSV also passed schema, side, positive price/amount and local-timestamp monotonicity checks.
+
+| Measurement | Tardis normalized CSV | Official OKX module 4 |
+|---|---:|---:|
+| L2 rows / level changes | 28,215,014 | 54,547,769 |
+| Message / book records | 844,983 | 5,827,935 |
+| Snapshots | 13 | 96 |
+| Update messages / records | 844,969 | 5,827,839 |
+| Zero-amount deletions | 4,527,548 | 9,255,375 |
+| Reconstructed states | 844,982 valid | 5,827,935 valid |
+| Pre-snapshot rows skipped | 8 | n/a |
+| Maximum inter-message / record gap | 3,803.897 ms | 584 ms |
+| Exact 10 ms record intervals | not yet histogrammed | 4,927,293 (84.546%) |
+| Exact 20 ms record intervals | not yet histogrammed | 329,079 (5.647%) |
+
+Tardis trade sample: 781,943 rows, 387,478 buy and 394,465 sell; local timestamps ranged from 1793491200589194 to 1793577598702054 microseconds.
+
+The two sources are both structurally reconstructable, but their temporal characteristics are materially different: the official archive has approximately 6.90 times as many book records, 96 snapshots versus 13, and a substantially smaller maximum observed gap. The Tardis normalized sample's source channel mapping is not explicit in the CSV, so do not assume it is equivalent to OKX's 10 ms VIP4+ books-l2-tbt channel. The measured event-volume/gap difference suggests lower effective granularity and/or capture/reconnect loss in this sample. A direct timestamp-aligned BBO comparison is still required to quantify price-state agreement; until then, the Tardis OKX CSV must not be treated as a substitute for the official 10 ms archive.
+
+The Tardis sample's 13 snapshots and 3.804-second maximum gap are consistent with reconnect/snapshot behaviour documented by Tardis; the CSV omits explicit disconnect markers. The official archive has 96 periodic snapshots and a 584 ms maximum adjacent record interval. Both reconstructions had zero empty/crossed/locked states, but this does not prove lossless capture.
+
+Artifact ID `14186673619`, 2,596 bytes, SHA-256 `33d6a8f07b1360683a8ada3cca0db7030012b9a906953ab320c82ce197ab734`, contains only manifests, hashes and small summaries; expires 19 November 2026 at 00:03 UTC. The workflow's separate unconditional cleanup step completed before artifact upload.
+
+**Disposition:** Tardis's OKX Swap normalized sample is validated as a parseable source, but not as a 10 ms-equivalent source. Keep it as an independent coarser/reference dataset until direct BBO matching and channel provenance are established. The official OKX archive remains the stronger high-frequency historical candidate. No runtime vendor is selected.
