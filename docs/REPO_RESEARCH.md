@@ -371,3 +371,22 @@ Sources:
 - https://nautilustrader.io/docs/latest/getting_started/installation/
 
 **Disposition:** retain as leading engine candidate for later architecture comparison, not an adopted dependency. Recheck stable release status and complete the remaining POC gaps before runtime integration.
+
+
+## IDEAL direct dependency and supply-chain recheck — 16 November 2026
+
+The isolated research POC and parser currently use only these direct pins:
+- `nautilus_trader==2.0.0rc9`: LGPL-3.0-only; pre-release engine candidate, not adopted.
+- `pytest==9.2.0`: MIT; development/test-only. The pin was upgraded from 8.4.2 in commit `48358298ebf1bff0cef427a384e1cce3bac4d392`; x86_64 and ARM64 CI [#43805067024](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43805067024) is in progress.
+- `orjson==3.11.3`: Apache-2.0 OR MIT per its version-specific PyPI metadata; research parser/CI only. The newer 3.13.0 release has an expanded SPDX expression `MPL-2.0 AND (Apache-2.0 OR MIT)`; keep the current pin until a separate licence review and high-volume regression test are complete.
+
+Upstream NautilusTrader publishes a mature supply-chain policy: signed/attested release artifacts, dependency lockfiles and cooldowns, CodeQL, OSV Scanner, pip-audit, cargo-audit/deny/vet, Zizmor, secret scanning, OpenSSF Scorecard, immutable tags and Trusted Publishing. Its 2.0.0rc9 release is signed and PyPI reports provenance metadata for all 13 files. This is positive evidence about upstream controls, not an IDEAL security audit or a guarantee of absence of vulnerabilities. Upstream explicitly leaves users responsible for auditing their own extensions/dependency trees.
+
+Sources:
+- https://pypi.org/project/nautilus-trader/2.0.0rc9/
+- https://pypi.org/project/pytest/9.2.0/
+- https://pypi.org/project/orjson/3.11.3/
+- https://pypi.org/project/orjson/3.13.0/
+- https://github.com/nautechsystems/nautilus_trader/blob/develop/SECURITY.md
+
+**IDEAL gaps:** current requirements files pin direct packages but do not lock all transitive dependencies with hashes. IDEAL has not yet run a complete pip-audit/OSV scan over a locked research dependency tree, GitHub Actions workflow security lint, or full licence/SBOM inventory. These remain Phase 01 exit work. The POC and parser dependencies remain research-only and are not selected runtime dependencies.
