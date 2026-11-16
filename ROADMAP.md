@@ -314,3 +314,37 @@ Before Phase 03, research and specify:
 A scan cannot guarantee that all vulnerabilities have been discovered. Findings, assessment scope/freshness and residual risks must be explicit. Critical exploitable findings block the affected release/capability. External testing is limited to assets IDEAL owns and requires separate authorisation.
 
 See [docs/IDEAL_SECURITY_ARCHITECTURE.md](docs/IDEAL_SECURITY_ARCHITECTURE.md). Phase 02 remains active; Phases 03–19 remain locked. No implementation, security product subscription, external scan, hosting or new integration is authorised.
+
+## Phase 02 — architecture-first research and design workstream
+
+**Primary milestone:** complete and independently challenge IDEAL's integrated architecture before implementation. Architecture defines the required capabilities and contracts; available code must not dictate the safety model.
+
+The Phase 02 work sequence is governed by [the Architecture-First Research and Design Plan](docs/IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md):
+
+1. Define the complete system, domains, authority hierarchy, trust boundaries, assumptions and non-goals.
+2. Specify all four foundations in depth: risk management, data integrity, system health and security.
+3. Define cross-pillar/domain contracts, ownership, permissions, data semantics, failure propagation, safe states, audit and recovery.
+4. Produce system maps, data flows, trust boundaries, dependency maps, threat models and failure-mode analysis.
+5. Conduct adversarial review, edge-case analysis and independent architecture challenge.
+6. Complete requirements-to-component-to-verification traceability; record unresolved risks and obtain explicit owner acceptance of the architecture baseline.
+7. Only after architecture acceptance, research implementation candidates across GitHub, official documentation, open source, Hugging Face, academic sources and other credible primary sources.
+8. Produce an implementation blueprint covering exact licence/rights, maintenance, engineering quality, security, dependencies, compatibility, cost, portability, limitations, alternatives and verification.
+9. Obtain separate explicit approval before implementation, runtime integration, dependency adoption or deployment.
+
+The four pillars remain distinct and mutually reinforcing. Security telemetry integrates with system health, but security assurance remains separate. Risk policy and authority cannot be overridden by strategies or AI. Data quality, provenance and freshness constrain dependent risk decisions. Health supervision must be independent of the components it monitors.
+
+### Phase 02 architecture exit criteria
+
+Phase 02 is not complete until the repository contains and the owner has reviewed:
+- complete system/domain and authority map;
+- four detailed foundation architectures;
+- critical cross-pillar and domain interface contracts;
+- trust-boundary, data-flow, dependency and failure-propagation diagrams;
+- threat model and security-control matrix;
+- failure-mode, containment and recovery analysis;
+- requirements-to-component-to-test traceability;
+- assumptions, unresolved questions, residual risks and rejected alternatives;
+- independent architecture review with findings resolved or explicitly accepted;
+- verification strategy and explicit owner acceptance.
+
+**Immediate research task:** begin with the risk-management architecture, designed from the outset to integrate with data integrity, system health and security. Phase 02 remains design/research only. Phase 03–19 remain locked. This workstream does not authorise code, runtime changes, dependencies, external services, exchange access, paper/live execution or paid infrastructure.
