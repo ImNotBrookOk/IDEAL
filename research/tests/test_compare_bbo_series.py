@@ -32,7 +32,7 @@ class CompareBboTests(unittest.TestCase):
         result = compare_rows(tardis, official)
 
         self.assertEqual(result["strict_preceding"]["exact_bbo_match_pct"], 100.0)
-        self.assertEqual(result["strict_preceding"]["age_ms"]["median"], 0.5)
+        self.assertEqual(result["strict_preceding"]["age_ms"]["median"], 500.0)
 
     def test_unsorted_input_is_rejected(self):
         official = [
