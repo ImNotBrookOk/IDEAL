@@ -158,3 +158,6 @@ The owner has asked to preserve two future ideas in [Deferred Future Scope Ideas
 
 
 - **Phase 01 exit review created (16 November 2026):** consolidated gate register in [docs/PHASE_01_EXIT_REVIEW.md](docs/PHASE_01_EXIT_REVIEW.md). Research evidence is largely classified; outstanding items are IDEAL-specific dependency/security remediation and reproducible lock/SBOM review, $0 persistent host availability, final component matrix owner approval and explicit Phase 01 closure. Phase 02 remains LOCKED.
+
+
+- **Tardis data-rights boundary documented (16 November 2026):** published Terms of Service permit storage of data/manipulated data on the customer system but restrict use of the service in products/services and redistribution/resale except aggregated/calculated data at 10-minute resolution or coarser. IDEAL's first-of-month public CSV samples were used only for internal research; raw data and reconstructed BBO rows were deleted, and only small summaries remain. Tardis is secondary internal research only; no external data distribution or product embedding without separate written licence. [Checkpoint 038](docs/CHATGPT_CONVERSATIONS/2026-11-16-038-tardis-data-rights-and-usage-boundary.md).
