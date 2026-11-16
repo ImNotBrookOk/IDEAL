@@ -1682,3 +1682,209 @@ No test or review process may be weakened to obtain a pass. A failed critical te
 Risk assurance is an ongoing evidence system, not a one-time sign-off. The architecture must prove both normal operation and safe failure, use independent challenge, and preserve the exact evidence that justifies each approval.
 
 No implementation, validator invocation, test environment, exchange integration, deployment or phase advancement is authorised. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 20. Research tranche 9 — cross-foundation risk interfaces and decision contracts (17 November 2026)
+
+**Status:** Provisional interface design for architecture review. Field names and schemas are conceptual, not frozen API contracts. No implementation is authorised.
+
+### 20.1 Contract design principles
+
+The risk boundary should be explicit, deterministic, versioned and auditable. Each interface must identify:
+- producer and consumer, ownership and authority;
+- schema/version and semantic definitions;
+- source identity, event time, observation/retrieval time and processing time where relevant;
+- quality/freshness state and validity interval;
+- idempotency, ordering, duplicate and correction semantics;
+- authentication/authorisation and integrity protection;
+- error, timeout, partial-failure and unknown-state behaviour;
+- safe response and blast-radius scope;
+- audit correlation and reconciliation evidence.
+
+A field name alone is not a contract. For example, `equity`, `available`, `position`, `cancelled` and `healthy` must each have precise source, meaning, units, timestamp and lifecycle semantics.
+
+### 20.2 Risk evaluation request — conceptual envelope
+
+A proposed risk evaluation request should bind together:
+
+**Identity and authority**
+- request and idempotency identifiers;
+- requesting domain, strategy/model identity and immutable version;
+- authenticated actor/service identity and permission scope;
+- account/venue/instrument scope;
+- action class (new risk, increase, reduce, close, cancel, transfer or non-financial action).
+
+**Exact proposed action**
+- instrument/contract specification identity and version;
+- side, quantity, unit, price/price collar, order type and time-in-force;
+- reduce-only/close-only semantics and venue-specific flags;
+- linked/conditional orders and intended position effect;
+- expected fee/funding assumptions and intended holding horizon.
+
+**Evidence references**
+- portfolio/account snapshot ID and reconciliation state;
+- positions, working/conditional orders and reservations;
+- named equity measures and valuation currency;
+- market, mark, index, funding and FX observation references;
+- instrument specification, risk tier and margin/collateral parameter versions;
+- data-quality/freshness state and timestamps;
+- portfolio stress/liquidity/model output references.
+
+**Policy and model versions**
+- approved risk-policy version;
+- applicable domain/portfolio allocation version;
+- risk calculation/model versions;
+- approved action and permission scope.
+
+The request should reference immutable evidence snapshots rather than embed ambiguous mutable values. Critical values may be included for efficiency, but their provenance and versioned source must remain resolvable.
+
+### 20.3 Risk decision response — conceptual envelope
+
+The response should be one of: approve exact action, approve a specifically reduced/modified action, reject, or defer/restrict pending evidence. An approval must bind:
+- unique decision ID and original request/idempotency ID;
+- exact approved action payload/hash, including quantity, price bounds and order flags;
+- account/instrument/domain scope;
+- policy, model and instrument-specification versions;
+- evidence snapshot references and timestamps;
+- limits consumed, remaining reservation and risk calculation outputs;
+- reason codes, warnings and rejected alternatives where material;
+- validity interval and invalidation conditions;
+- execution permission scope and one-time/replay semantics;
+- audit correlation and integrity proof.
+
+A modified action is a new exact payload and must be evaluated as such. A stale, expired, replayed, mutated or out-of-scope approval must be rejected. A decision is not a general permission to trade the instrument or strategy.
+
+### 20.4 Reservation and execution handshake
+
+Provisional state sequence:
+
+1. Request is authenticated and schema/permission checked.
+2. Data, account, health and security prerequisites are evaluated.
+3. Risk evaluates the exact proposed action under current policy and portfolio state.
+4. If approved, risk creates an atomic reservation against available allocation.
+5. Execution adapter verifies decision authenticity, scope, expiry and payload hash before any submission.
+6. Submission receives a unique client/idempotency identifier; retries must not create a second live order.
+7. Venue acknowledgement/fill/reject/cancel events are recorded with source and sequence evidence.
+8. Risk atomically transfers filled exposure from order reservation to position exposure; residual quantity remains reserved.
+9. Reservation is released only after authoritative terminal state and reconciliation.
+10. Any uncertain or contradictory state retains conservative exposure and blocks conflicting risk increases.
+
+The execution adapter cannot increase quantity, change price bounds, change side, remove reduce-only constraints or alter account scope under an existing approval. Any material mutation requires a fresh risk decision.
+
+### 20.5 Data integrity contract
+
+Data integrity owns source observation, canonicalisation, provenance, quality, correction and lineage. Risk consumes only data states explicitly permitted by the relevant risk policy.
+
+Minimum evidence semantics:
+- source and venue identity;
+- event/market timestamp and receive/retrieval timestamp;
+- processing timestamp and clock-quality status;
+- sequence/update continuity and gap state where applicable;
+- schema and instrument identity/version;
+- raw/canonical/derived classification;
+- validation status, freshness age and quality state;
+- correction/replacement/cancellation lineage;
+- source licence/retention constraints;
+- content hash or equivalent integrity reference.
+
+Risk must not forward-fill critical values, repair corrupted source history or silently choose between contradictory sources. A correction changes the evidence version and may invalidate decisions that depended on the earlier version. Re-evaluation is required where the correction is material.
+
+### 20.6 System health interlock contract
+
+The independent health supervisor reports health and dependency state; it does not calculate financial policy or initiate financial actions.
+
+Its interlock output should identify:
+- affected component/dependency and dependency-graph version;
+- health state (healthy, degraded, stale, unavailable, unknown or incident);
+- observed evidence and timestamps;
+- affected capability/action classes;
+- whether risk-increasing authority is withheld;
+- recovery prerequisites and acknowledgement state.
+
+Risk must check relevant interlocks at evaluation and again at the action boundary where timing/race conditions matter. A health state cannot be assumed valid indefinitely; the contract needs a short, purpose-specific validity window. Health supervisor failure itself must be detectable through an independent watchdog or equivalent design, with conservative restrictions on affected capabilities.
+
+The supervisor may trigger predefined restrictions through an authorised interlock channel, but cannot change risk limits, approve positions, flatten a portfolio or choose a financial action.
+
+### 20.7 Security and policy integrity contract
+
+Security owns identity, authentication, authorisation, secrets, access enforcement and security incident handling. Risk policy registry owns approved policy semantics and version history under owner authority.
+
+Required boundaries:
+- every request and decision is attributable to an authenticated identity;
+- service identities have narrowly scoped permissions;
+- policy read access is separated from policy change authority;
+- only the owner-approved process can propose/accept hard policy changes;
+- agents and strategies cannot write policy, grant permissions, approve themselves or release emergency states;
+- decision and policy artifacts are integrity-protected and version-pinned;
+- compromised identity or suspected tampering invalidates affected approvals;
+- revocation and permission changes propagate to the relevant action boundary;
+- security incident state can restrict risk authority but cannot autonomously authorise financial liquidation.
+
+A valid signature or authenticated request proves identity/integrity only to the extent of the key and trust chain; it does not prove that the request's market data, calculation or financial meaning is correct.
+
+### 20.8 Risk-to-health, audit and incident telemetry
+
+Risk should publish structured, non-secret telemetry including:
+- calculation status, age and duration;
+- request/decision counts and reason-code distributions;
+- active reservations, position exposure and reconciliation mismatch state;
+- policy/model/specification versions;
+- margin/liquidation buffer and stress outputs with freshness;
+- limit utilisation, warning/restriction state and drawdown status;
+- failed checks, timeouts, rejected stale inputs and unknown states;
+- emergency interlock transitions and action acknowledgements.
+
+Telemetry is an observation channel, not a policy-write channel. Health must not trust a risk component's own self-reported status as sole evidence; it should independently test liveness and selected invariants. Audit storage must preserve ordered, attributable decision and state-transition evidence. Sensitive account/credential data should be minimised and protected.
+
+### 20.9 Failure propagation and degraded-mode matrix
+
+| Failure or uncertainty | Risk response | Cross-pillar responsibility |
+|---|---|---|
+| Critical market/account data stale or contradictory | Reject risk increase; preserve last state as visibly stale | Data marks quality; health observes pipeline |
+| Account/position/order reconciliation unknown | Retain conservative reservations; block conflicting increases | Data reconciles; health raises incident |
+| Risk policy/model version unavailable or invalid | No approval | Security protects registry; health monitors availability |
+| Risk calculation service unavailable | No risk-increasing authority | Health detects; emergency plane contains |
+| Health supervisor/interlock unavailable | Restrict affected capabilities according to dependency criticality | Independent watchdog/health recovery |
+| Identity, permission or key compromise suspected | Invalidate affected approvals; isolate/revoke according to security playbook | Security leads incident response |
+| Audit evidence write/sequence integrity fails | Do not approve consequential risk increases | Data integrity/audit and health detect |
+| Execution acknowledgement/cancel state unknown | Keep reservation; no blind retry or conflicting action | Execution adapter reconciles |
+| Model drift or validation status invalid | Restrict/suspend model use; risk authority remains independent | Model governance/health monitoring |
+| Collateral/FX/margin parameters missing or changed | Recompute conservatively or reject increase | Data provenance and risk model versioning |
+
+A failure should propagate only to capabilities that depend on it, unless a portfolio-wide safety invariant is compromised. Scope and blast radius must be explicit.
+
+### 20.10 Contract verification requirements
+
+Before freezing interfaces, test:
+- schema version mismatch, unknown fields and incompatible semantic changes;
+- timestamp, clock drift, stale validity and out-of-order evidence;
+- duplicate requests, replayed decisions and idempotency collisions;
+- changed action payload after approval;
+- expired, revoked and wrong-scope approval;
+- concurrent reservation races and partial fills;
+- correction/replacement of source evidence after decision;
+- supervisor outage, stale interlock and common-mode failure;
+- security identity/key rotation and revocation during an in-flight request;
+- audit sink failure and tampered sequence;
+- risk service timeout and recovery without duplicate approval;
+- degraded-mode blast radius and recovery criteria.
+
+### 20.11 Open contract decisions
+
+- canonical event envelope and immutable evidence-reference format;
+- exact decision state machine and reason-code taxonomy;
+- policy/version registry ownership and signing/trust model;
+- freshness thresholds and clock/sequence contract per data type;
+- risk approval validity and invalidation semantics;
+- reservation transaction boundary and durable storage guarantees;
+- health interlock authority, watchdog topology and failure-domain independence;
+- audit immutability and external anchoring requirements;
+- exact domain/portfolio aggregation and cross-account observation boundaries.
+
+These are Phase 02 architecture decisions, not implementation details to guess. No schema is frozen by this tranche.
+
+### 20.12 Conclusions and boundaries
+
+The risk engine is not a standalone calculator. It is an authority boundary that depends on trustworthy evidence, independent health interlocks, secure identity/policy and tightly scoped action adapters. Its decisions must be exact, short-lived, idempotent, attributable and independently verifiable.
+
+No implementation, runtime integration, interface schema freeze, exchange access or phase advancement is authorised. Phase 02 remains active; Phases 03–19 remain locked.
