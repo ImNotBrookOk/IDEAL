@@ -93,3 +93,10 @@ The stricter auditor-persona run first surfaced one low-severity `concurrency-li
 The hash locks and two SBOMs are retained on the research branch under `research/requirements.lock`, `research/nautilus_poc/requirements.lock`, and `research/sbom/`. This closes the scoped reproducible-lock, vulnerability-scan and workflow-lint gates for the current research environments. It does not constitute a complete future-product SBOM or security clearance for dependencies not yet selected.
 
 The final parser pin is orjson 3.11.6. It fixes the uncontrolled-recursion issue affecting 3.11.3 (CVE-2025-67221), but introduces MPL-2.0-covered source files alongside Apache-2.0 OR MIT. Retain 3.11.6 for internal research; review MPL file-level obligations before distribution/product integration. See [checkpoint 041](CHATGPT_CONVERSATIONS/2026-11-16-041-scoped-security-locks-and-sbom-review.md).
+
+
+## Consolidated component recommendations for owner review
+
+A concise recommendation set is now available in [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md). It consolidates preferred research candidates, conditional data-source acceptance, holds/rejections, deferred infrastructure and Phase 02 handoff candidates. It is explicitly a draft and does not approve integration or phase advancement.
+
+The remaining owner task is to review this recommendation set and the full [component matrix](COMPONENT_SELECTION_MATRIX.md), request any changes, and explicitly approve or defer Phase 01 closure. Phase 02 remains locked.
