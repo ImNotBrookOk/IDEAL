@@ -164,3 +164,108 @@ Before implementation is considered, Phase 02 must define:
 - tests for stale, missing, duplicate, out-of-order, malformed, contradictory, delayed and corrected data, plus supervisor failure and recovery.
 
 No runtime code, dependencies, source subscriptions, credentials, accounts, hosting or paid services are authorised by this proposal.
+
+
+## 12. Historical data collection and learning readiness
+
+The owner is leaning toward IDEAL collecting and retaining its own historical data because the archive may later support research, model evaluation and improvement. This is a design direction for further investigation, not approval to subscribe to feeds, retain unlimited raw data or begin model training.
+
+### 12.1 Archive first; learning second
+
+Treat collected data first as an evidence-grade historical archive. Only later, explicitly curated and versioned subsets become research/training datasets. Never let a model's need for data silently redefine collection, retention, privacy or licensing policy.
+
+The archive should preserve:
+- source identity, venue/provider, instrument and contract metadata;
+- original source timestamps and separate receive/ingest/process timestamps;
+- raw payload or lossless/canonical evidence where legally and economically feasible;
+- normalised observations and transformation/version;
+- correction, cancellation, replacement, gap and reconciliation events;
+- source entitlement, licence, permitted-use and retention constraints;
+- content hashes, schema versions and dataset manifests.
+
+Keep market data, account/private financial records, personal data and AI interaction traces logically and access-control separated. A market dataset must not accidentally include account identifiers, credentials, personal transactions, or private conversation content.
+
+### 12.2 Storage tiers and collection economics
+
+Do not assume that storing every full-depth order-book update forever is necessary or affordable. Design retention by data class:
+- high-resolution hot window for tick/trade/order-book streams where required by active research questions;
+- compact, lossless or carefully specified warm archives for validated bars, funding, mark/index, instrument metadata and selected event streams;
+- cold compressed historical partitions with manifests and checksums;
+- derived features and labels stored separately and reproducibly, never replacing raw evidence.
+
+Measure data volume, write throughput, compression ratio, query patterns, recovery time and backup cost before selecting storage. Retention must respect provider/exchange terms, exchange redistribution restrictions, data residency/privacy obligations and user-controlled deletion policies. Where a licence prohibits archival or model training, record that restriction and exclude the data from those uses.
+
+### 12.3 Point-in-time research datasets
+
+A research dataset must be reproducible and point-in-time correct. Each dataset version should pin:
+- source snapshots and revision/correction state as known at decision time;
+- instrument universe and delisted/expired contracts;
+- timezone, calendar, bar construction and resampling rules;
+- feature definitions and code commit;
+- label definition, horizon and label-maturity time;
+- train/validation/test windows and purging/embargo rules;
+- costs, fees, funding, spread, slippage and execution assumptions;
+- data-quality exclusions and missing-data policy.
+
+Do not use revised macro releases, later corporate-action knowledge, future constituents, future labels or any other information unavailable at the simulated decision time. Retain delisted and expired instruments where possible to reduce survivorship bias.
+
+### 12.4 Separate kinds of learning
+
+Do not conflate:
+1. Assistant/agent learning: interaction traces can improve retrieval, routing, prompts, tool selection and workflow quality. OpenJarvis demonstrates trace-driven routing and stack/model optimisation concepts.
+2. Market-model learning: validated market observations and mature outcome labels can train/evaluate forecasting, regime, risk, execution-cost and portfolio models.
+3. Strategy research: deterministic feature/strategy experiments and backtests can use the archive without requiring an LLM.
+
+Agent traces are not market labels. A conversational model improving its tool use does not imply a trading model has learned predictive alpha.
+
+### 12.5 Controlled model lifecycle
+
+All model training and tuning must be offline and reproducible. The process is:
+collect → validate → curate dataset → define labels → train/fit → evaluate → walk-forward and regime tests → compare to baselines → shadow/challenger → paper evaluation (only when that phase is separately authorised) → explicit approval gate.
+
+No online weight updates, automatic strategy mutation or self-modifying live engine. A new model version must be immutable and registered with dataset hash, code commit, parameters, seed, environment, metrics, known limitations and approval state. Promotion requires measurable out-of-sample improvement after realistic fees, funding, spread, slippage, latency and position sizing, plus stability across regimes and independent replication. A model that fails or loses its data provenance is rejected or rolled back.
+
+## 13. Local AI and model research — preliminary candidates
+
+This section records research candidates only. No framework, model, package or runtime has been adopted or approved.
+
+### 13.1 Personal assistant / agent frameworks
+
+- OpenJarvis — Apache-2.0, https://github.com/open-jarvis/OpenJarvis. Strongest architectural research candidate for local-first personal AI: separate Intelligence, Engine, Agents, Tools/Memory and Learning primitives; supports local inference backends including Ollama, vLLM, SGLang and llama.cpp, plus optional cloud; trace-driven routing and learning; on-demand/scheduled/continuous modes; energy, latency and cost telemetry. Its security documentation is useful but requires careful hardening: shell execution can run with host-user privileges unless sandboxed, Docker sandboxing and capability controls are off by default, capability policy defaults need explicit deny-by-default configuration, and a documented tool-confirmation setting is accepted but not enforced in every entry point. Treat as a design reference and sandboxed evaluation candidate, not as IDEAL's trusted financial supervisor or execution authority.
+- Hermes Agent — MIT, https://github.com/NousResearch/hermes-agent. Broad self-hosted agent with memory, skill creation, scheduling, multiple channels and pluggable model providers. Useful comparison for user-facing assistant workflows. Its own security model describes a single-tenant agent and a default terminal backend that runs commands directly on the host; any IDEAL evaluation would require strict tool minimisation, isolated execution, least privilege and no access to trading credentials or financial write operations. Its learning loop is agent/skill/memory improvement, not evidence of market-prediction ability.
+- OpenJarvis is currently the better fit for architecture study because its composable primitives, trace/evaluation/efficiency focus and local-first routing align closely with IDEAL's low-token, portable design. Neither candidate is adopted.
+
+### 13.2 Local inference runtimes
+
+- llama.cpp — MIT, https://github.com/ggml-org/llama.cpp. Strong portability candidate for quantised CPU/GPU inference across Windows/Linux, Apple Silicon and multiple accelerators; provides an OpenAI-compatible local server, schema-constrained JSON and tool/function calling. Candidate runtime for later PC evaluation.
+- Ollama — MIT, https://github.com/ollama/ollama. Simpler local model lifecycle and API; supports tool calls and schema-constrained structured output. Useful usability baseline. Keep model runtime behind an IDEAL-owned interface so it can be replaced.
+- OpenJarvis supports several interchangeable backends. Avoid binding IDEAL's domain contracts to a particular inference server or model format.
+
+### 13.3 Hugging Face / open-weight model candidates
+
+- Amazon Chronos-2 — Apache-2.0, 120M parameters, probabilistic quantile forecasting, univariate/multivariate/covariate-aware and CPU/GPU capable. Promising low-compute baseline for general time-series experiments, but not validated as a crypto/equity alpha model.
+- Google TimesFM 3.0 — Apache-2.0 repository, pretrained general time-series foundation model. Candidate comparison, not assumed suitable for high-frequency or microstructure data.
+- IBM Granite Time Series PatchTST-FM-r2 — dual Apache-2.0/OpenMDW-1.0 licensing per release material, about 385M parameters, probabilistic forecasts and imputation. Candidate for medium-horizon forecasting and missing-data experiments; must benchmark locally and verify exact model artefact licence.
+- Salesforce Moirai 2.0-R-Small / MoiraiAgent — Hugging Face model card declares CC-BY-NC-4.0; exclude from any commercial-use-compatible candidate set unless licence terms change or counsel confirms the intended use. Research-only status and licence restrictions must be respected.
+- FinGPT — financial-language model research ecosystem, potentially useful for classifying/summarising financial text and sentiment with careful source/time provenance. It is not a replacement for numerical time-series models, and sentiment output is not a trading signal without independent validation.
+- Qlib — MIT, https://github.com/microsoft/qlib. Quant research framework with data pipeline, feature/model training, backtesting, portfolio/risk and execution abstractions. Valuable research reference and potential offline experiment harness; not a drop-in IDEAL runtime and not proof of edge. Its defaults/examples have equity-market orientation, so crypto perpetual support and funding/microstructure assumptions need independent assessment.
+
+### 13.4 AI usage policy for IDEAL
+
+Use deterministic scripts for acquisition, validation, reconciliation, health checks, calculations, backtests, scheduling and routine reporting. A local model may assist with natural-language interaction, document research, bounded incident summaries, tool routing or approved research analysis. LLM output is untrusted input: validate structured output against schemas, treat retrieved content as untrusted, sandbox code/tools, require explicit approval for consequential actions and maintain an independent audit record. No model can authoritatively validate its own input data or silently modify live strategy/execution logic.
+
+### 13.5 Evaluation criteria before any adoption
+
+Evaluate candidates on:
+- exact licence for code, weights, tokenizer, training data and intended use;
+- hardware and memory requirements at the actual target quantisation/context;
+- local latency, throughput, energy and memory use on the eventual PC;
+- structured-output and tool-call reliability on IDEAL-specific test sets;
+- hallucination, prompt-injection and tool-boundary resistance;
+- offline operation, data egress and telemetry behaviour;
+- reproducible installation, pinned versions, SBOM and security updates;
+- maintenance activity, release cadence, unresolved critical issues and dependency footprint;
+- measurable quality versus deterministic scripts and simpler models;
+- total cost of ownership, including hardware, power, storage and maintenance.
+
+Do not select hardware or a model before target PC specifications and representative workloads are known.
