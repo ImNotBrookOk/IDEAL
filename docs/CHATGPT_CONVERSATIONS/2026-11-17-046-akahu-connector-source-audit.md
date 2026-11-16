@@ -116,3 +116,8 @@ Further pinned-source inspection was completed after the initial record:
 - MoneyMatter's product-wide transfer support does not change the Akahu provider's explicit `transferNature: not_transfer` import behaviour.
 
 Research document section 17.7 contains the detailed evidence. This addendum does not change any approval boundary: D-017 remains Proposed; Phase 02 only; no app installation, credential use, bank connection, runtime, provider selection or implementation.
+
+
+## Current-state addendum — 17 November 2026
+
+The backup/restore and credential-key follow-up described above is now complete at source-review level and recorded in research section 17.7. The next proposed research step is to turn the observed gaps into a concise IDEAL source-observation/reconciliation contract and an acceptance matrix, then compare that contract against the existing IDEAL ledger/event-journal design. This remains Phase 02 architecture research only; no POC, installation, account connection or implementation is authorised.
