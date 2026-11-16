@@ -228,3 +228,12 @@ Additional repositories and documentation were reviewed: astt, krbob/portfolio, 
 Disposition: no drop-in application satisfies IDEAL's requirements. Keep the authoritative source-observation registry, reconciliation policy and double-entry journal IDEAL-owned in a separate personal-finance bounded context. astt is a MIT-licensed mobile/net-worth UX reference, not a ledger; krbob/portfolio is a strong portfolio architecture reference but no root licence was found; Formance and TigerBeetle are correctness references, not initial runtime dependencies. Akahu Personal Apps are documented as unsuitable for production-ready applications, so any deployed bank connector remains blocked pending provider clarification and the correct access/accreditation path.
 
 Phase 02 only. D-017 remains Proposed; D-001 unchanged. No code, dependency, credential, bank connection, provider, hosting or runtime changed. Phases 03–19 remain LOCKED.
+
+
+### Phase 02 research checkpoint — proposed tax intelligence domain (17 November 2026)
+
+Research supports a future Tax Intelligence and Tax Accounting bounded context feeding estimated provisions and assessed liabilities into Personal Finance. New Zealand tax treatments differ across spot crypto, derivatives/financial arrangements, equities/FIF and other income. Crypto perpetuals require specialist classification; do not infer their treatment from spot-crypto guidance.
+
+IRD Gateway Services include income-tax return submission/status, income retrieval and tax-account data for approved integrations. Registration, due diligence, security assessment and technical onboarding are mandatory. IRD docs describe in-house software providers, but IDEAL's private single-user approval path remains to be confirmed. Public payment guidance documents internet banking and myIR direct debit; no public generic payment-initiation API was identified. Direct payment automation remains unconfirmed.
+
+Details: docs/PERSONAL_FINANCE_RESEARCH.md section 20; future-scope F-005 is Proposed only. No new decision accepted, no IRD account linked, no filing/payment, no code/dependency changes. D-017 remains Proposed. Phase 02 only; Phases 03–19 remain LOCKED.
