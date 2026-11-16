@@ -77,7 +77,7 @@ On 16 November 2026, the owner explicitly accepted the seven-day OKX 400-level L
 
 ## Hosting constraint update — owner operating preference
 
-Phone-first operation is preferred. The owner has an existing Windows PC/laptop available only if required, but internet access is via mobile phone data. Treat mobile bandwidth, data caps, tethering and variable connectivity as material constraints. The PC is an unselected fallback, not a presumed always-on host. Do not provision or configure it, open inbound ports, or run continuous high-volume feeds without a measured need and explicit approval. GitHub Actions remains research CI only. Host selection remains OPEN and deferred. See [checkpoint 040](CHATGPT_CONVERSATIONS/2026-11-16-040-phone-first-hosting-constraints.md).
+Phone-first operation is preferred. The owner has an existing Windows PC/laptop available only if required, but internet access is via mobile phone data. Treat mobile bandwidth, data caps, tethering and variable connectivity as material constraints. The PC is an unselected fallback, not a presumed always-on host. Do not provision or configure it, open inbound ports, or run continuous high-volume feeds without a measured need and explicit approval. GitHub Actions remains research CI only. Host selection is DEFERRED BY OWNER unless a concrete requirement forces a Windows PC fallback. See [checkpoint 040](CHATGPT_CONVERSATIONS/2026-11-16-040-phone-first-hosting-constraints.md).
 
 
 ## Dependency security and licence update — 16 November 2026
