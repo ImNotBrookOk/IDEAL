@@ -99,7 +99,7 @@ class TardisBook:
         return "valid"
 
 
-def audit_rows(rows) -> dict:
+def audit_rows(rows, bbo_writer=None) -> dict:
     book = TardisBook()
     row_count = message_count = snapshots = updates = skipped = 0
     status_counts = collections.Counter()
@@ -148,7 +148,11 @@ def audit_rows(rows) -> dict:
         if last_processed_local_ts is not None:
             max_gap_us = max(max_gap_us, local_ts - last_processed_local_ts)
         last_processed_local_ts = local_ts
-        status_counts[book.status()] += 1
+        book_status = book.status()
+        status_counts[book_status] += 1
+        if bbo_writer is not None and book_status == "valid":
+            message_exchange_ts = max(int(row["timestamp"]) for row in message_rows)
+            bbo_writer.writerow([message_exchange_ts, str(book.best_bid()), str(book.best_ask())])
         previous_snapshot = is_snapshot
 
     if row_count == 0:
@@ -178,21 +182,33 @@ def audit_rows(rows) -> dict:
     }
 
 
-def audit_gzip_csv(path: str | Path) -> dict:
-    with gzip.open(path, "rt", encoding="utf-8-sig", newline="") as stream:
-        reader = csv.DictReader(stream)
-        required = {"exchange", "symbol", "timestamp", "local_timestamp", "is_snapshot", "side", "price", "amount"}
-        missing = required.difference(reader.fieldnames or [])
-        if missing:
-            raise ValueError(f"missing required CSV columns: {sorted(missing)}")
-        return audit_rows(reader)
+def audit_gzip_csv(path: str | Path, bbo_output: str | Path | None = None) -> dict:
+    bbo_stream = None
+    try:
+        if bbo_output is not None:
+            bbo_stream = Path(bbo_output).open("w", encoding="utf-8", newline="")
+            bbo_writer = csv.writer(bbo_stream)
+            bbo_writer.writerow(["timestamp_us", "bid", "ask"])
+        else:
+            bbo_writer = None
+        with gzip.open(path, "rt", encoding="utf-8-sig", newline="") as stream:
+            reader = csv.DictReader(stream)
+            required = {"exchange", "symbol", "timestamp", "local_timestamp", "is_snapshot", "side", "price", "amount"}
+            missing = required.difference(reader.fieldnames or [])
+            if missing:
+                raise ValueError(f"missing required CSV columns: {sorted(missing)}")
+            return audit_rows(reader, bbo_writer=bbo_writer)
+    finally:
+        if bbo_stream is not None:
+            bbo_stream.close()
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--l2", required=True, help="Tardis incremental_book_L2 .csv.gz file")
+    parser.add_argument("--bbo-output", help="Optional CSV output of reconstructed BBO states")
     args = parser.parse_args()
-    print(json.dumps(audit_gzip_csv(args.l2), sort_keys=True, separators=(",", ":")))
+    print(json.dumps(audit_gzip_csv(args.l2, args.bbo_output), sort_keys=True, separators=(",", ":")))
 
 
 if __name__ == "__main__":
