@@ -25,15 +25,18 @@ This is not approval to build, connect accounts, store credentials, move money, 
 
 ## 3. New Zealand bank access — Akahu
 
-Akahu documentation currently distinguishes:
-- **Personal App (Tier 0):** free, restricted to one user's own Akahu account; ongoing account information only; no payments; no webhooks; daily scheduled refresh; manual refresh subject to a one-hour rest period.
-- **Full application:** ongoing account information for personal-finance/budgeting is classified Tier 2 by Akahu and requires a full app review. Other functionality has separate tiers and requirements.
+Akahu's current Personal Apps page distinguishes:
+- **Personal App:** free; one user only (restricted to the owner's own Akahu account); ongoing connectivity; account information allowed; payments and webhooks unavailable; daily scheduled refresh; manual refresh rest period of one hour. Creating one requires an Akahu profile, connecting an account, accepting developer terms, identity verification and MFA.
+- **Full App:** usage-based pricing and customisable refresh; payments and webhooks available. Akahu's accreditation guide says public/production integrations require application review, including a privacy notice, consumer information page, recent security/penetration testing and review of security, authentication and consumer controls. The first review is free; subsequent reviews are listed at NZ$1,000 each.
+- Akahu's general refresh documentation says default full-app data freshness is at most 24 hours and its general manual-refresh rest period is 15 minutes, but the Personal App table explicitly sets a one-hour limit. Apply the Personal App-specific rule to that route.
 - **Official CDR:** an accredited intermediary can access customer-authorised banking data under New Zealand's Consumer Data Right. IDEAL is not accredited and must not represent itself as such.
 
-The personal-app route is promising for a private single-user experiment. It is not equivalent to a production integration for multiple users, and the exact use case/terms must be confirmed with Akahu before any connection. A personal token is a secret: do not paste it into chat, commit it, place it in plain-text config or log it.
+The Personal App route is promising for a private single-user experiment, but it is a provider-specific developer product, not a general permission to operate a bank-data service. Confirm that the intended personal/self-hosted use is permitted before connecting. A personal token is a secret: do not paste it into chat, commit it, place it in plain-text config or log it.
 
 References:
 - Akahu Personal Apps: https://developers.akahu.nz/docs/personal-apps
+- Akahu refresh behaviour: https://developers.akahu.nz/docs/data-refreshes
+- Akahu app accreditation: https://developers.akahu.nz/docs/app-accreditation
 - Akahu app accreditation/tier classification: https://developers.akahu.nz/docs/app-accreditation
 - Akahu official open-banking transition: https://developers.akahu.nz/docs/official-open-banking
 - Akahu pricing: https://www.akahu.nz/pricing
@@ -113,3 +116,50 @@ MoneyMatter's self-host guide states a 2 GB RAM minimum and uses Docker, Postgre
 ## 10. Source notes and uncertainty
 
 Web evidence checked 16 November 2026. Provider terms, bank coverage, API fields, fees, supported institutions and accreditation requirements can change. Confirm directly with Akahu/MBIE before relying on them. This document is technical issue-spotting, not legal, tax or financial advice.
+
+
+## 11. Comparative project screen — 16 November 2026
+
+This is a first-pass repository and documentation screen, not a full source-code/security audit. Stars/forks are discovery signals only. Pin exact commits before any isolated trial.
+
+| Project | Licence / activity evidence | Strongest fit | Main limitation / disposition |
+|---|---|---|---|
+| [Actual Budget](https://github.com/actualbudget/actual) | MIT; GitHub snapshot about 30.2k stars / 3.3k forks; release v26.11.0 dated 2 Nov 2026; high visible activity | Local-first envelope budgeting, reports, schedules, CSV/QIF/OFX/QFX/CAMT imports, mobile/browser access with server, API, Akahu provider | **Best initial candidate for an isolated budgeting trial.** Not a complete investment/trading platform. Bank-sync credentials are stored server-side and are not protected by budget end-to-end encryption; self-hosting is therefore important. Documentation versions differ on whether syncing is automatic or manual; verify pinned release behaviour. |
+| [MoneyMatter](https://github.com/letehaha/moneymatter) | AGPL-3.0; snapshot 227 stars / 90 forks; v0.33.7 released 30 Oct 2026; NZ Akahu support added in v0.33.6 | Broad all-in-one feature set: budgets, accounts, investments, net worth, debts, multi-currency, imports and Akahu | **Best breadth/reference candidate, not first default foundation.** More complex Docker/Postgres/Redis stack; AGPL and relicensing boundary need exact audit; bank token storage, data model, accounting correctness, security and restore process not yet verified. |
+| [Firefly III](https://github.com/firefly-iii/firefly-iii) | AGPL-3.0; 25k+ stars; v6.7.8 released 10 Oct 2026; signed releases; active development snapshot | Detailed personal-finance transaction management, budgets, recurring transactions, rules, reports and API/importer ecosystem | Strong alternative for tracking/accounting; no evidence yet of native NZ Akahu integration; AGPL; verify security fixes, importer compatibility and backup/restore. |
+| [Beancount](https://github.com/beancount/beancount) | GPL-2.0-only; 5.9k–6.1k stars; v3 current stable, v2 maintenance/frozen | Explicit double-entry ledger, native multi-currency accounting, reproducibility and text-based auditability | **Accounting reference, not end-user budgeting app.** Requires technical workflow and separate UI/importers; GPL obligations if embedding/distributing. |
+| [hledger](https://github.com/hledgerorg/hledger) | GPL-3.0; about 4.8k stars / 418 forks; active repo and release history | Double-entry ledger, CSV rules/import, CLI/TUI/web reporting, lots/cost basis | **Accounting/import reference.** Not a turnkey bank-connected budgeting experience; GPL-3.0 and command-line orientation. |
+
+### Actual Budget details worth testing
+
+- Official documentation lists Akahu as a New Zealand bank provider and supports importing CSV, QIF, OFX, QFX and CAMT statement files.
+- Actual's installation documentation says file import and budgeting work without a server; browser/mobile access, device sync and bank sync require the server.
+- Bank-sync credentials are held on the server and are not covered by Actual's budget end-to-end encryption. This is a material secret-management boundary, not a reason to assume the product is unsafe. Self-host and protect the host/database.
+- Actual is MIT-licensed, so it is the cleanest licensing candidate among the turnkey apps screened here. Any fork still requires normal licence notices and dependency review.
+
+### Preliminary disposition
+
+1. **Trial Actual Budget first** in a disposable, offline/local test environment with synthetic data only. Test the budgeting experience, data export, account model, CSV/OFX imports, mobile access and backup/restore. No bank credentials or real statements yet.
+2. **Audit MoneyMatter second** at a pinned release/commit. Focus on exact AGPL relicensing boundary, database schema, bank integration implementation, secret storage, transaction deduplication, tests, dependency vulnerabilities and restore.
+3. **Use Beancount/hledger as accounting design references**, not necessarily as the user interface or embedded ledger. Determine whether IDEAL needs a canonical double-entry ledger underneath either app.
+4. **Keep Firefly III as a serious alternative** if Actual's envelope-budget model or transaction/account model proves unsuitable.
+5. Do not integrate any of these into IDEAL yet. First define the canonical financial contracts and establish whether an external app can safely remain a replaceable adapter/view.
+
+### Important uncertainty and corrections
+
+- Akahu's Personal App page explicitly states the one-hour manual refresh rest period. Akahu's generic refresh page describes 15 minutes as the general default for apps; these statements apply to different app classes, so the Personal App-specific limit governs the proposed personal route.
+- Actual's bank-sync documentation surfaced in more than one revision: one describes automatic scheduled syncing and another says manual sync only. The exact behaviour must be checked against a pinned current release and tested before relying on it.
+- This screen does not establish that any project is secure, bug-free, accounting-correct or suitable for IDEAL. No security audit, dependency scan, restore test or live integration has been performed.
+
+Sources:
+- Actual repository: https://github.com/actualbudget/actual
+- Actual bank sync: https://github.com/actualbudget/actual/blob/master/packages/docs/docs/advanced/bank-sync.md
+- Actual transaction imports: https://github.com/actualbudget/actual/blob/master/packages/docs/docs/transactions/importing.md
+- Actual install modes: https://github.com/actualbudget/actual/blob/master/packages/docs/docs/install/index.md
+- MoneyMatter repo/releases: https://github.com/letehaha/moneymatter ; https://github.com/letehaha/moneymatter/releases
+- Firefly III repo/releases: https://github.com/firefly-iii/firefly-iii ; https://github.com/firefly-iii/firefly-iii/releases
+- Beancount: https://github.com/beancount/beancount
+- hledger: https://github.com/hledgerorg/hledger ; https://github.com/hledgerorg/hledger/releases
+- Akahu Personal Apps: https://developers.akahu.nz/docs/personal-apps
+- Akahu refresh: https://developers.akahu.nz/docs/data-refreshes
+- Akahu accreditation: https://developers.akahu.nz/docs/app-accreditation
