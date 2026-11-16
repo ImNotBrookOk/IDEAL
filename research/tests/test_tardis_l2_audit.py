@@ -81,6 +81,18 @@ class TardisAuditTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             audit_rows(rows)
 
+    def test_local_and_exchange_timestamp_gaps_are_reported_separately(self):
+        rows = [
+            row(1000, True, "bid", 100, 2, ts=10000),
+            row(1000, True, "ask", 101, 2, ts=10000),
+            row(2000, False, "bid", 100, 3, ts=10150),
+            row(3000, False, "ask", 101, 3, ts=10050),
+        ]
+        result = audit_rows(rows)
+        self.assertEqual(result["max_local_message_gap_ms"], 1.0)
+        self.assertEqual(result["max_exchange_message_gap_ms"], 0.15)
+        self.assertEqual(result["exchange_timestamp_backwards_messages"], 1)
+
     def test_bbo_writer_emits_one_state_per_processed_message(self):
         rows = [
             row(1000, True, "bid", 100, 2),
