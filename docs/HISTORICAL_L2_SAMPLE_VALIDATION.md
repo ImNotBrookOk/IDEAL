@@ -615,13 +615,13 @@ The new independent CSV parser/reconstructor was tested with six focused unit te
 - zero rows before the first snapshot;
 - 7,260,093 zero-amount level deletions;
 - all 3,242,436 reconstructed message states valid (no empty, crossed or locked BBO);
-- maximum gap between processed message groups 276.101 ms;
+- maximum local receive-timestamp gap between processed message groups 276.101 ms;
 - exchange timestamps covered 2026-11-01 UTC;
 - final reconstructed BBO at end of file: 78,313.0 / 78,313.1.
 
 The trade file contained 1,190,743 rows: 587,069 buy and 603,674 sell. All rows had the expected schema, positive finite prices/amounts, valid side values and nondecreasing local timestamps. Local timestamps ranged from 1793491200019430 to 1793577599972800 microseconds.
 
-This validates that the documented Tardis normalized incremental-L2 CSV format can be parsed and reconstructed on a full first-of-month Binance Futures sample. It does not validate the same exchange-day's fills against BBO, prove source-side sequence continuity, provide L3/FIFO order identity, or establish the license rights for commercial use of the data. The 276 ms maximum message gap is a measured property of this one sample, not a general Tardis guarantee.
+This validates that the documented Tardis normalized incremental-L2 CSV format can be parsed and reconstructed on a full first-of-month Binance Futures sample. It does not validate the same exchange-day's fills against BBO, prove source-side sequence continuity, provide L3/FIFO order identity, or establish the license rights for commercial use of the data. The 276 ms maximum is a local receive-timestamp gap in this one sample, not a general Tardis guarantee. The parser now reports local receive and exchange timestamp gaps separately.
 
 Tardis's official CSV specification states that messages are grouped by local_timestamp; pre-snapshot updates must be skipped; a new snapshot after updates resets the book; amount is absolute rather than a delta; and amount zero removes a level. Source: https://docs.tardis.dev/downloadable-csv-files (incremental_book_L2 schema).
 
