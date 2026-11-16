@@ -248,3 +248,10 @@ The detailed audit is in [docs/PERSONAL_FINANCE_RESEARCH.md](PERSONAL_FINANCE_RE
 - **GnuCash 5.17, Beancount v3 and hledger 1.52.4:** accounting/investment/ledger-model references rather than integrated phone-first bank-connected products.
 
 Revised recommendation: do not adopt a single external app as IDEAL's universal ledger. Keep Personal Finance as its own domain and use read-only consolidated projections from investment/trading engines. Firefly III is the leading external ledger candidate for isolated synthetic-data evaluation; MoneyMatter is the broadest feature/UX reference. No product, dependency, bank connection or implementation is selected. D-017 remains Proposed and Phase 02 remains architecture/contracts only.
+
+
+### Pinned Akahu source audit update — 17 November 2026
+
+Pinned source inspection of MoneyMatter v0.33.7 and Firefly III Data Importer v2.3.5 is recorded in `docs/PERSONAL_FINANCE_RESEARCH.md`, section 17. MoneyMatter has the stronger mocked Akahu E2E coverage (pagination, 14-day overlap, stable-ID idempotency, unlink/relink, outage/auth recovery and balance history), but its existing-ID path skips changed rows, it does not reconcile upstream deletions, does not fetch pending transactions, imports every row as `not_transfer`, and does not preserve Akahu's explicit foreign-currency conversion fields. Firefly stores Akahu IDs and defaults to identifier-based deduplication, but its inspected Akahu feature test is a TODO/mock skeleton; it also skips same-ID updates, does not reconcile upstream deletions or pending transactions, and rounds foreign amounts to two decimals.
+
+Revised research disposition: neither connector meets IDEAL's required source reconciliation contract. MoneyMatter is the better Akahu integration/UX reference; Firefly remains the stronger external double-entry ledger reference, not an adopted dependency. Any future POC must be separately approved and synthetic-only. D-017 remains Proposed; no implementation, account connection, credential, runtime, provider or hosting is approved.
