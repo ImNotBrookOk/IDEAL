@@ -291,3 +291,26 @@ The authoritative owner-approved vision and detailed design backlog are in [docs
 - Phase 02: ACTIVE — integrated core protection architecture and contracts research.
 - Phases 03–19: LOCKED.
 - No runtime implementation, dependencies, exchange/account connections, execution, paid infrastructure, hosting or model training authorised by this checkpoint.
+
+
+### Phase 02 — security architecture and assurance workstream (D-021)
+
+Security is the fourth foundational pillar alongside risk management, data integrity and system health. It is a mandatory design constraint across all components, not a later hardening task. Security telemetry integrates with system health, but security assurance remains separately reported because availability does not prove a component is uncompromised.
+
+Before Phase 03, research and specify:
+1. Threat model, protected assets, adversaries, trust boundaries and abuse cases.
+2. Identity, authentication, authorisation, least privilege, sessions and device trust.
+3. Secrets/key hierarchy, encryption, rotation, revocation and recovery.
+4. Data classification, privacy, minimisation, retention, deletion and secure export.
+5. Network, application, OS/container and host hardening; domain segmentation.
+6. Secure development lifecycle, dependency provenance, SBOM/scanning, CI/CD and artefact integrity.
+7. AI/agent sandboxing, prompt-injection boundaries, tool allowlists and approval controls.
+8. Independent security telemetry, tamper-evident audit, alerting and monitoring failure detection.
+9. Vulnerability discovery, severity/exception governance, remediation and authorised penetration testing.
+10. Incident response, forensic preservation, credential compromise and verified recovery.
+11. Security acceptance criteria and requirement-to-test-to-evidence traceability.
+12. Independent adversarial review of the highest-risk assumptions.
+
+A scan cannot guarantee that all vulnerabilities have been discovered. Findings, assessment scope/freshness and residual risks must be explicit. Critical exploitable findings block the affected release/capability. External testing is limited to assets IDEAL owns and requires separate authorisation.
+
+See [docs/IDEAL_SECURITY_ARCHITECTURE.md](docs/IDEAL_SECURITY_ARCHITECTURE.md). Phase 02 remains active; Phases 03–19 remain locked. No implementation, security product subscription, external scan, hosting or new integration is authorised.
