@@ -103,18 +103,6 @@ The owner explicitly accepts that designing and researching the foundation may t
 >
 > The priority is getting the foundation right before building on top of it. We will not rush Phase 02 to reach implementation. A design that is poorly specified now creates technical debt, security weaknesses and expensive corrections later.
 
-### User message 4 — current instruction
-
-> Yes I agree with you, keep all the data. The data is important no matter what form its in. It can be used constantly for different reasons.
-
-### User message 5 — current instruction
-
-> Yes well now you understand where we are going with this project. You can now understand what is important and needed. But whats more important as the data is rhr risk management engine. So basically everything goes hand in hand and backs each other up and supports each other in some way or another even tho the engines and systems may seem separate. But the integrity of the risk, data and health of the system is what keeps it running perfectly and in sync
-
-### User message 6 — current instruction
-
-> This is great. I love this vision for IDEAL. We need to document all of this, update our goals, roadmap and audit trail to assiss with this. Because I think there isnt much more wed need to add after this. Its thr complete system that protects itself and each part protects the next. Thats why planning and designing the system can take time and i understand that and i dont care how long it takes to design the foundation and research each part making sure the code is immaculate and is designed exactly how its meant to.
-
 ## 3. Decisions and requirements recorded
 
 - The integrated protection architecture is accepted as a foundational system direction (D-020).
