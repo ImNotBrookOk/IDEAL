@@ -143,8 +143,6 @@ jobs:
           zizmor --gh-token "$GITHUB_TOKEN" .github/workflows > research-output/zizmor.txt 2>&1
           zizmor_status=$?
           cat research-output/zizmor.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           {
             echo "parser_pip_audit_exit_code=$parser_status"
             echo "nautilus_poc_pip_audit_exit_code=$poc_status"
@@ -157,6 +155,8 @@ jobs:
           if [ "$parser_status" -ne 0 ] || [ "$poc_status" -ne 0 ] || [ "$zizmor_status" -ne 0 ]; then
             exit 1
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload audit reports and SBOM
         if: always()
