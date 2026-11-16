@@ -278,3 +278,26 @@ Scope includes separate tax treatments for spot crypto, crypto derivatives/perpe
 IRD Gateway Services support income-tax return filing/status, income retrieval and account/transaction data for approved integrations. Registration, due diligence, security assessment, developer onboarding and approval are required. IRD documentation permits in-house software applications, but approval of IDEAL's private single-user use case must be confirmed. Public payment guidance documents bank Pay IRD and myIR direct debit; no public general tax-payment initiation API was identified. Therefore a one-click direct payment is unconfirmed; initial design should provide reviewed payment instructions/links and reconcile only confirmed payments.
 
 Disposition: research proposal only. No filing, payment, IRD linking, implementation or rule set approved. See docs/PERSONAL_FINANCE_RESEARCH.md section 20. F-005 does not change D-001 or accept D-017.
+
+
+### F-005 amendment — user-controlled tax awareness (17 November 2026)
+
+The owner clarified that a tax reserve must never be mandatory or restrictive. IDEAL may calculate and display a recommended reserve, estimated liability, payments already made, due dates and potential shortfall, but it must not lock, escrow, deduct, segregate or make funds unavailable. The user may deploy the full amount, including a displayed recommended reserve, into trading or investments. IDEAL should update the estimated exposure and provide clear, proportionate warnings; it must not block trades or force payment. This is consistent with accepted D-018. Legal tax obligations remain in force independently of IDEAL's controls.
+
+### F-006 — Shared Data Trust, Quality and System Health Plane (Proposed architecture work, 17 November 2026)
+
+Proposal: design a cross-domain deterministic data trust and health capability that protects every trading, investment, hedging, personal-finance and tax domain from invalid, stale, incomplete, contradictory or fabricated inputs.
+
+Research/design scope:
+- Source and entitlement registry; provider/venue identity, instrument mapping, market session/calendar, source limits and permitted use.
+- Immutable raw observations and source timestamps; separate event time, publication time, retrieval/ingest time and processing time.
+- Deterministic schema, type, range, precision, sequence, gap, duplicate, timestamp, clock-drift, completeness and cross-source consistency checks.
+- Per-feed and per-field freshness contracts, market-session-aware status and explicit LIVE/DELAYED/STALE/UNKNOWN/UNAVAILABLE states; never imply real-time when entitlement or evidence does not support it.
+- Quarantine and correction/replay workflow; lineage from source observation through transformation and decision consumption.
+- Independent health supervisor for feeds, adapters, workers, scheduler, event queues, storage, reconciliation, backups, audit integrity, configuration/dependency drift and alert delivery.
+- Deterministic incident detection, escalation, recovery criteria, append-only incident/audit records and status dashboard.
+- Fail-closed policy for decision-critical data; last-known values may be shown for context only when visibly aged and never silently substituted into execution.
+- Deterministic scripts and scheduled jobs as the default; AI use optional, bounded and non-authoritative.
+- Portable separation of mobile UI/control plane from ingestion, storage and compute, enabling later PC/private-server deployment.
+
+No provider, paid data feed, hosting, always-on compute, runtime code or dependency is selected or authorised. F-006 is architecture/research scope only and does not change D-001 or unlock any phase. See `docs/DATA_INTEGRITY_AND_HEALTH.md`.
