@@ -364,3 +364,12 @@ Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK
 ### Phase 02 research checkpoint — risk management, Stage 3 (17 November 2026)
 
 Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with portfolio-level historical/stress risk, conditional dependence, concentration taxonomy, coherent scenario design, liquidity-adjusted close-out, VaR/Expected Shortfall limitations, auditable risk outputs and independent verification requirements. CME SPAN/SPAN 2 are methodology references only; recent crypto liquidation/liquidity papers are treated as provisional evidence requiring replication. D-006/D-008 and all accepted numerical policies remain unchanged. No venue/account mode or implementation selected. Phase 02 only; continue research on margin/collateral/liquidation buffers, drawdown controls, strategy/model risk and independent assurance.
+
+
+### Phase 02 research checkpoint — risk management, Stage 4 (17 November 2026)
+
+Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with venue/account-mode margin semantics, collateral eligibility and tiered haircuts, wrong-way and liquidity risk, stressed liquidation buffers, venue liquidation waterfalls, independent shadow-margin reconciliation, margin procyclicality and adversarial verification. Official Bybit/OKX/Binance venue material and BoE/CME/CPSS-IOSCO frameworks are treated as venue-specific or methodological evidence, not as universal rules for IDEAL. No venue, account mode, collateral asset, haircut, buffer threshold or execution action selected. D-006/D-008 and existing numerical policies remain unchanged.
+
+### Project identity and README scope clarification (17 November 2026)
+
+The repository front page now describes IDEAL's overall objective as a private integrated financial intelligence and decision-support platform. Crypto perpetual futures are explicitly described as the initial research domain rather than the entire product purpose. The README outlines the longer-term specialised domains (market/quant research, trading and investment analysis, portfolio/capital oversight, personal finance and tax-aware information), four shared foundations, owner authority, AI boundaries, architecture-first governance, current phase status and future-domain gates. These are vision and research scope, not a claim that future engines are built or authorised.
