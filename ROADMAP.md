@@ -219,3 +219,12 @@ No candidate connector satisfies IDEAL's source-reconciliation requirements. Mon
 ### Phase 02 follow-up — bank connector backup and key lifecycle (17 November 2026)
 
 MoneyMatter v0.33.7 source uses AES-256-GCM for bank credentials with a key derived from `APPLICATION_JWT_SECRET`; no rotation workflow was identified. Its backup tests strip bank and AI secrets, and restore connections as inactive until credentials are re-entered. Attachments are excluded from its archive and require separate backup. Firefly's inspected Akahu importer path has no visible application-level encryption for Akahu tokens. Detailed evidence is in docs/PERSONAL_FINANCE_RESEARCH.md, section 17.7. No tests were executed, no backup/restore was run, and no software was installed. Phase 02 only; D-017 Proposed; Phases 03–19 LOCKED.
+
+
+### Phase 02 research checkpoint — personal-finance reuse and reconciliation (17 November 2026)
+
+Additional repositories and documentation were reviewed: astt, krbob/portfolio, Formance Ledger, TigerBeetle, Akahu's official JavaScript SDK, OFX Statement, Beangulp, rotki, Ghostfolio and Flowfolio. Findings and a proposed source-observation/reconciliation contract are in docs/PERSONAL_FINANCE_RESEARCH.md sections 18–19.
+
+Disposition: no drop-in application satisfies IDEAL's requirements. Keep the authoritative source-observation registry, reconciliation policy and double-entry journal IDEAL-owned in a separate personal-finance bounded context. astt is a MIT-licensed mobile/net-worth UX reference, not a ledger; krbob/portfolio is a strong portfolio architecture reference but no root licence was found; Formance and TigerBeetle are correctness references, not initial runtime dependencies. Akahu Personal Apps are documented as unsuitable for production-ready applications, so any deployed bank connector remains blocked pending provider clarification and the correct access/accreditation path.
+
+Phase 02 only. D-017 remains Proposed; D-001 unchanged. No code, dependency, credential, bank connection, provider, hosting or runtime changed. Phases 03–19 remain LOCKED.
