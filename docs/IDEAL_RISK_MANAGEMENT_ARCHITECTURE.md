@@ -115,7 +115,7 @@ The following is a design hypothesis for review, not an accepted final contract.
 
 A lower level cannot override a higher-level rejection. Venue rules may be stricter than IDEAL policy; IDEAL must respect the stricter effective constraint.
 
-### 4.4 Risk policy classes and change governance
+### 4.2 Risk policy classes and change governance
 
 Research should distinguish at least four classes of constraints:
 
@@ -128,7 +128,7 @@ Policy changes should be versioned, attributable, reasoned, effective-dated and 
 
 The existing D-009 principle that progression gates are predefined and deterministic is relevant: strategy eligibility and risk allocation cannot be changed by an AI component to bypass a gate. Unknown regime or absence of an eligible strategy remains a no-trade condition under D-004.
 
-### 4.2 Action classification
+### 4.3 Action classification
 
 Every proposed action should be classified by its effect, not merely by its order type:
 
@@ -145,7 +145,7 @@ An action described as "reduce-only" must still be checked against actual venue 
 
 Collateral transfers/withdrawals and policy changes are not assumed to be ordinary trading actions; they require distinct permissions and approval boundaries.
 
-### 4.3 Pre-action decision contract
+### 4.4 Pre-action decision contract
 
 A risk decision should be bound to:
 - unique proposal and decision identifiers;
