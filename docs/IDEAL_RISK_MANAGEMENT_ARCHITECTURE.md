@@ -248,6 +248,32 @@ The exact equity basis for D-006 and any future portfolio limits remains unresol
 
 Cross-venue or cross-account aggregation may be useful for economic exposure, but IDEAL must not assume margin netting, collateral transferability or immediate access to funds across venues/accounts unless this is separately proven and authorised.
 
+
+
+### 6.6 Capital and equity semantics
+
+Official exchange documentation demonstrates that wallet balance, total equity, adjusted equity, margin balance and available balance are different measures with different purposes. Binance's Futures documentation distinguishes wallet balance (including realised P&L, funding and commissions) from margin balance (wallet balance plus unrealised P&L) and available balance. Bybit distinguishes total equity, margin balance and available balance, including collateral haircuts. OKX distinguishes total equity, adjusted equity after collateral haircuts and available equity.
+
+Sources:
+- Binance Futures balance definitions: https://www.binance.com/en/blog/futures/457299340443288694
+- Bybit V5 Get Wallet Balance: https://bybit-exchange.github.io/docs/v5/account/wallet-balance
+- Bybit UTA glossary: https://www.bybit.com/en/help-center/article/Glossary-Unified-Trading-Account
+- OKX API account overview: https://www.okx.com/docs-v5
+
+Provisional architecture implication: do not use one ambiguous field called "equity" as the basis for every risk rule. Investigate and explicitly define at least:
+- **Economic equity:** best estimate of net economic value across the explicitly included account assets and liabilities, with valuation timestamp and source.
+- **Risk-adjusted equity:** conservative risk-capital measure after applicable collateral haircuts, liabilities, uncertain valuations and other approved deductions.
+- **Venue margin equity:** the exchange's own account-mode-specific measure used by its margin/liquidation system.
+- **Available margin:** the amount the venue currently makes available for additional margin requirements.
+
+These values must remain separately named and traceable. Available margin is not a measure of wealth or a sufficient standalone risk budget. Unrealised gains must not automatically be treated as cash or transferable collateral.
+
+The future capital-state design should distinguish immutable financial events (transfers, realised P&L, fees, funding, rebates, liquidation charges and adjustments) from time-varying valuations (mark-to-market unrealised P&L and collateral conversion). Transfers between internal accounts must not be mistaken for profit or loss. Position P&L must not be double-counted in both the ledger and valuation layer.
+
+The exact equity basis for D-006 and any future portfolio limits remains unresolved. D-008 already specifies UTC day-start equity for its daily loss boundary; that definition must be preserved unless the owner explicitly approves a superseding decision. D-006's "equity" basis requires clarification during policy design. Venue-specific account mode, collateral haircut, borrowing/liability and settlement-currency rules must be modelled explicitly.
+
+Cross-venue or cross-account aggregation may be useful for economic exposure, but IDEAL must not assume margin netting, collateral transferability or immediate access to funds across venues/accounts unless this is separately proven and authorised.
+
 ### 6.5 Stress scenarios
 
 At minimum, investigate coherent combinations of:
