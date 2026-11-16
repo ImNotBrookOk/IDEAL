@@ -6,7 +6,6 @@ on:
       - research/okx-l2-sample-2026-11-16
     paths:
       - research/**/*.py
-      - research/requirements.txt
       - research/requirements.lock
 
 permissions:
