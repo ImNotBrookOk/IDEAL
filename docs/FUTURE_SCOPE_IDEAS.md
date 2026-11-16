@@ -260,3 +260,10 @@ Revised research disposition: neither connector meets IDEAL's required source re
 ### Backup and credential-key audit follow-up — 17 November 2026
 
 MoneyMatter's pinned v0.33.7 source uses AES-256-GCM for stored bank credentials, with a key derived from `APPLICATION_JWT_SECRET`; preserve that deployment secret because no rotation workflow was found in the inspected source. Its backup tests strip bank/AI secrets and restore bank connections as disabled until credentials are re-entered. Attachments are excluded and require separate backup. Firefly's Akahu importer path has no visible application-level encryption for its Akahu tokens. Full evidence is in research section 17.7. No app or backup/restore was executed; no implementation or real data is approved.
+
+
+### F-004 research update — 17 November 2026
+
+Additional component research found no safe drop-in platform. astt is MIT-licensed and the strongest permissive mobile/net-worth product reference, but its current schema is not double-entry and account deletion cascades through transaction history. krbob/portfolio has a strong transaction-canonical/rebuildable-read-model design and backup/audit patterns, but no root licence file was found, so code reuse is not cleared. Formance Ledger (MIT) and TigerBeetle (Apache-2.0) offer useful immutable-ledger, idempotency and correction patterns but are operationally excessive as initial single-user runtime dependencies. Akahu's official documentation explicitly says Personal Apps are unsuitable for production-ready applications; any deployed integration requires provider clarification and the appropriate full-app/accreditation path.
+
+Recommendation: keep the personal-finance domain IDEAL-owned and separate from trading ledgers; study compatible open-source patterns, use manual/file imports first, and keep bank sync conditional. See docs/PERSONAL_FINANCE_RESEARCH.md sections 18–19. D-017 remains Proposed; no implementation, dependency, provider, account connection, credential, hosting or phase advancement is approved.
