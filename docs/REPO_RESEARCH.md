@@ -390,3 +390,6 @@ Sources:
 - https://github.com/nautechsystems/nautilus_trader/blob/develop/SECURITY.md
 
 **IDEAL gaps:** current requirements files pin direct packages but do not lock all transitive dependencies with hashes. IDEAL has not yet run a complete pip-audit/OSV scan over a locked research dependency tree, GitHub Actions workflow security lint, or full licence/SBOM inventory. These remain Phase 01 exit work. The POC and parser dependencies remain research-only and are not selected runtime dependencies.
+
+
+The same run measured the SQLite event-journal POC on GitHub-hosted x86_64 and ARM64 runners (5,000 events per payload, WAL + synchronous=FULL). Throughput ranged from 3,174 to 5,203 events/s, with p95 append latency 0.379–0.480 ms and p99 0.597–2.705 ms. These are informational runner measurements only; they are not target-worker benchmarks and do not prove crash recovery, power-loss durability or sustained capacity. Full figures are recorded in [checkpoint 033](CHATGPT_CONVERSATIONS/2026-11-16-033-dependency-licence-and-supply-chain-review.md).
