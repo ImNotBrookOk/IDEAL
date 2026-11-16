@@ -107,7 +107,11 @@ def audit_rows(rows, bbo_writer=None) -> dict:
     previous_snapshot = False
     have_snapshot = False
     last_processed_local_ts = None
-    max_gap_us = 0
+    last_processed_exchange_ts = None
+    max_local_gap_us = 0
+    max_exchange_gap_us = 0
+    exchange_timestamp_backwards = 0
+    max_exchange_backstep_us = 0
     min_exchange_ts = max_exchange_ts = None
 
     for local_ts_text, grouped_rows in groupby(rows, key=lambda row: str(row["local_timestamp"])):
@@ -124,6 +128,7 @@ def audit_rows(rows, bbo_writer=None) -> dict:
             raise ValueError("mixed is_snapshot flags within one local_timestamp message")
         is_snapshot = flags.pop()
 
+        message_exchange_ts = max(int(row["timestamp"]) for row in message_rows)
         for row in message_rows:
             row_count += 1
             exchange_ts = int(row["timestamp"])
@@ -146,12 +151,19 @@ def audit_rows(rows, bbo_writer=None) -> dict:
             book.apply(row)
 
         if last_processed_local_ts is not None:
-            max_gap_us = max(max_gap_us, local_ts - last_processed_local_ts)
+            max_local_gap_us = max(max_local_gap_us, local_ts - last_processed_local_ts)
         last_processed_local_ts = local_ts
+        if last_processed_exchange_ts is not None:
+            exchange_gap_us = message_exchange_ts - last_processed_exchange_ts
+            if exchange_gap_us < 0:
+                exchange_timestamp_backwards += 1
+                max_exchange_backstep_us = max(max_exchange_backstep_us, -exchange_gap_us)
+            else:
+                max_exchange_gap_us = max(max_exchange_gap_us, exchange_gap_us)
+        last_processed_exchange_ts = message_exchange_ts
         book_status = book.status()
         status_counts[book_status] += 1
         if bbo_writer is not None and book_status == "valid":
-            message_exchange_ts = max(int(row["timestamp"]) for row in message_rows)
             bbo_writer.writerow([message_exchange_ts, str(book.best_bid()), str(book.best_ask())])
         previous_snapshot = is_snapshot
 
@@ -170,7 +182,10 @@ def audit_rows(rows, bbo_writer=None) -> dict:
         "rows_skipped_before_first_snapshot": skipped,
         "deleted_levels": book.deleted_levels,
         "book_status_counts": dict(status_counts),
-        "max_message_gap_ms": max_gap_us / 1000.0,
+        "max_local_message_gap_ms": max_local_gap_us / 1000.0,
+        "max_exchange_message_gap_ms": max_exchange_gap_us / 1000.0,
+        "exchange_timestamp_backwards_messages": exchange_timestamp_backwards,
+        "max_exchange_timestamp_backstep_ms": max_exchange_backstep_us / 1000.0,
         "min_exchange_timestamp_us": min_exchange_ts,
         "max_exchange_timestamp_us": max_exchange_ts,
         "final_best_bid": float(best_bid) if best_bid is not None else None,
