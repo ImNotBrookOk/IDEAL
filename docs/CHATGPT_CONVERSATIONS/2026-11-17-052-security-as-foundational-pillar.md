@@ -61,3 +61,23 @@ The architectural answer is:
 - Add checkpoint 052 to the conversation audit index.
 
 No code, dependencies, credentials, runtime configuration, external accounts, infrastructure or financial records are changed.
+
+
+## 5. Read-back verification
+
+All ten changed or created paths were fetched from `main` after the writes. Their current blob identities and content checks are:
+
+| Path | Blob SHA | Read-back |
+|---|---|---|
+| `docs/IDEAL_SECURITY_ARCHITECTURE.md` | `fe8b53b1a4522c5cc0010a0c30b457e8dd2c6414` | Verified |
+| `docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md` | `09c3ceffc4323b3b0040ae5b3ad32e6048d78121` | Verified |
+| `REQUIREMENTS.md` | `bed0b4cd311bedf87b15ec4851d3c147a54a9951` | Verified |
+| `ARCHITECTURE.md` | `3799dcf73cb47a0b659b57b679f154488dd415b1` | Verified |
+| `docs/DATA_INTEGRITY_AND_HEALTH.md` | `cc5c980f4a7892ab774e90a4b56885b2df7d1442` | Verified |
+| `ROADMAP.md` | `80a1771d89ebc467b2eca4ab7407903df28c2cf9` | Verified |
+| `DECISIONS.md` | `b5c5d6d930e0298f1dd26842a6cce5c8b8b71879` | Verified |
+| `README.md` | `bfcc74477e2ea36fb7f4fb25314018b43940483f` | Verified |
+| `docs/CHATGPT_CONVERSATIONS/2026-11-17-052-security-as-foundational-pillar.md` | `ac8aedadf82b37d08f4faca9665ada013eb3e73c` | Verified |
+| `docs/CHATGPT_CONVERSATIONS/README.md` | `3f10763927c770caa3db76cc2996181efed35189` | Verified |
+
+Verification checked the expected security architecture, four-pillar direction, requirements, roadmap workstream, D-021 and audit index. No application code, dependencies, credentials, runtime configuration, external services or infrastructure were changed. Phase 02 remains active; Phases 03–19 remain locked.
