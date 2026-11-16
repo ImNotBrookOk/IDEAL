@@ -82,5 +82,23 @@ class AlignmentTests(unittest.TestCase):
             align_records(books, trades)
 
 
+    def test_alignment_reports_book_and_trade_timestamp_coverage(self):
+        books = [snapshot(100), update(200, ask="100")]
+        trades = [(150, 101.0, "buy"), (200, 100.5, "buy")]
+        result = align_records(books, trades)
+        self.assertEqual(result["book_timestamp_ms"], {"first": 100, "last": 200})
+        self.assertEqual(result["trade_timestamp_ms"], {"first": 150, "last": 200})
+        self.assertIsNone(result["first_no_preceding_book_trade_ms"])
+
+    def test_alignment_identifies_first_trade_before_initial_snapshot(self):
+        books = [snapshot(100), update(200)]
+        trades = [(99, 101.0, "buy"), (150, 101.0, "buy")]
+        result = align_records(books, trades)
+        self.assertEqual(result["no_preceding_book"], 1)
+        self.assertEqual(result["first_no_preceding_book_trade_ms"], 99)
+        self.assertEqual(result["book_timestamp_ms"], {"first": 100, "last": 200})
+        self.assertEqual(result["trade_timestamp_ms"], {"first": 99, "last": 150})
+
+
 if __name__ == "__main__":
     unittest.main()
