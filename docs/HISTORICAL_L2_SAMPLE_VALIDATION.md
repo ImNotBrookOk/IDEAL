@@ -643,13 +643,13 @@ Workflow [#43777769642](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777
 | Zero-amount deletions | 4,527,548 | 9,255,375 |
 | Reconstructed states | 844,982 valid | 5,827,935 valid |
 | Pre-snapshot rows skipped | 8 | n/a |
-| Maximum inter-message / record gap | 3,803.897 ms | 584 ms |
+| Maximum observed gap (Tardis local receive time; official exchange time) | 3,803.897 ms | 584 ms |
 | Exact 10 ms record intervals | not yet histogrammed | 4,927,293 (84.546%) |
 | Exact 20 ms record intervals | not yet histogrammed | 329,079 (5.647%) |
 
 Tardis trade sample: 781,943 rows, 387,478 buy and 394,465 sell; local timestamps ranged from 1793491200589194 to 1793577598702054 microseconds.
 
-The two sources are both structurally reconstructable, but their temporal characteristics are materially different: the official archive has approximately 6.90 times as many book records, 96 snapshots versus 13, and a substantially smaller maximum observed gap. The Tardis normalized sample's source channel mapping is not explicit in the CSV, so do not assume it is equivalent to OKX's 10 ms VIP4+ books-l2-tbt channel. The measured event-volume/gap difference suggests lower effective granularity and/or capture/reconnect loss in this sample. A direct timestamp-aligned BBO comparison is still required to quantify price-state agreement; until then, the Tardis OKX CSV must not be treated as a substitute for the official 10 ms archive.
+The two sources are both structurally reconstructable, but their observation density differs materially: the official archive has approximately 6.90 times as many book records and 96 snapshots versus 13. The listed gap values use different clocks (Tardis local receive time versus official exchange event time) and must not be compared as an apples-to-apples cadence metric. The Tardis normalized sample's source channel mapping is not explicit in the CSV, so do not assume it is equivalent to OKX's 10 ms VIP4+ books-l2-tbt channel. A direct timestamp-aligned BBO comparison is now available in section 12.18: inclusive same-timestamp match was 100%, while strict-preceding no-lookahead exact BBO match was 99.85065%. This validates sampled BBO agreement on this day, but the Tardis message stream remains much sparser and is not a substitute for the official 10 ms archive.
 
 The Tardis sample's 13 snapshots and 3.804-second maximum gap are consistent with reconnect/snapshot behaviour documented by Tardis; the CSV omits explicit disconnect markers. The official archive has 96 periodic snapshots and a 584 ms maximum adjacent record interval. Both reconstructions had zero empty/crossed/locked states, but this does not prove lossless capture.
 
