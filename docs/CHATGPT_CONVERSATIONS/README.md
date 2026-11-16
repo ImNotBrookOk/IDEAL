@@ -130,3 +130,6 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-051-integrated-core-protection-architecture.md](2026-11-17-051-integrated-core-protection-architecture.md) | Owner confirms IDEAL's integrated-system vision: risk management, data integrity and independent system health are mutually reinforcing foundations; all engines inherit shared protection and audit contracts; design/research quality takes precedence over speed; D-020 accepted; Phase 02 remains active and Phases 03–19 locked; documentation-only, no runtime or phase changes |
+
+
+| [2026-11-17-052-security-as-foundational-pillar.md](2026-11-17-052-security-as-foundational-pillar.md) | Owner adds security as a fourth foundational pillar; security monitoring integrates with system health but remains separately assessed; D-021 accepted; threat model, least privilege, secrets, privacy, supply chain, AI isolation, vulnerability lifecycle and incident recovery added to Phase 02; documentation-only, no runtime changes |
