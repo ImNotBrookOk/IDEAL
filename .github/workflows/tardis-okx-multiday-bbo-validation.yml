@@ -9,7 +9,6 @@ on:
       - research/okx_archive_audit.py
       - research/compare_bbo_series.py
       - research/tests/**
-      - research/requirements.txt
       - research/requirements.lock
 
 permissions:
