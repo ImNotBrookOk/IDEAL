@@ -279,3 +279,12 @@ Additional classification nuance: the FMA's official derivatives guidance define
 A no-API-key first-of-month Tardis Binance Futures BTCUSDT sample for 1 November 2026 was retrieved and reconstructed successfully in [workflow #43777192211](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777192211). The normalized incremental L2 file was 429.9 MB compressed / 6.461 GB uncompressed and contained 79.44m level rows across 3.242m message groups. One initial snapshot, 3.242m update messages, 7.26m zero-amount deletions and all 3.242m reconstructed states valid; maximum message gap 276.101 ms. The matching trade file contained 1,190,743 rows with valid schema, positive price/amount and monotonic local timestamps.
 
 This proves Tardis's public first-of-month sample can be acquired and the documented normalized L2 format can be reconstructed in our research pipeline. It does not prove paid historical API cost, commercial data rights, sequence continuity, L3 queue identity or event-level trade/BBO alignment. Tardis remains an independent data-source candidate/reference only; no vendor is selected. Full details and hashes: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.13.
+
+
+## 13.13 Same-day Tardis OKX sample is not equivalent to official 10 ms archive (16 November 2026)
+
+The same-day 1 November 2026 Tardis normalized OKX Swap L2 and official module-4 archive were both reconstructed successfully in [workflow #43777769642](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777769642). Both had zero invalid reconstructed states, but the data cadence differed materially:
+- Tardis: 844,983 message groups, 28.22m level rows, 13 snapshots, maximum message gap 3,803.897 ms.
+- Official OKX module 4: 5,827,935 records, 54.55m level rows, 96 snapshots, maximum record interval 584 ms; 84.546% of intervals were exactly 10 ms.
+
+The Tardis sample therefore has ~6.90x fewer message groups and substantially longer gaps. The CSV does not expose the raw OKX WebSocket channel identifier, so it is not proven to be the 10 ms VIP4+ books-l2-tbt stream. Treat it as a validated normalized/coarser reference, not as a substitute for official 10 ms history. Direct timestamp-aligned BBO comparison and exact channel provenance remain open. Artifact 14186673619 (2,596 bytes) contains summaries only; unconditional cleanup passed before upload. Full details: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.14.
