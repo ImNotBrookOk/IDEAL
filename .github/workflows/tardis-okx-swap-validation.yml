@@ -8,6 +8,7 @@ on:
       - .github/workflows/tardis-okx-swap-validation.yml
       - research/tardis_l2_audit.py
       - research/okx_archive_audit.py
+      - research/compare_bbo_series.py
       - research/tests/**
 
 permissions:
@@ -68,10 +69,16 @@ jobs:
         run: |
           python research/tardis_l2_audit.py \
             --l2 research-output/tardis-okex-swap-BTC-USDT-SWAP-L2-2026-11-01.csv.gz \
+            --bbo-output research-output/tardis-okx-bbo.csv \
             | tee research-output/tardis-okx-l2-summary.json
           python research/okx_archive_audit.py \
+            --bbo-output research-output/official-okx-bbo.csv \
             research-output/okx-official-BTC-USDT-SWAP-L2-400-2026-11-01.tar.gz \
             | tee research-output/okx-official-l2-summary.json
+          python research/compare_bbo_series.py \
+            --tardis-bbo research-output/tardis-okx-bbo.csv \
+            --official-bbo research-output/official-okx-bbo.csv \
+            | tee research-output/tardis-vs-official-bbo.json
           python - <<'PY'
           import csv, gzip, json
           from pathlib import Path
@@ -107,7 +114,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-          rm -f research-output/*.csv.gz research-output/*.tar.gz
+          rm -f research-output/*.csv.gz research-output/*.tar.gz research-output/*-bbo.csv
 
       - name: Upload audit summaries only
         if: always()
