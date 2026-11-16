@@ -834,3 +834,20 @@ The seven-day dataset is accepted as a **conditional historical market-structure
 - Do not claim passive-fill accuracy, queue position, sequence continuity, exact book/trade event order or execution-grade market-impact calibration.
 
 Full audit: [checkpoint 034](CHATGPT_CONVERSATIONS/2026-11-16-034-okx-seven-day-boundary-and-risk-classification.md).
+
+
+## 12.21 Tardis OKX September/October multi-day BBO comparison (16 November 2026)
+
+Workflow [#43804760777](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43804760777) completed a multi-day comparison on 1 Sep and 1 Oct 2026 using public Tardis OKX Swap incremental-L2 samples and matching official OKX module-4 400-level archives. Unit tests, retrieval, integrity checks, book reconstruction, no-lookahead comparison, unconditional raw-data cleanup and summary-only artifact upload all passed. Artifact [14198581255](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43804760777/artifacts/14198581255), 4,753 bytes; ZIP SHA-256 `970e09322fea56fb3fa8ce17120d6cbf1b5ab1409c36e865cdb4cd2b492dd15c`.
+
+| Date | Tardis messages / snapshots | Official records / snapshots | Strict-preceding exact BBO | Preceding BBO age median / p95 / max | Tardis max exchange gap |
+|---|---:|---:|---:|---:|---:|
+| 1 Sep 2026 | 854,293 / 65 | 5,858,458 / 96 | 99.3517439% | 10 / 50 / 510 ms | 16,500 ms |
+| 1 Oct 2026 | 855,187 / 49 | 7,217,446 / 96 | 99.3175754% | 10 / 40 / 500 ms | 2,400 ms |
+| 1 Nov 2026 baseline | 844,982 / 13 | 5,827,935 / 96 | 99.85065% | 10 / 60 / 529 ms | 3,800 ms |
+
+Both new days had zero samples without a preceding official state and 100% inclusive same-timestamp exact BBO match. September had 48,055,501 Tardis level rows vs 82,790,279 official; October 42,194,739 vs 82,544,414 official. Official archives had approximately 6.86x as many records in September and 8.44x in October.
+
+All three first-of-month dates show >99.3% strict-preceding exact BBO agreement, which supports Tardis as an accurate **secondary sampled BBO reference**. However, its message density is materially lower than official history and exchange-time gaps reach 2.4–16.5 seconds on the new dates. Do not treat it as equivalent to the official 10 ms feed for execution calibration. Normalized CSV still omits raw channel ID; exact channel provenance remains unavailable. This does not establish sequence continuity, FIFO queue position, RPI composition or passive-fill fidelity.
+
+Full audit: [checkpoint 036](CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md).
