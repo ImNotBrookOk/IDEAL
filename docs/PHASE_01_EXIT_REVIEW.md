@@ -7,9 +7,7 @@
 
 ## Executive position
 
-Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. It is not ready to close. The remaining blockers are now concentrated in two areas:
-
-1. **Owner approval:** the component recommendations and full matrix still require final review and explicit approval to close Phase 01. Infrastructure is now a documented deferral, not a reason to provision hardware: no reliable $0 cloud host is proven, and the owner prefers phone-first operation with a Windows PC only as fallback if a concrete requirement forces it.
+Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. The remaining owner action is to review the component recommendations and full matrix, then explicitly approve or request changes before Phase 01 can close. Infrastructure is a documented deferral, not a reason to provision hardware: no reliable $0 cloud host is proven, and the owner prefers phone-first operation with a Windows PC only as fallback if a concrete requirement forces it.
 
 The scoped research dependency/security gates now pass: both locked Python environments have zero known vulnerabilities, hash-pinned locks and CycloneDX SBOMs are retained, and online zizmor auditor-persona analysis reports no findings after a concurrency-control fix. These controls cover the two current research environments and nine workflows, not a future product dependency graph. orjson 3.11.6 MPL obligations remain relevant before distribution.
 
@@ -29,7 +27,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | Engine POC | RESEARCH CANDIDATE ONLY | NautilusTrader 2.0.0rc9, LGPL-3.0-only, pre-release; 84 tests pass on x86_64 and ARM64 using pytest 9.2.0. Known liquidation/accounting/queue and worker gaps remain. |
 | Direct dependency licences | REVIEWED WITH LIMITS | NautilusTrader LGPL-3.0-only; pytest 9.2.0 MIT; orjson 3.11.6 MPL-2.0 AND (Apache-2.0 OR MIT), selected to fix CVE-2025-67221 affecting 3.11.3. Review MPL file-level obligations before distribution. |
 | IDEAL-specific security / SBOM | PASS WITH LIMITS | Scoped parser and Nautilus POC scans each report zero known vulnerabilities; universal hash locks and CycloneDX SBOMs retained. Online zizmor auditor-persona scan reports no findings across nine workflows after fixing a concurrency-limits issue. Future product dependency graph is not covered. |
-| Documentation / audit trail | VERIFIED | Checkpoint audits 031–036, historical data validation, component matrix, roadmap, shortlist and research docs saved to main and fetched back for verification. |
+| Documentation / audit trail | VERIFIED | Checkpoint audits 031–041, historical data validation, component matrix, roadmap, shortlist and research docs saved to main and fetched back for verification. |
 | Owner approval | OPEN | Final component selections/rejections and residual risk acceptance require explicit owner review. |
 
 ## Current component dispositions
