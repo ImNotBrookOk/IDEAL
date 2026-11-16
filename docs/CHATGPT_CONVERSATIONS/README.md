@@ -97,3 +97,6 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-16-039-owner-acceptance-okx-research-dataset.md](2026-11-16-039-owner-acceptance-okx-research-dataset.md) | Owner explicitly accepts the seven-day OKX sample as conditional historical market-structure research; original strict 5/7 result and 7/8 Nov flags remain; revalidation completed calculations and cleanup; no further identical rerun required; Phase 01 continues, Phase 02 locked |
+
+
+| [2026-11-16-040-phone-first-hosting-constraints.md](2026-11-16-040-phone-first-hosting-constraints.md) | Owner prefers phone-first/phone-only; existing Windows PC is fallback only; mobile data bandwidth/caps/tethering are constraints; no host selected or provisioned; low-bandwidth research continues |
