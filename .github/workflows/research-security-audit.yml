@@ -140,9 +140,11 @@ jobs:
               print("PIP-AUDIT:", path.name, "dependencies=", len(report.get("dependencies", [])),
                     "vulnerability_records=", count)
           PY
-          zizmor .github/workflows > research-output/zizmor.txt 2>&1
+          zizmor --gh-token "$GITHUB_TOKEN" .github/workflows > research-output/zizmor.txt 2>&1
           zizmor_status=$?
           cat research-output/zizmor.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           {
             echo "parser_pip_audit_exit_code=$parser_status"
             echo "nautilus_poc_pip_audit_exit_code=$poc_status"
