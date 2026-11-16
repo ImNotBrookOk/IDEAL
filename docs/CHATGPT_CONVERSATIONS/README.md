@@ -123,3 +123,5 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-048-tax-intelligence-and-ird-integration-research.md](2026-11-17-048-tax-intelligence-and-ird-integration-research.md) | Proposed NZ tax intelligence domain; spot crypto vs derivatives/FIF distinctions; IRD Gateway Services approval and API capabilities; no public payment-initiation API identified; proposed tax-to-personal-finance contract; no filing/payment/account linking authorised |
+
+| [2026-11-17-049-user-autonomy-data-trust-and-system-health.md](2026-11-17-049-user-autonomy-data-trust-and-system-health.md) | Owner confirms optional/non-restrictive tax reserve; records user authority D-018, data integrity/system health D-019, proposed F-006 shared data trust and deterministic health supervisor, multi-asset future scope reminder, low-AI automation and PC/server portability; documentation-only, no runtime changes |
