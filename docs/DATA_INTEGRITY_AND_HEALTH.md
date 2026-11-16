@@ -269,3 +269,18 @@ Evaluate candidates on:
 - total cost of ownership, including hardware, power, storage and maintenance.
 
 Do not select hardware or a model before target PC specifications and representative workloads are known.
+
+
+## 14. Risk, data and health as one protection system
+
+Data integrity and system health are not standalone infrastructure concerns. They are direct prerequisites for valid risk decisions. Risk management is the protection and permission layer; data integrity is the evidence layer; system health is the independent oversight layer. All three must reinforce one another across every authorised domain.
+
+A risk calculation must consume the quality and freshness state of every material input, not just its numeric value. If required prices, balances, positions, FX conversions, contract metadata, funding/mark values or other inputs are stale, incomplete, contradictory or unknown, the risk result must be invalid or conservatively restricted according to a predefined contract. A numeric output must never imply confidence when its evidence is defective.
+
+The health supervisor must monitor whether data validation, risk services, policy versions, reconciliation and downstream interlocks are functioning. A risk service cannot certify its own health; a data adapter cannot certify its own source integrity; and a strategy cannot declare that its own dependencies are safe. Independent checks, external heartbeats and cross-source reconciliation should be proportionate to the failure being detected.
+
+Risk management must be a shared deterministic capability with domain-specific contracts. It should evaluate exposure before an action, monitor it while exposure exists, and reconcile actual outcomes afterwards. A strategy may request an action but cannot alter limits, bypass a restriction or treat unavailable risk controls as approval. The health supervisor may trigger only predefined restrictive interlocks; it must not invent risk limits or authorise financial actions.
+
+Failure handling must be dependency-aware. Invalid market data may suspend strategies that rely on it without disabling unrelated finance reporting. A portfolio-wide risk service failure may restrict every activity that depends on portfolio-wide approval. Every engine must declare its dependencies, acceptable quality states, failure behaviour and recovery requirements.
+
+This integration is specified in [docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md](IDEAL_CORE_PROTECTION_ARCHITECTURE.md). No runtime integration or implementation is authorised by this documentation update.
