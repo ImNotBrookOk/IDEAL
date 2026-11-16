@@ -68,3 +68,8 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 - [ ] All evidence, decisions, risks and audit records saved and read-back verified.
 
 **Current phase state:** Phase 01 IN PROGRESS. Phase 02 and implementation phases remain LOCKED. This matrix does not approve runtime integration, exchange access, paper/live execution or spend.
+
+
+## Owner disposition — seven-day OKX sample
+
+On 16 November 2026, the owner explicitly accepted the seven-day OKX 400-level L2/trade sample as **conditional historical market-structure research** and directed that the project proceed without rerunning the same test. The original strict 5/7 result and 7/8 November quality flags remain unchanged. This acceptance does not make the dataset execution-grade, does not relax freshness requirements, and does not close the remaining Phase 01 infrastructure, security or component-approval gates. See [checkpoint 039](CHATGPT_CONVERSATIONS/2026-11-16-039-owner-acceptance-okx-research-dataset.md).
