@@ -235,3 +235,16 @@ A first-pass comparison is now recorded in `docs/PERSONAL_FINANCE_RESEARCH.md`:
 - Akahu Personal App's own documentation confirms daily refresh, one-hour manual-refresh rest period, account data only, no payments/webhooks, one user/own account, and developer terms plus identity verification/MFA. Generic Akahu refresh defaults differ by app class; use Personal App-specific limits.
 
 Disposition remains research-only: no installation, bank account, credentials, real statements, dependency, runtime integration or provider selection approved. Actual is only a candidate for an isolated synthetic-data evaluation after the relevant architecture/security gate.
+
+
+### Comparative repository audit update — 16 November 2026
+
+The detailed audit is in [docs/PERSONAL_FINANCE_RESEARCH.md](PERSONAL_FINANCE_RESEARCH.md), sections 11–16.
+
+- **Firefly III v6.7.9 + Data Importer v2.3.5:** strongest double-entry/multi-currency personal ledger candidate; 2FA and REST API. Akahu provider code and tests are present in the v2.3.5 source tag, but current user-facing setup documentation omits Akahu and NZ transfer mapping has known gaps. No at-rest encryption; AGPL-3.0-or-later; no native securities holdings.
+- **MoneyMatter v0.33.7:** broadest all-in-one feature reference with Akahu, investment holdings, multi-currency and transaction sync tests. Bank tokens encrypted at rest, but no E2EE, no native 2FA, no disclosed third-party security audit; cloud Plus/trial sends selected transaction details to AI for categorisation. AGPL-3.0-only. Self-hosted mode is the only version worth considering for synthetic-data evaluation, with AI/MCP disabled.
+- **Actual Budget 26.11.0:** strong local-first envelope-budgeting UX, MIT, experimental Akahu support and optional E2EE for budget data; native multi-currency is explicitly unsupported, and bank-sync tokens are plaintext on the server.
+- **Money Manager Ex v1.9.4:** encrypted local/mobile/manual finance option with investment accounts, budgets and multi-currency; no Akahu or web/API integration identified.
+- **GnuCash 5.17, Beancount v3 and hledger 1.52.4:** accounting/investment/ledger-model references rather than integrated phone-first bank-connected products.
+
+Revised recommendation: do not adopt a single external app as IDEAL's universal ledger. Keep Personal Finance as its own domain and use read-only consolidated projections from investment/trading engines. Firefly III is the leading external ledger candidate for isolated synthetic-data evaluation; MoneyMatter is the broadest feature/UX reference. No product, dependency, bank connection or implementation is selected. D-017 remains Proposed and Phase 02 remains architecture/contracts only.
