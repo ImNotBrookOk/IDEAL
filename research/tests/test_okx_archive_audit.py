@@ -1,4 +1,6 @@
 import unittest
+import csv
+import io
 
 from okx_archive_audit import BookState, audit_records
 
@@ -63,6 +65,20 @@ class BookStateTests(unittest.TestCase):
 
 
 class AuditTests(unittest.TestCase):
+    def test_bbo_writer_emits_one_row_per_valid_record(self):
+        records = [
+            {"ts": "1000", "action": "snapshot", "bids": [["100", "1", "1"]], "asks": [["101", "1", "1"]]},
+            {"ts": "2000", "action": "update", "bids": [["100", "2", "1"]], "asks": []},
+        ]
+        output = io.StringIO()
+        writer = csv.writer(output)
+        audit_records(records, bbo_writer=writer)
+        parsed = list(csv.reader(io.StringIO(output.getvalue())))
+        self.assertEqual(parsed, [
+            ["1000000", "100.0", "101.0"],
+            ["2000000", "100.0", "101.0"],
+        ])
+
     def test_audit_counts_snapshots_updates_and_timestamp_gaps(self):
         records = [
             {"ts": "1000", "action": "snapshot", "bids": [["100", "1", "1"]], "asks": [["101", "1", "1"]]},
