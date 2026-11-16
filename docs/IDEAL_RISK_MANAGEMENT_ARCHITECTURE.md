@@ -224,6 +224,33 @@ Investigate complementary methods rather than relying on a single score:
 
 Statistical models are estimates, not guarantees. Correlations can change abruptly, historical data may omit new regimes, and tail events may be underrepresented. Risk decisions must retain explicit scenario and model limitations.
 
+### 6.9 Leverage, notional and liquidation buffer are distinct measures
+
+Leverage should not be used as a standalone proxy for risk. The design must distinguish:
+- **Configured leverage:** venue setting that influences initial margin and maximum permitted notional.
+- **Gross notional exposure:** total absolute market exposure, before offsets.
+- **Net directional exposure:** signed exposure after explicitly permitted aggregation.
+- **Effective leverage:** a named exposure measure divided by a named equity basis.
+- **Initial-margin utilisation:** initial margin consumed by positions and orders relative to the relevant venue margin base.
+- **Maintenance-margin utilisation:** maintenance requirement relative to the venue's applicable margin equity.
+- **Liquidation buffer/distance:** current mark-price distance to estimated liquidation, with the estimate's assumptions and freshness.
+- **Stress liquidation buffer:** remaining buffer after applying stressed price, funding, fee, collateral and margin-tier changes.
+
+A position with low configured leverage can still be too large relative to portfolio equity or liquidity. Conversely, raising configured leverage does not itself change the P&L sensitivity of an unchanged notional position, but it reduces initial margin posted and can reduce the loss buffer before liquidation. Therefore, risk policy must separately constrain notional/exposure, planned loss, portfolio stress loss, margin utilisation and liquidation distance.
+
+The venue's liquidation price is an estimate under its current assumptions, not a guaranteed exit price or a fixed boundary. IDEAL must not treat distance to liquidation as a substitute for stop/exit risk, nor assume it can close at the liquidation price.
+
+### 6.10 Margin mode, netting and hedge assumptions
+
+Isolated and cross margin change how losses propagate through collateral:
+- Isolated margin separates the collateral/risk assessment of a position, but the position can still be liquidated independently.
+- Cross margin shares equity across positions using the applicable collateral pool; one position's loss can impair other positions.
+- Portfolio margin may recognise offsets using a venue-specific model; those offsets are not automatically valid under IDEAL's own stress assumptions.
+
+The architecture must represent the actual account and position mode, collateral scope, settlement currency and venue-specific treatment of long/short legs. It must not assume that opposite positions cancel risk or funding. It must not assume that margin is netted across separate accounts or venues.
+
+Hedge credit should be granted only where the relationship is economically justified, executable under stress, supported by reliable data and explicitly represented in the stress model. Basis, correlation breakdown, funding mismatch, execution leg risk, venue failure and liquidation asymmetry can make a nominal hedge fail.
+
 ### 6.7 Funding and perpetual basis risk
 
 Funding is a direct cash-flow component of holding perpetual contracts, not a cosmetic market indicator. Official venue documentation shows that:
