@@ -1129,3 +1129,221 @@ Use fault injection, replay, property-based tests and independent recomputation.
 - Drawdown thresholds, warning bands, cooldown extension, high-water mark basis, external/manual exposure capture and recovery criteria remain to be researched and owner-reviewed.
 
 Next tranche: strategy/model risk, including AI-generated strategies, model drift, validation and promotion gates; then emergency control and incident-recovery contracts. No runtime implementation or phase advancement is authorised.
+
+
+## 17. Research tranche 6 — strategy, statistical-model and AI-agent risk (17 November 2026)
+
+**Status:** Provisional architecture research. No strategy, model, AI agent, framework or execution capability is approved for deployment.
+
+### 17.1 Evidence reviewed
+
+- Federal Reserve SR 26-2 (17 April 2026) supersedes SR 11-7 for the banking organisations to which the revised guidance is relevant. It emphasises risk-based model governance, conceptual soundness, validation, outcomes analysis, ongoing monitoring and clear accountability. Its regulatory applicability is limited to supervised banking organisations; IDEAL uses it as a model-risk design reference, not as a claim of regulatory coverage. https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm
+- The revised Federal Reserve model-risk guidance explains that model risk includes misuse and misapplication even where a model performs as designed; it recommends assessing model risk individually and in aggregate, including shared data, assumptions and dependencies. It also notes that generative/agentic AI is outside that specific guidance's scope. https://www.federalreserve.gov/frrs/guidance/supervisory-guidance-on-model-risk-management.htm
+- NIST AI RMF 1.0 organises AI risk around Govern, Map, Measure and Manage, with risk management continuing across the AI lifecycle. NIST says the framework is being updated; the current published material remains a voluntary framework, not a certification. https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10
+- NIST's Generative AI Profile provides additional risk considerations for generative AI systems across design, development, use and evaluation. https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence
+- Bailey, Borwein, López de Prado and Zhu's work on Probability of Backtest Overfitting explains why ordinary holdout approaches can be unreliable after extensive strategy selection and proposes combinatorially symmetric cross-validation as one diagnostic. https://escholarship.org/uc/item/4w1110bb
+- Bailey and López de Prado's Deflated Sharpe Ratio addresses performance inflation from multiple testing/selection bias and non-normal returns. It is a statistical diagnostic, not proof of future profitability. https://doi.org/10.3905/jpm.2014.40.5.094
+
+### 17.2 Model and strategy inventory
+
+Every model-like component must be registered, including:
+- deterministic strategy rules and signal combinations;
+- regime classification and market-state models;
+- statistical forecasts and feature transformations;
+- machine-learning prediction, ranking and allocation models;
+- portfolio risk, volatility, correlation, liquidity and margin models;
+- execution, slippage, fill-probability and transaction-cost models;
+- anomaly detection and system-health models;
+- LLMs, agents, prompts, tool policies, retrieval pipelines and generated strategy proposals.
+
+Each registry record should state:
+- unique immutable model/strategy identifier and version;
+- intended purpose, supported instruments, horizon and operating context;
+- explicit prohibited uses and known failure conditions;
+- owner, developer/source, approval authority and independent reviewer;
+- code, configuration, dependency and model-artifact hashes;
+- training/validation/test dataset IDs, provenance and point-in-time policy;
+- feature definitions, labels, transformations and data freshness requirements;
+- parameters, random seeds, environment and reproducibility instructions;
+- baseline/challenger comparisons, validation evidence and limitations;
+- risk allocation, maximum permitted authority and dependencies;
+- status, effective dates, promotion/revocation reason and audit history.
+
+A model's approval is limited to its declared scope. Approval for one contract family, venue, timeframe or regime does not automatically extend to another.
+
+### 17.3 Separate prediction, strategy and authority
+
+Maintain distinct interfaces and responsibilities:
+- **Prediction model:** estimates a specified quantity or probability with uncertainty and horizon.
+- **Regime model:** estimates market-state probabilities/labels and uncertainty; it does not declare a regime with certainty.
+- **Strategy logic:** converts eligible inputs into a proposed position/action under its own constraints.
+- **Portfolio allocator:** allocates only within already-approved capital/risk capacity.
+- **Risk authority:** independently approves, restricts or rejects the exact proposed action.
+- **Execution control:** validates order semantics, limits, reservations and venue state.
+
+No predictive score, AI confidence, backtest Sharpe, regime label or strategy conviction can override the risk authority. A model cannot set its own risk budget, approve its own validation or promote itself. A strategy may propose a trade; it cannot create permission to take it.
+
+### 17.4 Backtest and research-selection risk
+
+The strategy research process must record the entire experiment population, not only winning variants:
+- every tested strategy family, parameter combination, feature set, label, universe filter and selection rule;
+- rejected/failed experiments and the reason for rejection;
+- data versions, code/configuration hashes and random seeds;
+- all lookbacks, validation windows and performance metrics inspected;
+- manual research iterations and model/AI-generated candidate trials;
+- how the final candidate was selected from the trial population.
+
+Controls against overfitting and selection bias:
+- chronological train/validation/test separation;
+- purging and embargo where labels or holding periods overlap;
+- nested model/parameter selection within training/validation data;
+- a final untouched out-of-sample holdout used sparingly and not repeatedly tuned against;
+- walk-forward evaluation across multiple market regimes;
+- point-in-time universe and instrument metadata, including delisted/expired contracts where available;
+- realistic fees, maker/taker mix, funding, spread, slippage, latency, partial fills, market impact and risk limits;
+- explicit treatment of missing data, survivorship, corporate/token events, exchange outages and price-source revisions;
+- comparison with simple baselines, no-trade and buy/hold or passive references where appropriate;
+- stability checks across nearby parameter values, time windows, instruments and execution assumptions.
+
+PBO/CSCV, Deflated Sharpe Ratio, Probabilistic Sharpe Ratio, bootstrap and other selection-bias diagnostics may be used where assumptions fit. They are not magic pass/fail certificates. Record number of trials, dependence among trials, return non-normality, sample length, effective sample size and uncertainty. A large search followed by one impressive result is evidence of selection risk, not necessarily an edge.
+
+### 17.5 Statistical and ML model validation
+
+Before a quantitative model can be considered for any consequential use, validate:
+- conceptual soundness and economic/market rationale;
+- input data quality, point-in-time correctness, representativeness and leakage;
+- label definition, horizon, overlap and survivorship handling;
+- calibration and discrimination where probabilities are produced;
+- forecast error and directional/decision utility at the intended horizon;
+- residual structure, tail behaviour and regime conditional performance;
+- sensitivity to parameters, missing/stale inputs and distribution shifts;
+- stability across assets, venues, market regimes and execution assumptions;
+- comparison against simpler alternatives and a no-model baseline;
+- reproducibility from immutable data/code/environment records;
+- the difference between predictive accuracy and net trading profitability after costs.
+
+For classification, measure calibration and class imbalance, not just accuracy. For regression, report scale-aware error and forecast intervals where meaningful. For ranking, assess stability and turnover/cost implications. For volatility/risk forecasts, perform coverage and exceedance analysis at the stated horizon. Metrics must correspond to the actual decision use; no universal metric is sufficient.
+
+### 17.6 Regime and uncertainty handling
+
+Regime classification is inherently uncertain and can lag abrupt transitions. It must expose probabilities/uncertainty, data quality and model age rather than a single authoritative label. Research requirements:
+- regime definitions and transition assumptions documented before testing;
+- out-of-sample and walk-forward regime stability;
+- sensitivity to features, thresholds and lookback;
+- transition/unknown states and no-trade handling;
+- tests for false stability, rapid label flipping and delayed detection;
+- performance conditional on regime and transition periods;
+- no forced allocation where posterior confidence or data sufficiency is inadequate.
+
+D-004's no-trade requirement for no eligible strategy or unknown regime remains in force. A model must not invent certainty to avoid a no-trade outcome.
+
+### 17.7 Execution and cost-model risk
+
+Execution models are material risk models, not cosmetic backtest settings. They must be validated against representative market data and, only after separately authorised future testing, observed fills. Model:
+- order type and maker/taker probability;
+- queue position and adverse selection where data supports it;
+- spread crossing and depth walking;
+- market impact and participation;
+- latency, stale data, throttling, rejects and cancel races;
+- partial fills, residual exposure and hedge-leg failure;
+- funding timing and fees;
+- mark/index/last price divergence;
+- stressed liquidity and close-out cost.
+
+Avoid optimistic assumptions such as fills at candle close, fills at touch without queue modelling, unlimited depth, zero latency, perfect stops or no market impact. If empirical execution data is unavailable, report a conservative uncertainty range and avoid claiming validated execution performance.
+
+### 17.8 Drift, degradation and model retirement
+
+Monitor model performance and assumptions after approval for the relevant future use:
+- input/data drift and schema/semantic changes;
+- feature distribution and missingness;
+- label/target drift and concept drift;
+- forecast calibration and residual changes;
+- strategy expectancy, tail loss, drawdown and turnover;
+- execution cost, fill ratio, slippage and rejected/cancelled orders;
+- regime coverage and previously unseen market states;
+- dependency, runtime, model artifact and prompt/tool changes.
+
+Define warning, restricted, suspended and retired states per model class. Drift alarms should trigger investigation and, where risk warrants, restriction or suspension. Recalibration is a new version with documented evidence and revalidation; it is not a silent in-place mutation. A model that stops performing must not continue because its historic backtest remains attractive.
+
+### 17.9 AI and agent-specific risk
+
+AI agents and LLMs introduce risks beyond conventional predictive models:
+- hallucinated facts, citations, formulas, assumptions or source interpretations;
+- prompt injection through market data, websites, documents, code, issue text or connected tools;
+- data exfiltration, secret disclosure and unauthorised tool invocation;
+- non-deterministic outputs and model/provider updates;
+- context loss, memory errors, stale research and fabricated continuity;
+- reward hacking, metric gaming and hidden multiple-testing/selection bias;
+- self-modification, permission escalation or attempts to bypass hard controls;
+- unsafe code generation, dependency confusion and supply-chain compromise.
+
+Required architecture boundaries:
+- agents operate with least privilege and isolated, explicitly scoped tools;
+- untrusted market/news/repository content is treated as data, never as instructions;
+- no direct exchange trading credentials or unrestricted order tools are exposed to research agents;
+- agents cannot edit accepted risk policy, decision records or their own approval state;
+- AI-generated code/strategies are untrusted proposals until independently reviewed and tested;
+- prompts, model/provider/version, tool schemas, retrieved sources and outputs are logged as appropriate without exposing secrets;
+- sensitive data is minimised and protected; no secret is inserted into model context;
+- output schemas are validated, source claims checked and critical calculations recomputed deterministically;
+- model/provider outage or uncertainty degrades to safe non-action, not an invented answer.
+
+AI may assist research and explain evidence. It is not a substitute for deterministic accounting, risk checks, model validation or owner approval.
+
+### 17.10 Model lifecycle and promotion gates
+
+Provisional lifecycle states:
+1. **Research:** exploratory, no operational authority.
+2. **Candidate:** purpose and data contract defined; initial tests reproducible.
+3. **Validated:** independent validation completed for a declared use and scope.
+4. **Approved for bounded use:** owner-authorised, risk limits and monitoring specified. This status does not imply live execution authority.
+5. **Restricted:** use limited due to uncertainty, drift, data or performance concerns.
+6. **Suspended:** no new use until a defined issue is resolved and approval renewed.
+7. **Retired:** no longer eligible; artifacts and evidence retained for audit.
+
+Promotion requires documented evidence, independent challenge, explicit acceptance of residual risk, version pinning, monitoring/rollback plan and separate owner approval. Passing a backtest is not promotion. A new model version, feature pipeline, prompt, model provider, venue, instrument universe or execution assumption can be a material change requiring revalidation.
+
+No online self-learning or self-modifying strategy is proposed. Training and research remain offline and reproducible. Any later automated research loop must be separated from deployment authority and may only generate candidates for controlled review.
+
+### 17.11 Aggregate and correlated model risk
+
+Models may fail together because they share:
+- data vendors, exchange feeds, index/mark sources or preprocessing;
+- common features, labels, training windows or instrument universe;
+- identical model families, embeddings or base models;
+- common assumptions about liquidity, volatility, correlation or funding;
+- shared execution and runtime infrastructure;
+- similar prompts, agent policies or retrieved sources.
+
+Maintain a dependency graph and evaluate aggregate model risk. Model diversity is not real diversification if components share the same hidden inputs or failure modes. A model ensemble must be tested for correlated errors, not assumed robust because it contains multiple models.
+
+### 17.12 Verification and assurance requirements
+
+Required test families:
+- reproducibility of model artefacts and strategy experiments from immutable manifests;
+- leakage, survivorship, future-data and overlapping-label detection;
+- trial-count accounting and selection-bias diagnostics;
+- untouched holdout protection and repeated-inspection detection;
+- walk-forward and regime-specific performance;
+- baseline comparison and parameter perturbation;
+- sensitivity, stress, calibration and uncertainty checks;
+- model drift, missing inputs and distribution-shift detection;
+- execution cost under spread/depth/latency/funding stress;
+- strategy/model dependency and correlated failure;
+- invalid output, hallucinated source, prompt injection and malicious retrieved content;
+- agent least privilege, denied tool access and secret isolation;
+- model version change, provider change, rollback and suspension;
+- independent recomputation of risk-critical outputs;
+- assurance that no model can change limits, permissions, capital or its own approval.
+
+### 17.13 Conclusions and boundaries
+
+- Treat every strategy, statistical model, risk model, execution model and AI agent as a governed component with declared purpose and limitations.
+- Track all experiments and selection attempts; evaluate backtest overfitting and selection bias.
+- Validation must include conceptual soundness, point-in-time data, outcomes, ongoing monitoring and independent challenge.
+- Regime models must express uncertainty and support no-trade states.
+- AI-generated strategies are untrusted research candidates; agents never receive direct authority over capital, policy or execution.
+- Model changes, drift and dependency failures require controlled restriction, revalidation, rollback or retirement.
+
+No strategy/model is selected or promoted by this research. No AI runtime, framework, model weights, trading integration or execution capability is approved. Phase 02 remains active; Phases 03–19 remain locked.
