@@ -757,3 +757,29 @@ All 844,982 Tardis BBO samples matched the official BBO when the official update
 **Clock-basis clarification:** the Tardis 3,803.897 ms local receive gap and official 584 ms exchange interval use different clocks. The updated parser separately measured the Tardis maximum exchange-timestamp gap at 3,800 ms, with zero exchange-timestamp backsteps. On the same exchange-time basis, Tardis's 3,800 ms maximum gap is materially longer than the official archive's 584 ms. The lower Tardis message count (844,983 versus 5,827,935 official records) also establishes a substantially sparser observation set, but the exact source channel and effective cadence remain to be confirmed.
 
 **Disposition:** Tardis OKX is validated as a high-BBO-agreement, lower-density reference feed for this sample, not as a substitute for the official 10 ms archive. The 100% inclusive result is an upper bound, not a no-lookahead result; use 99.85065% as the conservative strict-preceding match rate. Full audit artifact ID `14187915961`, 2,991 bytes, SHA-256 `74d5c38cee84ced1e398fc51ea81a2d6b06152482e99689dc21d0229b0b95e69`, expires 19 November 2026 at 00:16 UTC and contains summaries/manifests only.
+
+
+### 12.19 Seven-day OKX 400-level trade-to-BBO alignment — first attempt (16 November 2026)
+
+Workflow [#43779725982](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43779725982) retrieved and structurally processed seven consecutive 400-level BTC-USDT-SWAP archives (7–13 Nov 2026), paired UTC+8 trade files and aligned trades only to the strictly preceding book state. Unit tests, retrieval and schema inspection passed. Raw archives were removed before the 6,856-byte summary-only artifact upload (artifact 14188696071; SHA-256 9e2ea9806da6451b1b2df8008aeb45deb5c47a8a14001f46ef90a835b04405ff).
+
+Initial acceptance gates did **not** pass across all seven days:
+
+| UTC day | Aligned trades | BBO age median / p95 / max | Side consistency | Gate outcome |
+|---|---:|---:|---:|---|
+| 7 Nov | 497,187 | 6 / 32 / 519 ms | 99.4270% | FAIL: no preceding book for some trades; p95 >20 ms |
+| 8 Nov | 1,521,255 | 6 / 15 / 506 ms | 96.4530% | FAIL: side consistency <98% |
+| 9 Nov | 3,283,080 | 6 / 10 / 475 ms | 99.1492% | PASS |
+| 10 Nov | 3,238,578 | 6 / 10 / 489 ms | 98.2971% | PASS |
+| 11 Nov | 2,597,825 | 6 / 18 / 497 ms | 99.1181% | PASS |
+| 12 Nov | 3,224,415 | 6 / 10 / 509 ms | 98.5424% | PASS |
+| 13 Nov | 5,556,342 | 5 / 10 / 507 ms | 98.1102% | PASS |
+
+Interpretation:
+- 5 of 7 days passed the initial per-day gates; 7 Nov and 8 Nov did not.
+- 7 Nov requires investigation of archive start coverage, trade/book boundary and sample age; do not count unmatched trades as valid alignments.
+- 8 Nov's 96.453% side-consistency is a material diagnostic, not permission to lower the 98% gate. Investigate trade aggressor-side semantics, same-timestamp ambiguity, event ordering and age-bucket distribution. A trade at/inside spread is not necessarily expected to print beyond the opposite BBO; the current metric is a conservative diagnostic, not a complete aggressor-label ground truth.
+- 9–13 Nov passing this diagnostic does not establish fill simulation accuracy, queue position, sequence continuity or exchange-equivalent execution.
+- The maximum age remains roughly 0.5 seconds on every day despite p95 mostly 10–18 ms; the tail must be characterized before using this data for execution calibration.
+
+**Disposition:** seven-day trade/BBO gate remains BLOCKED. Do not weaken thresholds or silently exclude failing days. Preserve the failed run and repeat only after diagnosing 7 Nov coverage and 8 Nov side-consistency. Cleanup ran successfully despite the acceptance failure; raw archives were not retained in the artifact.
