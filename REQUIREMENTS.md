@@ -69,3 +69,17 @@ No new numerical risk limits or execution permissions are introduced here. Exist
 15. **Audit and privacy:** sensitive access, permission changes, key lifecycle, configuration changes and security incidents must be auditable and tamper-evident. Retention must respect purpose, privacy and provider/legal constraints.
 
 See [IDEAL Security Architecture and Assurance](docs/IDEAL_SECURITY_ARCHITECTURE.md). Security is a mandatory Phase 02 design workstream; this does not authorise implementation, external scanning or new integrations.
+
+## Architecture-first completion requirements
+
+IDEAL's first major development milestone is a complete, internally consistent and independently challenged architecture before implementation. The architecture must define the system and domain boundaries, authority hierarchy, trust boundaries, responsibilities, dependencies, interfaces, data flows, failure propagation, safe states, audit evidence and recovery behaviour.
+
+The four foundations must each have a detailed design: risk management, data integrity, system health and security. Critical cross-pillar/domain interfaces must specify ownership, schemas and semantics, permissions, provenance, validity/freshness, error and timeout behaviour, idempotency/correction semantics, safe responses, escalation, audit and recovery verification.
+
+Architecture completion requires a system/domain map; four foundation designs; critical interface contracts; data-flow/trust/dependency/failure diagrams; threat model and security-control matrix; failure-mode and recovery analysis; requirements-to-component-to-test traceability; recorded assumptions and residual risks; independent design review; verification strategy; and explicit owner acceptance.
+
+Only after architecture acceptance may implementation-ecosystem research be converted into a proposed stack/blueprint. Each repository, library, model or dataset must be assessed for exact licence and use rights, maintenance, engineering quality, tests/documentation, security, dependencies, compatibility, portability, cost, limitations and evidence. Record reuse/adapt/isolate/defer/reject disposition. No technology is adopted by popularity alone.
+
+Deterministic software remains authoritative for risk calculations, accounting, data validation, reconciliation, permissions and safety enforcement. AI may assist bounded research and analysis but cannot be the security boundary, policy authority or sole validator of its own output.
+
+These requirements are Phase 02 design/research only. They do not authorise code, dependencies, runtime integration, deployment, external security testing, exchange access or phase advancement. See [Architecture-First Research and Design Plan](docs/IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md).
