@@ -315,6 +315,12 @@ A scan cannot guarantee that all vulnerabilities have been discovered. Findings,
 
 See [docs/IDEAL_SECURITY_ARCHITECTURE.md](docs/IDEAL_SECURITY_ARCHITECTURE.md). Phase 02 remains active; Phases 03–19 remain locked. No implementation, security product subscription, external scan, hosting or new integration is authorised.
 
+### Phase 02 research checkpoint — risk management architecture, Stage 1 (17 November 2026)
+
+Initial evidence-led risk research is recorded in [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md). It covers perpetual-specific supervisory references, automated trading controls, venue-specific margin/liquidation mechanics, portfolio risk references, provisional risk authority, working-order exposure, portfolio stress, control lifecycle, cross-pillar contracts, failure modes and verification requirements.
+
+This is a working research draft, not an accepted final architecture. The existing D-001 scope and D-006/D-008 numerical policy decisions are preserved and not changed. No venue, account mode, margin mode, model or implementation has been selected. Continue deep research through the unresolved topics before proposing final contracts or policy changes. Phase 02 only; no implementation or runtime authority.
+
 ## Phase 02 — architecture-first research and design workstream
 
 **Primary milestone:** complete and independently challenge IDEAL's integrated architecture before implementation. Architecture defines the required capabilities and contracts; available code must not dictate the safety model.
