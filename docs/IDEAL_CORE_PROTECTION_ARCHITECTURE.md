@@ -11,13 +11,14 @@ IDEAL is one integrated personal financial intelligence system composed of speci
 
 The system's foundational objective is to make every consequential decision evidence-based, risk-bounded, observable, reproducible and recoverable. The integrity of the whole system takes precedence over the performance or autonomy of any individual engine.
 
-The three foundational pillars are:
+The four foundational pillars are:
 
 1. **Risk management — the protection and permission layer.** It evaluates capital exposure and constrains what the system may do.
 2. **Data integrity — the evidence layer.** It establishes whether the information used by the system is authentic, complete, timely, correctly interpreted and traceable.
 3. **System health — the oversight layer.** It independently observes whether the system, its components and dependencies are functioning within declared contracts.
+4. **Security — the trust and defence layer.** It protects identities, permissions, data, code, infrastructure, integrations and audit evidence against unauthorised access, leakage, tampering and abuse.
 
-These pillars reinforce one another. None is sufficient alone. Risk decisions depend on trustworthy data; data pipelines depend on observable and recoverable infrastructure; system health must detect when either data or risk controls cannot be trusted.
+These pillars reinforce one another. None is sufficient alone. Risk decisions depend on trustworthy data; data pipelines depend on observable and recoverable infrastructure; system health must detect when data, risk or security controls cannot be trusted. Security is designed into every layer and its telemetry is monitored by system health, but operational health is not proof of security. See [IDEAL Security Architecture and Assurance](IDEAL_SECURITY_ARCHITECTURE.md).
 
 ## 2. Architectural invariants
 
@@ -88,6 +89,10 @@ It should monitor source health, data freshness and gaps, event backlogs, clock 
 Health must be explicit at source, component, domain and whole-system levels. At minimum, distinguish HEALTHY, DEGRADED, STALE, UNAVAILABLE and UNKNOWN. A green global state is valid only when all critical dependencies satisfy their declared contracts.
 
 The supervisor may trigger predefined restrictive interlocks for affected consumers, but it must not invent or alter financial risk limits, approve trades, move funds or silently change permissions. Its own failure must be detectable through an independent watchdog or external heartbeat appropriate to the eventual deployment.
+
+### 3.4 Security
+
+Security is a distinct foundational pillar and a cross-cutting constraint on every component. It protects confidentiality, integrity, availability, authenticity and accountability through threat modelling, least privilege, strong authentication, scoped authorisation, secrets/key management, encryption, secure development and supply-chain controls, network/application/host hardening, privacy controls, tamper-evident audit and incident response. AI/agent permissions are enforced outside the model; prompts and outputs are untrusted. Security monitoring is integrated into system health, while security assurance remains a separate assessment with scope, evidence and freshness. A healthy process may still be compromised. No scan or architecture can guarantee that every vulnerability will be discovered.
 
 ## 4. How the pillars reinforce one another
 
@@ -191,5 +196,7 @@ This document does not authorise:
 - payments, transfers, tax filing or financial write operations;
 - paid infrastructure, hosting, subscriptions, hardware purchases or billing;
 - model downloads, training jobs, online learning or autonomous model/strategy promotion.
+
+Security is a fourth foundational pillar under D-021. Its detailed architecture and assurance lifecycle are documented in `docs/IDEAL_SECURITY_ARCHITECTURE.md`.
 
 Phase 02 remains active. Phases 03–19 remain LOCKED until the relevant exit criteria and explicit owner approvals are satisfied.
