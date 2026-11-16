@@ -1,6 +1,6 @@
 # IDEAL
 
-IDEAL is an integrated, evidence-driven personal financial intelligence system. Its initial active scope is crypto perpetuals research and paper trading; future financial domains remain separately gated. Specialised engines operate under three shared foundations: deterministic risk management, trustworthy data and independent system-health oversight. AI may research and propose; deterministic controls govern evidence quality, risk, permissions and authorised actions.
+IDEAL is an integrated, evidence-driven personal financial intelligence system. Its initial active scope is crypto perpetuals research and paper trading; future financial domains remain separately gated. Specialised engines operate under four shared foundations: deterministic risk management, trustworthy data, independent system-health oversight and security by design. AI may research and propose; deterministic controls govern evidence quality, risk, permissions and authorised actions.
 
 ## Status
 Planning baseline. Implementation is not yet authorised. This repository is the source of truth for scope, decisions, architecture, testing, trading knowledge and project accountability.
@@ -18,6 +18,7 @@ Planning baseline. Implementation is not yet authorised. This repository is the 
 ## Source of truth
 - ROADMAP.md — gated implementation plan; Phase 02 prioritises the integrated risk, data-integrity and system-health foundation.
 - docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md — owner-approved integrated system vision, protection pillars, authority boundaries, failure model and Phase 02 design requirements.
+- docs/IDEAL_SECURITY_ARCHITECTURE.md — security threat model, defensive controls, security-health integration, vulnerability assurance and incident recovery requirements.
 - RULES.md — mandatory engineering, accountability and trading constraints.
 - REQUIREMENTS.md — product and quantitative requirements.
 - ARCHITECTURE.md — provisional system boundaries and data flow.
