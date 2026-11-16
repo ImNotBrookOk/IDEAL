@@ -267,3 +267,14 @@ MoneyMatter's pinned v0.33.7 source uses AES-256-GCM for stored bank credentials
 Additional component research found no safe drop-in platform. astt is MIT-licensed and the strongest permissive mobile/net-worth product reference, but its current schema is not double-entry and account deletion cascades through transaction history. krbob/portfolio has a strong transaction-canonical/rebuildable-read-model design and backup/audit patterns, but no root licence file was found, so code reuse is not cleared. Formance Ledger (MIT) and TigerBeetle (Apache-2.0) offer useful immutable-ledger, idempotency and correction patterns but are operationally excessive as initial single-user runtime dependencies. Akahu's official documentation explicitly says Personal Apps are unsuitable for production-ready applications; any deployed integration requires provider clarification and the appropriate full-app/accreditation path.
 
 Recommendation: keep the personal-finance domain IDEAL-owned and separate from trading ledgers; study compatible open-source patterns, use manual/file imports first, and keep bank sync conditional. See docs/PERSONAL_FINANCE_RESEARCH.md sections 18–19. D-017 remains Proposed; no implementation, dependency, provider, account connection, credential, hosting or phase advancement is approved.
+
+
+### F-005 — Tax Intelligence and Tax Accounting (Proposed, 17 November 2026)
+
+Proposal: a dedicated New Zealand Tax Intelligence domain that consumes verified events from trading, investing and personal-finance domains; classifies taxable events; calculates versioned tax estimates and workpapers; tracks evidence, filing status and assessments; and publishes estimated provisions/assessed obligations into Personal Finance.
+
+Scope includes separate tax treatments for spot crypto, crypto derivatives/perpetuals, equities/FIF, dividends, interest, FX, fees and other income. Perpetual futures classification is a specialist research gate; do not assume spot-crypto guidance automatically applies. Tax estimates must be distinct from IRD-assessed debt.
+
+IRD Gateway Services support income-tax return filing/status, income retrieval and account/transaction data for approved integrations. Registration, due diligence, security assessment, developer onboarding and approval are required. IRD documentation permits in-house software applications, but approval of IDEAL's private single-user use case must be confirmed. Public payment guidance documents bank Pay IRD and myIR direct debit; no public general tax-payment initiation API was identified. Therefore a one-click direct payment is unconfirmed; initial design should provide reviewed payment instructions/links and reconcile only confirmed payments.
+
+Disposition: research proposal only. No filing, payment, IRD linking, implementation or rule set approved. See docs/PERSONAL_FINANCE_RESEARCH.md section 20. F-005 does not change D-001 or accept D-017.
