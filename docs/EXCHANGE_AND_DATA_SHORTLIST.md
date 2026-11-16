@@ -330,3 +330,10 @@ The September and October 2026 first-of-month comparisons now supplement the 1 N
 Tardis is materially sparser than the official module-4 400-level archives: ~6.86x fewer messages on 1 Sep, ~8.44x fewer on 1 Oct and ~6.90x fewer on 1 Nov. Tardis max exchange-time gaps were 16.5s, 2.4s and 3.8s respectively. It is accepted as a secondary sampled BBO reference for market-structure research, not as a substitute for the official 10ms execution-calibration feed. Normalized CSV lacks raw channel ID; exact per-message source channel remains unproven.
 
 Evidence: [workflow #43804760777](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43804760777), artifact 14198581255, and [audit checkpoint 036](CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md).
+
+
+### Tardis licence / usage boundary (16 November 2026)
+
+Tardis' published Terms of Service section 9 permit storage of Data/Manipulated Data on the customer system and certain distribution of Derived Data to Customer Users, but restrict use of the Services in products/services and prohibit redistribution/resale of Data or Services except aggregated/calculated data at a lowest resolution of 10 minutes. Data IP remains with Tardis or its licensors. The first-of-month public CSV samples are available without an API key, but the sample-download page does not itself grant a separate redistribution licence.
+
+**IDEAL disposition:** internal historical research/reference only. Do not redistribute raw/normalized Tardis event data or sub-10-minute derived data, and do not embed Tardis data/services in an external or commercial IDEAL product without separate written permission. Existing raw samples were deleted after validation; only small summary artifacts remain. Re-open data rights before any multi-user or product use. See https://docs.tardis.dev/legal/terms-of-service and [checkpoint 038](CHATGPT_CONVERSATIONS/2026-11-16-038-tardis-data-rights-and-usage-boundary.md).
