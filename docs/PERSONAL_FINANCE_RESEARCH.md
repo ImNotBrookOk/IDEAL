@@ -408,3 +408,106 @@ The one-package all-in-one ideal is not yet met by a candidate without trade-off
 The most viable path for IDEAL is therefore a separated Personal Finance domain plus separate investment/trading engines and a read-only consolidated view. Whether its initial ledger is IDEAL-owned or a private Firefly III adapter remains open and requires further isolated evaluation.
 
 **Approval boundary unchanged:** D-017 Proposed; D-001 unchanged; Phase 02 architecture/contracts only; Phases 03–19 locked. No implementation, dependency adoption, account connection, credentials, bank provider selection, payments or hosting are authorised.
+
+
+## 17. Pinned-release source audit — Akahu import correctness (17 November 2026)
+
+This section records a source-level inspection of the exact stable tags below. No application was installed or executed; no live Akahu request, account, token or financial record was used. The MoneyMatter E2E tests inspected use mocked HTTP responses. Findings are code-path observations, not a security certification or independent runtime test.
+
+### 17.1 Pinned source and evidence
+
+| Project | Pinned release | Source paths inspected |
+|---|---|---|
+| Firefly III Data Importer | v2.3.5 | `app/Services/Akahu/Conversion/TransactionConverter.php`; `TransactionFetcher.php`; `Request/GetTransactionsRequest.php`; `Request/AkahuDateRange.php`; `Response/GetTransactions/GetTransactionsResponseBuilder.php`; `Model/Transaction/Transaction.php`; `Services/Shared/Import/Routine/ApiSubmitter.php`; `Services/Shared/Configuration/Configuration.php`; `Services/Akahu/Authentication/SecretManager.php`; `tests/Feature/Akahu/HttpFlowTest.php` |
+| MoneyMatter | v0.33.7 | `packages/backend/src/services/bank-data-providers/akahu/akahu.provider.ts`; `api-client.ts`; `types.ts`; `akahu-flow.e2e.ts`; `services/bank-data-providers/utils/credential-encryption.ts` |
+
+Pinned-source links:
+- Firefly converter: https://github.com/firefly-iii/data-importer/blob/v2.3.5/app/Services/Akahu/Conversion/TransactionConverter.php
+- Firefly fetcher: https://github.com/firefly-iii/data-importer/blob/v2.3.5/app/Services/Akahu/Conversion/TransactionFetcher.php
+- Firefly submitter: https://github.com/firefly-iii/data-importer/blob/v2.3.5/app/Services/Shared/Import/Routine/ApiSubmitter.php
+- Firefly Akahu flow test: https://github.com/firefly-iii/data-importer/blob/v2.3.5/tests/Feature/Akahu/HttpFlowTest.php
+- MoneyMatter Akahu provider: https://github.com/letehaha/moneymatter/blob/v0.33.7/packages/backend/src/services/bank-data-providers/akahu/akahu.provider.ts
+- MoneyMatter Akahu API client: https://github.com/letehaha/moneymatter/blob/v0.33.7/packages/backend/src/services/bank-data-providers/akahu/api-client.ts
+- MoneyMatter Akahu mocked E2E suite: https://github.com/letehaha/moneymatter/blob/v0.33.7/packages/backend/src/services/bank-data-providers/akahu/akahu-flow.e2e.ts
+
+### 17.2 Transaction import, idempotency and source corrections
+
+**MoneyMatter v0.33.7**
+- First connection fetches the available settled transaction feed. Subsequent sync starts 14 days before the newest imported transaction, specifically to catch late-settling NZ bank rows.
+- The API client follows every Akahu cursor page and carries the same start/end window to each page.
+- Persistence is ordered by transaction date. It checks account + Akahu `_id` against `originalId`; an existing ID is skipped. A second lookup on `externalData.originalSource.originalId` restores the source ID after unlink/relink.
+- This is good append idempotency and unlink/relink protection. It is not source reconciliation: an existing ID is skipped even if the bank has since changed amount/date/description/metadata. The inspected code does not reconcile removed Akahu IDs into local reversals/deletions.
+- The 14-day overlap catches late-arriving records within the overlap; it is not proof that older transactions are rechecked indefinitely for changes.
+- The provider uses Akahu's settled endpoint only. No pending-transaction endpoint is called in the inspected provider/API client.
+- Imported amounts are converted to the account's currency precision (Money/cents); direction is stored separately as income/expense. Currency comes from the account balance payload.
+- The metadata mapper stores Akahu type, merchant, category, category group, particulars, reference, card suffix and balance-after. It does not persist Akahu `meta.conversion` amount/currency/rate as explicit foreign-currency transaction fields.
+- Every imported transaction is explicitly created with `transferNature: not_transfer`. Therefore a bank-to-bank transfer is initially classified as an income/expense row, not automatically paired into a transfer by this connector.
+- The current balance is separately written to balance history when Akahu supplies it; if current balance is null, the balance is left unchanged. Balance freshness is taken from Akahu's `refreshed.balance` timestamp when available.
+- The 20-hour stale-data threshold may request an Akahu refresh, but the source comments correctly note refresh is asynchronous: the current sync still reads the cached account/transactions; the request can improve the next sync only.
+- Mocked E2E tests cover valid/invalid credentials, account selection, signed amounts, cents, repeat-sync idempotency, late-settling rows, cursor pagination, 14-day overlap, transient 5xx recovery, auth-failure handling, stale refresh requests, period imports, pre-link history and unlink/relink. The inspected suite does not test changed-content updates or source deletions.
+
+**Firefly III Data Importer v2.3.5**
+- The Akahu request fetcher follows all cursor pages and applies the same date range on each request. Its date-range adapter subtracts one millisecond from the inclusive lower calendar date and adds a day to the upper bound to account for Akahu's exclusive `start` and inclusive `end` semantics.
+- The converter stores Akahu `_id` as Firefly `external_id`. For non-file flows, the import configuration defaults duplicate detection to the `cell`/identifier path; the submitter defaults an empty identifier field to `external_id`. A repeat ID is therefore skipped, including when Firefly finds that identifier on a deleted transaction.
+- This is identifier-based append idempotency, not update/delete reconciliation. If Akahu changes the contents while retaining the ID, the importer finds the ID and skips the changed record. If Akahu removes and replaces a transaction with a new ID, the new ID can import but the old Firefly entry is not automatically reversed/deleted.
+- The converter maps positive amounts to deposits and negative amounts to withdrawals. Optional Akahu other-account data becomes a source/destination name; the inspected Akahu conversion path does not demonstrate robust resolution of both sides to existing Firefly accounts or automatic pairing of opposite-side bank entries.
+- Akahu conversion metadata can populate Firefly foreign amount and currency, but the code hard-codes two decimal places for the foreign amount and also uses two decimals for the account amount (the source contains FIXME comments about obtaining account decimal places). This is a precision risk for currencies with zero or three minor-unit decimals.
+- The Akahu converter maps the account-side amount and foreign amount, but does not use the Akahu transaction balance as a continuously reconciled account balance. New-account opening balance is separately configured by the user.
+- The Akahu response model reads settled transaction records; the inspected request calls the settled transactions endpoint and does not query pending transactions.
+- Akahu-specific test coverage is materially thinner than MoneyMatter's: the v2.3.5 `HttpFlowTest` contains a TODO to mock Akahu API responses. There are Akahu model/unit tests, but the inspected Akahu feature test does not exercise the complete import/conversion/submit lifecycle against mocked transactions.
+- Akahu credentials are retrieved from server-side session state or environment-backed configuration in the inspected SecretManager. This code path does not itself show an application-level encrypted credential store. Actual exposure depends on session driver, host controls, environment handling and logs; this requires deployment-specific review.
+
+### 17.3 Transfers, pending rows and foreign currency — comparison
+
+| Requirement | MoneyMatter v0.33.7 | Firefly importer v2.3.5 |
+|---|---|---|
+| Stable-ID repeat import | Yes: account + `originalId`, plus unlink/relink recovery | Yes: Akahu `external_id` and default identifier duplicate path |
+| Update same ID when bank changes row | Not in inspected persistence path; existing row skipped | Not in inspected submit path; existing identifier skipped |
+| Remove/reverse row deleted upstream | Not in inspected persistence path | Not in inspected import path |
+| Pending transactions | Not queried by inspected connector | Not queried by inspected connector |
+| Late-settling rows | 14-day incremental overlap; mocked E2E test | Date-window import/pagination; no equivalent tested rolling overlap identified |
+| Automatic transfer pairing | No: explicitly imports as `not_transfer` | Not demonstrated; deposit/withdrawal with source/destination names |
+| Foreign-currency conversion metadata | Akahu conversion object not mapped into explicit foreign amount/currency/rate fields | Foreign amount/currency mapped, but amount rounded to 2 decimals |
+| Current account balance | Explicit balance-history write when current balance is supplied | Not continuously synced by the inspected importer converter |
+
+Akahu's own documentation says settled records can be modified or deleted and that consumers should process additions, modifications and deletions. It also states pending transactions are separate, unstable, lack stable IDs and should be rebuilt on each fetch. Neither pinned connector implements the full Akahu lifecycle described by the provider.
+
+### 17.4 Security, recovery and integration implications
+
+- MoneyMatter encrypts the stored Akahu credential object through its credential-encryption helper before database persistence. This is a meaningful control, but the key-management, backup encryption, rotation and restore procedure still require an isolated deployment review.
+- MoneyMatter's provider does not expose webhook/realtime support for Akahu Personal Apps; its code explicitly marks webhooks and realtime unsupported. The 12-hour internal sync schedule cannot make upstream daily Personal App data fresh.
+- Firefly's Akahu credentials are supplied via session or environment-backed config in the inspected importer code. No application-level encryption of these tokens is visible in that code path. Firefly's core ledger still has the previously recorded at-rest database encryption limitation.
+- MoneyMatter documents a self-hosted PostgreSQL/Redis/Docker stack and backup/restore workflow; this is operationally heavier than a single local database. Restore drills and off-host encrypted backups remain mandatory before any real data.
+- Firefly III and its importer are separate services. Their API boundary is useful, but introduces another credential, network and backup boundary. Firefly's AGPL obligations remain a separate reuse decision.
+- Neither connector should be treated as an authoritative bank reconciliation engine for IDEAL. The required behaviour is a source-observation ledger with immutable raw-event references, deterministic normalisation, versioned matching, update/supersession handling, explicit deletion/tombstone handling, and a separate pending snapshot lifecycle.
+
+### 17.5 Synthetic fixture acceptance matrix for any future POC
+
+No fixtures were executed in this audit. A future separately approved synthetic-only POC must include at least:
+
+1. Same transaction ID, identical payload imported twice → one economic event.
+2. Same transaction ID, changed description/date/amount/balance → update or superseding version, never silent skip.
+3. Old transaction removed by provider → explicit tombstone/reversal workflow; no silent historical erasure.
+4. Removed ID replaced by new ID → link old/new source records and prevent double counting.
+5. Pending row changes date/description/amount, then disappears and settles under a new ID → provisional snapshot is replaced and reconciled once.
+6. Two sides of an internal transfer arrive on separate accounts, with different descriptions/fees/settlement dates → candidate match with confidence and user review; never infer transfer solely from equal amounts.
+7. Foreign card purchase with NZD base posting and JPY/KWD/GBP conversion → preserve exact source decimal, foreign amount, currency and rate; no binary-float rounding.
+8. Pagination with fixed date bounds and a cursor → no missing or duplicated page boundary.
+9. Akahu API outage, 401/403, 429 refresh throttle and partial-page failure → no false-success checkpoint; safe retry with idempotency.
+10. Account balance null/stale/revised → preserve freshness timestamp and reconcile statement balance against ledger without silently rewriting transactions.
+11. Import rollback/replay after interruption → deterministic results and auditable batch state.
+12. Backup restore → credentials excluded or separately protected, database and attachments restored, checksums and ledger totals verified.
+
+### 17.6 Revised disposition
+
+**Do not adopt either bank connector as IDEAL's correctness model.** MoneyMatter is the stronger Akahu integration reference because its pinned provider has substantially broader mocked E2E coverage, pagination, incremental overlap, stable-ID idempotency, unlink/relink recovery, auth-failure handling and balance-history handling. Its important gap remains append-only behaviour for upstream edits/deletions, no pending feed, no automatic transfer classification and loss of explicit Akahu FX conversion metadata.
+
+Firefly remains the stronger external double-entry/multi-currency ledger candidate, but its Akahu importer is less mature in the inspected tag: identifier deduplication exists, while full update/delete reconciliation and a comprehensive mocked Akahu flow test are not demonstrated. Its two-decimal conversion and account-currency assumptions require tests before trusting NZD/international accounts.
+
+The architecture recommendation is therefore:
+1. Keep the Personal Finance domain separate from trading and investment engines.
+2. Keep IDEAL-owned source observations and reconciliation semantics as the eventual authority, rather than relying on either connector's import semantics.
+3. If a future external-ledger POC is approved, compare Firefly for double-entry/accounting semantics and MoneyMatter for bank-sync/UX behaviour using synthetic fixtures only. Do not connect a real bank.
+4. No runtime, dependency, credential, bank connection, installation, host or implementation is selected by this audit.
+
+**Approval boundary unchanged:** D-017 remains Proposed; D-001 remains accepted and unchanged; Phase 02 architecture/contracts only; Phases 03–19 remain LOCKED.
