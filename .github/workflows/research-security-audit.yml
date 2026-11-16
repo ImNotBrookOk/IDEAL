@@ -8,13 +8,15 @@ on:
       - .github/workflows/**
       - .github/workflows/research-security-audit.yml
       - research/requirements.txt
+      - research/requirements.lock
       - research/nautilus_poc/requirements.txt
+      - research/nautilus_poc/requirements.lock
 
 permissions:
   contents: read
 
 concurrency:
-  group: research-security-audit-v2
+  group: research-security-audit-v3
   cancel-in-progress: true
 
 jobs:
@@ -38,53 +40,109 @@ jobs:
           python -m pip install --disable-pip-version-check \
             pip-audit==2.10.1 \
             zizmor==1.32.0 \
-            cyclonedx-bom==7.5.0
+            cyclonedx-bom==7.5.0 \
+            uv==0.13.8
 
-      - name: Resolve the exact research dependency environment
+      - name: Generate universal hash-pinned dependency locks
         run: |
-          python -m venv .venv
-          .venv/bin/python -m pip install --disable-pip-version-check \
-            -r research/nautilus_poc/requirements.txt \
-            -r research/requirements.txt
+          set -euo pipefail
           mkdir -p research-output
+          uv pip compile --universal --python-version 3.14 --generate-hashes \
+            --output-file research-output/parser-requirements.lock \
+            research/requirements.txt
+          uv pip compile --universal --python-version 3.14 --generate-hashes \
+            --output-file research-output/nautilus-poc-requirements.lock \
+            research/nautilus_poc/requirements.txt
+          if [ -f research/requirements.lock ]; then
+            cmp research/requirements.lock research-output/parser-requirements.lock
+          else
+            cp research-output/parser-requirements.lock research/requirements.lock
+          fi
+          if [ -f research/nautilus_poc/requirements.lock ]; then
+            cmp research/nautilus_poc/requirements.lock research-output/nautilus-poc-requirements.lock
+          else
+            cp research-output/nautilus-poc-requirements.lock research/nautilus_poc/requirements.lock
+          fi
+          {
+            echo "LOCK_BEGIN_PARSER"
+            cat research/requirements.lock
+            echo "LOCK_END_PARSER"
+            echo "LOCK_BEGIN_NAUTILUS_POC"
+            cat research/nautilus_poc/requirements.lock
+            echo "LOCK_END_NAUTILUS_POC"
+          } > research-output/lock-files.txt
 
-      - name: Generate CycloneDX SBOM for resolved research environment
+      - name: Install exactly the hash-pinned dependency locks
         run: |
-          cyclonedx-py environment .venv \
+          set -euo pipefail
+          uv venv .venv-parser --python 3.14
+          uv pip sync --python .venv-parser/bin/python research/requirements.lock
+          uv venv .venv-poc --python 3.14
+          uv pip sync --python .venv-poc/bin/python research/nautilus_poc/requirements.lock
+
+      - name: Generate CycloneDX SBOMs for resolved environments
+        run: |
+          cyclonedx-py environment .venv-parser \
             --spec-version 1.6 \
             --output-format JSON \
-            --output-file research-output/research-python-sbom.json
+            --output-file research-output/parser-sbom.json
+          cyclonedx-py environment .venv-poc \
+            --spec-version 1.6 \
+            --output-format JSON \
+            --output-file research-output/nautilus-poc-sbom.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in sorted(Path("research-output").glob("*-sbom.json")):
+              bom = json.loads(path.read_text())
+              print("SBOM:", path.name, "components=", len(bom.get("components", [])))
+              for component in bom.get("components", []):
+                  licenses = component.get("licenses", [])
+                  ids = []
+                  for item in licenses:
+                      lic = item.get("license", {})
+                      ids.append(lic.get("id") or lic.get("name") or "NOASSERTION")
+                  print("  ", component.get("name"), component.get("version"), ",".join(ids))
+          PY
 
       - name: Run Python vulnerability and GitHub Actions workflow audits
         shell: bash
         run: |
           set +e
-          pip-audit --path .venv/lib/python3.14/site-packages \
-            --format json \
-            --output research-output/pip-audit.json
-          pip_status=$?
+          pip-audit --path .venv-parser/lib/python3.14/site-packages \
+            --format json --output research-output/parser-pip-audit.json
+          parser_status=$?
+          pip-audit --path .venv-poc/lib/python3.14/site-packages \
+            --format json --output research-output/nautilus-poc-pip-audit.json
+          poc_status=$?
           python - <<'PY'
           import json
           from pathlib import Path
-          report = json.loads(Path("research-output/pip-audit.json").read_text())
-          for dep in report.get("dependencies", []):
-              for vuln in dep.get("vulns", []):
-                  print("PIP-AUDIT:", dep.get("name"), dep.get("version"),
-                        vuln.get("id"), "aliases=", vuln.get("aliases"),
-                        "fix_versions=", vuln.get("fix_versions"))
-          print("PIP-AUDIT dependency count:", len(report.get("dependencies", [])))
+          for path in sorted(Path("research-output").glob("*-pip-audit.json")):
+              report = json.loads(path.read_text())
+              count = 0
+              for dep in report.get("dependencies", []):
+                  for vuln in dep.get("vulns", []):
+                      count += 1
+                      print("PIP-AUDIT:", path.name, dep.get("name"), dep.get("version"),
+                            vuln.get("id"), "aliases=", vuln.get("aliases"),
+                            "fix_versions=", vuln.get("fix_versions"))
+              print("PIP-AUDIT:", path.name, "dependencies=", len(report.get("dependencies", [])),
+                    "vulnerability_records=", count)
           PY
           zizmor .github/workflows > research-output/zizmor.txt 2>&1
           zizmor_status=$?
           cat research-output/zizmor.txt
           {
-            echo "pip_audit_exit_code=$pip_status"
+            echo "parser_pip_audit_exit_code=$parser_status"
+            echo "nautilus_poc_pip_audit_exit_code=$poc_status"
             echo "zizmor_exit_code=$zizmor_status"
             echo "python=$(python --version 2>&1)"
+            echo "uv=$(uv --version)"
             echo "pip_audit=$(pip-audit --version)"
             echo "zizmor=$(zizmor --version)"
           } > research-output/audit-manifest.txt
-          if [ "$pip_status" -ne 0 ] || [ "$zizmor_status" -ne 0 ]; then
+          if [ "$parser_status" -ne 0 ] || [ "$poc_status" -ne 0 ] || [ "$zizmor_status" -ne 0 ]; then
             exit 1
           fi
 
