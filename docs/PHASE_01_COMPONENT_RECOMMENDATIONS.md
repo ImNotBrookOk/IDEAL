@@ -1,7 +1,7 @@
 # IDEAL — Phase 01 Component Recommendations for Owner Review
 
 **Date:** 16 November 2026  
-**Status:** DRAFT RECOMMENDATIONS — NOT APPROVED  
+**Status:** OWNER-APPROVED PHASE 01 DISPOSITION — 16 November 2026  
 **Phase:** 01 — Open-source and infrastructure research  
 **Phase 02:** LOCKED
 
@@ -54,6 +54,6 @@ If the owner approves closing Phase 01, these are the candidates to examine in P
 
 No Phase 02 work is started by this recommendation document. No component is adopted or integrated by it.
 
-## Owner approval required
+## Owner approval — 16 November 2026
 
-The owner should review the recommendations and either accept them as the Phase 01 research disposition, request changes to named rows, or defer a decision. Explicit approval is still required to close Phase 01 and unlock Phase 02.
+The owner explicitly approved the recommendations and component dispositions in this document, including the preferred research candidates, holds, rejections, and deferred hosting/legal decisions. This approval authorises Phase 01 closure and Phase 02 architecture/contracts work only. It does not adopt or integrate any runtime dependency, select a venue, authorise exchange connectivity, provide credentials, authorise paper/live trading, change risk policy, or approve paid infrastructure.
