@@ -73,3 +73,8 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 ## Owner disposition — seven-day OKX sample
 
 On 16 November 2026, the owner explicitly accepted the seven-day OKX 400-level L2/trade sample as **conditional historical market-structure research** and directed that the project proceed without rerunning the same test. The original strict 5/7 result and 7/8 November quality flags remain unchanged. This acceptance does not make the dataset execution-grade, does not relax freshness requirements, and does not close the remaining Phase 01 infrastructure, security or component-approval gates. See [checkpoint 039](CHATGPT_CONVERSATIONS/2026-11-16-039-owner-acceptance-okx-research-dataset.md).
+
+
+## Hosting constraint update — owner operating preference
+
+Phone-first operation is preferred. The owner has an existing Windows PC/laptop available only if required, but internet access is via mobile phone data. Treat mobile bandwidth, data caps, tethering and variable connectivity as material constraints. The PC is an unselected fallback, not a presumed always-on host. Do not provision or configure it, open inbound ports, or run continuous high-volume feeds without a measured need and explicit approval. GitHub Actions remains research CI only. Host selection remains OPEN and deferred. See [checkpoint 040](CHATGPT_CONVERSATIONS/2026-11-16-040-phone-first-hosting-constraints.md).
