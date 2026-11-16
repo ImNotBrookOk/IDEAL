@@ -653,6 +653,6 @@ The two sources are both structurally reconstructable, but their temporal charac
 
 The Tardis sample's 13 snapshots and 3.804-second maximum gap are consistent with reconnect/snapshot behaviour documented by Tardis; the CSV omits explicit disconnect markers. The official archive has 96 periodic snapshots and a 584 ms maximum adjacent record interval. Both reconstructions had zero empty/crossed/locked states, but this does not prove lossless capture.
 
-Artifact ID `14186673619`, 2,596 bytes, SHA-256 `33d6a8f07b1360683a8ada3cca0db7030012b9a906953ab320c82ce197ab734`, contains only manifests, hashes and small summaries; expires 19 November 2026 at 00:03 UTC. The workflow's separate unconditional cleanup step completed before artifact upload.
+Artifact ID `14186673619`, 2,596 bytes, SHA-256 `33d6a8fc07b1360683a8ada3cca0db7030012b9a906953ab320c82ce197ab734`, contains only manifests, hashes and small summaries; expires 19 November 2026 at 00:03 UTC. The workflow's separate unconditional cleanup step completed before artifact upload.
 
 **Disposition:** Tardis's OKX Swap normalized sample is validated as a parseable source, but not as a 10 ms-equivalent source. Keep it as an independent coarser/reference dataset until direct BBO matching and channel provenance are established. The official OKX archive remains the stronger high-frequency historical candidate. No runtime vendor is selected.
