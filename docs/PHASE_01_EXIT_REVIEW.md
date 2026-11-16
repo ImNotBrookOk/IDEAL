@@ -51,7 +51,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 - [x] Hash-pinned universal locks and CycloneDX SBOMs generated, installed/compared and retained for parser and Nautilus POC environments on the research branch. Review checkpoint 041; repeat for every future runtime/product dependency set.
 - [x] Host selection intentionally deferred by owner: phone-first control/monitoring, Windows PC/laptop only as fallback if a concrete need arises. If revisited, measure mobile-data allowance/tethering and representative bandwidth first; then assess sleep/power, uptime, backup and outbound-only secure remote access. No provisioning or paid service authorised.
 - [ ] Review [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md) and every row in `docs/COMPONENT_SELECTION_MATRIX.md`; approve preferred candidates, reject alternatives, and record any changes.
-- [ ] Confirm all final Phase 01 evidence and decisions are documented, indexed and fetched back from `main`.
+- [x] Current Phase 01 evidence, decisions and checkpoints 031–041 are documented and indexed; roadmap, testing policy, component matrix, exit review, recommendation draft and audit index have been fetched back from `main` and verified. Repeat this readback after any remaining owner-requested edits.
 - [ ] Obtain explicit owner approval to close Phase 01 and unlock Phase 02.
 
 ## Non-negotiable boundary
