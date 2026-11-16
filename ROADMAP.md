@@ -388,3 +388,8 @@ Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK
 ### Phase 02 research checkpoint — risk management, Stage 7 (17 November 2026)
 
 Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with independent emergency-control-plane requirements, financial/security incident classification, safe-state/action ordering, NIST-aligned incident lifecycle, evidence preservation, containment/eradication, isolated recovery, account reconciliation, backup/restore, manual fallback and technical/tabletop exercises. NIST SP 800-61r3, CISA playbooks and FIA controls are methodological references. No emergency action, credential operation, exchange integration, backup service, external scan or runtime change authorised. Phase 02 only.
+
+
+### Phase 02 research checkpoint — risk management, Stage 8 (17 November 2026)
+
+Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) with independent assurance cases (claim/context/argument/evidence/residual risk), effective challenge, requirements-to-control-to-test traceability, layered verification, critical safety invariants, mutation resistance, quantitative model assurance, operational control monitoring and release/change-control gates. FIA, CFTC, Federal Reserve and NIST sources are methodological references; no regulatory applicability or certification is claimed. Open cross-foundation contract and independent review gaps remain. No implementation, validator invocation, test environment, exchange integration, deployment or phase advancement authorised.
