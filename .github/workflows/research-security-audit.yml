@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: research-security-audit
+  group: research-security-audit-v2
   cancel-in-progress: true
 
 jobs:
