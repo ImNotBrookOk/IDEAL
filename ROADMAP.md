@@ -155,3 +155,6 @@ The owner has asked to preserve two future ideas in [Deferred Future Scope Ideas
 
 
 - **Tardis OKX multi-day BBO comparison completed (16 November 2026):** workflow [#43804760777](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43804760777) passed retrieval, unit tests, reconstruction, strict-preceding/no-lookahead comparison and cleanup for 1 Sep and 1 Oct 2026. Exact strict-preceding BBO match: 99.35174% Sep, 99.31758% Oct; both 100% inclusive same-timestamp; 1 Nov baseline 99.85065%. Tardis has 6.86x/8.44x fewer messages than official archives and max exchange gaps 16.5s/2.4s; therefore accepted only as secondary sampled BBO reference, not 10ms execution calibration. Raw channel ID remains unavailable. Artifact 14198581255; detailed audit [checkpoint 036](docs/CHATGPT_CONVERSATIONS/2026-11-16-036-tardis-multiday-bbo-validation.md), validation report section 12.21. The multi-day comparison exit item is now complete.
+
+
+- **Phase 01 exit review created (16 November 2026):** consolidated gate register in [docs/PHASE_01_EXIT_REVIEW.md](docs/PHASE_01_EXIT_REVIEW.md). Research evidence is largely classified; outstanding items are IDEAL-specific dependency/security remediation and reproducible lock/SBOM review, $0 persistent host availability, final component matrix owner approval and explicit Phase 01 closure. Phase 02 remains LOCKED.
