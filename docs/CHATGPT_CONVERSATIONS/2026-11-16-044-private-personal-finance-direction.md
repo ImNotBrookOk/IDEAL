@@ -107,3 +107,11 @@ Owner confirms a personal-use-first direction for IDEAL's future financial syste
 - Phase 02 is architecture/contracts only. Phases 03–19 remain LOCKED.
 - No code, dependency, bank connection, credentials, payment capability, provider, host or public product is approved.
 - Next step: complete pinned MoneyMatter audit and compare alternative personal finance/ledger projects, then specify the personal-finance domain contracts. Owner approval remains required before any local prototype or bank-account connection.
+
+
+## Verification addendum — 16 November 2026
+
+- The conversation index was updated after this record was created; its entry is present in docs/CHATGPT_CONVERSATIONS/README.md.
+- Fetch-back from main confirmed D-017 is Proposed, D-001 remains accepted and unchanged, F-004 is present, the personal-finance research plan exists, and ROADMAP.md retains Phase 02 architecture/contracts only with Phases 03–19 locked.
+- Verified current blob SHAs: DECISIONS.md ec5ce6c80e098607b62cecc67bf0cb2dfbc833c4; docs/FUTURE_SCOPE_IDEAS.md 26e35de2cc4ed2b38b3770fd7bb44dad444bbf2c; docs/PERSONAL_FINANCE_RESEARCH.md 8b54f06d41cdf95ecd8f31721c9984581ed3f634; ROADMAP.md e4a0767ecefccb3ecb6f9a9dd38743402ab8e156; this conversation record 051a13de85af95b782b963e3be4b75c495abe441; conversation index 05c80fdf4cba7bb9b49dddde829b83415985db5c.
+- No code, dependencies, credentials, accounts, external services or hosting resources were created or connected. No tests were run because no executable code changed.
