@@ -128,3 +128,23 @@ Documentation-only changes:
 - Add this checkpoint to the conversation audit index.
 
 No source code, dependencies, runtime configuration, secrets, credentials, external accounts or financial records are changed.
+
+
+## 5. Read-back verification
+
+All documentation changes below were fetched from `main` after the write operations. The following checks confirmed the expected content and current blob identities:
+
+| Path | Read-back result | Blob SHA |
+|---|---|---|
+| `docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md` | Verified | `0f45a888a6e2a7645097a7603a476014a16d7a59` |
+| `README.md` | Verified | `c4c8ffdb0ad6f52e36e4ab0f1d34255358299a9d` |
+| `REQUIREMENTS.md` | Verified | `2a9e8cbda25bdbb41002764ca49574b3d452984e` |
+| `ARCHITECTURE.md` | Verified | `9be4f0606edde9bf14752298462857a221f4d35b` |
+| `docs/DATA_INTEGRITY_AND_HEALTH.md` | Verified | `bfb7edf9fbc8e6cc0c43d48aca6b841fafbbc30d` |
+| `ROADMAP.md` | Verified | `ec07e698e6c8f7a60e931cfd7ce91fbc2fd975bc` |
+| `DECISIONS.md` | Verified | `67ef52f839bbb607f86df5a9b5b290dbbde83976` |
+| `docs/FUTURE_SCOPE_IDEAS.md` | Verified | `2c2ad21286528f75dbf059c4ca1b2a8e62b6db44` |
+| `docs/CHATGPT_CONVERSATIONS/2026-11-17-051-integrated-core-protection-architecture.md` | Verified after transcript correction and this addendum | Current record blob recorded by the final read-back |
+| `docs/CHATGPT_CONVERSATIONS/README.md` | Verified | `9769f880bc2be3c7a98ae415290f56292744af20` |
+
+Verification was content-based against the intended headings and key requirements. No application code, tests, dependencies, runtime configuration, external accounts or infrastructure were changed. This checkpoint records documentation and architecture requirements only; it does not complete Phase 02 or unlock Phase 03.
