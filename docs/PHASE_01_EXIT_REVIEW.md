@@ -13,7 +13,7 @@ Phase 01 has produced enough evidence to retain several research candidates and 
 2. **IDEAL-specific dependency and workflow security:** direct licences are reviewed and a first vulnerability/SBOM/workflow audit is running, but the audit has found four known vulnerabilities in two packages in its first run; the exact packages and fixes must be examined before acceptance.
 3. **Owner approval:** the component matrix and explicit accepted/rejected/deferred choices still require final review and approval.
 
-The seven-day OKX dataset is conditionally accepted for historical market-structure research, and the Tardis multi-day comparison is complete with a secondary-reference-only disposition. These are evidence classifications, not execution-readiness claims.
+The seven-day OKX dataset is conditionally accepted for historical market-structure research, and the Tardis multi-day comparison is complete with a secondary-reference-only disposition. These are evidence classifications, not execution-readiness claims. Tardis use is limited to internal research under the published terms; external product use requires separate written rights.
 
 ## Evidence and gate register
 
@@ -37,7 +37,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | Component | Phase 01 disposition |
 |---|---|
 | Official OKX module-4 400-level history | Primary historical research source, with archive sequence limitations documented |
-| Tardis OKX normalized L2 | Secondary sampled BBO/reference only; not 10 ms execution calibration |
+| Tardis OKX normalized L2 | Secondary sampled BBO/reference for internal research only; no raw/sub-10-minute redistribution or external product embedding without separate written licence |
 | NautilusTrader 2.0.0rc9 | Preferred engine POC candidate; pre-release and not adopted |
 | HftBacktest | Execution-model research/reference only; no FIFO claim |
 | Cloudflare Workers / Durable Objects | Supporting edge, API, notification or low-volume relay only |
