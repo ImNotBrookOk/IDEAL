@@ -193,3 +193,17 @@ Current phase gates remain unchanged: Phase 02 architecture/contracts only; Phas
 ### Phase 02 research checkpoint — personal finance project comparison (16 November 2026)
 
 First-pass comparison recorded in docs/PERSONAL_FINANCE_RESEARCH.md. Actual Budget (MIT) is the leading candidate for a later synthetic-data-only budgeting trial; MoneyMatter (AGPL-3.0) remains a broader feature reference but has a more complex stack and licence/security items requiring audit; Firefly III (AGPL-3.0) remains an alternative; Beancount and hledger are ledger/accounting references. Akahu Personal App limitations were rechecked against its official docs: own account/one user, daily scheduled refresh, one-hour manual refresh rest period, account information only, no payments or webhooks. No installation, real data, credentials, bank connection, dependency or integration is authorised. Phase 02 only; Phases 03–19 remain LOCKED.
+
+
+## Phase 02 research checkpoint — personal finance repository audit (16 November 2026)
+
+Completed a source-level comparison of MoneyMatter v0.33.7, Actual Budget 26.11.0, Firefly III v6.7.9 / Data Importer v2.3.5, Money Manager Ex v1.9.4, GnuCash 5.17, Beancount v3 and hledger 1.52.4. Full evidence, licence notes, security limitations, Akahu constraints and build-versus-adopt recommendation are recorded in docs/PERSONAL_FINANCE_RESEARCH.md (sections 11–16).
+
+Current assessment:
+- Firefly III is the strongest external double-entry/multi-currency personal-ledger candidate, with 2FA and REST API; however it has no at-rest encryption, no native securities holdings, AGPL obligations, and the Akahu importer documentation/transfer mapping requires a pinned integration test.
+- MoneyMatter is the broadest all-in-one feature reference and has Akahu transaction-sync tests, but it has no native 2FA or E2EE, no disclosed third-party security audit, and cloud Plus/trial AI categorisation sends selected transaction fields to an AI provider. AGPL-3.0-only.
+- Actual Budget has excellent local-first envelope budgeting but explicitly lacks native multi-currency; bank-sync tokens are plaintext on the server despite budget-file E2EE.
+- Money Manager Ex is a useful encrypted local/mobile/manual alternative but has no NZ bank feed or IDEAL integration identified.
+- GnuCash, Beancount and hledger are accounting/ledger references, not full phone-first bank-connected platforms.
+
+Recommended architecture remains a separate IDEAL Personal Finance domain with its own ledger, manual/file import first, read-only bank sync only after separate approval, and read-only aggregation from investment/trading engines. No external app is selected or adopted. No code, dependencies, bank accounts, credentials, payments or hosting are approved. D-017 remains Proposed; D-001 unchanged; Phase 02 architecture/contracts only; Phases 03–19 remain LOCKED.
