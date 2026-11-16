@@ -120,3 +120,6 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-047-personal-finance-component-and-contract-research.md](2026-11-17-047-personal-finance-component-and-contract-research.md) | Expanded open-source audit (astt, krbob/portfolio, Formance, TigerBeetle, Akahu SDK, OFX Statement, Beangulp, rotki, Ghostfolio); licence and reuse dispositions; feasibility assessment; proposed source-observation, reconciliation and journal contract; no implementation or bank connection authorised |
+
+
+| [2026-11-17-048-tax-intelligence-and-ird-integration-research.md](2026-11-17-048-tax-intelligence-and-ird-integration-research.md) | Proposed NZ tax intelligence domain; spot crypto vs derivatives/FIF distinctions; IRD Gateway Services approval and API capabilities; no public payment-initiation API identified; proposed tax-to-personal-finance contract; no filing/payment/account linking authorised |
