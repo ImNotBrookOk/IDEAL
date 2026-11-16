@@ -100,3 +100,15 @@ Phase 01 remains closed. Phase 02 remains active. Phases 03–19 remain locked. 
 ## Verification
 
 All created/updated paths must be fetched from `main` after writing and checked for expected content. Read-back evidence and blob SHAs will be appended after successful verification.
+
+## Read-back verification
+
+All five paths below were fetched from `main` after the writes. Expected checkpoint markers were present in each response.
+
+| Path | Read-back blob SHA | Check |
+|---|---|---|
+| `docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md` | `9c8ff76d2be4fe12ba01b3d9fa669f56c348ce26` | PASS |
+| `docs/CHATGPT_CONVERSATIONS/2026-11-17-054-risk-management-research-stage-1.md` | `9cd7f2f8c2c41d931bf694f1ec58afb23a3cc663` | PASS |
+| `ROADMAP.md` | `0524a7954d8b7455bcbee030c2e980fab95bc67e` | PASS |
+| `README.md` | `6721b17425f106fbcfcdc504a5025012179021b2` | PASS |
+| `docs/CHATGPT_CONVERSATIONS/README.md` | `18270ab71bcb622c40838bb477646d6f82ddf62b` | PASS |
