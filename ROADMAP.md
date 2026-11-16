@@ -261,3 +261,33 @@ Learning is split into assistant/agent improvement (routing, retrieval, tools an
 Preliminary AI research identified OpenJarvis (Apache-2.0) as the strongest local-first assistant architecture candidate for further study; Hermes Agent (MIT) as a comparator; llama.cpp and Ollama as interchangeable local inference runtime candidates; Chronos-2, TimesFM and IBM Granite Time Series as numerical forecasting research candidates; FinGPT for financial text analysis; and Qlib as an offline quant research framework. OpenJarvis's documented security caveats (host shell execution, sandbox/capability defaults and a confirmation setting not enforced in every entry point) are recorded. No framework/model is adopted.
 
 New proposals: F-007 historical data archive and controlled learning; F-008 local AI runtime and agent framework research. Both remain Proposed. D-001 remains the only active initial trading scope. D-018/D-019 remain accepted. Phase 02 only; Phases 03–19 remain LOCKED. No runtime changes, data subscriptions, model downloads, hardware purchases, training jobs or account integrations authorised.
+
+
+## Phase 02 — integrated foundation and protection architecture (owner direction, 17 Nov 2026)
+
+The owner confirms that IDEAL must be designed as one integrated personal financial intelligence system, not as disconnected engines. Risk management, data integrity and system health are the three mutually reinforcing foundations. The owner explicitly accepts that research and design may take as long as necessary; implementation speed must not compromise correctness, security, auditability or fidelity to the intended system.
+
+### Phase 02 architecture work required before Phase 03 can be considered
+
+1. **Core system and domain boundaries:** define bounded contexts, shared contracts, state ownership, dependency graph and cross-domain isolation.
+2. **Risk architecture:** define policy hierarchy, authority, exposure aggregation, pre-action checks, ongoing monitoring, restrictions, cooldown/recovery and domain-specific adapters. Do not invent or change numeric limits without approval.
+3. **Data architecture:** define source/observation/normalised/derived/research/decision evidence layers, lineage, point-in-time correctness, correction history, quality/freshness contracts, retention, licence and privacy boundaries.
+4. **Health and oversight:** define independent supervisor/watchdog, health states, critical dependencies, monitoring cadence, incident lifecycle, alerting, backup/restore evidence and supervisor-failure behaviour.
+5. **Protection integration:** specify how data quality and health state affect risk validity; how risk and health interlocks constrain engines; and how action results, reconciliation and incidents feed back into audit and health.
+6. **Failure containment and recovery:** define dependency blast radius, safe degraded modes, timeouts, retry policy, failover equivalence, gap disposition, replay, reconciliation and verified recovery.
+7. **Authority and security:** define what components may observe, calculate, recommend, approve, restrict or execute; threat model privilege boundaries, secrets, AI tools, data access and audit integrity.
+8. **Verification and traceability:** define measurable acceptance criteria and a requirement-to-contract-to-test-to-evidence traceability matrix. Include fault injection, risk-boundary, concurrency, supervisor independence, recovery and restore tests.
+9. **Portability and operations:** keep UI/control separate from compute, ingestion and storage; document a portable topology and operational runbooks without selecting or provisioning hosting.
+
+### Phase 02 quality rule
+
+Do not unlock Phase 03 merely because diagrams or interface drafts exist. The architecture must be reviewed for simplicity, completeness, failure modes, security, testability, maintainability, cost and portability. Material assumptions and unresolved questions must be explicit. Contracts must be internally consistent and independently challenged. The design must show how unsafe states are detected, contained, audited and recovered.
+
+The authoritative owner-approved vision and detailed design backlog are in [docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md](docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md). Supporting requirements are in `REQUIREMENTS.md`, `ARCHITECTURE.md` and `docs/DATA_INTEGRITY_AND_HEALTH.md`.
+
+### Current gate
+
+- Phase 01: CLOSED (owner-approved 16 Nov 2026).
+- Phase 02: ACTIVE — integrated core protection architecture and contracts research.
+- Phases 03–19: LOCKED.
+- No runtime implementation, dependencies, exchange/account connections, execution, paid infrastructure, hosting or model training authorised by this checkpoint.
