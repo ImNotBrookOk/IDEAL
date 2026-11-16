@@ -284,3 +284,14 @@ Risk management must be a shared deterministic capability with domain-specific c
 Failure handling must be dependency-aware. Invalid market data may suspend strategies that rely on it without disabling unrelated finance reporting. A portfolio-wide risk service failure may restrict every activity that depends on portfolio-wide approval. Every engine must declare its dependencies, acceptable quality states, failure behaviour and recovery requirements.
 
 This integration is specified in [docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md](IDEAL_CORE_PROTECTION_ARCHITECTURE.md). No runtime integration or implementation is authorised by this documentation update.
+
+
+## 15. Security monitoring and health integration
+
+Security is a separate foundational pillar, but its telemetry and the operational status of its controls must be integrated with system health. Monitor authentication anomalies, permission changes, credential/key lifecycle, unusual access and exports, unexpected outbound connections, process/port/configuration drift, dependency advisories, integrity failures, audit gaps, backup encryption/restore evidence and failures or disablement of security monitoring.
+
+Do not collapse security posture into a single green health indicator. Operational health asks whether components are functioning; security assurance asks what was assessed, against which threats and controls, using what evidence and how recently. A compromised component may remain available and report itself healthy. Security status therefore needs its own scoped states, evidence freshness and independent observation.
+
+The health supervisor may trigger predefined containment actions (for example, isolating an affected workload or disabling a compromised integration) only under explicitly designed authority, with audit, owner visibility, false-positive safeguards and recovery procedures. It must not silently change financial risk policy or initiate financial actions.
+
+The security architecture, threat model, vulnerability lifecycle, incident response and assurance backlog are specified in [docs/IDEAL_SECURITY_ARCHITECTURE.md](IDEAL_SECURITY_ARCHITECTURE.md). No implementation or external scanning is authorised by this documentation update.
