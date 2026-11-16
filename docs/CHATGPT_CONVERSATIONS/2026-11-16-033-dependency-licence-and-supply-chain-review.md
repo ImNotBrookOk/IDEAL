@@ -21,7 +21,7 @@ Sources:
 
 ### Deliberate version decisions
 
-- `pytest==8.4.2` was replaced with `pytest==9.2.0` (MIT) in commit `48358298ebf1bff0cef427a384e1cce3bac4d392`. CI [#43805067024](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43805067024) is verifying the full POC suite on x86_64 and ARM64. No pass is claimed until both jobs complete.
+- `pytest==8.4.2` was replaced with `pytest==9.2.0` (MIT) in commit `48358298ebf1bff0cef427a384e1cce3bac4d392`. CI [#43805067024](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43805067024) passed on x86_64 and ARM64: **84 tests passed on each architecture**. The exact NautilusTrader pin `2.0.0rc9` remained unchanged.
 - Keep `orjson==3.11.3` for the current research workflows. Version 3.13.0 is newer, but its PyPI licence expression includes MPL-2.0 for some source files in addition to Apache-2.0 OR MIT. The current 3.11.3 version page reports Apache-2.0 OR MIT. Do not upgrade a research-only parser merely for recency without reviewing the changed licence expression and rerunning the high-volume alignment workloads.
 - NautilusTrader `2.0.0rc9` is LGPL-3.0-only and a pre-release. Linking/combining obligations and any modification of the library require licence review before distribution. It remains an isolated POC and no source has been copied into IDEAL runtime.
 
@@ -43,6 +43,16 @@ Sources:
 - https://nautilustrader.io/security/
 - https://github.com/nautechsystems/nautilus_trader/releases
 - https://pypi.org/project/nautilus-trader/2.0.0rc9/
+
+## SQLite event-journal benchmark (informational, same CI run)
+
+The POC workflow also benchmarked 5,000 append-only events per payload size using SQLite WAL and `synchronous=FULL`. This is GitHub-hosted runner data only, not a target-worker benchmark and no minimum throughput is asserted.
+
+- x86_64: 256-byte payload 3,174 events/s (p50 0.159 ms, p95 0.480 ms, p99 2.705 ms); 1,024-byte payload 3,504 events/s (p50 0.158 ms, p95 0.420 ms, p99 2.546 ms).
+- ARM64: 256-byte payload 5,203 events/s (p50 0.160 ms, p95 0.379 ms, p99 0.597 ms); 1,024-byte payload 4,653 events/s (p50 0.172 ms, p95 0.378 ms, p99 0.667 ms).
+- 5,000 events were verified and 2,500-event tail replay completed for each case. Database size after close was 4,038,656 bytes (256-byte payload) and 10,850,304 bytes (1,024-byte payload).
+
+These figures show that SQLite's append/replay path is plausible for a small local event journal POC. They do not prove the target host's throughput, long-duration write latency, power-loss durability, backup/restore correctness, concurrent-reader contention or production capacity. No storage architecture is selected.
 
 ## IDEAL gaps found
 
