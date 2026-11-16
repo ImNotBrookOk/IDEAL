@@ -7,6 +7,7 @@ on:
     paths:
       - research/tardis_l2_audit.py
       - research/tests/test_tardis_l2_audit.py
+      - research/requirements.lock
 
 permissions:
   contents: read
