@@ -61,9 +61,20 @@ jobs:
             --format json \
             --output research-output/pip-audit.json
           pip_status=$?
-          zizmor --format json .github/workflows \
-            > research-output/zizmor.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("research-output/pip-audit.json").read_text())
+          for dep in report.get("dependencies", []):
+              for vuln in dep.get("vulns", []):
+                  print("PIP-AUDIT:", dep.get("name"), dep.get("version"),
+                        vuln.get("id"), "aliases=", vuln.get("aliases"),
+                        "fix_versions=", vuln.get("fix_versions"))
+          print("PIP-AUDIT dependency count:", len(report.get("dependencies", [])))
+          PY
+          zizmor .github/workflows > research-output/zizmor.txt 2>&1
           zizmor_status=$?
+          cat research-output/zizmor.txt
           {
             echo "pip_audit_exit_code=$pip_status"
             echo "zizmor_exit_code=$zizmor_status"
