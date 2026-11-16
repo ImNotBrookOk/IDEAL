@@ -201,7 +201,7 @@ Security is a fourth foundational pillar under D-021. Its detailed architecture 
 
 Phase 02 remains active. Phases 03–19 remain LOCKED until the relevant exit criteria and explicit owner approvals are satisfied.
 
-## 7. Architecture-first integration and acceptance
+## 11. Architecture-first integration and acceptance
 
 The four pillars must be designed as one integrated protection system before implementation. Each pillar has distinct responsibilities and authority, while critical interfaces are explicit contracts rather than informal assumptions.
 
