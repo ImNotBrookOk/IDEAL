@@ -694,3 +694,28 @@ The same-timestamp subset is weaker, but only accounts for 11,895 of 98,400 mism
 **Disposition:** retain the failed 98% result as a quality warning. Do not lower the threshold or claim three-day alignment acceptance. The 10 ms feed remains usable for sampled market-quality research with uncertainty bounds, but its trade/BBO directional alignment is not consistently within the initial target across all three days. Sequence IDs/checksums and exact event ordering remain absent. Further work must verify trade-side semantics, test more days/market regimes, and quantify BBO agreement against an independent source before this gate can be closed.
 
 The rerun artifact ID `14187715114` (3,348 bytes, SHA-256 `3bab0de9a9659691165d0339d851fe70ebd9fb60cd557c66de2ac4492683d53b`) contains summaries/manifests only and expires 19 November 2026 at 00:05 UTC. The separate unconditional cleanup step completed successfully before upload. The earlier failed-run artifact `14187155843` still temporarily contains raw archives and expires 18 November 2026 at 23:55 UTC; this was recorded in conversation audit 029 and the workflow cleanup defect is corrected.
+
+
+### 12.16 Three consecutive OKX 400-level archives passed independent structural reconstruction (16 November 2026)
+
+Workflow [#43777630729](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43777630729) retrieved and independently reconstructed 11, 12 and 13 November 2026 module-4 BTC-USDT-SWAP archives. All 20 focused archive-audit unit tests passed before retrieval; all records across all three days reconstructed to valid, non-empty, non-crossed and non-locked books. Every one of the 288 snapshots had exactly 400 bid and 400 ask levels.
+
+| Measurement | 11 Nov | 12 Nov | 13 Nov |
+|---|---:|---:|---:|
+| Book records | 6,630,044 | 6,604,203 | 7,391,929 |
+| Snapshots | 96 | 96 | 96 |
+| Updates | 6,629,948 | 6,604,107 | 7,391,833 |
+| Price-level rows | 99,009,762 | 109,286,945 | 152,568,681 |
+| Zero-quantity deletions | 17,885,894 | 20,114,734 | 29,620,105 |
+| Median changed levels/update | 6 | 6 | 8 |
+| Exact 10 ms intervals | 85.929% | 85.957% | 91.069% |
+| Exact 20 ms intervals | 7.356% | 7.291% | 5.182% |
+| Exact 30 ms intervals | 3.187% | 3.154% | 1.954% |
+| Maximum adjacent interval | 508 ms | 520 ms | 517 ms |
+| Invalid/empty/crossed/locked states | 0 | 0 | 0 |
+
+The 13 November day is materially more active in the L2 stream: 7.39m book records, 152.57m level rows, 29.62m deletions and median 8 changed levels/update, versus 6.60–6.63m records and median 6 levels/update on the prior days. Its exact-10ms interval share is also higher (91.069%). This increased activity is consistent with a more demanding market-data sample, but does not by itself prove the cause of the 97.835% trade-side alignment result in section 12.15.
+
+All three archive structures pass. The separate trade/BBO directional quality screen still fails on 13 November and remains open. Structural reconstruction does not establish sequence continuity because the historical schema has no sequence IDs/checksums.
+
+Artifact ID `14186803944`, 7,033 bytes, SHA-256 `90a39d1d5c042d970e899a391833dd6f6bba01a22c8fa155d23d685361cde13e`, contains summaries/manifests only and expires 19 November 2026 at 00:10 UTC. The unconditional cleanup step completed before upload.
