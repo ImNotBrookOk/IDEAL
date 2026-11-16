@@ -138,7 +138,7 @@ Artifact 14187915961 (2,991 bytes; SHA-256 74d5c38cee84ced1e398fc51ea81a2d6b0615
 
 ## 15. Tardis timestamp-gap clock correction
 
-The earlier Tardis maximum gap of 3,803.897 ms is based on local receive timestamps, whereas the official archive's 584 ms maximum interval is based on exchange timestamps. These values must not be directly compared. A test-first parser update now reports local receive gaps and exchange timestamp gaps separately, plus exchange timestamp backsteps. The next Tardis run will regenerate the precise exchange-time gap metrics. The direct BBO comparator uses exchange timestamps and stable sorting.
+The earlier Tardis maximum gap of 3,803.897 ms was based on local receive timestamps. The updated parser separately reports local and exchange gaps and backsteps: Tardis maximum exchange-time gap is 3,800 ms, local receive gap 3,803.897 ms, and exchange timestamp backsteps 0. The official archive's maximum exchange-time interval is 584 ms, so the same-clock comparison confirms a materially longer Tardis gap tail. The direct BBO comparator uses exchange timestamps and stable sorting.
 
 ## 16. Current OKX feed/RPI constraints
 
@@ -148,3 +148,10 @@ Official OKX documentation confirms VIP4+ for the 400-level 10 ms books-l2-tbt c
 ## 17. New Zealand derivatives licensing scope clarified
 
 Current FMA guidance states that a derivatives issuer making a regulated offer of derivatives to retail investors must hold the relevant licence; its derivative definition includes recurrently traded futures and swaps. This is an issuer/offeror obligation, not a licence requirement on the user merely operating a personal trading system. The cross-border application to a specific offshore exchange, contracting entity and crypto perpetual-swap product still requires independent legal confirmation. No venue eligibility is asserted. Sources: https://www.fma.govt.nz/business/services/derivatives-issuers/ and https://www.fma.govt.nz/business/services/derivatives-issuers/?stage=Live. The component matrix now states this distinction.
+
+
+## 18. Updated Tardis exchange-time gap audit and rerun artifact
+
+Workflow [#43779462348](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43779462348) passed the full research test suite and reran the Tardis/official OKX sample with separate local/exchange timestamp metrics and stable BBO sorting. Tardis OKX sample: 844,983 messages, 13 snapshots, max exchange gap 3,800 ms, max local receive gap 3,803.897 ms, zero exchange timestamp backsteps. Official archive: 5,827,935 records, 96 snapshots, max exchange interval 584 ms. The strict/inclusive BBO results were unchanged: 99.85065% strict-preceding and 100% inclusive same-timestamp.
+
+Artifact 14186924404 (3,022 bytes; SHA-256 592e4058eb28952f2b9c173bec75c51353c3c59408664d4da1c222975ffe2b74; expires 19 Nov 00:21 UTC) contains summaries/manifests only; cleanup passed.
