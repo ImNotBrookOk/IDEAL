@@ -103,3 +103,6 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-16-041-scoped-security-locks-and-sbom-review.md](2026-11-16-041-scoped-security-locks-and-sbom-review.md) | Scoped pip-audit clean; hash locks and CycloneDX SBOMs retained; orjson 3.11.6 fixes CVE-2025-67221 with MPL-2.0 licence review; online zizmor auditor scan found/fixed concurrency-limits issue; final scan clean across nine workflows |
+
+
+| [PHASE_01_COMPONENT_RECOMMENDATIONS.md](../PHASE_01_COMPONENT_RECOMMENDATIONS.md) | Consolidated draft of preferred research candidates, holds/rejections, hosting deferral and proposed Phase 02 handoff; owner review required; no adoption or phase unlock |
