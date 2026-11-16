@@ -9,7 +9,7 @@
 
 Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. It is not ready to close. The remaining blockers are now concentrated in three areas:
 
-1. **Persistent $0 core compute:** no reliable free cloud worker is proven; a self-hosted always-on host is possible but the user's hardware/power/network availability is unconfirmed.
+1. **Persistent $0 core compute:** no reliable free cloud worker is proven. An existing Windows PC/laptop is available as a fallback, but phone-data bandwidth/caps/tethering, stable uptime, power and safe remote administration are unverified; the owner prefers phone-first operation, so host selection is deferred.
 2. **IDEAL-specific dependency and workflow security:** direct licences are reviewed and a first vulnerability/SBOM/workflow audit is running, but the audit has found four known vulnerabilities in two packages in its first run; the exact packages and fixes must be examined before acceptance.
 3. **Owner approval:** the component matrix and explicit accepted/rejected/deferred choices still require final review and approval.
 
@@ -25,7 +25,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | Independent Tardis comparison | PASS WITH LIMITS | 1 Sep, 1 Oct, 1 Nov strict-preceding exact BBO match >99.3%; inclusive 100%. Tardis is materially sparser and has multi-second gaps; secondary sampled BBO only. |
 | Live feed entitlement | DOCUMENTED | OKX 10 ms books-l2-tbt VIP4+; standard books 100 ms; RPI channel separate and permissioned. Historical archives do not prove live entitlement. |
 | NZ legal / venue eligibility | CONTAINED BY EXCLUSION | No venue selected; venue selection, exchange accounts and connectivity explicitly excluded pending independent product/entity-specific NZ legal review. |
-| $0 persistent worker | OPEN | Oracle A1 is highest-capacity free VM but no SLA, home-region capacity and idle reclamation. GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO useful only as supporting edge/relay. Self-hosted host unconfirmed. |
+| $0 persistent worker | OPEN — deferred | Oracle A1 remains an unreliable sole host; GCP e2-micro too small/US-only; Render Free unsuitable; Cloudflare DO is supporting edge/relay only. Existing Windows PC/laptop is a fallback, but mobile-data limits, uptime/power and remote-access safety are unverified; phone-first preferred. |
 | Engine POC | RESEARCH CANDIDATE ONLY | NautilusTrader 2.0.0rc9, LGPL-3.0-only, pre-release; 84 tests pass on x86_64 and ARM64 using pytest 9.2.0. Known liquidation/accounting/queue and worker gaps remain. |
 | Direct dependency licences | REVIEWED | NautilusTrader LGPL-3.0-only; pytest MIT; orjson 3.11.3 Apache-2.0 OR MIT. Newer orjson 3.13.0 has MPL-2.0-covered files; not adopted. |
 | IDEAL-specific security / SBOM | OPEN | First audit found 4 known vulnerabilities in 2 packages; exact findings and remediation pending. Zizmor workflow analysis and CycloneDX SBOM generated, but report must be inspected. Transitive dependency hash lock and complete licence/SBOM review remain open. |
@@ -51,7 +51,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 - [ ] Inspect exact pip-audit findings, distinguish direct vs transitive and runtime vs dev exposure, upgrade/mitigate or document bounded exceptions; rerun until no unresolved high/critical findings.
 - [ ] Inspect Zizmor output, fix actionable workflow security findings, and rerun.
 - [ ] Produce and review a reproducible transitive dependency lock (hash-pinned) for the research POC/parser; preserve the generated CycloneDX SBOM and complete licence inventory.
-- [ ] Decide the $0 core-compute route: confirm availability of an always-on self-hosted machine with stable power/network/backup, or accept that a reliable $0 cloud host is not currently available and explicitly defer deployment choice. No paid service without approval.
+- [ ] Keep host selection deferred unless a concrete requirement forces it. If the Windows PC becomes necessary, measure mobile-data allowance/tethering and representative bandwidth first; then assess sleep/power, uptime, backup and outbound-only secure remote access. No provisioning or paid service without approval.
 - [ ] Final pass over every row in `docs/COMPONENT_SELECTION_MATRIX.md`; approve preferred candidates, reject alternatives, and record deferred items.
 - [ ] Confirm all final Phase 01 evidence and decisions are documented, indexed and fetched back from `main`.
 - [ ] Obtain explicit owner approval to close Phase 01 and unlock Phase 02.
