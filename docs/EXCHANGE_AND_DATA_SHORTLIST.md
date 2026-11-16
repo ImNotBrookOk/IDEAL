@@ -288,3 +288,8 @@ The same-day 1 November 2026 Tardis normalized OKX Swap L2 and official module-4
 - Official OKX module 4: 5,827,935 records, 54.55m level rows, 96 snapshots, maximum record interval 584 ms; 84.546% of intervals were exactly 10 ms.
 
 The Tardis sample therefore has ~6.90x fewer message groups and substantially longer gaps. The CSV does not expose the raw OKX WebSocket channel identifier, so it is not proven to be the 10 ms VIP4+ books-l2-tbt stream. Treat it as a validated normalized/coarser reference, not as a substitute for official 10 ms history. Direct timestamp-aligned BBO comparison and exact channel provenance remain open. Artifact 14186673619 (2,596 bytes) contains summaries only; unconditional cleanup passed before upload. Full details: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.14.
+
+
+## 13.14 Third-day trade/BBO quality gate did not pass (16 November 2026)
+
+The 13 November sample aligned 4,544,561 trades with zero missing preceding books and zero invalid book matches; median book age 5 ms, p95 10 ms, maximum 507 ms. However aggregate side consistency was 97.8348%, below the original 98.0% screen. The expanded diagnostic showed 97.3518% on same-timestamp trades and 97.8877% on strictly preceding trades; age <=10 ms was 97.7814%, while older age buckets were >99.5%. Timestamp ties and long stale tails therefore do not fully explain the mismatch. Potential causes include timestamp resolution/event ordering, fast market movement, missing updates or unverified trade-side semantics. The threshold is not being lowered. The three-day trade/BBO gate remains **OPEN**; the data remains a research candidate only. Full breakdown: [Historical L2 validation](HISTORICAL_L2_SAMPLE_VALIDATION.md), section 12.15.
