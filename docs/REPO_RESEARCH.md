@@ -393,3 +393,26 @@ Sources:
 
 
 The same run measured the SQLite event-journal POC on GitHub-hosted x86_64 and ARM64 runners (5,000 events per payload, WAL + synchronous=FULL). Throughput ranged from 3,174 to 5,203 events/s, with p95 append latency 0.379–0.480 ms and p99 0.597–2.705 ms. These are informational runner measurements only; they are not target-worker benchmarks and do not prove crash recovery, power-loss durability or sustained capacity. Full figures are recorded in [checkpoint 033](CHATGPT_CONVERSATIONS/2026-11-16-033-dependency-licence-and-supply-chain-review.md).
+
+
+## Additional free-host comparison — Google Cloud, Render and Cloudflare (16 November 2026)
+
+A second-pass comparison confirms that the Oracle A1 assessment is not missing a clearly superior free VM:
+
+- **Google Cloud Compute Engine:** one non-preemptible e2-micro per month, restricted to US regions (Oregon/Iowa/South Carolina), 0.25 vCPU, 1 GB RAM, 30 GB standard persistent disk and 1 GB/month outbound transfer. Billing account required. Too small and geographically remote for IDEAL's core engine; possibly a utility/monitoring node only.
+- **Render Free:** 750 free instance-hours/workspace/month. Free web services spin down after 15 minutes without inbound HTTP or WebSocket messages, have ephemeral local filesystems/no persistent disk, and may restart. An outbound exchange WebSocket does not satisfy the inbound-traffic keepalive contract. Not a background trading worker.
+- **Cloudflare Workers Free:** 100,000 requests/day, 10 ms CPU per request and 128 MB memory. SQLite-backed Durable Objects provide 100,000 requests/day, 13,000 GB-s/day and 5 GB storage. Incoming server-side WebSockets can hibernate while clients remain connected, but outgoing WebSocket clients cannot use that hibernation path. It is a credible edge relay or low-volume data gateway, not a general Python/Rust trading process.
+- **GitHub Actions:** ephemeral CI/research only, not a persistent service.
+- **Self-hosted existing hardware:** the only plausible no-subscription core-compute option if a continuously powered machine, stable internet and adequate backup are available. None of those resources has been confirmed.
+
+Sources:
+- https://docs.cloud.google.com/free/docs/free-cloud-features
+- https://docs.cloud.google.com/compute/docs/general-purpose-machines
+- https://render.com/docs/free
+- https://render.com/changelog/free-web-services-now-remain-active-while-receiving-websocket-messages
+- https://developers.cloudflare.com/workers/platform/limits/
+- https://developers.cloudflare.com/durable-objects/platform/pricing/
+- https://developers.cloudflare.com/durable-objects/platform/limits/
+- https://developers.cloudflare.com/durable-objects/best-practices/websockets/
+
+**Conclusion:** no reliable $0 full-engine cloud host is proven. A hybrid self-hosted engine plus Cloudflare edge relay is a candidate topology only. $0 persistent worker feasibility remains open; no provider selected and no account/resource provisioned. Full comparison: [checkpoint 035](CHATGPT_CONVERSATIONS/2026-11-16-035-free-tier-hosting-alternatives.md).
