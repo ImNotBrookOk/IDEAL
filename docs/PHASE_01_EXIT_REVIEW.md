@@ -2,12 +2,12 @@
 
 **Last updated:** 16 November 2026  
 **Current phase:** Phase 01 — Open-source and infrastructure research  
-**Phase state:** IN PROGRESS  
-**Next phase:** Phase 02 — Architecture/contracts (**LOCKED**)
+**Phase state:** CLOSED — OWNER APPROVED (16 November 2026)  
+**Next phase:** Phase 02 — Architecture/contracts (**UNLOCKED — owner approved**)
 
 ## Executive position
 
-Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. The remaining owner action is to review the component recommendations and full matrix, then explicitly approve or request changes before Phase 01 can close. Infrastructure is a documented deferral, not a reason to provision hardware: no reliable $0 cloud host is proven, and the owner prefers phone-first operation with a Windows PC only as fallback if a concrete requirement forces it.
+Phase 01 has produced enough evidence to retain several research candidates and reject unsuitable alternatives. The owner reviewed and explicitly approved the component recommendations and full matrix on 16 November 2026, including preferred research candidates, holds, rejections, and deferred hosting/legal decisions. Phase 01 is therefore CLOSED and Phase 02 architecture/contracts is UNLOCKED. Infrastructure remains deferred: no reliable $0 cloud host is proven, and the owner prefers phone-first operation with a Windows PC only as fallback if a concrete requirement forces it.
 
 The scoped research dependency/security gates now pass: both locked Python environments have zero known vulnerabilities, hash-pinned locks and CycloneDX SBOMs are retained, and online zizmor auditor-persona analysis reports no findings after a concurrency-control fix. These controls cover the two current research environments and nine workflows, not a future product dependency graph. orjson 3.11.6 MPL obligations remain relevant before distribution.
 
@@ -28,7 +28,7 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 | Direct dependency licences | REVIEWED WITH LIMITS | NautilusTrader LGPL-3.0-only; pytest 9.2.0 MIT; orjson 3.11.6 MPL-2.0 AND (Apache-2.0 OR MIT), selected to fix CVE-2025-67221 affecting 3.11.3. Review MPL file-level obligations before distribution. |
 | IDEAL-specific security / SBOM | PASS WITH LIMITS | Scoped parser and Nautilus POC scans each report zero known vulnerabilities; universal hash locks and CycloneDX SBOMs retained. Online zizmor auditor-persona scan reports no findings across nine workflows after fixing a concurrency-limits issue. Future product dependency graph is not covered. |
 | Documentation / audit trail | VERIFIED | Checkpoint audits 031–041, historical data validation, component matrix, roadmap, shortlist and research docs saved to main and fetched back for verification. |
-| Owner approval | OPEN | Final component selections/rejections and residual risk acceptance require explicit owner review. |
+| Owner approval | COMPLETE | Owner approved the recommendation document and full matrix, including residual-risk dispositions, and explicitly authorised Phase 01 closure and Phase 02 start on 16 November 2026. |
 
 ## Current component dispositions
 
@@ -52,11 +52,11 @@ The seven-day OKX dataset is conditionally accepted for historical market-struct
 - [x] Host selection intentionally deferred by owner: phone-first control/monitoring, Windows PC/laptop only as fallback if a concrete need arises. If revisited, measure mobile-data allowance/tethering and representative bandwidth first; then assess sleep/power, uptime, backup and outbound-only secure remote access. No provisioning or paid service authorised.
 - [ ] Review [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md) and every row in `docs/COMPONENT_SELECTION_MATRIX.md`; approve preferred candidates, reject alternatives, and record any changes.
 - [x] Current Phase 01 evidence, decisions and checkpoints 031–041 are documented and indexed; roadmap, testing policy, component matrix, exit review, recommendation draft and audit index have been fetched back from `main` and verified. Repeat this readback after any remaining owner-requested edits.
-- [ ] Obtain explicit owner approval to close Phase 01 and unlock Phase 02.
+- [x] Explicit owner approval received to close Phase 01 and unlock Phase 02 (16 November 2026).
 
 ## Non-negotiable boundary
 
-Phase 01 closure does not itself authorise exchange credentials, account access, runtime integration, paper trading, live trading, risk-policy changes or paid infrastructure. Phase 02 remains locked until the owner explicitly approves the Phase 01 exit review.
+Phase 01 closure does not itself authorise exchange credentials, account access, runtime integration, paper trading, live trading, risk-policy changes or paid infrastructure. The owner explicitly approved the Phase 01 exit review on 16 November 2026. Phase 01 is closed and Phase 02 is unlocked. Phase 02 remains limited to architecture/contracts; all runtime, venue, account, trading and spending boundaries remain in force.
 
 ## Key audit records
 
@@ -97,3 +97,8 @@ The final parser pin is orjson 3.11.6. It fixes the uncontrolled-recursion issue
 A concise recommendation set is now available in [docs/PHASE_01_COMPONENT_RECOMMENDATIONS.md](PHASE_01_COMPONENT_RECOMMENDATIONS.md). It consolidates preferred research candidates, conditional data-source acceptance, holds/rejections, deferred infrastructure and Phase 02 handoff candidates. It is explicitly a draft and does not approve integration or phase advancement.
 
 The remaining owner task is to review this recommendation set and the full [component matrix](COMPONENT_SELECTION_MATRIX.md), request any changes, and explicitly approve or defer Phase 01 closure. Phase 02 remains locked.
+
+
+## Owner closure decision — 16 November 2026
+
+The owner explicitly approved the Phase 01 component recommendations and full component matrix, including the documented preferred research candidates, holds, rejections, and deferred hosting/legal decisions. The owner also explicitly authorised Phase 01 closure and Phase 02 unlock. Accordingly, Phase 01 is **CLOSED** and Phase 02 — Architecture/contracts is **UNLOCKED**. No runtime integration, exchange connectivity, credentials, paper/live trading, risk-policy changes or paid infrastructure are authorised by this phase transition.
