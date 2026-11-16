@@ -111,3 +111,13 @@ Added test-first BBO extraction from both Tardis normalized CSV and official OKX
 - official BBO age and no-preceding/tie counts.
 
 The first red test exposed a unit error in the test expectation (500,000 microseconds is 500 ms); the expectation was corrected, not the implementation. Workflow [#43778824863](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43778824863) is queued to rerun the full test suite, regenerate both BBO series and produce the direct source comparison. No result is claimed yet.
+
+
+## 13. Current OKX live-feed and RPI requirements
+
+Official OKX change logs were checked:
+- 7 April 2026: JSON books-l2-tbt (400-level 10 ms) and books50-l2-tbt (50-level 10 ms) are VIP4+.
+- 23 June 2026: checksum on books/books-l2-tbt/books50-l2-tbt is fixed to zero; live consumers must validate seqId/prevSeqId.
+- 28 July 2026: books-rpi is a separate public 400-level 100 ms consolidated organic+RPI book; levels contain totalQty/nonRpiQty/count and sequence validation uses seqId/prevSeqId. rpiTakerAccess defaults false; instrument permission rpi=2 is required for a user with RPI permission.
+
+The 10 ms historical archive does not carry live sequence IDs or a documented RPI split. It cannot be assumed to represent all executable liquidity. If a selected account can access RPI, IDEAL must retain organic 10 ms and consolidated RPI 100 ms streams separately and account for RPI order flags and the slower sampling cadence. This is documented in validation report section 12.17 and the component matrix.
