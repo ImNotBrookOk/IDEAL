@@ -163,3 +163,248 @@ Sources:
 - Akahu Personal Apps: https://developers.akahu.nz/docs/personal-apps
 - Akahu refresh: https://developers.akahu.nz/docs/data-refreshes
 - Akahu accreditation: https://developers.akahu.nz/docs/app-accreditation
+
+---
+
+## 11. Comparative repository audit — pinned evidence checked 16 November 2026
+
+This is a source-level preliminary audit, not a security audit or runtime test. Stable release tags are preferred over development branches. Repository activity and stars are discovery signals, not proof of correctness.
+
+### 11.1 MoneyMatter — feature-complete reference
+
+Repository: https://github.com/letehaha/moneymatter  
+Stable release inspected: [v0.33.7](https://github.com/letehaha/moneymatter/releases/tag/v0.33.7), released 30 October 2026; Akahu NZ sync was introduced in v0.33.6 on 29 October 2026. The dev branch has moved beyond the stable tag; do not describe its unreleased work as a stable release.  
+Licence: AGPL-3.0-only. README and release history state earlier pre-relicensing versions used CC BY-NC-SA 4.0; do not reuse code from an unverified historical boundary.
+
+**Strengths**
+- Broadest all-in-one product fit in this comparison: accounts, transactions, categories, transfers/refunds, budgets, bills, subscriptions, loans, savings/financial goals, investments, portfolio holdings, multi-currency, net worth, CSV/OFX/QFX and other imports, export and backup/restore.
+- New Zealand Akahu Personal App integration is in the v0.33.7 source tree. The provider uses the two Akahu tokens and read-only account/transaction endpoints.
+- Source inspection shows a 14-day overlap on incremental sync, transaction IDs as provider external IDs, idempotent persistence and an Akahu E2E test suite with mocked API responses. It does not import Akahu's unstable pending feed in the inspected sync path.
+- Bank-provider credentials are encrypted before database storage using the application's AES-GCM token encryption utility.
+- CI workflow runs frontend lint/test/build/unused-code checks, backend lint/unit tests/typecheck, sharded backend E2E tests, Docker build/smoke checks and related gates.
+- Self-hosted mode is documented as keeping analytics/Sentry off and bank sync/AI disabled until configured. Passkey and external identity-provider login options are available.
+
+**Limitations / risks**
+- AGPL-3.0-only; unsuitable for copying into IDEAL without a deliberate licence strategy. A separate unmodified instance is a different choice from incorporating code.
+- No native two-factor authentication. Project documentation recommends passkeys or an identity provider with its own MFA; if password login remains enabled, password login remains another path.
+- No end-to-end encryption. Bank credentials are encrypted at rest, but transaction and balance records are readable by the server operator and database administrator. A compromised live server can access them.
+- No published third-party security certification or security audit is disclosed by the project.
+- The cloud Plus/free-trial configuration automatically sends selected new bank-transaction fields (amount, currency, account, date, note, payee and category names) to the included AI provider for categorisation; project docs state there is no single global switch to turn that automatic categorisation off. Self-hosted installs keep AI off until a model is configured. For IDEAL evaluation, do not use the cloud service with real financial data; if ever trialled, use self-hosted mode and do not configure AI/MCP access.
+- A large feature surface and active migrations increase upgrade/restore review requirements. Some migrations are explicitly irreversible and require restoring a pre-migration backup to roll back. Test restore before trusting the data.
+- It is a personal-finance manager, not a broker-grade investment ledger or execution/risk engine. Portfolio holdings and quoted prices must not be treated as authoritative trading accounting.
+
+**Disposition:** best all-in-one feature and workflow reference; a possible synthetic-data evaluation candidate only. Not selected as IDEAL's core, not adopted as a dependency, and not approved for real bank data.
+
+### 11.2 Actual Budget — best envelope-budgeting reference
+
+Repository: https://github.com/actualbudget/actual  
+Stable release inspected: [26.11.0](https://github.com/actualbudget/actual/releases/tag/v26.11.0), 2 November 2026.  
+Licence: MIT. The repository is active, with a substantial commit/test history and published security policy.
+
+**Strengths**
+- Local-first, mobile-friendly budgeting experience with envelope budgeting, transaction rules, scheduled transactions, reports and a mature community.
+- Akahu support for New Zealand banks was introduced as an experimental provider in 26.7.0. Bank sync requires actual-server; 26.11 adds scheduled automatic sync while Actual is open.
+- Optional end-to-end encryption protects budget data as it leaves the client; local device data still depends on device/disk security.
+- Clear published security policy and architecture decision records. The project explicitly says it is designed for a single owner or trusted household, not as a shared server security boundary for unrelated users.
+- Strong automated test and release discipline.
+
+**Limitations / risks**
+- Official documentation explicitly states native multi-currency is not supported; workarounds use experimental rules and fixed rates. This is a material blocker for IDEAL's NZD base currency plus international investments and foreign-currency accounts.
+- Bank-sync API credentials are stored in plaintext on the sync server and are not protected by the budget-file E2EE. Server administrators can read them.
+- E2EE has a recovery trade-off: losing the encryption passphrase and local copy can make data unrecoverable.
+- Bank sync is not a standalone offline desktop-only feature; it requires the server. Automatic sync runs only while Actual is open and remains constrained by provider/bank refresh policies.
+- It is primarily a budgeting/account register, not a full investment holdings or double-entry portfolio-accounting engine.
+
+**Disposition:** excellent envelope-budgeting UX and rules reference; not suitable as IDEAL's main financial ledger while native multi-currency is absent.
+
+### 11.3 Firefly III — strongest personal ledger/accounting candidate
+
+Repositories:
+- Core: https://github.com/firefly-iii/firefly-iii
+- Data Importer: https://github.com/firefly-iii/data-importer
+- Import configuration collection: https://github.com/firefly-iii/import-configurations
+
+Stable versions inspected: Firefly III v6.7.9 (11 October 2026); Data Importer v2.3.5 (23 September 2026). Newer development builds dated 11 and 14 November respectively are explicitly pre-release and warn of possible bugs/duplicate imports.  
+Licence: AGPL-3.0-or-later.
+
+**Strengths**
+- Mature double-entry personal-finance ledger, multi-currency accounts and transactions, budgets, rules, recurring transactions, savings goals/piggy banks, reports, two-factor authentication and a broad REST JSON API.
+- Fully self-hosted by design; README says it does not contact external services unless explicitly configured.
+- Data Importer is a separate component, supports CSV and CAMT.052/CAMT.053 files, plus third-party providers. The separation is intentional for security and maintenance.
+- Current v2.3.5 source tree contains an enabled Akahu provider and Akahu-specific unit tests. The stable v2.3.5 tag declares the provider. The user-facing configuration documentation has not caught up and still omits Akahu, so treat this as code-level support requiring a pinned-version end-to-end test, not as a fully documented turnkey NZ integration.
+- Importer duplicate detection supports content-based hashes and identifier-based matching. Identifier-based matching is preferable when the provider supplies a stable transaction ID.
+
+**Limitations / risks**
+- AGPL-3.0-or-later; do not copy code into IDEAL without a separate licence review.
+- Firefly's official security documentation states that database data and uploaded attachments are not encrypted at rest. Use full-disk encryption, strict filesystem/database permissions and encrypted backups; do not expose the database port.
+- The importer is another service/container with its own API token/configuration and lifecycle. This increases deployment and backup complexity compared with a single application.
+- No native investment holdings/portfolio engine. It can track asset accounts and balances, but this is not equivalent to securities lots, corporate actions, derivatives accounting or IDEAL's portfolio ledger.
+- Akahu transfer matching has known NZ-specific gaps in the contribution history: NZ domestic account numbers are not IBANs, the transaction type field was initially unused for transfer typing, and dynamic currency precision required attention. These are explicit test items.
+- The importer stable release is behind its development branch. The 14 November development build warns that data handling changes may produce duplicates; do not use development images for any financial records.
+
+**Disposition:** leading candidate for a separate private personal-finance ledger or a source of accounting/API patterns. Before any use with real data, test the stable Akahu path, transfer matching, duplicate handling, backups/restores and security configuration using synthetic data. Not adopted or selected.
+
+### 11.4 Money Manager Ex (MMEX) — local/mobile manual-finance option
+
+Repository: https://github.com/moneymanagerex/moneymanagerex  
+Stable desktop release: v1.9.4 (31 August 2026). Android app release 5.5.12 was listed by F-Droid in September 2026.  
+Licence: GPL-2.0.
+
+**Strengths**
+- Local desktop/mobile personal-finance app with checking, credit-card, savings, stock-investment and asset accounts, multi-level categories, budgets, scheduled bills, cash-flow forecasting and reports.
+- Uses a local SQLite database with AES encryption; Android supports SQLCipher.
+- Can synchronise via user-controlled cloud storage or Syncthing according to its mobile documentation.
+- Good fit for a private, manual-first, offline-capable finance workflow and a useful comparison for phone-first usability.
+
+**Limitations**
+- No native NZ open-banking/Akahu connector; desktop import is CSV/QIF according to current project documentation.
+- No first-party IDEAL integration/API contract identified in this screen.
+- Not a web application/server architecture. It is an alternative standalone personal tool, not a foundation for the IDEAL modular monolith.
+- GPL-2.0 is a copyleft licence; do not incorporate code without review.
+
+**Disposition:** retain as a possible standalone/manual-only privacy-oriented alternative and mobile UX reference, not as IDEAL's integrated platform.
+
+### 11.5 GnuCash — mature accounting and investment reference
+
+Repository: https://github.com/Gnucash/gnucash  
+Stable release: 5.17 (27 September 2026).  
+Licence: GNU GPL; exact licence expression to confirm before any reuse.
+
+**Strengths**
+- Mature double-entry accounting; multiple currencies; stock and mutual-fund portfolios; QIF and OFX import with transaction matching/duplicate detection.
+- Strong accounting semantics and long history; useful reference for investment accounts, lots, realised/unrealised gains and reconciliations.
+- Desktop builds for Windows, macOS and Linux.
+
+**Limitations**
+- Desktop-first, no suitable integrated phone-first web experience or NZ Akahu path established in this screen.
+- XML is the default data store. SQL database support is described by the project as experimental and not fully tested, with some corner cases reported to cause data loss.
+- Not a modern multi-engine trading platform.
+
+**Disposition:** accounting and investment-lot reference only; not selected for IDEAL runtime.
+
+### 11.6 Beancount and Fava — auditable ledger model
+
+Repositories:
+- https://github.com/beancount/beancount
+- https://github.com/beancount/fava
+
+Beancount v3 is the current stable major line (since June 2024); v2 is frozen/obsolete. Beancount is GPL-2.0-only.
+
+**Strengths**
+- Plain-text, double-entry accounting with explicit commodities, prices, postings, balances and investment accounting.
+- Text ledger and version control make changes inspectable and auditable.
+- Fava supplies a web UI and reports.
+
+**Limitations**
+- Not a turnkey budgeting/bank-sync/mobile product; bank statement ingestion is primarily importer/script based.
+- More technical and text-oriented than the requested personal finance experience.
+- GPL-2.0-only is a licence consideration for reuse.
+
+**Disposition:** excellent reference for ledger invariants, auditability and reproducible accounting; not an end-user product foundation.
+
+### 11.7 hledger — multi-currency journal and import reference
+
+Repository: https://github.com/hledger/hledger  
+Stable release inspected: 1.52.4 (10 September 2026).  
+Licence: GPL-3.0.
+
+**Strengths**
+- Text journal accounting, multi-currency, well-documented CSV import rules, CLI, TUI and web UI; supports Windows.
+- Strong focus on reliability, real-world practicality and documented formats.
+- Good reference for reconciliation, import rules, reports and deterministic ledger calculations.
+
+**Limitations**
+- Not a polished consumer budgeting application or native bank aggregation service.
+- No integrated investment holdings/portfolio engine or NZ bank connection identified in this screen.
+- GPL-3.0.
+
+**Disposition:** accounting/import/reporting reference only.
+
+---
+
+## 12. Revised shortlist and build-versus-adopt recommendation
+
+| Candidate | Best role | Key blocker | Current disposition |
+|---|---|---|---|
+| Firefly III + Data Importer | Separate personal finance ledger; multi-currency, double-entry, 2FA, REST API | AGPL; no investment holdings; no at-rest encryption; Akahu docs/transfer handling need tests | Leading candidate for isolated synthetic-data evaluation |
+| MoneyMatter | Broad all-in-one feature and mobile UX reference; NZ Akahu integration | AGPL; no native 2FA/E2EE; AI privacy defaults in cloud; no external security audit disclosed | Reference and synthetic-data evaluation candidate only |
+| Actual Budget | Envelope budgeting UX, local-first workflows, Akahu | No native multi-currency; bank tokens plaintext on server | Borrow UX/rules patterns only |
+| Money Manager Ex | Offline/manual, encrypted, mobile personal finance | No NZ bank sync or IDEAL API; standalone desktop/mobile | Optional private manual-only fallback |
+| GnuCash | Double-entry, multi-currency, stock accounting | Desktop-centric; SQL storage experimental | Accounting reference |
+| Beancount/Fava | Auditable ledger and investment postings | Technical/manual import; no mobile-first bank sync | Ledger semantics reference |
+| hledger | Deterministic journal, CSV import, reports | Technical UX; no integrated investment/bank feeds | Accounting/import reference |
+
+**Recommended IDEAL direction (not yet approved as an implementation decision):**
+1. Do not make any external personal-finance app the authoritative ledger for all IDEAL engines.
+2. Keep Personal Finance as a separate IDEAL domain with its own ledger and account ownership.
+3. Reuse established accounting principles (double-entry, reconciliation, currency precision, transaction provenance) and budgeting workflows; do not copy AGPL/GPL code.
+4. Use a read-only adapter to consolidate balances/performance from investment and trading engines. Do not pool cash, margin or collateral.
+5. Treat Firefly III as the leading external accounting candidate for an isolated comparison; treat MoneyMatter as the broadest product reference. A future decision may still favour a clean, small IDEAL-owned domain if adapter complexity or data ownership outweighs reuse.
+6. No bank account, API token, provider, host, runtime dependency or application is selected by this research.
+
+## 13. Akahu-specific data quality and refresh constraints
+
+Official Akahu documentation checked 16 November 2026:
+- Personal Apps are free and limited to the owner's own Akahu account; account information only, no payments, no webhooks; scheduled refresh is daily and manual refresh has a one-hour rest period.
+- Personal Apps can access up to 730 days of transaction history, subject to any shorter history limits imposed by the financial institution.
+- Settled transactions and pending transactions are separate endpoints. Pending transactions are unstable, may change date/description and do not have stable transaction IDs; they should be treated as provisional and rebuilt on each fetch.
+- Settled transactions normally have stable Akahu IDs, but a small fraction may be deleted/replaced with new IDs if the bank mutates a transaction beyond recognition. Consumers must handle updates and deletions, not only append new records.
+- API timestamps are UTC; pagination is required for larger histories; bank refresh timestamps must be displayed so users can see data freshness.
+- Bank transaction data is not a real-time event stream. The Personal App's daily schedule and manual-refresh rest period are incompatible with a promise of live balance/transaction freshness.
+
+References:
+- Personal Apps: https://developers.akahu.nz/docs/personal-apps
+- Accessing transactional data: https://developers.akahu.nz/docs/accessing-transactional-data
+- Transaction model: https://developers.akahu.nz/docs/the-transaction-model
+- Data refreshes: https://developers.akahu.nz/docs/data-refreshes
+- Pending transactions: https://developers.akahu.nz/reference/get_transactions-pending
+
+## 14. Practical viability for the owner's private-use goals
+
+**Viable without a bank connection**
+- Manual accounts, assets and liabilities; CSV/QIF/OFX/CAMT imports; budgets; bills; subscriptions; debt; savings goals; cash-flow forecasts; net worth; investment statements and valuations.
+- All imports must be previewed, validated, deduplicated and reconciled before posting. No silent balance corrections.
+
+**Viable with a future read-only Akahu connection**
+- Account balances and settled transactions for supported NZ banks, subject to daily refresh and provider/bank historical limits.
+- Display last refreshed timestamps and stale-data warnings.
+- Handle transaction updates/deletions, pending-vs-settled states and account disconnections explicitly.
+- Do not use bank-feed values as permission to spend, transfer or trade.
+
+**Not appropriate for the first version**
+- Payment initiation, automated transfers, broker orders, exchange connectivity or live trading.
+- Claims of real-time bank data.
+- Public multi-user SaaS, commercial open-banking accreditation or financial-advice functionality.
+- Cross-engine cash/margin pooling.
+- Cloud AI processing of identifiable bank transactions by default.
+
+**Hosting reality**
+- A phone is a client, not a dependable always-on server.
+- Local/private operation on an existing PC can work while that PC is on; remote/mobile access then requires a deliberate secure network path.
+- A VPS or public web app is technically possible later, but introduces ongoing cost, provider access to runtime data, hardening, MFA, TLS, patching, backups and incident response. No free always-on hosting assumption is approved.
+- Start with synthetic data and manual workflows. Do not put real bank data into an unreviewed prototype.
+
+## 15. Audit and provenance contract requirements
+
+The future audit record should be structured and reconstructable, not a transcript of hidden internal reasoning. For each event, preserve as appropriate:
+- event ID, event type, actor/source, timestamp, correlation/import batch ID;
+- source system and source record ID, source timestamps, data freshness and provider/account reference;
+- parser, mapping, rule, FX-rate, valuation and software versions;
+- before/after references or immutable journal entries, validation result, duplicate decision and reconciliation outcome;
+- calculation inputs, output, assumptions, confidence/limitations and concise decision rationale;
+- explicit user approval/denial for any action, including the exact scope approved;
+- errors, retries, idempotency key, reversal/supersession and recovery references.
+
+Do not log bank tokens, passwords, full unredacted statement payloads, or sensitive personal data unnecessarily. Keep raw evidence in protected storage with explicit retention controls; GitHub stores documentation and source only, never personal financial records. Corrections must be reversible and traceable, not silent mutation.
+
+## 16. Research outcome
+
+The one-package all-in-one ideal is not yet met by a candidate without trade-offs:
+- MoneyMatter has the broadest feature coverage but has material security/licence limitations.
+- Firefly III has the strongest accounting/API/multi-currency foundations but no native investment holdings and an extra importer component.
+- Actual Budget has the best envelope-budgeting UX but lacks native multi-currency.
+- MMEX is the best offline/manual privacy alternative but lacks NZ bank sync and web/API integration.
+
+The most viable path for IDEAL is therefore a separated Personal Finance domain plus separate investment/trading engines and a read-only consolidated view. Whether its initial ledger is IDEAL-owned or a private Firefly III adapter remains open and requires further isolated evaluation.
+
+**Approval boundary unchanged:** D-017 Proposed; D-001 unchanged; Phase 02 architecture/contracts only; Phases 03–19 locked. No implementation, dependency adoption, account connection, credentials, bank provider selection, payments or hosting are authorised.
