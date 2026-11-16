@@ -719,3 +719,17 @@ The 13 November day is materially more active in the L2 stream: 7.39m book recor
 All three archive structures pass. The separate trade/BBO directional quality screen still fails on 13 November and remains open. Structural reconstruction does not establish sequence continuity because the historical schema has no sequence IDs/checksums.
 
 Artifact ID `14186803944`, 7,033 bytes, SHA-256 `90a39d1d5c042d970e899a391833dd6f6bba01a22c8fa155d23d685361cde13e`, contains summaries/manifests only and expires 19 November 2026 at 00:10 UTC. The unconditional cleanup step completed before upload.
+
+
+### 12.17 Live OKX feed entitlement, sequence integrity and RPI liquidity (official documentation review, 16 November 2026)
+
+Current OKX documentation changes the live-feed assumptions that must be carried into any venue decision:
+
+1. **10 ms order-book channel entitlement:** the 7 April 2026 change log states that the JSON books-l2-tbt channel (400-level tick-by-tick) and books50-l2-tbt channel (50-level tick-by-tick) are both accessible from VIP4 and above. This is the current documented requirement; older VIP5/VIP6 references are superseded. Source: https://www.okx.com/docs-v5/log_en/ (7 April 2026 Trading Fee Tier Requirement Changes).
+2. **Live continuity validation:** on 23 June 2026 OKX deprecated checksum validation for books, books-l2-tbt and books50-l2-tbt; the checksum field remains but is fixed at zero. Live consumers must validate seqId/prevSeqId continuity and fail closed on gaps/resynchronisation. Historical archive records inspected in this research do not contain these sequence fields, so the historical archive cannot prove lossless capture. Source: https://www.okx.com/docs-v5/log_en/ (23 June 2026 Deprecation of checksum field in order book channels).
+3. **RPI liquidity is a separate data/execution dimension:** on 28 July 2026 OKX introduced books-rpi, a public WebSocket/REST consolidated book with 400 depth levels and 100 ms snapshots/updates, including organic plus RPI liquidity. Each level contains totalQty, nonRpiQty and count. Its WebSocket continuity uses seqId/prevSeqId; there is no checksum. The channel applies to SWAP/FUTURES as well as SPOT/MARGIN. Source: https://www.okx.com/docs-v5/log_en/ (28 July 2026 New consolidated order book: books-rpi).
+4. **Account/order permission:** rpiTakerAccess defaults to false; when true, standard limit/market/FOK/IOC orders may access RPI liquidity. The instrument permission field rpi distinguishes not enabled (0), enabled but user lacks permission (1), and enabled/permitted (2). An enabled instrument does not prove RPI liquidity is present.
+
+**Implication for IDEAL:** do not model the 10 ms books-l2-tbt historical archive as complete executable liquidity without separately establishing RPI coverage and the intended account's permission/order flags. If the selected account can access RPI, capture the organic 10 ms book and consolidated 100 ms RPI book as separate streams, preserve each sequence chain, and model the additional 100 ms observation lag. The historical three-field archive schema does not establish whether RPI is included or expose total/non-RPI quantity separately.
+
+The 10 ms channel's VIP4+ requirement is documented, but no account entitlement is known or assumed. Venue eligibility in New Zealand remains a separate legal gate.
