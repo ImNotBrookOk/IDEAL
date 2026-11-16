@@ -189,3 +189,7 @@ Initial path assessment: manual entry and statement imports are high-feasibility
 Design boundary: personal finance owns its own accounts, liabilities, budgets and ledger. Investment/trading engines retain separate authoritative ledgers. Consolidated net worth/exposure is read-only; no implicit capital, cash, margin or collateral pooling. Preserve provenance, reversals, idempotency, reconciliation and immutable action audit references.
 
 Current phase gates remain unchanged: Phase 02 architecture/contracts only; Phases 03–19 LOCKED. D-001 remains unchanged. Any local prototype or account connection requires separate explicit approval.
+
+### Phase 02 research checkpoint — personal finance project comparison (16 November 2026)
+
+First-pass comparison recorded in docs/PERSONAL_FINANCE_RESEARCH.md. Actual Budget (MIT) is the leading candidate for a later synthetic-data-only budgeting trial; MoneyMatter (AGPL-3.0) remains a broader feature reference but has a more complex stack and licence/security items requiring audit; Firefly III (AGPL-3.0) remains an alternative; Beancount and hledger are ledger/accounting references. Akahu Personal App limitations were rechecked against its official docs: own account/one user, daily scheduled refresh, one-hour manual refresh rest period, account information only, no payments or webhooks. No installation, real data, credentials, bank connection, dependency or integration is authorised. Phase 02 only; Phases 03–19 remain LOCKED.
