@@ -48,3 +48,7 @@ Complete final cross-document source/contract consistency, validate the historic
 ## Audit numbering correction
 
 > This record was originally assigned checkpoint 088 in error. The repository already contained checkpoint 088 for the architecture document map. The freshness/clock work is correctly numbered checkpoint 090; the canonical audit record is [2026-11-17-090-freshness-clock-contract.md](2026-11-17-090-freshness-clock-contract.md). This original path is retained for audit continuity.
+
+## Final numbering correction
+
+> The subsequent discovery of the pre-existing checkpoint 090 official-source revalidation shifts this work again: its canonical number is checkpoint 091, not 090. Use [2026-11-17-091-freshness-clock-contract.md](2026-11-17-091-freshness-clock-contract.md).
