@@ -131,3 +131,54 @@ Sources:
 - https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/
 - https://developer.android.com/develop/background-work/background-tasks/bg-work-restrictions
 - https://github.com/firecracker-microvm/firecracker/blob/main/docs/prod-host-setup.md
+
+
+## 8. Infrastructure revalidation — checkpoint 094 (17 November 2026)
+
+### 8.1 SQLite WAL-reset incident: version and test gate
+
+Two primary engineering reports materially change the SQLite assurance checklist:
+
+- Tailscale documented 19 database-corruption incidents over six months in a production single-writer SQLite deployment. The root cause was a WAL-reset race in the checkpoint path; the investigation also found committed writes that were not visible to later transactions in two cases.
+- Antithesis reports that SQLite 3.51.3 fixed the WAL-reset bug. A generic concurrent writer/checkpoint workload reproduced the defect against 3.51.2 in 15 minutes; the same instrumented workload passed against 3.51.3.
+
+Implications for IDEAL:
+1. Any future SQLite POC must pin a SQLite runtime at or above 3.51.3 and record the actual runtime version from the library used by the application.
+2. Python's sqlite3 wrapper version, system SQLite version and bundled/native extension version must not be conflated. Record `sqlite3.sqlite_version` (or equivalent runtime API) from the exact deployed process.
+3. Add deterministic/fault-injection tests for concurrent writes and WAL checkpoints, committed-write visibility, process termination at transaction boundaries, `PRAGMA integrity_check`, backup consistency, restore and replay.
+4. Keep one authoritative writer per database file unless a separately tested design proves otherwise. Do not assume a single-writer design eliminates engine-level races.
+5. Use SQLite's supported backup mechanisms or a proven consistent snapshot procedure; copying a live database file without a consistent snapshot contract is not an acceptable backup design.
+6. Keep audit/authority transaction atomicity and independent off-host backup/hash anchoring as IDEAL-owned requirements; WAL mode is not a substitute for them.
+
+This is a design/test requirement, not evidence of corruption in IDEAL. No database was created or tested in this checkpoint.
+
+Sources:
+- https://tailscale.com/blog/sqlite-wal-reset-bug
+- https://antithesis.com/blog/2026/wal-reset-bug/
+
+### 8.2 OCI Always Free quota documentation conflict
+
+The current Oracle general Always Free resources page states 1,500 OCPU-hours and 9,000 GB-hours per month for A1, equivalent to 2 OCPUs and 12 GB continuously. Oracle's A1-specific compute page states 3,000 OCPU-hours and 18,000 GB-hours. These are conflicting official pages.
+
+The conservative interpretation for any future estimate is the lower general Always Free allowance until Oracle resolves the discrepancy or the tenancy console/contract confirms the applicable quota. The general page also confirms:
+- A1 capacity is home-region constrained and can return "out of host capacity";
+- idle Always Free compute can be reclaimed when CPU, network and (for A1) memory utilisation remain below 20% at the 95th percentile over seven days;
+- a paid-account upgrade does not make an individual A1 shape available by guarantee;
+- quota/compartment limits are not a hard spending cap.
+
+No account, region, quota, capacity or pricing was tested for IDEAL. No provisioning or upgrade is authorised.
+
+Sources:
+- https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
+- https://docs.oracle.com/en-us/iaas/Content/Compute/References/arm.htm
+
+### 8.3 NautilusTrader current platform and persistence semantics
+
+Current upstream installation documentation lists Ubuntu Linux ARM64 as a supported platform. This aligns with the isolated POC's x86_64/ARM64 compatibility evidence, but it is not an OCI A1 performance benchmark.
+
+The current architecture documentation also describes a critical persistence boundary: cache insertion/publication may proceed despite synchronous persistence/enqueue errors, and asynchronous database failures do not roll back in-memory cache state. IDEAL must therefore own its durable ledger, audit, intent, reservation, outbox and reconciliation semantics outside the engine's cache. The engine may be a trading-system component, not the system-of-record for financial authority or accounting.
+
+Sources:
+- https://nautilustrader.io/docs/latest/getting_started/installation/
+- https://nautilustrader.io/docs/latest/concepts/architecture/
+- https://nautilustrader.io/docs/latest/concepts/overview/
