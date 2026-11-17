@@ -109,7 +109,7 @@ Trust boundaries must be explicitly mapped: mobile/PC client, local runtime, ser
 - Expose narrow, allowlisted tools with typed input validation, explicit capability scopes, rate/cost limits and audit logging.
 - Separate read, research, propose, approve and execute capabilities. AI must not approve its own consequential actions or alter security/risk policy.
 - Isolate shell, browser, code execution and file access in constrained sandboxes; deny by default.
-- Require explicit human approval for destructive, irreversible, external or financial write operations.
+- Require explicit human approval for initial activation of a future execution capability; policy/limit/envelope changes; new accounts, venues or integrations; credential creation or permission expansion; transfers, withdrawals and payments; disabling safeguards; reserved destructive/irreversible actions; and incident recovery/release where specified. Individual financial actions may run without per-action approval only under a separately owner-approved, active, versioned bounded-autonomy envelope and after all deterministic controls pass.
 - Protect retrieval stores against cross-domain leakage, poisoning and unauthorised indexing.
 - Record model/provider, version, tool calls and relevant input/output hashes without logging secrets or unnecessary personal data.
 
@@ -194,3 +194,65 @@ Phase 02 remains active. Phases 03–19 remain locked.
 
 
 The cross-pillar STRIDE-style challenge and prioritised residual findings are maintained in [IDEAL Integrated Adversarial Architecture Review](IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md). This is a design review draft, not a penetration test or security certification.
+
+
+## 9. Bounded owner-authorised autonomy (D-023)
+
+IDEAL's future execution-capable operating model is bounded autonomy, not unrestricted agent authority and not mandatory per-action human approval.
+
+### 9.1 Owner-approved operating envelope
+
+Before any future execution capability can be activated, the owner must explicitly approve a versioned capability envelope. Its scope must define, at minimum:
+- authorised domain, account, venue and instrument scope;
+- permitted action classes and prohibited/reserved action classes;
+- operating mode and whether autonomous submission is permitted;
+- hard risk policy, exposure/position limits and maximum permissions;
+- strategy eligibility and required deterministic gates;
+- data-quality, freshness, reconciliation and system-health prerequisites;
+- security identity, credential scope and allowed tool capabilities;
+- stop conditions, drawdown/restriction behaviour, duration/expiry and revocation method;
+- audit/evidence requirements and owner notification/escalation rules.
+
+The envelope is an upper bound, not an entitlement to use the full capacity. Independent risk evaluation may approve less, restrict, or reject an action. A strategy's requested size, AI confidence or model output cannot expand the envelope or risk budget.
+
+### 9.2 Autonomous in-envelope actions
+
+A future separately authorised engine may submit individual actions without per-action human approval only when all of the following are true:
+1. The envelope is active, unexpired, correctly signed/versioned and not revoked.
+2. The actor/service identity is authenticated and authorised for the exact action and scope.
+3. The request is within every envelope and venue constraint.
+4. Decision-critical data, account/order state and instrument parameters are sufficiently fresh, complete, reconciled and trusted.
+5. Required health and security interlocks are clear; UNKNOWN, stale or compromised states restrict the dependent action.
+6. Independent deterministic risk evaluation approves the exact action payload and reserves its potential exposure.
+7. The action is idempotent, attributable and covered by required durable audit evidence.
+8. The approval is unexpired and has not been consumed, revoked or invalidated by a material state/policy change.
+
+No AI model or strategy component is itself an authority. Models may research, propose and explain; deterministic policy and externally enforced permissions govern action.
+
+### 9.3 Actions reserved for owner approval
+
+Human approval remains mandatory for:
+- initial activation or reactivation of any future execution capability;
+- creation, expansion, renewal or material modification of the operating envelope;
+- changes to hard risk limits, permissions, account/venue/instrument scope or operating mode;
+- credential creation, secret/key trust changes or privilege expansion;
+- transfers, withdrawals, payments and movement of funds between accounts;
+- disabling, bypassing or weakening safeguards;
+- new external integrations and materially new data permissions;
+- reserved destructive or irreversible operations;
+- security-incident recovery, restoration of trust and release from critical restrictions where owner approval is required by incident policy.
+
+An owner may explicitly reserve additional action classes. This list is a minimum design boundary, not an exhaustive grant of authority.
+
+### 9.4 Enforcement, revocation and failure behaviour
+
+- The envelope is immutable to strategies, models and agents. Changes require an authenticated owner-authorised workflow, independent validation, a new version and tamper-evident audit.
+- Every action is checked against the current envelope at the action boundary; UI-only or prompt-only restrictions are insufficient.
+- A changed action payload, expired/revoked envelope, missing approval, unknown permission state or stale critical evidence requires denial and a fresh evaluation.
+- Owner suspension/revocation must propagate to the action boundary. Revocation cannot rely solely on a possibly compromised strategy process.
+- Failure to establish envelope validity, risk approval, required data quality, health or security status means no risk-increasing action.
+- Emergency restrictions may reduce authority. They cannot silently grant new financial authority or initiate a financial liquidation.
+
+### 9.5 Approval and activation boundary
+
+D-023 records the future governance model only. It does not activate any operating envelope or execution capability. A later proposal must separately define and verify the policy schema, signing/root-of-trust model, identity and permission enforcement, risk reservation/approval protocol, audit durability, health interlocks, recovery and manual fallback. The owner must explicitly approve the complete capability and its operating scope before implementation or use.
