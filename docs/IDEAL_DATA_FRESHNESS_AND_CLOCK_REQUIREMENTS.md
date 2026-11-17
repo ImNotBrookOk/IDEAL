@@ -193,3 +193,8 @@ FX freshness is evaluated for an explicit canonical AssetId pair, not an ambiguo
 ## Funding schedule and mark-method revisions — checkpoint 110
 
 Funding schedules are source data, not a global eight-hour timer. Retain effective-dated interval, next settlement time, cap/floor, publication time, observed settlement time and source revision. Forecast funding remains distinct from realised settlement. Mark-price observations must bind to the applicable effective-dated methodology/configuration revision; stale or missing revision invalidates dependent liquidation-risk decisions. See [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md).
+
+
+## Funding schedule and mark-method revisions — checkpoint 110
+
+Funding schedules are source data, not a global eight-hour timer. Retain effective-dated interval, next settlement time, cap/floor, publication time, observed settlement time and source revision. Forecast funding remains distinct from realised settlement. Mark-price observations must bind to the applicable effective-dated methodology/configuration revision; stale or missing revision invalidates dependent liquidation-risk decisions. See [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md).
