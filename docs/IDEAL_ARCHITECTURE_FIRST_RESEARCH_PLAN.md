@@ -190,3 +190,8 @@ A canonical document ownership map is proposed. Historical evidence remains inta
 [IDEAL Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) now provides stable requirement aliases, component owners, controls/contracts and future verification IDs. Coverage includes active perpetual research, strategy validation, four foundations, autonomy, reconciliation/recovery, personal finance, tax, retention, privacy, host/UI and cost constraints.
 
 This closes the traceability artefact at design level; tests are not implemented or executed. D-006/D-008, source-specific fidelity, host topology, retention periods and independent review remain open.
+
+
+## 16. Canonical architecture document ownership — checkpoint 088
+
+[IDEAL Phase 02 Architecture Document Map](IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md) formalises the canonical source for each governance, system, foundation, authority, contract, recovery, privacy and assurance concern. It defines conflict precedence and records unresolved owner decisions as an inventory, not an approval request. The map preserves historical evidence and does not authorise consolidation/deletion or implementation.
