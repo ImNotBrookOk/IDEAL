@@ -289,3 +289,21 @@ See [Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](IDE
 | Unknown valuation/FX stays unknown | Consumer-specific quality and freshness gate | Data Integrity / consuming risk domain | Stale FX and missing-price aggregate tests |
 
 See [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md). Proposed controls only; no runtime tests performed.
+
+
+## Checkpoint 076 — reconciliation and verified recovery traceability
+
+| Requirement | Control | Owner boundary | Required verification |
+|---|---|---|---|
+| No universal source-of-truth assumption | Fact-specific authority matrix per domain | Owning bounded context | Conflicting source/ledger/venue facts remain distinct |
+| Mismatch is not silently overwritten | Immutable source evidence, linked revisions and reconciliation cases | Data Integrity / domain owner | Late correction, duplicate, deletion and replay tests |
+| Unknown venue state remains conservative | UNKNOWN order/position state and retained reservation | Risk / action boundary | Lost ACK, late venue acceptance, cancel-unknown and restart tests |
+| Bank imports reconcile before posting | Staging observations and controlled journal posting | Personal Finance | Pending/posted, correction, transfer and balance mismatch tests |
+| Tax estimate differs from assessment/payment | Separate estimate, workpaper, IRD assessment and confirmed payment states | Tax Intelligence / Personal Finance | No false filing/payment confirmation |
+| Restore does not restore authority | Recovery quarantine, revocation high-water anchor, old capability invalidation | Security / owner authority | Restore pre-revocation backup and prove old permits fail |
+| Recovery requires independent evidence | Scoped Security/Data/Health/Risk attestations | Four pillars | Missing, stale or contradictory attestation blocks release |
+| Health cannot certify security | Separate security incident authority and health supervisor | Security / Health | Common-mode compromise and false healthy-state tests |
+| Recovery cannot initiate financial actions | Restrictive containment and explicit owner-reserved action classes | Security / health / owner | Incident control attempts transfer/flatten/payment; deny |
+| Unaffected domains remain available where safe | Dependency-aware blast-radius matrix | Health / domain owners | Feed/bank/provider failure isolation tests |
+
+See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). All verification entries are future requirements; no runtime recovery tests have been run.
