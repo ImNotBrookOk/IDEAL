@@ -295,3 +295,14 @@ Do not collapse security posture into a single green health indicator. Operation
 The health supervisor may trigger predefined containment actions (for example, isolating an affected workload or disabling a compromised integration) only under explicitly designed authority, with audit, owner visibility, false-positive safeguards and recovery procedures. It must not silently change financial risk policy or initiate financial actions.
 
 The security architecture, threat model, vulnerability lifecycle, incident response and assurance backlog are specified in [docs/IDEAL_SECURITY_ARCHITECTURE.md](IDEAL_SECURITY_ARCHITECTURE.md). No implementation or external scanning is authorised by this documentation update.
+
+
+## Independent supervisor authority boundary — checkpoint 069
+
+The health supervisor is an observer and restrictive interlock issuer, not an execution authority. It observes components outside their process boundary and must not rely on self-reported HEALTHY status. It has read-only telemetry access and a narrow, authenticated, scoped channel to request suspension of new risk-increasing actions. It cannot create/change owner envelopes, policy, risk approvals, reservations, credentials, or initiate cancellation, flattening, transfer, withdrawal or payment.
+
+The action gateway validates supervisor identity, message scope, generation, freshness and integrity. Loss of the supervisor heartbeat, invalid state or untrusted monitoring path triggers the defined fail-closed restriction for affected risk-increasing actions. Only independent recovery evidence and the designated owner release process can clear critical latched interlocks.
+
+A separate process identity is the minimum logical separation; it does not protect against shared host root/kernel compromise. Stronger independence requires a separate VM/host or hardware/remote watchdog when that threat is in scope. A compromised supervisor may cause denial of service but must not gain financial authority. It cannot certify its own health or security posture.
+
+Keep operational health, data trust, security posture, financial-state trust and authority state as distinct dimensions. No single supervisor or pillar self-certifies all others. See the autonomy authority architecture §§23–24.
