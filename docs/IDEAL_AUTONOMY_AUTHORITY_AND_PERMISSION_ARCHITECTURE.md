@@ -184,8 +184,9 @@ The result is a narrow, short-lived admission capability, not a general credenti
 | VALIDATED | Canonical action/evidence assembled | Continue only with trusted, fresh mandatory inputs |
 | AUTHORISED | Envelope and security policy permit exact action | Still no side effect; obtain risk approval |
 | RESERVED | Risk authority reserves potential exposure/capacity | Persist intent and reservation before dispatch |
-| ADMITTED | All prerequisites and durable audit preconditions pass | Issue one narrow adapter admission |
-| DISPATCHED | Adapter attempted external side effect | Track stable idempotency/client reference |
+| ADMITTED | All prerequisites and durable audit preconditions pass; one-use permit exists but is not consumed | Recheck generation and atomically consume permit at dispatch boundary |
+| DISPATCH_STARTED | Durable local commit records the final generation check, one-use permit consumption and audit event immediately before network write | This is the local linearisation point; a crash after this point is potentially in-flight/UNKNOWN |
+| DISPATCHED | Adapter has attempted the external network write and records the attempt outcome where possible | Track stable idempotency/client reference; do not assume remote receipt or exactly-once semantics |
 | ACKNOWLEDGED | Venue returned definitive response | Reconcile with authoritative venue state |
 | UNKNOWN | Timeout/disconnect/ambiguous response | Retain reservation; reconcile; do not blindly retry |
 | RECONCILED | External state matched to internal records | Transfer/release reservation exactly once |
@@ -607,7 +608,7 @@ Logical module separation inside one process does not provide independent oversi
 
 ### 23.2 One-way restrictive authority
 
-The health supervisor receives read-only telemetry and has only a narrow restrictive output channel to the action gateway:
+The health supervisor receives read-only telemetry and has only a narrow restrictive output channel to the action gateway. It is not the security incident-response authority: a separately governed security control plane may revoke compromised credentials/identities or isolate a workload under its own audited incident authority, but it cannot create financial authority or initiate financial side effects. The health supervisor itself cannot revoke/issue credentials or change security policy:
 
 - It may assert a scoped interlock such as DATA_STALE, ACCOUNT_STATE_UNKNOWN, SECURITY_INCIDENT, AUDIT_UNAVAILABLE or CONTROL_HEARTBEAT_LOST.
 - It may request suspension of new risk-increasing actions in the affected domain/scope.
@@ -643,9 +644,9 @@ IDEAL cannot atomically commit a local database transaction and a remote exchang
 
 ### 24.2 Three durable local boundaries
 
-**Transaction A — admission preparation:** in one local durable transaction, persist the canonical action intent, exact digest, owner/security decision reference, current authority generation, risk reservation, audit event and transactional outbox item. If any required record fails, roll back the entire local transaction and do not admit dispatch.
+**Transaction A — admission preparation:** in one ACID transaction in the authoritative local admission store, persist canonical action intent, exact digest, owner/security decision reference, current authority generation, risk reservation, audit event and transactional outbox item. These records must share one transactional commit boundary; separate databases/services cannot be described as atomic without a verified transaction protocol. If any required record fails, roll back the entire local transaction and do not admit dispatch. In the initial modular-monolith direction, prefer one database transaction with schema/ownership boundaries rather than cross-service best-effort writes.
 
-**Transaction B — dispatch start:** immediately before the external network write, atomically consume the one-use permit, verify the current revocation generation and policy/identity state, transition the action to DISPATCH_STARTED, and append the corresponding audit event. This commit is the local linearisation point shared with revocation. The network write occurs only after this transaction is durably committed.
+**Transaction B — dispatch start:** immediately before the external network write, atomically consume the one-use permit, verify the current revocation/policy generation and identity state, transition the action to DISPATCH_STARTED, and append the corresponding audit event in the same authoritative transaction. This commit is the local linearisation point shared with revocation. The network write occurs only after this transaction is durably committed.
 
 **External side effect:** send the exact approved payload with stable client-side idempotency identity where the venue supports it. Do not expose generic request construction to strategy/AI. A timeout, crash or missing acknowledgement after dispatch-start is UNKNOWN.
 
@@ -655,7 +656,7 @@ IDEAL cannot atomically commit a local database transaction and a remote exchang
 
 - The durable local audit/intent record is a precondition to dispatch.
 - If the primary audit/transaction store cannot durably commit Transaction A or B, no new risk-increasing external side effect is permitted.
-- A separate append-only audit projection or remote witness may be asynchronously updated from a committed outbox, but it does not replace the pre-dispatch durable local evidence.
+- A separate append-only audit projection or remote witness may be asynchronously updated from a committed outbox, but it does not replace pre-dispatch durable local evidence. Its maximum lag, backlog capacity and outage behaviour must be defined; exceeding the approved bound blocks new risk-increasing actions.
 - If the external request may have been sent but the outcome/audit projection is unavailable, retain in-flight status and reservation; restore audit pipeline and reconcile before further related actions.
 - An alternate audit path can preserve essential incident events during a primary sink outage, but it cannot be used to bypass the durable action-intent/dispatch-start requirement.
 - Audit log storage, audit administration and action execution credentials are separate privileges. Agents cannot write trusted audit records directly.
@@ -739,3 +740,22 @@ Phase 02 cannot close until these semantics are reconciled across security, risk
 - [NIST SP 800-53 Rev. 5](https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final) — audit protection, logging failure response and alternate audit capability control families.
 - [NIST SP 800-57 Part 1 Rev. 5](https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final) — key lifecycle, compromise scope, replacement and recovery planning.
 - [AWS Prescriptive Guidance — Transactional Outbox](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html) — atomic local state/outbox commit and duplicate-delivery/idempotency handling. This is a distributed-systems pattern reference, not an endorsement of AWS infrastructure for IDEAL.
+
+
+### 26.1 State-machine consistency rules
+
+The authority/envelope lifecycle, policy lifecycle, action lifecycle, risk-reservation lifecycle and incident lifecycle are separate state machines connected by explicit versioned events. Do not merge them into one status flag.
+
+- Owner envelope/policy state controls whether an actor may request an action.
+- Workload identity state controls which service is making the request.
+- Health/security interlocks can restrict action admission but cannot grant authority.
+- Risk reservation state controls capacity and exposure accounting.
+- Action state controls whether the external side effect may have started.
+- Reconciliation state controls whether the external financial outcome is known.
+- Incident/recovery state controls whether execution capability may be reactivated.
+
+An action can be security-authorised but risk-rejected; risk-approved but authority-revoked; dispatched but not acknowledged; or reconciled financially while an incident hold remains active. Each dimension must retain its own evidence and cannot be inferred from another dimension's green state.
+
+The only permitted path to a future external side effect is: owner envelope/policy active → workload identity authenticated → exact action canonicalised → data/health/security gates pass → risk approval and reservation committed → durable intent/audit/outbox committed → final generation check and DISPATCH_STARTED commit → narrow adapter network write → authoritative venue reconciliation → reservation transfer/release. Any failure before dispatch-start denies the side effect. Any uncertainty after dispatch-start is treated as potentially in-flight and reconciled.
+
+If the future architecture splits the admission store across services or databases, it must replace the single-store transaction with a formally specified, tested coordination protocol. Merely writing to multiple services sequentially is not atomic and is not an acceptable substitute.
