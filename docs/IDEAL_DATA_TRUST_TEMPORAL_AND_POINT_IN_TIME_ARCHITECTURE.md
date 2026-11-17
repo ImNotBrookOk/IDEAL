@@ -239,3 +239,10 @@ Sources:
 - https://www.privacy.org.nz/responsibilities/disclosing-personal-information-outside-new-zealand/
 - https://www.ird.govt.nz/cryptoassets/taxing/record-keeping
 - https://www.ird.govt.nz/international-tax/exchange-of-information/crypto-asset-reporting-framework/crypto-asset-reporting-framework-overview
+
+
+## Consumer-specific freshness and clock requirements — checkpoint 088
+
+Freshness is a consumer-specific fitness contract, not a global TTL. Each consumer declares source cadence, event/availability semantics, maximum decision/event age, clock uncertainty, completeness/gap rules, degradation behaviour and restoration evidence. Market L2, trades, candles, funding, mark/index, contract metadata, account state, FX, bank data, tax rules and health telemetry have distinct source-specific requirements.
+
+See [IDEAL Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). Numeric thresholds remain open until sources, host and decision tolerance are known.
