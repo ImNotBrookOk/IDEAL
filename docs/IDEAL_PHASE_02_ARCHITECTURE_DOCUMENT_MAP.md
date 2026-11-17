@@ -252,7 +252,7 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md) specifies byte-level digest/signature requirements, exact financial number handling, candidate encodings and future conformance tests. No format selected.
 
 
-## 21. Perpetual funding and mark-price semantics — checkpoint 110
+## 26. Perpetual funding and mark-price semantics — checkpoint 110
 
 [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) owns the current official-source refinement for effective-dated funding schedules/caps, mark methodology versions, settlement accounting, funding-to-margin effects and additional conformance tests. It extends the margin/liquidation and data-freshness sources. No venue or formula selected.
 
@@ -265,3 +265,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 22. Checkpoint 110 audit record
 
 [Checkpoint 110 audit](CHATGPT_CONVERSATIONS/2026-11-18-110-perpetual-funding-mark-price-refresh.md) records the funding/mark-price source refresh, document integrations and fetch-back verification. The checkpoint did not perform a fresh full-map crawl; the 38/38 result remains the historical checkpoint 108 result.
+
+
+## 27. Funding/mark-price integration and document-map verification — checkpoint 111
+
+[Checkpoint 111 audit](CHATGPT_CONVERSATIONS/2026-11-18-111-funding-mark-price-integration-and-map-verification.md) verifies all 41 local Markdown targets present before the audit entry was added, confirms checkpoint 110 source/schema/margin integration, adds funding/mark/margin test traceability and corrects the checkpoint 110 section numbering. The audit entry itself is also a local target and must be included in the next complete link check. Phase 02 remains active.
