@@ -80,3 +80,12 @@ Security is the fourth foundational pillar and a cross-cutting constraint across
 Security telemetry and security-control status feed the independent health supervisor. However, security assurance remains separate from operational health: a process can be available while compromised, and a monitor can be disabled or deceived. The design must include independent evidence, tamper detection, vulnerability management, incident response and tested recovery. No scanner or test can guarantee that all vulnerabilities are found.
 
 The detailed requirements and Phase 02 backlog are in [docs/IDEAL_SECURITY_ARCHITECTURE.md](docs/IDEAL_SECURITY_ARCHITECTURE.md). This is a design requirement only; no security tooling, dependency or runtime change is authorised.
+
+
+## Bounded-autonomy authority model (D-023)
+
+The future execution architecture uses an owner-approved capability envelope. The owner grants a bounded, versioned, scoped and revocable authority; the engine does not receive unrestricted trading authority. Individual in-envelope actions may proceed without per-action human approval only after exact security permission checks, trusted/reconciled data, health interlocks, deterministic risk approval and reservation, and required durable audit.
+
+Owner approval remains mandatory for capability activation, envelope/policy/permission changes, new accounts/venues/integrations, credential/privilege expansion, fund transfers/withdrawals/payments, safeguard disablement and reserved irreversible or incident-recovery actions. AI/strategy components cannot change or approve the envelope.
+
+The policy registry, signing/root-of-trust, identity enforcement, revocation propagation, reservation/action state machine and audit durability remain Phase 02 contract work. This architecture direction does not activate an envelope or authorise an execution adapter, exchange connection, credentials, paper/live trading or implementation.
