@@ -170,3 +170,8 @@ Binance insurance-fund FAQ notes it may be outdated and directs readers to excha
 ## 15. Authority boundary
 
 Research only. No venue, margin mode, collateral asset, haircut, risk limit, formula, policy engine, provider, dependency or execution permission selected. D-006 and D-008 unchanged. Phase 02 active; Phases 03–19 locked.
+
+
+## 12. Funding and mark-price source refresh — checkpoint 110
+
+The [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) records current official-source evidence that funding intervals/caps may vary by contract and change, and that mark-price methods are more specific than generic help-page summaries. Treat funding schedules, mark methodology and tier tables as effective-dated, instrument-specific evidence. Funding forecasts are not realised ledger events; funding settlement may affect available balance or position margin. Missing/stale configuration or settlement evidence invalidates dependent calculations. Added conformance cases cover interval changes, funding boundary ordering, corrections, mark-method revisions and mode-specific tier changes. No venue, formula or runtime is selected.
