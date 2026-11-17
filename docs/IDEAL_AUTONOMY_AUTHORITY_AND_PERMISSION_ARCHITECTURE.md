@@ -851,3 +851,8 @@ A cryptographic assertion is not meaningful owner consent if the owner cannot un
 The UI must not render a summary from mutable, unbound display data while signing a different payload. The approval challenge must bind the exact digest, operation, environment, audience, nonce and expiry. The verifier checks origin/RP ID, credential status, user verification, replay/nonce and the returned challenge. A valid WebAuthn assertion is evidence of a scoped user ceremony, not a general-purpose policy signature or proof that the owner understood an undisplayed payload.
 
 Reject hidden scope expansion, ambiguous units, truncated critical fields, misleading defaults, approval via agent-generated text alone, and approval dialogs that can be overlaid or confused with ordinary UI. High-impact policy changes should require a deliberate re-authentication step and a separate confirmation of the displayed diff. The precise authenticator, device binding, recovery and mobile/desktop ceremony remain open decisions.
+
+
+## 28. Workstream closure assessment
+
+The consolidated technology-neutral invariants, provisional private-deployment recommendations, platform-dependent choices, deferred owner decisions, residual risks and workstream acceptance criteria are maintained in [IDEAL Autonomy Authority — Phase 02 Closure Assessment](IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md). That assessment does not close Phase 02 or approve implementation.
