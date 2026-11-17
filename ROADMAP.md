@@ -621,3 +621,8 @@ Created [Margin, Collateral and Liquidation Architecture](docs/IDEAL_MARGIN_COLL
 ### Phase 02 — integrated challenge refresh (checkpoint 100, 18 November 2026)
 
 Reopened the final integrated architecture challenge after policy-engine, owner-authenticator, audit-witness and margin/liquidation work. Corrected risk-document numbering; added margin/collateral/liquidation logical schemas; bound venue liquidation events to reservation conservation and reconciliation; added seven requirements and planned tests. Eight findings and dispositions are in [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md). Independent architecture/security/operations review remains outstanding. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 — documentation integrity and review refresh (checkpoint 101, 18 November 2026)
+
+Fetched all 34 distinct local Markdown targets linked by the Phase 02 Architecture Document Map; all exist on GitHub main. Refreshed integrated review and adversarial review to include checkpoint 100 margin/liquidation changes and reaffirmed that internal challenge is not independent assurance. Independent architecture, security/operations and testability reviews plus owner acceptance remain required. No implementation or phase advancement.
