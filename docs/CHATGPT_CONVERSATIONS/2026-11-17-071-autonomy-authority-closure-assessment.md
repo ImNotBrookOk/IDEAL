@@ -67,3 +67,40 @@ Phase 01 closed. Phase 02 active. Phases 03–19 locked. D-023 accepted. This cl
 ## Next autonomous work
 
 Perform a final consistency and completeness audit of the entire authority workstream, verify all files from GitHub, update the audit trail, and present the completed workstream with a precise list of deferred owner decisions. Continue to keep Phase 02 active and later phases locked.
+
+
+## GitHub read-back verification
+
+Fourteen affected/current files were fetched from the repository default branch. All required-content checks passed.
+
+| File | Read-back blob SHA |
+|---|---|
+| docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md | dde5713997e94c3b3307d18136ed97453089ff47 |
+| docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md | 76eb504039bb521406e9d924146d531d66e87dbf |
+| docs/IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md | 89e3ea17ade7e6d2cec81ec75adefef647276308 |
+| docs/IDEAL_SECURITY_ARCHITECTURE.md | c008d0d56eccb2da31b6579b3d8f5f670ba3d7a2 |
+| docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md | 165c601bddbd358baced615e47ef6bbf052f4403 |
+| docs/DATA_INTEGRITY_AND_HEALTH.md | 1ff31234b4d8f09887bae0873b62f1b406c9248e |
+| docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md | 207ec6392df56c779f2f9d4f92e6da5d96ca0b58 |
+| REQUIREMENTS.md | 751c5ee7ca4c6232af8c2011f0df716c5535ad29 |
+| ARCHITECTURE.md | 652d01b8d2a717ea0be560b2ca5896f767f95cf8 |
+| ROADMAP.md | b9288f4da477e3a4c9bb3488d211f8269185dcba |
+| docs/IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md | 0903587ce8ed3a03754c71e0d9591e70fa45b31a |
+| README.md | 17de133f0ae8da5295003c892ee60dbdcd70d789 |
+| docs/CHATGPT_CONVERSATIONS/2026-11-17-071-autonomy-authority-closure-assessment.md (before evidence addendum) | a36375d05ee639e2a38c82625596e3252e8ad9d0 |
+| docs/CHATGPT_CONVERSATIONS/README.md | 1808b140d743a9dd3553111b6eb8e989f65291f7 |
+
+### Commit ledger
+
+| Change | Commit SHA |
+|---|---|
+| Create autonomy authority closure assessment | e23c23942f86b0227625c97166e0f72308085930 |
+| Link closure assessment from autonomy architecture | b077785b76288405d6692a8c8d7756b266b5255c |
+| Add closure assessment to roadmap | 167b8a4d8de48d092265181f372c957723aa8459 |
+| Link closure assessment from README | f97117917a7f0943b1ea82e9bb86b725664b49b4 |
+| Add residual-risk closure notes to adversarial review | 274545d00943067eb973967dd9f392c6f346eaa2 |
+| Add closure traceability | 20b3d4598384fa2609b17277538cbc33c7b8762d |
+| Create checkpoint 071 audit | 30aa18e6a5f497ae6863cd83594682d376415790 |
+| Index checkpoint 071 | 21169e70510829e4ced247de8f63fb4aa2a6dc93 |
+
+This verifies repository content only. It does not represent runtime, security, host isolation, database durability, key ceremony, or exchange execution tests.
