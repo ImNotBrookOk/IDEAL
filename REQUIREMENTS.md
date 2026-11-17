@@ -83,3 +83,18 @@ Only after architecture acceptance may implementation-ecosystem research be conv
 Deterministic software remains authoritative for risk calculations, accounting, data validation, reconciliation, permissions and safety enforcement. AI may assist bounded research and analysis but cannot be the security boundary, policy authority or sole validator of its own output.
 
 These requirements are Phase 02 design/research only. They do not authorise code, dependencies, runtime integration, deployment, external security testing, exchange access or phase advancement. See [Architecture-First Research and Design Plan](docs/IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md).
+
+
+## Bounded autonomy and owner authority (D-023)
+
+The intended future execution model is bounded, owner-authorised autonomy. No execution is currently authorised.
+
+Before any future execution capability is activated, the owner must explicitly approve a versioned, scoped, time-bounded and revocable envelope defining permitted domains, accounts, venues, instruments, action classes, operating mode, hard limits, maximum permissions, stop conditions and audit requirements.
+
+A future engine may perform individual actions without per-action human approval only inside that active envelope and only after fresh deterministic risk approval/reservation, exact security authorisation, trusted and reconciled decision-critical data, required system-health interlocks and durable audit controls. The envelope is an upper bound; it does not require using available capacity.
+
+Human approval remains mandatory for initial activation/reactivation; envelope, hard policy, limit or permission changes; new accounts, venues or integrations; credential creation and privilege expansion; transfers, withdrawals and payments; safeguard disablement; reserved destructive/irreversible actions; and incident recovery/release where required. The owner may reserve further action classes.
+
+AI, strategy and agent components cannot create or modify the envelope, change hard risk policy, approve their own exceptions or grant themselves permissions. Out-of-envelope, expired, revoked, stale, unknown or compromised state denies the affected risk-increasing action.
+
+D-023 is a future governance/architecture decision only. It does not authorise implementation, exchange/account access, credentials, paper/live orders or phase advancement.
