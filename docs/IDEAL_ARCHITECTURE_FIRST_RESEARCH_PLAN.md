@@ -197,12 +197,12 @@ This closes the traceability artefact at design level; tests are not implemented
 [IDEAL Phase 02 Architecture Document Map](IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md) formalises the canonical source for each governance, system, foundation, authority, contract, recovery, privacy and assurance concern. It defines conflict precedence and records unresolved owner decisions as an inventory, not an approval request. The map preserves historical evidence and does not authorise consolidation/deletion or implementation.
 
 
-## 16. Critical contract field schemas — checkpoint 089
+## 20. Critical contract field schemas — checkpoint 092
 
 [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md) now defines logical field-level semantics and constraints for all critical cross-pillar/domain contracts. This closes the technology-neutral schema deliverable at design level. Serialization, database DDL, API and compatibility tooling remain deferred until platform selection.
 
 
-## 17. Consolidated owner decision register — checkpoint 090
+## 21. Consolidated owner decision register — checkpoint 093
 
 [IDEAL Phase 02 Owner Decision Register](IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md) consolidates deferred decisions with evidence, recommended defaults, dependencies and readiness status. It is a draft and must not be presented for approval until the full architecture, independent review findings and final traceability pass are complete.
 
@@ -215,3 +215,34 @@ The [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_AR
 ## 18. Official source reference revalidation — checkpoint 090
 
 Primary New Zealand privacy/tax and core security/host-hardening references have been rechecked and summarised in [Official Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md). Before implementation research is converted into a proposed stack, all relevant source versions, provider terms, licence conditions and legal interpretations must be revalidated against the chosen deployment and use case.
+
+
+## 19. Data freshness and clock requirements — checkpoint 091
+
+[IDEAL Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md) defines source/consumer-specific freshness, event versus availability age, source sequence/gap handling, tail-latency measurement, clock uncertainty and decision invalidation. No global TTL or numeric threshold is selected.
+
+## 22. Current Phase 02 status and remaining gates — checkpoint 093
+
+The logical architecture pack now includes:
+- integrated system/domain map and bounded-context ownership;
+- four foundation architectures and their authority separation;
+- risk/capital and worked accounting/valuation examples;
+- data provenance, point-in-time semantics, freshness and clock requirements;
+- privacy, classification, retention, deletion and audit policy;
+- owner autonomy, identity, revocation, state-machine composition and critical field schemas;
+- reconciliation, incident containment and verified recovery;
+- host trust/topology research and logical diagrams;
+- security control/threat traceability and requirement/component/control/test mapping;
+- integrated adversarial review and grouped owner decision register.
+
+The asset-denomination gap identified by the checkpoint 089 final challenge has been carried through to the critical field schemas: canonical AssetId distinguishes fiat, native crypto and network/contract-specific tokens; stablecoins are not assumed to be at par. T-ASSET-01–06 remain planned tests.
+
+Remaining Phase 02 gates:
+1. Final consistency/read-back/link pass across the complete current main branch.
+2. Independent architecture simplicity/maintainability review.
+3. Independent security/operations review.
+4. Independent maintainability/testability review.
+5. Evidence-backed disposition of all findings and residual risks.
+6. Final owner decision pack presentation and explicit acceptance of the complete architecture baseline.
+
+No implementation, runtime tests, external security testing, account/provider access, credentials, paper/live execution, hosting, paid infrastructure or phase advancement is authorised. Phase 02 remains active; Phases 03–19 remain locked.
