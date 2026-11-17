@@ -18,3 +18,8 @@ The technology-neutral field-level schema deliverable is specified for critical 
 ## 3. Boundaries
 
 No code, runtime, schema registry, database, API, provider, account, credential, paper/live execution or phase advancement was introduced. No tests were run.
+
+
+## Audit numbering correction — follow-up
+
+> This record was first renumbered to checkpoint 091, but the corrected freshness/clock work occupies checkpoint 091. The critical contract schema work is correctly numbered checkpoint 092; see [2026-11-17-092-critical-contract-schemas.md](2026-11-17-092-critical-contract-schemas.md). This original path is retained for audit continuity.
