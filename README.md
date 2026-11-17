@@ -125,3 +125,8 @@ IDEAL's data architecture distinguishes raw observations, validated records, der
 ## Domain risk and capital integrity
 
 Risk policies remain specific to each domain. The consolidated portfolio view is read-only by default and does not infer collateral portability, legal netting, hedge credit or authority to reallocate capital. Ledger balances, available cash, investment value, derivatives equity, margin, collateral and tax estimates remain distinct. See [Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md).
+
+
+## Reconciliation and verified recovery
+
+IDEAL treats reconciliation as a domain-owned evidence comparison, not a generic sync. Unknown venue/account state, provider corrections and restored backups remain explicit until reconciled. A restart or successful reconnect does not prove recovery; restored data and authority stay quarantined until trust, external state and independent pillar attestations are verified. See [Reconciliation, Incident Containment and Verified Recovery Architecture](docs/IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
