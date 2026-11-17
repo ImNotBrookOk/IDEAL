@@ -185,3 +185,8 @@ See [Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AN
 The owner/policy, workload identity, security incident, health, data evidence, risk, reservation, action, reconciliation and recovery state machines have been composed into one cross-authority admission contract. No pass in one machine implies a pass in another. Future consequential actions bind a version vector (owner authority, policy/key/identity, security incident, health interlock, risk policy/decision/reservation, data snapshot, instrument/account reconciliation, audit and clock evidence) and recheck invalidation-sensitive versions immediately before dispatch.
 
 See [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](docs/IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). No schema or runtime implementation is approved.
+
+
+## Integrated system diagrams — checkpoint 082
+
+The logical domain/evidence flow, trust zones and forbidden flows, consequential action admission/dispatch, incident recovery and temporal evidence lifecycle are illustrated in [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md). These diagrams are technology-neutral and do not select network topology or implementation.
