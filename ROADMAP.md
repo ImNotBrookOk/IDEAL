@@ -574,3 +574,8 @@ Created [IDEAL Critical Contract Field Schemas](docs/IDEAL_CRITICAL_CONTRACT_FIE
 Created [IDEAL Phase 02 Owner Decision Register](docs/IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md), consolidating 12 decision groups: future domain scope; D-006 denominator; D-008 daily loss semantics; cross-domain risk/netting; portfolio valuation/FX; personal-finance bank path; NZ tax interpretation; data licensing/retention/training; host trust topology; owner authenticator/root/recovery; revocation/health/audit witness; and final architecture baseline/Phase 03 gate.
 
 This is a draft, not yet presented for approval. Existing accepted decisions remain unchanged; no new permission or numerical policy is created. It will be presented only after final consistency checks and independent review disposition.
+
+
+### Phase 02 final integrated architecture challenge (checkpoint 089)
+
+Created [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md). The cross-pillar review identified and corrected a logical contract gap: financial amounts now bind to canonical fiat/crypto AssetIds rather than ISO currency alone. R-CONTRACT-001 and future T-ASSET-01–06 were added to traceability. Other platform/owner/assurance blockers remain open. No runtime tests or independent review were performed. Phase 02 active; Phases 03–19 locked.
