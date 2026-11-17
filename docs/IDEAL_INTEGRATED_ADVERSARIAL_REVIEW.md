@@ -322,3 +322,12 @@ The current paper-execution wording conflict noted in earlier risk reconciliatio
 ## Checkpoint 081 — state-machine composition challenge
 
 [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md) now composes owner authority, policy publication, workload identity, security incident, health, data quality, risk, reservation, action, reconciliation and recovery state machines. It specifies conjunctive admission, version-vector binding, restrictive precedence and transition invariants. Numeric thresholds, exact schemas, topology and independent verification remain open.
+
+
+## Checkpoint 100 — margin and liquidation attack-surface extension
+
+The final integrated challenge now includes venue-rule provenance/rollback, stale margin-tier configuration, collateral haircut/depeg manipulation, liquidation-trigger versus terminal-state confusion, ADL/insurance notice spoofing or delay, and reservation release before authoritative fill reconciliation. Required outcomes are fail-closed risk increase, preservation of conservative reservations and reconciliation from authoritative account/position/fill evidence. See [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) and [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md). No live attack or runtime test was performed.
+
+## Checkpoint 101 — assurance boundary reaffirmed
+
+Internal adversarial review is not independent review. Independent architecture, security/operations and testability reviews remain required before Phase 02 acceptance. No self-review is labelled independent.
