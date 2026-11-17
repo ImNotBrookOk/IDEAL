@@ -200,3 +200,8 @@ Checkpoint 094 changes no owner-approved component disposition. SQLite, Nautilus
 ## 14. Owner authenticator and recovery evidence — checkpoint 097
 
 [Owner Authenticator and Recovery Options](IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md) owns the WebAuthn BE/BS and origin-binding model, Android Keystore/StrongBox constraints, device-bound versus synced credential trade-offs, action-digest-bound approval ceremony, key-role separation and recovery lifecycle. ODR-10 remains open; no authenticator or vendor selected.
+
+
+## 15. Audit integrity and external witness evidence — checkpoint 098
+
+[Audit Integrity and External Witness Options](IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md) owns the local hash/Merkle versus independent checkpoint distinction, Rekor/Tessera/Trillian/immudb comparison, privacy implications, witness trust boundary and recovery verification requirements. ODR-11 remains open; no database, log or witness selected.
