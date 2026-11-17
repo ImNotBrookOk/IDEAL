@@ -285,3 +285,8 @@ The required three review lenses have been completed as internal read-only passe
 High findings remain: complete dispatcher inventory and revocation objective (ODR-11); host-root/failure-domain separation (ODR-09/10/11); root/recovery custody (ODR-10/11); canonical serialization/schema evolution (Phase 03 contract gate); and D-006/D-008 semantics (ODR-02/03). These do not silently change accepted policy or authorise implementation.
 
 The owner decision register is now ready for owner review of the grouped decisions and residual-risk disposition, subject to final GitHub read-back. ODR-12 remains a gate; no acceptance is inferred from silence.
+
+
+## 8. Checkpoint 109 — canonical serialization remains an explicit architecture gate
+
+[Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md) defines the missing byte-level requirements for exact digests, signatures, idempotency and replay. JCS and deterministic CBOR are candidates only; neither is selected. Before Phase 03 contract implementation, the approved baseline must choose a deterministic encoding and IDEAL profile, including exact decimal strings or equivalent exact representation, schema evolution, domain separation and cross-implementation golden vectors. TST-105-01 remains open. No library, database, language or cryptographic suite is selected by this research.
