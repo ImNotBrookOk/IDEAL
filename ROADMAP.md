@@ -426,3 +426,12 @@ Reconcile the action, authority, policy, workload identity, risk reservation, he
 ### Phase 02 — bounded autonomy closure assessment
 
 The authority workstream now has a consolidated closure assessment separating technology-neutral invariants, provisional initial-deployment recommendations, platform-dependent decisions, deferred owner approvals and residual risks. It remains provisional and is not Phase 02 closure or implementation approval. See docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md.
+
+
+### Phase 02 architecture checkpoint — integrated system and bounded contexts (checkpoint 072)
+
+Created [IDEAL Integrated System and Bounded-Context Architecture](docs/IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md). It defines provisional active/deferred/excluded domain status, bounded-context state ownership, authority hierarchy, shared contract families, dependency and failure-containment rules, cross-domain financial semantics, archive/privacy/learning separation, topology principles, open questions and a future verification catalogue.
+
+Key architecture constraints: D-001 remains the only active market domain; all future spot/equities/commodities/hedging, personal-finance, tax, archive/learning and local-AI capabilities remain proposed/deferred as recorded. Cross-domain views are read-only projections; native ledgers remain authoritative; no implicit currency netting, collateral fungibility, tax equivalence or hedge credit. Personal finance imports require reconciliation before journal posting. Tax estimates cannot restrict capital (D-018). Risk, data, health and security retain separate authority.
+
+This is a logical architecture, not a frozen module/process/database/deployment design. No schema, provider, technology, domain activation or implementation is approved. Phase 02 remains active; Phase 03–19 remain locked. Next: canonical evidence/time/point-in-time contracts, domain-specific risk and portfolio semantics, failure/recovery topology and whole-system adversarial challenge.
