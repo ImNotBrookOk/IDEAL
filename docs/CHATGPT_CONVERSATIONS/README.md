@@ -212,3 +212,6 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-089-critical-contract-schemas.md](2026-11-17-089-critical-contract-schemas.md) | Phase 02 logical field schemas for owner/security/health/risk/action/reconciliation/personal-finance/tax/audit/recovery contracts; digest/version-vector/idempotency and value semantics; no wire format, API or database selected |
 
 | [2026-11-17-090-owner-decision-register.md](2026-11-17-090-owner-decision-register.md) | Draft consolidated Phase 02 owner decision register: 12 groups covering scope, D-006/D-008, portfolio/risk, bank/tax/data, host trust/recovery, audit and final architecture acceptance; not presented for approval |
+
+
+| [2026-11-17-089-final-integrated-architecture-challenge.md](2026-11-17-089-final-integrated-architecture-challenge.md) | Final Phase 02 internal integrated challenge; corrected fiat/crypto AssetId semantics in canonical contracts; added R-CONTRACT-001 and T-ASSET-01–06; ten findings and remaining blockers recorded; no runtime tests, independent review or phase advancement |
