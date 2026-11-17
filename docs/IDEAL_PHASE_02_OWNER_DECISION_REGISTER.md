@@ -276,3 +276,12 @@ Local hash/Merkle integrity cannot detect a full-host attacker who rewrites both
 #### Checkpoint 099 evidence refinement — ODR-02 / ODR-03 / ODR-04
 
 Margin/collateral research confirms that the D-006 risk denominator cannot be equated to venue margin equity or available margin. A provisional risk-adjusted-equity schema separately values eligible collateral after asset/size/concentration haircuts, conservative PnL, liabilities, accrued costs, FX evidence and uncertainty reserves. Exact weights, PnL recognition, cash-flow adjustment, FX hierarchy and thresholds remain open; D-006/D-008 are unchanged. Cross-margin aggregation is venue/account-mode specific; no implicit netting or hedge credit across accounts, venues, legal entities, instruments or collateral pools. ODR-04 remains deferred for future domains. See [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md).
+
+
+## 7. Checkpoint 105 — independent review availability and residual findings
+
+The required three review lenses have been completed as internal read-only passes and recorded in [Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md). They are not independent reviewers. No external human reviewer or separate review service was available in this workstream. Per §1, this limitation is explicitly recorded rather than misrepresented as assurance. The owner must decide whether to commission independent review or consider the documented residual risk under ODR-12.
+
+High findings remain: complete dispatcher inventory and revocation objective (ODR-11); host-root/failure-domain separation (ODR-09/10/11); root/recovery custody (ODR-10/11); canonical serialization/schema evolution (Phase 03 contract gate); and D-006/D-008 semantics (ODR-02/03). These do not silently change accepted policy or authorise implementation.
+
+The owner decision register is now ready for owner review of the grouped decisions and residual-risk disposition, subject to final GitHub read-back. ODR-12 remains a gate; no acceptance is inferred from silence.
