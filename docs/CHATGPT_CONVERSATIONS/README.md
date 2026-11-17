@@ -205,3 +205,6 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-087-current-state-consistency.md](2026-11-17-087-current-state-consistency.md) | Repository-wide current-state scan: corrected stale RULES Phase 01-only instruction and EXECUTION_QUALITY_RESEARCH phase status; marked dated L2 status statements as historical; no runtime or policy changes |
 
 | [2026-11-17-088-freshness-clock-contract.md](2026-11-17-088-freshness-clock-contract.md) | Phase 02 data freshness/clock contract: consumer-specific thresholds, event vs availability age, sequence/gap and tail-latency metrics, clock uncertainty and decision invalidation; no numeric thresholds or time service selected |
+
+
+| [2026-11-17-088-architecture-document-map.md](2026-11-17-088-architecture-document-map.md) | Phase 02 canonical document ownership and source precedence formalised; architecture pack indexed; grouped unresolved decisions inventoried without approval; README/roadmap/plan/review updated; scoped local read-back only, no runtime or phase changes |
