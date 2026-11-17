@@ -231,3 +231,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-18-096-policy-engine-security-evaluation.md](2026-11-18-096-policy-engine-security-evaluation.md) | Compared Cedar 4.15.0 and OPA 1.22.4; documented fail-closed wrapper semantics, recent parser/bundle-signature advisories, signed policy publication and deferred ODR-13 decision; no engine selected |
 
 | [2026-11-18-097-owner-authenticator-recovery-research.md](2026-11-18-097-owner-authenticator-recovery-research.md) | Revalidated WebAuthn L3, NIST 800-63B-4, Android Keystore/StrongBox and FIDO recovery; distinguished synced/device-bound credentials and bound approval to exact action digest; no device/vendor selected |
+
+| [2026-11-18-098-audit-integrity-external-witness-research.md](2026-11-18-098-audit-integrity-external-witness-research.md) | Compared local hash/Merkle integrity, Rekor/Tessera/Trillian and immudb; defined independent checkpoint and privacy boundaries; no external witness/database selected |
