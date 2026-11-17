@@ -251,3 +251,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-18-106-final-phase-02-document-map-link-audit.md](2026-11-18-106-final-phase-02-document-map-link-audit.md) | Fetched all 36 local Markdown targets in the Phase 02 document map and read back the readiness, decision register and review records |
 
 | [2026-11-18-107-infrastructure-security-source-refresh.md](2026-11-18-107-infrastructure-security-source-refresh.md) | Updated Linux kernel and Firecracker lifecycle/security evidence; documented future host acceptance checks without selecting a platform |
+
+| [2026-11-18-108-phase-02-source-refresh-verification.md](2026-11-18-108-phase-02-source-refresh-verification.md) | Fetch-back verification for checkpoint 107 and 38/38 document-map targets |
