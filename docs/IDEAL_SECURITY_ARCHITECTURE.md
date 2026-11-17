@@ -191,3 +191,6 @@ Keep the implementation proportionate to a private single-user system, but do no
 This document does not authorise implementation, new dependencies, security product subscriptions, external scans against third-party systems, hosting, remote access, external integrations, credential collection, account connections or financial operations. Any external penetration test must be limited to assets the owner controls and separately authorised.
 
 Phase 02 remains active. Phases 03–19 remain locked.
+
+
+The cross-pillar STRIDE-style challenge and prioritised residual findings are maintained in [IDEAL Integrated Adversarial Architecture Review](IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md). This is a design review draft, not a penetration test or security certification.
