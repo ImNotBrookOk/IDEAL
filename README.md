@@ -110,3 +110,8 @@ The bounded-autonomy work now includes explicit revocation/dispatch ordering, ho
 
 
 The bounded-autonomy authority workstream has a consolidated Phase 02 closure assessment, separating settled governance, technology-neutral requirements, provisional recommendations and platform-dependent owner decisions. It remains a research/design draft and does not authorise implementation or execution. See [Autonomy Authority Closure Assessment](docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md).
+
+
+## Integrated system and domain architecture
+
+The provisional bounded-context map now defines state ownership, cross-domain contracts, authority boundaries and failure containment across the active derivatives research domain and proposed future domains. The architecture deliberately keeps domain ledgers separate and treats portfolio aggregation as read-only; tax estimates cannot control capital. See [IDEAL Integrated System and Bounded-Context Architecture](docs/IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md). This is Phase 02 design research, not domain activation or implementation approval.
