@@ -62,7 +62,7 @@ Open decisions are not all blockers to research completion. They must remain vis
 - Re-read current Phase 02 exit criteria and owner decision register.
 - Confirmed Phase 01 CLOSED and Phase 02 ACTIVE from authoritative ROADMAP current-state section.
 - Confirmed Phases 03–19 remain locked.
-- Confirmed 38/38 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
+- Confirmed all 41 local Markdown targets present before checkpoint 111 audit indexing; checkpoint 111 then added its audit as target 42 and verified that target by fetch-back. The other 41 targets were fetched successfully in the same verification pass.
 - Checkpoint 099 margin/collateral/liquidation architecture is integrated into requirements, logical schemas, state machines, traceability and integrated challenge.
 - Checkpoint 100 internal challenge findings and checkpoint 101 documentation integrity findings are recorded.
 - Checkpoint 102 document-map section numbering corrected and fetched back.
@@ -114,3 +114,12 @@ Official Binance, Bybit and OKX material confirms that funding intervals/limits 
 
 
 **Document-map verification clarification:** The 38/38 path check is the historical result at checkpoint 108. Checkpoint 110 added one research document and an audit record to the map; a fresh full-map crawl has not yet been completed. Those new targets were individually fetched back successfully. Do not treat the historical 38/38 figure as a current total.
+
+
+## Checkpoint 111 — funding/mark-price and document-map verification
+
+The funding/mark-price refresh is integrated into logical schemas (§19), margin/liquidation architecture (§12) and requirement traceability (R-FUND-001–003, R-MARK-001–002, R-MARGIN-008–009). Official sources establish that funding intervals/caps and mark methods are instrument/venue-specific and may change; they do not establish a universal formula or selected venue. Forecast funding remains non-ledger; realised settlements require immutable, idempotent evidence and reconciliation. Missing/stale rules or mark evidence block dependent risk increases.
+
+The Phase 02 map contained 41 unique local Markdown targets before checkpoint 111 was indexed. All 41 were fetched successfully. The checkpoint 111 audit was then added as target 42 and fetched back successfully; the remaining 41 targets were unchanged from the completed 41/41 fetch pass. Thus all 42 current map targets have fetch evidence. This verifies path existence only, not semantic consistency or independent assurance.
+
+TST-105-01 remains open pending an approved canonical serialization profile and independent golden vectors. ODR-02/03 remain open; ODR-12 remains the owner acceptance gate. Phase 02 remains NOT COMPLETE; Phase 03 remains locked.
