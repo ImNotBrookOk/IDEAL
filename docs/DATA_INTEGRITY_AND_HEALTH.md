@@ -324,3 +324,10 @@ Reconciliation is a domain-owned comparison between independent state representa
 Mismatch, unknown and quarantine states remain explicit. Corrections preserve both source sides and create linked revisions. Recovery requires restore into quarantine, integrity/identity/policy checks, external-state reconciliation, recomputation of dependent projections, scoped attestations from each foundation and owner release where reserved. Restart or reconnect alone never establishes recovery.
 
 See [IDEAL Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). No runtime recovery or account reconciliation has been performed.
+
+
+## Cross-authority state and version-vector contract — checkpoint 081
+
+Data quality is a distinct state machine. Each future consequential action binds source revisions, availability cutoff, transformation version, quality state and account/instrument reconciliation version. A later correction creates a new latest-known view and may invalidate dependent current decisions; it does not rewrite the original as-known-then evidence snapshot. Data validity cannot grant authority or risk approval.
+
+See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
