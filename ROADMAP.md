@@ -562,3 +562,8 @@ No global TTL or numeric threshold is chosen. L2, trades, candles, funding, acco
 ### Phase 02 canonical architecture document map (checkpoint 088)
 
 Created [IDEAL Phase 02 Architecture Document Map](docs/IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md). It formalises canonical document ownership and conflict precedence, indexes the architecture evidence pack, and groups unresolved owner decisions without requesting or inferring approval. Scoped local link/read-back checks were performed; a full automated Markdown link crawl and live external-source revalidation were not performed. Phase 02 remains active; Phases 03–19 remain locked. No implementation or runtime change.
+
+
+### Phase 02 critical contract field schemas (checkpoint 089)
+
+Created [IDEAL Critical Contract Field Schemas](docs/IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md), defining logical field types, requiredness and constraints for evidence references, owner envelopes, security authorisation, health interlocks, risk evaluation/reservations, action intents/permits, dispatch receipts, reconciliation, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations. This closes the field-level logical schema deliverable; no serialization, API or database is selected. Phase 02 active; Phases 03–19 locked.
