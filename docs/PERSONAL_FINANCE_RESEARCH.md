@@ -898,3 +898,8 @@ Sources:
 - https://www.privacy.org.nz/responsibilities/disclosing-personal-information-outside-new-zealand/
 - https://www.ird.govt.nz/cryptoassets/taxing/record-keeping
 - https://www.ird.govt.nz/international-tax/exchange-of-information/crypto-asset-reporting-framework/crypto-asset-reporting-framework-overview
+
+
+## 26. Official-source revalidation — checkpoint 090
+
+The current Privacy Act section 27 text includes amendments effective 27 November 2025 and 1 May 2026; the holding exception includes information lawfully collected, received unsolicited or created by the individual, subject to personal/domestic-affairs and highly-offensive conditions. Section 11 agent-only processing remains distinct from IPP 12. IRD's CARF guidance excludes individuals/entities only trading for their own benefit from RCASP status; this does not determine a counterparty/platform's status. IRD's CARF pages conflict on registration timing (3 December 2026 versus March 2027); do not encode a date. The separate seven-year CARF retention rule applies to RCASPs, not automatically to the private individual. See [Official Source Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md).
