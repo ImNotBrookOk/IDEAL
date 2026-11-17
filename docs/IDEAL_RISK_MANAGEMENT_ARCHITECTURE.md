@@ -1938,3 +1938,10 @@ The system-wide risk taxonomy and capital ontology are consolidated in [IDEAL Do
 The portfolio/capital view is read-only by default. It must preserve gross exposure, net directional exposure, factor exposure, liquidity, counterparty/custody, margin/collateral, economic net worth, cash-flow capacity and tax exposure as distinct views. No implicit legal-entity netting, cross-venue collateral portability, hedge credit or capital reallocation is assumed.
 
 D-006 and D-008 remain specific to the initial crypto-perpetual risk policy. D-006's equity denominator remains unresolved; D-008's accepted UTC day-start baseline remains unchanged pending owner decision. No numerical risk limit or allocation is introduced. D-018 remains a hard user-autonomy rule: tax reserves are informational and cannot lock or restrict capital.
+
+
+## 23. Reconciliation and recovery integration — checkpoint 076
+
+Risk state is not recovered by process restart or by trusting a restored internal snapshot. Account/position/order/collateral/funding state must be reconciled against authoritative venue evidence. Unknown or contradictory order state retains conservative exposure/reservations and blocks conflicting risk increases. Reconciliation is domain-owned; no blind retries, timeout-based release or last-write-wins correction is allowed.
+
+See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). No live account or venue reconciliation has been performed.
