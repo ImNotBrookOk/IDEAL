@@ -230,3 +230,6 @@ Phase 02 includes a venue-neutral margin/collateral/liquidation architecture. It
 ## Phase 02 assurance status
 
 The final integrated architecture challenge has been refreshed through checkpoint 100. Margin/collateral schemas, liquidation/reservation transitions and traceability have been integrated. This remains an internal design review: independent architecture/security/operations review and owner acceptance are outstanding. No implementation or phase advancement is authorised.
+
+
+Phase 02 documentation integrity check: all 34 local Markdown targets in the architecture document map were fetched successfully at checkpoint 101. This is path verification only; independent reviews and owner acceptance remain open.
