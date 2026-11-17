@@ -121,3 +121,14 @@ Before any external side effect, IDEAL durably commits canonical intent, authori
 Consequential actions bind all current authority, identity, policy, risk, health/security, data, account and instrument versions to the exact canonical action digest. The initial authority generation is monotonic and global for simplicity; it is serialized with policy activation, revocation and dispatch-start. Separate health, security, risk, data and venue metadata generations are also bound.
 
 The authoritative local event/transaction order determines state transitions; wall-clock timestamps are not the sole ordering mechanism. Reservation states distinguish HELD, IN_FLIGHT, PARTIALLY_FILLED, TERMINAL_PENDING_RECONCILIATION, RELEASED and INCIDENT_HOLD. Fill transfer is idempotent; uncertain residual exposure remains reserved. See autonomy authority architecture §27.
+
+
+## Integrated bounded-context architecture — checkpoint 072
+
+IDEAL is one integrated personal financial intelligence system composed of bounded contexts with explicit state ownership. Integration exchanges versioned evidence and projections; it does not merge ledgers, capital, credentials, policies or permissions. The provisional context catalogue covers market/source data, canonical evidence, market intelligence, strategy research, backtesting, strategy registry, derivatives risk, future execution/reconciliation, personal finance, tax intelligence, portfolio/capital views, archive/datasets, learning/models, health, security/identity, owner authority/policy, audit, orchestration and mobile presentation.
+
+Each context owns its canonical records. Cross-domain aggregation is read-only by default; all amounts retain currency, unit, ownership, account, valuation time and source. No implicit collateral fungibility, legal-entity netting, tax equivalence or hedge credit is assumed. Personal finance imports remain source observations until reconciled into its own journal. Tax outputs are informational and cannot lock capital or force payment (D-018).
+
+The authority hierarchy remains owner → owner-approved policy/authority → security permission → data validity → health interlock → independent risk approval/reservation → domain/action boundary. These are conjunctive gates, not substitutes. Health can restrict only; security can contain/revoke identities but cannot approve financial risk or initiate financial actions; strategy/AI can propose but cannot grant authority.
+
+The complete provisional domain/state ownership catalogue, shared contract families, dependency/containment rules, data-plane separation, open questions and required verification catalogue are in [IDEAL Integrated System and Bounded-Context Architecture](docs/IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md). This does not freeze schemas, module/process topology, storage, deployment or deferred domains.
