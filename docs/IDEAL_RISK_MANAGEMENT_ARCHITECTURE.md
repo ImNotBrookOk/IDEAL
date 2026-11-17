@@ -1922,3 +1922,10 @@ A revocation acknowledgement must not imply remote cancellation or that an alrea
 The local authority/risk/audit transaction and remote exchange side effect cannot form one ACID transaction. The required sequence is: (A) atomically persist canonical intent, exact digest, authority evidence, current generation, risk reservation, audit event and transactional outbox; (B) immediately before network write, atomically consume one-use admission, recheck generation and persist DISPATCH_STARTED plus audit event; (C) after definitive venue response/reconciliation, atomically append outcome and update order/position/reservation state. The external network write occurs only after durable Transaction B.
 
 If A or B cannot durably commit, do not dispatch. If the request may have been sent and acknowledgement or C fails, retain UNKNOWN/in-flight state and reservation; reconcile authoritative venue state before retry/release. Duplicate outbox delivery must be idempotent. No exactly-once remote execution claim is permitted. See autonomy architecture §24.
+
+
+## Reservation lifecycle and authority-generation ordering — checkpoint 069
+
+Use explicit reservation states: NONE → HELD → IN_FLIGHT → PARTIALLY_FILLED / TERMINAL_PENDING_RECONCILIATION → RELEASED, with INCIDENT_HOLD for compromised or contradictory state. HELD is committed before dispatch; DISPATCH_STARTED moves it to IN_FLIGHT. Filled quantity transfers to position exposure exactly once; residual remains reserved. Cancel-pending, timeout, restart, lost acknowledgement or non-authoritative terminal indication cannot release residual capacity.
+
+Dispatch-start serializes against the monotonic authority generation and rechecks risk-policy version, health interlock generation, data/account evidence and instrument metadata. If any required version changed before dispatch-start, reject and atomically release only a provably pre-dispatch reservation. After dispatch-start, retain UNKNOWN/in-flight state and reconcile. Full version binding and reservation states are in autonomy authority architecture §§27.1–27.7.
