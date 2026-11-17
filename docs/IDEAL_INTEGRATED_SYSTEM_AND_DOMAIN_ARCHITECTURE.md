@@ -229,3 +229,10 @@ Next Phase 02 work:
 6. Only after the architecture is complete and independently challenged, prepare implementation-ecosystem research; seek explicit owner acceptance before any Phase 03 consideration.
 
 Phase 02 remains active. Phase 03–19 remain locked. No implementation, runtime integration, dependencies, credentials, accounts, external actions, paid infrastructure or execution are authorised.
+
+
+## Canonical contract catalogue — checkpoint 085
+
+The shared contract families in §5 are now expanded into 22 owned logical contracts, including source observation, validation, canonical evidence, point-in-time datasets, domain projections, strategy candidates, risk evaluation/reservation, health/security decisions, owner grants, action intent/permit, dispatch outcomes, reconciliation, personal-finance import/journal, tax workpapers, model release, audit and recovery attestations.
+
+See [IDEAL Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md). This defines semantics only; no serialization or API is selected.
