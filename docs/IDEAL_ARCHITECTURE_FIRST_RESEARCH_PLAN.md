@@ -205,3 +205,8 @@ This closes the traceability artefact at design level; tests are not implemented
 ## 17. Consolidated owner decision register — checkpoint 090
 
 [IDEAL Phase 02 Owner Decision Register](IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md) consolidates deferred decisions with evidence, recommended defaults, dependencies and readiness status. It is a draft and must not be presented for approval until the full architecture, independent review findings and final traceability pass are complete.
+
+
+## 17. Final integrated challenge — checkpoint 089
+
+The [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) identified and corrected the missing canonical crypto asset-denomination semantics in the shared contract catalogue. It records cross-pillar consistency findings and residual blockers. The next required gate is independent read-only review across architecture simplicity, security/operations and maintainability/testability; no owner decision pack is final until those reviews are reconciled.
