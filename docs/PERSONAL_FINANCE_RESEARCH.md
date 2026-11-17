@@ -885,3 +885,16 @@ See [Reconciliation, Incident Containment and Verified Recovery Architecture](ID
 Synthetic worked examples now cover bank-to-exchange transfers, pending-to-posted rows, collateral, tax estimates versus owner-designated reserves/assessments/payments, and stale FX. The core rule remains that imported bank rows are observations until reconciled, transfers are not income, pending rows are not final postings, and tax reserves do not restrict capital.
 
 See [Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). No real records or bank integration were used.
+
+
+## 25. Data retention and third-party processor clarification — checkpoint 079
+
+Current Privacy Commissioner guidance clarifies that a cloud/software provider acting solely as an agent to store or process data on behalf of the principal is generally not treated as a disclosure under IPP 12; the principal remains responsible for the personal information under Privacy Act section 11. If the provider uses or discloses information for its own purposes (including model training or cross-customer reuse), both may be treated as holding the data and further disclosure obligations can apply. IDEAL must therefore classify each provider's role and contract, not assume all offshore processing is prohibited or that all processors are independently exempt.
+
+IRD's cryptoasset record-keeping guidance says records supporting cryptoasset tax positions must be kept for at least seven years, including transaction details, NZD values, exchange records, bank statements and wallet addresses, even after the cryptoassets are no longer held. Apply this only to records within the guidance's scope; do not assume it resolves record retention or tax classification for every perpetual/futures contract. CARF's seven-year provider record obligation is for RCASPs, not automatically for the individual user.
+
+Sources:
+- https://www.privacy.org.nz/resources-and-learning/a-z-topics/working-with-third-party-providers/
+- https://www.privacy.org.nz/responsibilities/disclosing-personal-information-outside-new-zealand/
+- https://www.ird.govt.nz/cryptoassets/taxing/record-keeping
+- https://www.ird.govt.nz/international-tax/exchange-of-information/crypto-asset-reporting-framework/crypto-asset-reporting-framework-overview
