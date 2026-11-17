@@ -601,3 +601,8 @@ Compared official gVisor, Kata Containers and Firecracker security/architecture 
 ### Phase 02 authorization policy engine security review — checkpoint 096 (18 November 2026)
 
 Compared Cedar 4.15.0 and OPA 1.22.4 against IDEAL's authorization and dispatch contracts. Recorded Cedar skip-on-policy-error semantics and schema-validation lifecycle; OPA undefined/missing-result and runtime-error semantics plus eventually consistent signed bundle rollout; and recent high-severity Cedar parser and OPA bundle-signature advisories with fixed versions. Added explicit fail-closed wrapper, digest/version binding, signed publication and negative-test requirements. No engine or binding selected; deferred under ODR-13 pending trusted-core language/runtime and topology. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 owner authenticator and recovery research — checkpoint 097 (18 November 2026)
+
+Revalidated W3C WebAuthn Level 3, NIST SP 800-63B-4, Android Keystore/Credential Manager and FIDO high-assurance guidance. Distinguished synced/backup-eligible from device-bound credentials; documented StrongBox/TEE variability and app-process invocation risk; established that WebAuthn credential authentication is not transaction-content approval. Added action-digest-bound challenge, nonce/replay, policy-generation and dispatch-recheck requirements plus revoke-and-re-enrol recovery. No device, authenticator or vendor selected; ODR-10 remains open. Phase 02 active; Phases 03–19 locked.
