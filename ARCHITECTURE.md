@@ -141,3 +141,12 @@ All data flows preserve source identity, raw evidence, validation version, canon
 Data quality is a consumer-specific vector, not a global green flag. Market data, private financial records, security/audit evidence and AI traces are separate data planes with purpose-limited access and retention. Unknown, conflicted, stale, incomplete, unlicensed or unreconciled inputs cannot be silently promoted to valid evidence.
 
 See [IDEAL Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](docs/IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). W3C PROV, Apache Iceberg and MLflow are conceptual/candidate references only; no data technology or schema is selected.
+
+
+## Domain risk and capital semantics — checkpoint 074
+
+Risk policy is domain-specific. The shared platform provides common governance, provenance, authority and audit contracts, but derivatives, future investments, commodities, hedges, personal cash flow and tax estimation retain separate risk meanings and decision authorities.
+
+Portfolio/capital aggregation is read-only by default and preserves gross exposure, net exposure, factor risk, liquidity, counterparty/custody, margin/collateral, economic net worth, cash-flow capacity and tax exposure separately. It cannot infer netting, collateral transferability, hedge credit or permission to reallocate capital. D-006/D-008 remain initial crypto-perpetual policy only; D-018 prevents tax reserve estimates from restricting capital.
+
+See [IDEAL Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md).
