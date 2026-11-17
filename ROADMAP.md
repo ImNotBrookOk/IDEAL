@@ -483,3 +483,10 @@ Created [IDEAL Phase 02 Integrated Architecture Consistency and Adversarial Revi
 The review finds the core design materially consistent after checkpoint 075 corrected stale RULES.md paper-trading/Phase 01 wording. It identifies 24 cross-domain adversarial scenarios, seven residual architecture blocker groups, 11 owner-decision groups to defer, and explicit Phase 02 exit criteria. Critical future execution blockers remain: physical trust/recovery topology, D-006/D-008 semantics, provider-specific point-in-time evidence, cross-domain worked accounting examples, tax/legal interpretation, retention/audit policy and genuinely independent architecture review.
 
 This is an internal desk review only, not independent assurance or proof of security. Phase 02 remains active; Phases 03–19 locked. No implementation, runtime test, external scan, account access, credentials, paper/live execution or phase advancement.
+
+
+### Phase 02 research checkpoint — cross-domain accounting and valuation examples (checkpoint 078)
+
+Created [IDEAL Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md) with synthetic flows for bank-to-exchange transfers, spot plus perpetual exposure, funding/fees/unrealised P&L, collateral encumbrance, pending-to-posted transactions, tax estimates and reserves, stale FX, late corrections and partial portfolio projections.
+
+These examples expose the accounting and valuation invariants that future deterministic fixtures must assert. They are not tax/accounting advice, do not choose an accounting standard or tax classification, and were not executed as tests. No real financial data or provider connection was used. Phase 02 active; Phases 03–19 locked.
