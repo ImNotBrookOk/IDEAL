@@ -123,3 +123,12 @@ The funding/mark-price refresh is integrated into logical schemas (§19), margin
 The Phase 02 map contained 41 unique local Markdown targets before checkpoint 111 was indexed. All 41 were fetched successfully. The checkpoint 111 audit was then added as target 42 and fetched back successfully; the remaining 41 targets were unchanged from the completed 41/41 fetch pass. Thus all 42 current map targets have fetch evidence. This verifies path existence only, not semantic consistency or independent assurance.
 
 TST-105-01 remains open pending an approved canonical serialization profile and independent golden vectors. ODR-02/03 remain open; ODR-12 remains the owner acceptance gate. Phase 02 remains NOT COMPLETE; Phase 03 remains locked.
+
+
+## Checkpoint 112 — funding event-state and historical coverage
+
+The funding contract now distinguishes predicted, assessed, realised and settled rates, settlement state, formula/method and API revision. FundingHistoryCoverage records retention limits, retrieval coverage, pagination, gaps, duplicates, corrections and licence state; missing history is UNKNOWN, not zero. Mark-series evidence is distinct from trade candles. Linear/inverse PnL and funding require denomination-specific exact-decimal oracles. Added R-FUND-004–006 / T-FUND-04–06 and logical schemas in §20 of Critical Contract Field Schemas. These are design requirements only; no tests have run.
+
+The map now contains 43 unique local Markdown targets. The 42 targets verified at checkpoint 111 remain unchanged; checkpoint 112's audit is the new 43rd target and has been fetched back successfully. This is path-existence verification, not semantic or independent assurance.
+
+Phase 02 remains NOT COMPLETE. ODR-02/03 remain open, ODR-12 remains owner gate, and TST-105-01 remains open. Phase 03 remains locked.
