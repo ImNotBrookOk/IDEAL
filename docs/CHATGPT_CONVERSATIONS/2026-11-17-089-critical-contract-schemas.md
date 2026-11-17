@@ -47,3 +47,7 @@ Finalise policy/decision register coverage, verify source links and all reposito
 ## Audit numbering correction
 
 > This record was originally assigned checkpoint 089 in error. The repository already contained checkpoint 089 for the final integrated architecture challenge. The critical contract schema work is correctly numbered checkpoint 091; the canonical audit record is [2026-11-17-091-critical-contract-schemas.md](2026-11-17-091-critical-contract-schemas.md). This original path is retained for audit continuity.
+
+## Final numbering correction
+
+> The canonical number is now checkpoint 092 (after pre-existing checkpoints 088–090 and freshness checkpoint 091). Use [2026-11-17-092-critical-contract-schemas.md](2026-11-17-092-critical-contract-schemas.md).
