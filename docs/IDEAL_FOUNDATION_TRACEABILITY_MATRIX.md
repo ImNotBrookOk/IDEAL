@@ -346,3 +346,17 @@ See [Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_A
 | Backup cannot resurrect revoked/deleted state | Bounded expiry, key lifecycle and restore quarantine | Security / Health | Restore after deletion, revocation and key rotation |
 
 See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md). These are future controls; no retention/deletion runtime tests have been performed.
+
+
+## Checkpoint 080 — host trust topology traceability
+
+| Requirement | Control / candidate | Limitation | Required verification |
+|---|---|---|---|
+| Phone remains control plane, not safety-critical worker | Android UI, approval and notifications | Background work, battery and mobile-data constraints | Device loss, background restriction and network outage tests |
+| WSL2 is not treated as a sandbox | Treat WSL code as same trust level as Windows user | Windows host/user compromise reaches WSL trust domain | Negative boundary tests; no secrets in untrusted workloads |
+| Hyper-V VM trust boundary is explicit | Guest isolation, Secure Boot/vTPM candidates | Same host administrator/root can control VM | Host compromise and VM disk/configuration access tests |
+| KVM/Firecracker hardening is complete | Jailer, seccomp, cgroups/namespaces, host egress firewall | Host kernel/hardware and network policy remain trusted | Escape, egress, resource-exhaustion and host-root tests |
+| Action gateway survives worker compromise | Separate physical trust domain candidate | Added cost, network and operational complexity | Worker compromise cannot access gateway keys/adapter |
+| Recovery root and watchdog are independent enough | Offline/hardware/remote anchor candidates | No topology or anchor selected | Host compromise, restore rollback and watchdog independence tests |
+
+See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No device inspection or isolation tests were performed.
