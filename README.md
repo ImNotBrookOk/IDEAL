@@ -160,3 +160,8 @@ Owner authority, policy, identity, security incident, health, data quality, risk
 ## System architecture diagrams
 
 Logical diagrams cover domain/evidence flow, trust zones and forbidden flows, action admission/dispatch, recovery and temporal evidence lineage. See [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md).
+
+
+## Security control and threat traceability
+
+Security controls SEC-01–SEC-14 are mapped to protected assets, 28 threat paths, owners, future tests and residual risks. This is a design traceability matrix, not a security certification or runtime test report. See [Security Control and Threat Traceability Matrix](docs/IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md).
