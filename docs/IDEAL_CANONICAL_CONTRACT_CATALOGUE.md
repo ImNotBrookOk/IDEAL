@@ -183,3 +183,8 @@ The schemas define logical types and constraints only; no serialization, databas
 ### 4.1 Canonical asset identity requirement — checkpoint 089
 
 Asset identity is not a display ticker or ISO currency string. The logical AssetId must distinguish fiat, native crypto assets and network/contract-specific tokens, with effective-dated mappings from provider/venue symbols. The eventual identifier and registry schema remain open. Instrument multiplier, tick/lot precision and settlement denomination are separate effective-dated instrument metadata. All derived conversions preserve source, side, timestamp, spread/haircut and quality; no stablecoin peg or FX rate is assumed.
+
+
+## Canonical encoding and digest conformance — checkpoint 109
+
+The logical contract catalogue does not freeze wire bytes. Before implementing digest/signature-bearing contracts, use a versioned canonical profile that specifies exact decimal/integer representation, optional/null/unknown distinctions, duplicate-key rejection, string/Unicode handling, collection ordering, time precision, domain separation, schema compatibility and golden vectors across independent implementations. RFC 8785 JCS and RFC 8949 deterministic CBOR remain candidates only. See [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md).
