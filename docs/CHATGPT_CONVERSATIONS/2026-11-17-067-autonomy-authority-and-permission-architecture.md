@@ -82,7 +82,7 @@ All twelve affected/new files were fetched from GitHub after the writes. Require
 | docs/IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md | aa556ce3aa2911a1b92873566167ee7cd67784a3 |
 | docs/CHATGPT_CONVERSATIONS/README.md | 84598a77a6c873d5e993e2fd3b09190062bafae8 |
 
-The architecture document creation commit was a8ca3d7f146233f010472b8d6aaa1910de718a6b. The checkpoint audit creation commit was dc47b8ade541c9fcd1cd68797d12b4fde20b3c6e. The ten cross-reference/index updates completed successfully; their commit SHAs are available in the work record from the current conversation.
+The architecture document creation commit was a8ca3d7f146233f010472b8d6aaa1910de718a6b. The checkpoint audit creation commit was dc47b8ade541c9fcd1cd68797d12b4fde20b3c6e. The cross-reference, index and README priority updates completed successfully; exact commit SHAs are listed below.
 
 
 ## Commit ledger
@@ -103,3 +103,4 @@ The architecture document creation commit was a8ca3d7f146233f010472b8d6aaa1910de
 | Audit index update | 12cf17a071a3aae06ae240e4972a9223b93debe8 |
 | README Phase 02 priority wording | b042c2abe9acab8e4b7045a330aeca9b9d62551b |
 | Audit verification evidence update | 1b43295d7c6b7cd1cb1c0c8bddf93ee9254c8c72 |
+| Audit commit-ledger formatting correction | 84dd62b3c75018c55007bcb626e0182720ee4818 |
