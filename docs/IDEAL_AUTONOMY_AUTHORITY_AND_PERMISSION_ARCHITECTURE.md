@@ -835,3 +835,19 @@ Filled quantity transfers from order reservation to position exposure exactly on
 ### 27.7 Cross-document acceptance condition
 
 The requirements, risk architecture, security architecture, health architecture, core protection architecture and traceability matrix must all describe these same boundaries and state semantics. A change to the event sequence, generation scope, transaction boundary or reservation lifecycle is a material architecture change requiring impact analysis and independent review.
+
+### 25.6 Owner approval ceremony and transaction presentation
+
+A cryptographic assertion is not meaningful owner consent if the owner cannot understand what is being approved. Any future approval interface must render a deterministic, human-readable summary derived from the exact canonical artefact digest, including:
+
+- whether this is initial activation, renewal, expansion, restriction, recovery or revocation;
+- environment (research/test/paper/live) and exact account/venue scope;
+- permitted and prohibited action classes;
+- maximum exposure/risk limits and other hard constraints;
+- strategy/model eligibility and required data/health/security gates;
+- expiry, stop conditions, revocation method and owner-reserved actions;
+- exact policy/envelope version and digest, with a readable before/after diff for changes.
+
+The UI must not render a summary from mutable, unbound display data while signing a different payload. The approval challenge must bind the exact digest, operation, environment, audience, nonce and expiry. The verifier checks origin/RP ID, credential status, user verification, replay/nonce and the returned challenge. A valid WebAuthn assertion is evidence of a scoped user ceremony, not a general-purpose policy signature or proof that the owner understood an undisplayed payload.
+
+Reject hidden scope expansion, ambiguous units, truncated critical fields, misleading defaults, approval via agent-generated text alone, and approval dialogs that can be overlaid or confused with ordinary UI. High-impact policy changes should require a deliberate re-authentication step and a separate confirmation of the displayed diff. The precise authenticator, device binding, recovery and mobile/desktop ceremony remain open decisions.
