@@ -137,3 +137,8 @@ Only after that challenge and independent review are complete should the grouped
 ## 8. Final integrated challenge — checkpoint 089
 
 [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) records the cross-pillar challenge and the corrected asset-denomination gap. It distinguishes design consistency from runtime proof and lists remaining blockers. Independent review and owner acceptance remain outstanding.
+
+
+## 9. Official source register — checkpoint 090
+
+The dated [Official Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md) records current primary-source positions for NZ Privacy Act sections 11/27 and IPP 12, IRD cryptoasset records/CARF/tax-bill status, NIST key-management/crypto-agility guidance and Firecracker host hardening. External URLs and legal/provider facts must be rechecked before implementation or provider selection.
