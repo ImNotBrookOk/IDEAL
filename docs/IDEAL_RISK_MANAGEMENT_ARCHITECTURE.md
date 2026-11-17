@@ -1888,3 +1888,16 @@ These are Phase 02 architecture decisions, not implementation details to guess. 
 The risk engine is not a standalone calculator. It is an authority boundary that depends on trustworthy evidence, independent health interlocks, secure identity/policy and tightly scoped action adapters. Its decisions must be exact, short-lived, idempotent, attributable and independently verifiable.
 
 No implementation, runtime integration, interface schema freeze, exchange access or phase advancement is authorised. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 21. Bounded owner-authorised autonomy — D-023
+
+The future authority model is bounded autonomy, not unrestricted strategy/AI authority and not mandatory per-action owner approval for every routine in-envelope action.
+
+A future execution request must carry and be checked against the current owner-approved envelope identity/version, authenticated actor, exact action payload and hash, account/instrument scope, current policy/model/venue parameter versions, trusted evidence references, idempotency identity and expiry. The envelope establishes maximum permitted capability only; independent deterministic risk evaluation remains mandatory and may reject or reduce the requested action.
+
+No strategy, model, agent or risk calculation may create, edit, sign or expand the envelope or hard policy. The security boundary enforces the envelope outside the proposing component. The risk decision must bind to the exact action and current envelope/policy versions; changed payload, expired/revoked envelope, stale critical evidence, unknown permission or failed health/security interlock requires denial and fresh evaluation.
+
+Initial capability activation/reactivation, envelope/policy/limit/permission changes, new accounts/venues/integrations, credential/privilege expansion, transfers/withdrawals/payments, safeguard disablement, reserved irreversible operations and designated incident recovery/release remain owner-approved actions. No risk authority is granted by a UI state, model confidence, strategy eligibility or venue acceptance.
+
+D-023 is a governance decision for future design only. It does not approve a running envelope, execution capability, account, venue, credential, paper/live trading, implementation or policy threshold. The remaining policy schema, signing trust chain, reservation/action transaction boundary, audit durability and revocation/recovery contracts remain unresolved Phase 02 work.
