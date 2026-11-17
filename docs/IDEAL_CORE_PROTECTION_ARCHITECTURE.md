@@ -234,3 +234,8 @@ This is a governance and architecture direction only. No execution capability, a
 ## Autonomy authority as a cross-foundation control
 
 D-023's bounded autonomy model requires a separate owner-authority/security gate and deterministic risk gate. The action-enforcement boundary consumes trusted data evidence, independent health/security interlocks and durable audit preconditions before admitting an exact action. Risk approval reserves capacity; security/owner permission establishes authority; neither can replace the other. Emergency interlocks may restrict capability but cannot create financial authority or initiate liquidation. Full provisional design: [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md).
+
+
+## Adversarial enforcement and recovery requirements — checkpoint 068
+
+The four foundations must jointly support three hard requirements: (1) revocation/dispatch ordering is serialised and reports already in-flight external requests honestly; (2) untrusted AI/strategy workloads cannot reach gateway credentials, host control planes or venue egress; (3) recovery cannot resurrect revoked authority from an old backup. A compromised host root/kernel is a trust-boundary failure, not a condition that local process health can certify away. Independent host/gateway trust separation and an external/current revocation anchor are required where the threat model demands protection from host compromise. See autonomy architecture §§19–21.
