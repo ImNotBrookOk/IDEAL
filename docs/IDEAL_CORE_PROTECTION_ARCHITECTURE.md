@@ -239,3 +239,12 @@ D-023's bounded autonomy model requires a separate owner-authority/security gate
 ## Adversarial enforcement and recovery requirements — checkpoint 068
 
 The four foundations must jointly support three hard requirements: (1) revocation/dispatch ordering is serialised and reports already in-flight external requests honestly; (2) untrusted AI/strategy workloads cannot reach gateway credentials, host control planes or venue egress; (3) recovery cannot resurrect revoked authority from an old backup. A compromised host root/kernel is a trust-boundary failure, not a condition that local process health can certify away. Independent host/gateway trust separation and an external/current revocation anchor are required where the threat model demands protection from host compromise. See autonomy architecture §§19–21.
+
+
+## Supervisor, audit and policy-root contracts — checkpoint 069
+
+- Health supervisor is a read-only observer with one-way restrictive interlock authority; it cannot grant authority or initiate financial side effects.
+- Authority, risk reservation, audit event and outbox are durably committed before dispatch; dispatch-start is atomically recorded before external network write.
+- Policy publication and activation are immutable, owner-approved, signed, versioned and serialised with revocation/dispatch.
+- A shared host root/kernel compromise defeats local process-level independence; trust boundaries must state this limitation.
+- Remote side effects are never claimed exactly-once; ambiguous outcomes remain UNKNOWN and require authoritative reconciliation.
