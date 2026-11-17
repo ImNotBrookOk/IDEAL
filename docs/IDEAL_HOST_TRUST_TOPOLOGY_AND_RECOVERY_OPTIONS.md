@@ -188,3 +188,25 @@ Sources:
 - https://github.com/firecracker-microvm/firecracker/blob/main/docs/seccomp.md
 - https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
 - https://docs.oracle.com/en-us/iaas/Content/Compute/References/arm.htm
+
+
+## 14. Checkpoint 094 — Firecracker operational controls and cloud caveats
+
+A fresh read of Firecracker's production host guidance adds controls that must be explicit in any future deployment assessment:
+
+- Run the matching release's `jailer`, or enforce equal/more restrictive constraints. Use dedicated unprivileged UID/GID identities, preferably unique per microVM.
+- Protect all jailer input paths and parent directories from unprivileged modification.
+- Retain default seccomp filters; upstream does not recommend custom `--seccomp-filter` overrides or `--no-seccomp` in production.
+- Bound CPU, memory, disk I/O, file size and file descriptors using cgroups/resource limits.
+- Apply host-enforced TAP-interface egress filtering (nftables/iptables). Firecracker does not filter guest network traffic itself.
+- Bound guest-influenced serial/log output to prevent disk exhaustion; consider disabling serial in production and use bounded log rotation/ring buffers.
+- Operate a host-side overwatcher for unresponsive Firecracker processes; upstream documents a possible signal-handler deadlock.
+- Patch host/guest kernels and CPU microcode; Firecracker does not mitigate host hardware vulnerabilities or eliminate side-channel risks.
+
+These details increase operational burden. Firecracker remains a future candidate only if the threat model justifies a dedicated Linux/KVM host and the owner can operate patching, monitoring, egress, backup and recovery controls.
+
+### OCI free-tier caution
+
+Oracle's general Always Free page states 1,500 OCPU-hours / 9,000 GB-hours monthly for A1, while its A1-specific page states 3,000 / 18,000. Use the lower allowance conservatively until clarified. The general page confirms home-region capacity constraints and seven-day idle reclamation thresholds. Neither nominal free quota nor PAYG account guarantees physical capacity or caps all possible charges.
+
+Sources: https://github.com/firecracker-microvm/firecracker/blob/main/docs/prod-host-setup.md ; https://github.com/firecracker-microvm/firecracker/blob/main/docs/seccomp.md ; https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm ; https://docs.oracle.com/en-us/iaas/Content/Compute/References/arm.htm
