@@ -360,3 +360,19 @@ See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDE
 | Recovery root and watchdog are independent enough | Offline/hardware/remote anchor candidates | No topology or anchor selected | Host compromise, restore rollback and watchdog independence tests |
 
 See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No device inspection or isolation tests were performed.
+
+
+## Checkpoint 081 — integrated state-machine traceability
+
+| Requirement | Contract | Required verification |
+|---|---|---|
+| State authority is not conflated | Each state machine has one owner; no pass implies another pass | Cross-machine negative/deny tests |
+| Policy publication is immutable | DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE | Role separation, digest mismatch and rollback tests |
+| Action admission is conjunctive | Owner, identity, security, data, health, risk, reservation and audit gates | Deny/UNKNOWN injection at each gate |
+| State changes invalidate stale permits | Version vector bound to action and rechecked at dispatch | Concurrent policy/data/account/interlock changes |
+| Revocation serialises with dispatch | Shared monotonic authority generation and DISPATCH_STARTED boundary | Race, partition and crash-point tests |
+| Reservations conserve exposure | Partial fills transfer once; unknown residual stays held | Concurrency, partial-fill and cancel-unknown tests |
+| Corrections preserve historical knowledge | As-known-then snapshot and latest-corrected view separate | Late source correction replay |
+| Recovery cannot self-release | Quarantine, scoped pillar attestations and owner release where reserved | Missing/stale/contradictory attestation tests |
+
+See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). No runtime tests performed.
