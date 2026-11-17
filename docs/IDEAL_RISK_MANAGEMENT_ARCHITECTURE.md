@@ -1915,3 +1915,10 @@ The reservation/dispatch boundary must conservatively handle concurrency, duplic
 Risk reservations and authority revocation must share a clearly defined dispatch boundary. The durable transition to DISPATCH_STARTED is the local linearisation point, serialised against the current authority generation. Revocation-first means no external request is started; dispatch-start-first means the request is in-flight and cannot be recalled locally. A crash/timeout around network write is UNKNOWN and retains its reservation until authoritative venue reconciliation.
 
 A revocation acknowledgement must not imply remote cancellation or that an already transmitted request cannot arrive. Global EFFECTIVE requires all registered dispatch boundaries to acknowledge the new generation and all unstarted work to be fenced. Missing worker acknowledgements or partition means restricted/uncertain status, not success. Recovery invalidates all old permits and preserves unresolved reservations. See autonomy architecture §§19 and 21. This is a provisional contract, not execution approval.
+
+
+## Audit, reservation and external side-effect transaction ordering — checkpoint 069
+
+The local authority/risk/audit transaction and remote exchange side effect cannot form one ACID transaction. The required sequence is: (A) atomically persist canonical intent, exact digest, authority evidence, current generation, risk reservation, audit event and transactional outbox; (B) immediately before network write, atomically consume one-use admission, recheck generation and persist DISPATCH_STARTED plus audit event; (C) after definitive venue response/reconciliation, atomically append outcome and update order/position/reservation state. The external network write occurs only after durable Transaction B.
+
+If A or B cannot durably commit, do not dispatch. If the request may have been sent and acknowledgement or C fails, retain UNKNOWN/in-flight state and reservation; reconcile authoritative venue state before retry/release. Duplicate outbox delivery must be idempotent. No exactly-once remote execution claim is permitted. See autonomy architecture §24.
