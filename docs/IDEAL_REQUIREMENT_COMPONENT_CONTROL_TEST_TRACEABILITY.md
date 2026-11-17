@@ -116,3 +116,12 @@ The field-level schemas for OwnerEnvelope, SecurityAuthorization, HealthInterloc
 | R-MARGIN-009 — tier revision | Effective tier/maintenance schedule change forces IM/MM and liquidation-estimate recomputation even without a price move | Venue Rule Registry, Risk | InstrumentRiskTier / VenueRuleSet | T-MARGIN-09: tier change invalidates stale admission permit and recomputes margin with exact boundary oracle | Design specified; venue open |
 
 These IDs are planning labels only. No tests have been implemented or run. See [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) and checkpoint 111 audit.
+
+
+## Funding event-state and historical-coverage traceability — checkpoint 112
+
+| Req ID / source anchor | Requirement summary | Owning component(s) | Control / contract | Future verification ID and expected result | Status |
+|---|---|---|---|---|---|
+| R-FUND-004 — event-state typing | Predicted, assessed, realised and prior-settled funding rates plus processing/settled state are distinct | Market Data, Data Integrity, Ledger | FundingObservation | T-FUND-04: unknown enum, contradictory timestamps or forecast/settled conflation fails closed | Design specified |
+| R-FUND-005 — history completeness | Funding/mark history carries explicit retention, coverage, pagination, gap, correction and licence metadata | Data Archive, Data Integrity, Research | FundingHistoryCoverage / MarkSeriesEvidence | T-FUND-05: truncated endpoint history, missing page or known gap cannot be treated as a complete zero-filled series | Design specified; source rights open |
+| R-FUND-006 — denomination-specific accounting | Linear and inverse funding/PnL use verified contract face value, multiplier and settlement asset | Derivatives Ledger, Risk, Reconciliation | InstrumentRuleSnapshot / FundingSettlementEvent | T-FUND-06: independent exact-decimal linear/inverse oracle matches in native settlement units | Design specified; venue semantics open |
