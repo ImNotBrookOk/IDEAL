@@ -596,3 +596,8 @@ These findings refine future acceptance tests only. No component, host, provider
 ### Phase 02 workload isolation comparison — checkpoint 095 (17 November 2026)
 
 Compared official gVisor, Kata Containers and Firecracker security/architecture models. gVisor's userspace Sentry reduces direct host syscall exposure but still relies on host kernel/platform and cgroups; Kata provides a guest-kernel VM boundary through a larger container runtime/VMM/agent/IPC stack; Firecracker offers a minimal KVM microVM but requires jailer/seccomp/resource controls/host egress/monitoring. No runtime is selected. Future selection requires an explicit threat model and bounded compatibility, egress, exhaustion, observability and recovery tests. No deployment or implementation.
+
+
+### Phase 02 authorization policy engine security review — checkpoint 096 (18 November 2026)
+
+Compared Cedar 4.15.0 and OPA 1.22.4 against IDEAL's authorization and dispatch contracts. Recorded Cedar skip-on-policy-error semantics and schema-validation lifecycle; OPA undefined/missing-result and runtime-error semantics plus eventually consistent signed bundle rollout; and recent high-severity Cedar parser and OPA bundle-signature advisories with fixed versions. Added explicit fail-closed wrapper, digest/version binding, signed publication and negative-test requirements. No engine or binding selected; deferred under ODR-13 pending trusted-core language/runtime and topology. Phase 02 active; Phases 03–19 locked.
