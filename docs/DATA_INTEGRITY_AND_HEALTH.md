@@ -331,3 +331,10 @@ See [IDEAL Reconciliation, Incident Containment and Verified Recovery Architectu
 Data quality is a distinct state machine. Each future consequential action binds source revisions, availability cutoff, transformation version, quality state and account/instrument reconciliation version. A later correction creates a new latest-known view and may invalidate dependent current decisions; it does not rewrite the original as-known-then evidence snapshot. Data validity cannot grant authority or risk approval.
 
 See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
+
+
+## Source freshness and clock-quality contract — checkpoint 088
+
+Operational connection status is not data freshness. Each consumer measures source-to-receive, ingest and processing latency separately from event age, availability age, sequence continuity and clock uncertainty. Tail distributions (p95/p99/max) and clustered gaps matter; mean latency alone is insufficient. Unknown clock quality or stale critical evidence restricts dependent use.
+
+See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md).
