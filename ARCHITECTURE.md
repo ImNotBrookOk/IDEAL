@@ -132,3 +132,12 @@ Each context owns its canonical records. Cross-domain aggregation is read-only b
 The authority hierarchy remains owner → owner-approved policy/authority → security permission → data validity → health interlock → independent risk approval/reservation → domain/action boundary. These are conjunctive gates, not substitutes. Health can restrict only; security can contain/revoke identities but cannot approve financial risk or initiate financial actions; strategy/AI can propose but cannot grant authority.
 
 The complete provisional domain/state ownership catalogue, shared contract families, dependency/containment rules, data-plane separation, open questions and required verification catalogue are in [IDEAL Integrated System and Bounded-Context Architecture](docs/IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md). This does not freeze schemas, module/process topology, storage, deployment or deferred domains.
+
+
+## Data trust and temporal evidence — checkpoint 073
+
+All data flows preserve source identity, raw evidence, validation version, canonical revision, transformation lineage and point-in-time availability. Event time, publication time, receipt time, ingest time, processing time, valid/effective time, knowledge time and decision-as-of time are distinct. Corrections are new linked revisions; raw observations are not silently overwritten. A backtest may use only data knowable at its simulated decision time.
+
+Data quality is a consumer-specific vector, not a global green flag. Market data, private financial records, security/audit evidence and AI traces are separate data planes with purpose-limited access and retention. Unknown, conflicted, stale, incomplete, unlicensed or unreconciled inputs cannot be silently promoted to valid evidence.
+
+See [IDEAL Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](docs/IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). W3C PROV, Apache Iceberg and MLflow are conceptual/candidate references only; no data technology or schema is selected.
