@@ -114,3 +114,10 @@ The health supervisor is an independent observer with a one-way restrictive inte
 Policy/envelope artefacts are immutable, owner-approved against exact digest, separately signed, versioned and anti-rollback protected. Activation, revocation and dispatch-start serialize against one authority generation.
 
 Before any external side effect, IDEAL durably commits canonical intent, authority evidence, risk reservation, audit event and outbox. It commits DISPATCH_STARTED and its audit event before network write. Remote side effects are not atomic with local storage; ambiguous outcomes remain UNKNOWN and require authoritative reconciliation.
+
+
+## Unified authority and reservation event ordering — checkpoint 069
+
+Consequential actions bind all current authority, identity, policy, risk, health/security, data, account and instrument versions to the exact canonical action digest. The initial authority generation is monotonic and global for simplicity; it is serialized with policy activation, revocation and dispatch-start. Separate health, security, risk, data and venue metadata generations are also bound.
+
+The authoritative local event/transaction order determines state transitions; wall-clock timestamps are not the sole ordering mechanism. Reservation states distinguish HELD, IN_FLIGHT, PARTIALLY_FILLED, TERMINAL_PENDING_RECONCILIATION, RELEASED and INCIDENT_HOLD. Fill transfer is idempotent; uncertain residual exposure remains reserved. See autonomy authority architecture §27.
