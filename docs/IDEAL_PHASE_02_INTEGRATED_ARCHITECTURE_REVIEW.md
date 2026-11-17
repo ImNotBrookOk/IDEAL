@@ -206,3 +206,12 @@ The 12 grouped owner decisions are consolidated in [IDEAL Phase 02 Owner Decisio
 ## Checkpoint 090 — official source revalidation
 
 [Official Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md) confirms the current Privacy Act section 27 amendment conditions, distinguishes section 11 agent processing from IPP 12, records the CARF own-benefit exclusion and conflicting IRD registration dates, and rechecks NIST and Firecracker references. Legal/tax interpretation, provider role and exact retention scope remain open; no architecture or owner policy is changed.
+
+
+## Checkpoint 100 — margin/liquidation integration refresh
+
+The final integrated challenge was reopened after checkpoints 096–099. The resulting changes are reflected in [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md): risk architecture numbering corrected; margin/collateral/liquidation logical records added to [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md); venue liquidation, partial fills, insurance-fund and ADL evidence bound to reservation conservation and reconciliation in the integrated state machine; seven new margin requirement/test aliases added to traceability. No numerical D-006/D-008 semantics were changed. The challenge remains internal; independent architecture/security/operations review and owner acceptance remain open.
+
+## Checkpoint 101 — documentation integrity refresh
+
+The current Phase 02 Architecture Document Map contains 34 distinct local Markdown links. All 34 targets were fetched successfully from GitHub main. This is a path-existence check, not a complete Markdown/anchor or semantic validation. Independent reviews remain outstanding; internal review must not be represented as independent assurance.
