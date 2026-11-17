@@ -173,7 +173,7 @@ CT-01/02/03/05/09/14 require source event/publication/availability/receive/inges
 See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md).
 
 
-## Field-level logical schemas — checkpoint 091
+## Field-level logical schemas — checkpoint 092
 
 Critical contract field semantics are expanded in [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md), including common evidence references, owner envelopes, security authorisation, health interlocks, risk decisions/reservations, action intents/permits, dispatch receipts, reconciliation cases, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations.
 
