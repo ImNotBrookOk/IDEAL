@@ -62,3 +62,24 @@ The owner has not approved an envelope schema, key custody/recovery model, WebAu
 - D-023 remains accepted; this checkpoint adds no new accepted decision.
 - No implementation, runtime, dependency, account, credential, exchange connection, paper/live execution, paid service, hosting or external security testing is authorised.
 - Next step: continue reconciling the authority/action state machine with risk reservations, cross-pillar contracts and recovery design, then subject the complete model to adversarial review before asking for owner acceptance.
+
+## Read-back verification evidence
+
+All twelve affected/new files were fetched from GitHub after the writes. Required-content checks passed for all files except one overly case-sensitive check for the word UNKNOWN in the risk document; the actual risk-reservation section was present and is recorded below as verified by direct content inspection.
+
+| File | Read-back blob SHA |
+|---|---|
+| docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md | e226c91b5cac52fe6d0314bd32a27a833c30707c |
+| docs/CHATGPT_CONVERSATIONS/2026-11-17-067-autonomy-authority-and-permission-architecture.md (before this evidence addendum) | 5868b4fb9ac520dae9874e3c00dea6780e95d5dc |
+| README.md | d625c25a075a83a89fa23a82d589d189cfd55e5f |
+| REQUIREMENTS.md | e332199715f551d792e52206e29f963794e6b2e1 |
+| ARCHITECTURE.md | e911ae9ef858d1012b7f1b6f3c59e996996b4897 |
+| ROADMAP.md | 7ece2e7c59a35adbd206787d74431c70c4e7ce8d |
+| docs/IDEAL_SECURITY_ARCHITECTURE.md | 0650993a7efb8f56a9ddc488673195c0b7180998 |
+| docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md | 9066b1b7e59738e58820c55f01a461a4ef2babb0 |
+| docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md | a94b06fe38845ed985fc8463247f1ba6bfd246d8 |
+| docs/IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md | 602c64d755574d2d556201ff4da7841d572ca852 |
+| docs/IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md | aa556ce3aa2911a1b92873566167ee7cd67784a3 |
+| docs/CHATGPT_CONVERSATIONS/README.md | 84598a77a6c873d5e993e2fd3b09190062bafae8 |
+
+The architecture document creation commit was a8ca3d7f146233f010472b8d6aaa1910de718a6b. The checkpoint audit creation commit was dc47b8ade541c9fcd1cd68797d12b4fde20b3c6e. The ten cross-reference/index updates completed successfully; their commit SHAs are available in the work record from the current conversation.
