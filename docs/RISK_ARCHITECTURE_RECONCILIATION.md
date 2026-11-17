@@ -272,3 +272,16 @@ The correction is to describe paper execution as a future proposed capability, n
 - No paper or live order is authorised.
 - No runtime integration, code, dependency, infrastructure, paid service or external security scan is authorised.
 - Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## Checkpoint 077 — supersession of historical consistency findings
+
+The earlier §9.1 execution-authority wording conflict is now resolved by later repository updates:
+- `REQUIREMENTS.md` explicitly says no paper or live execution is currently authorised and any future paper simulator requires separate approval/gates.
+- `ARCHITECTURE.md` explicitly marks the paper-execution simulator as future proposed/not authorised and states no paper or live order flow is active.
+- `RULES.md` was corrected at checkpoint 075 to prohibit paper and live execution until separate owner approval.
+- Current roadmap and decision register remain consistent with Phase 02 architecture-only authority.
+
+Therefore, §9.1 is a historical finding, not an open current contradiction. The older §11 sequence (immediate owner review) is superseded by the user's standing instruction and D-022: continue Phase 02 research autonomously and present unresolved owner decisions together only after the full architecture pack is ready.
+
+Other findings in this document remain open unless explicitly closed by later checkpoint evidence. The integrated domain map, temporal evidence, domain risk/capital and reconciliation/recovery documents add further contracts that must be included in the next system-wide adversarial review.
