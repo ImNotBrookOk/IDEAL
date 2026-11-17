@@ -220,3 +220,8 @@ The owner-authenticator research distinguishes synced and device-bound passkeys,
 ## Audit integrity and external witnessing
 
 IDEAL distinguishes the authoritative local audit journal from tamper-evidence and independent external witnessing. Public transparency logs must not receive financial or personal records. The provisional design is a local journal with minimal batched signed checkpoints retained in a separate trust domain; no witness or provider is selected. See [Audit Integrity and External Witness Options](docs/IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md).
+
+
+## Margin, collateral and liquidation research
+
+Phase 02 includes a venue-neutral margin/collateral/liquidation architecture. It distinguishes risk-adjusted capital from venue margin, requires collateral eligibility and haircuts, tiered margin rules, worst-case reservations for uncertain orders, and explicit liquidation/reconciliation states. No venue or margin mode is selected. See [Margin, Collateral and Liquidation Architecture](docs/IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md).
