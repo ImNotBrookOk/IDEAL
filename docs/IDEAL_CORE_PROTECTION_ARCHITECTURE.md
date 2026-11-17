@@ -255,3 +255,10 @@ The four foundations must jointly support three hard requirements: (1) revocatio
 Risk controls are domain-specific even though their governance and data-quality foundations are shared. Derivatives risk, future investment risk, personal-finance cash-flow visibility and tax estimation must not be collapsed into one universal score or capital gate. A read-only portfolio/capital view may aggregate evidence but cannot transfer, net, hedge, lock, allocate or liquidate funds by implication.
 
 Preserve separate concepts for ledger balance, pending/available cash, investment market value, derivatives economic equity, risk-adjusted equity, venue margin equity, available margin, collateral, encumbered capital, tax estimate, assessed liability and owner-designated reserve. No implicit cross-account netting or collateral portability is permitted. See [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md).
+
+
+## Reconciliation, containment and recovery — checkpoint 076
+
+No component may self-certify full recovery. Reconciliation is domain-owned and uses the authoritative evidence for the fact in question. Restored state remains quarantined until data/audit integrity, current identity and revocation state, external account state, derived projections and all required pillar attestations are verified. Health, security, data and risk attest only to their own scope. Owner release remains mandatory for D-023-reserved authority restoration.
+
+See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
