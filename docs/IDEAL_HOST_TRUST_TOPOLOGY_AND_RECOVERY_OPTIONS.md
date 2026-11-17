@@ -247,3 +247,8 @@ The owner approval ceremony must bind the exact canonical action digest and curr
 ## 17. Audit checkpoint and witness trust boundary — checkpoint 098
 
 A local hash chain/Merkle tree is not independent against host-root compromise when the attacker can rewrite the journal and all local anchors. The future design may periodically publish a minimal signed batch commitment to an independent trust domain. The witness should retain monotonic checkpoint state and support offline inclusion/consistency verification; it must not receive event payloads or have authority over actions, policies or keys. Public transparency logs are append-only and must not receive personal or financial records. Recovery compares restored journal state with the latest independent checkpoint and enters RECOVERY_HOLD if stale or inconsistent. Full options: [Audit Integrity and External Witness Options](IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md).
+
+
+## 18. Infrastructure security source refresh — checkpoint 107
+
+The 18 November 2026 upstream refresh adds explicit future host acceptance checks for supported kernel/distribution lifecycle, patch ownership, Firecracker support window, release-matched jailer, protected jailer paths, restrictive seccomp, host-enforced default-deny guest egress, bounded logs/resources and an independent VMM watchdog. Two upstream Firecracker advisories are recorded: CVE-2026-1386 (jailer symlink path; patched in 1.13.2/1.14.1) and CVE-2026-5747 (virtio PCI queue bounds; patched in 1.14.4/1.15.1). These findings do not select Firecracker or a host. See [Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md).
