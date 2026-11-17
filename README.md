@@ -57,7 +57,7 @@ The owner remains the final authority. Consequential actions require explicit pe
 - Phase 02 architecture and contract design is active. The current priority is completing and challenging the four shared foundations and their cross-pillar contracts, including risk management and bounded-autonomy authority.
 - Phase 03 and all later phases remain locked.
 - No runtime implementation, trading execution, exchange credentials, bank connections, paid infrastructure, hosting or external security scans are authorised.
-- No live trading is authorised. The initial market scope remains crypto perpetual futures research; any later paper or live execution capability requires its own explicit approval and gates.
+- Neither paper nor live trading/execution is authorised. The initial market scope remains crypto perpetual futures research; any future execution capability requires separate explicit owner approval and its own gates.
 - The long-term domains described above are vision and research scope, not a claim that those engines are built or authorised.
 
 ## Initial quantitative research scope
@@ -91,7 +91,7 @@ These initial trading constraints do not define the risk policies for future dom
 
 ## How work is accepted
 
-One explicitly authorised task at a time. Research and design findings are documented with sources, assumptions, alternatives, limitations and open questions. Repository changes are fetched back and checked. When implementation is eventually authorised, each task must be implemented and tested in isolation, integration-tested, regression-tested, audited and documented before the next task is proposed.
+One bounded roadmap task at a time within D-022's standing Phase 02 research/design authority; do not skip, bundle or reorder tasks. Research and design findings are documented with sources, assumptions, alternatives, limitations and open questions. Repository changes are fetched back and checked. When implementation is eventually authorised, each task must be implemented and tested in isolation, integration-tested, regression-tested, audited and documented before the next task is proposed.
 
 A research checkpoint does not itself approve a decision, change policy, unlock a phase or authorise execution. IDEAL advances only through explicit owner review and approval. No task is complete without recorded verification.
 
@@ -185,3 +185,8 @@ Requirements are mapped to their owning components, controls/contracts and plann
 ## Data freshness and clock quality
 
 IDEAL measures source availability, event age, receive/ingest latency, sequence continuity and clock uncertainty separately. Freshness is consumer-specific; no global TTL or stale-data fallback is assumed. See [Data Freshness and Clock Requirements](docs/IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md).
+
+
+## Phase 02 architecture document map
+
+The canonical ownership map, source-of-truth precedence and grouped unresolved-decision inventory are maintained in [IDEAL Phase 02 Architecture Document Map](docs/IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md). This is a navigation and planning index, not owner approval or implementation authority.
