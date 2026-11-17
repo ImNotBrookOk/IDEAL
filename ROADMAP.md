@@ -611,3 +611,8 @@ Revalidated W3C WebAuthn Level 3, NIST SP 800-63B-4, Android Keystore/Credential
 ### Phase 02 audit integrity and external witness research — checkpoint 098 (18 November 2026)
 
 Compared local hash/Merkle audit integrity, Sigstore Rekor/Rekor v2 and Tessera, Trillian and immudb. Established that local anchors cannot detect full-host rewrite; independent monotonic checkpoints can detect rollback/split-view when retained outside the host. Public append-only logs must not receive financial or personal records. Trillian is maintenance-only; Tessera is its successor but adds real operations; immudb is an immutable database, not an independent witness. Provisional direction is local authoritative audit plus minimal external batch-root checkpoint, with raw records kept local. ODR-11 remains open; no service selected. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 — margin, collateral and liquidation architecture (checkpoint 099, 18 November 2026)
+
+Created [Margin, Collateral and Liquidation Architecture](docs/IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md), based on official Binance, Bybit (15 October 2026), OKX (11 August 2026) and Hyperliquid documentation. Defined separate risk-adjusted and venue margin equity, collateral eligibility/haircuts, tiered IM/MM, mark versus executable price, multi-currency valuation, open-order reservations, stress/hedge-credit boundaries and uncertain liquidation lifecycle. No venue/mode/formula selected; D-006/D-008 unchanged; ODR-02/03 remain open. Research only; no tests or runtime integration. Phase 02 active.
