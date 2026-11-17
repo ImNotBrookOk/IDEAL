@@ -46,3 +46,7 @@ No implementation, runtime, dependency, account, credential, bank connection, pr
 ## Audit numbering correction
 
 > This record was originally assigned checkpoint 090 in error because the preceding checkpoint numbers were not reconciled against the existing audit index. The owner decision register is correctly numbered checkpoint 092; the canonical audit record is [2026-11-17-092-owner-decision-register.md](2026-11-17-092-owner-decision-register.md). This original path is retained for audit continuity.
+
+## Final numbering correction
+
+> The canonical number is now checkpoint 093 (after pre-existing checkpoints 088–090, freshness 091 and schemas 092). Use [2026-11-17-093-owner-decision-register.md](2026-11-17-093-owner-decision-register.md).
