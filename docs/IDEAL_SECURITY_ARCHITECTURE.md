@@ -256,3 +256,12 @@ An owner may explicitly reserve additional action classes. This list is a minimu
 ### 9.5 Approval and activation boundary
 
 D-023 records the future governance model only. It does not activate any operating envelope or execution capability. A later proposal must separately define and verify the policy schema, signing/root-of-trust model, identity and permission enforcement, risk reservation/approval protocol, audit durability, health interlocks, recovery and manual fallback. The owner must explicitly approve the complete capability and its operating scope before implementation or use.
+
+
+## Autonomy authority and permission enforcement (D-023 technical design)
+
+The owner-approved operating envelope is a cryptographically verifiable, immutable, versioned and revocable authority artefact. Its signature is necessary but not sufficient: semantic validation, authenticated owner approval, protected key custody, anti-rollback, independent enforcement and current revocation checks are also required. Keep owner root/recovery, owner approval, policy publication, workload identity, audit checkpoint and data-encryption keys separate.
+
+Every privileged service receives a distinct workload identity; identity is not permission. All consequential actions pass through an action boundary outside strategy/AI processes. It verifies the exact canonical action, owner envelope, policy, caller identity, current revocation epoch, data trust, health/security interlocks, deterministic risk decision/reservation and audit preconditions. Deny by default; any missing, stale, malformed, ambiguous or unverifiable prerequisite blocks risk-increasing actions. The boundary must be the only route to adapters.
+
+Owner approval must be bound to the exact envelope/policy digest and reserved action. Any material parameter change invalidates prior authorisation. Revocation must propagate independently of the strategy/agent process, have a measurable maximum delay and invalidate outstanding capabilities. See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) for candidate tooling, key lifecycle, exact-action contract, threat cases, recovery and assurance requirements. No identity/policy/key tool is adopted and no runtime or execution authority is granted.
