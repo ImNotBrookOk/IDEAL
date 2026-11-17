@@ -215,3 +215,4 @@ This section records design requirements only. It does not authorise runtime imp
 
 
 The working requirements-to-controls-to-components-to-tests matrix across governance, risk, data integrity, system health, security, audit and cross-pillar interfaces is maintained in [IDEAL Integrated Foundation Traceability Matrix](IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md). It is a Phase 02 working design, not an implementation authorisation or frozen contract.
+The integrated cross-pillar adversarial review, including STRIDE-style threat coverage, authority conflicts, common-mode failure and recovery gaps, is maintained in [IDEAL Integrated Adversarial Architecture Review](IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md). It remains a Phase 02 review draft; independent review and owner acceptance are pending.
