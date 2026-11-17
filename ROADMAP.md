@@ -656,3 +656,8 @@ Specified the missing byte-level canonicalization requirements for exact financi
 ### Phase 02 perpetual funding and mark-price semantics refresh — checkpoint 110 (18 November 2026)
 
 Created [Perpetual Funding and Mark-Price Semantics Source Refresh](docs/IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) from current official Binance, Bybit and OKX material. Funding interval/cap and mark-price methodology are effective-dated, instrument-specific configuration—not global constants. Funding forecasts are not realised ledger events; settlement can affect available balance or position margin. Added logical schemas and data-freshness/margin architecture integration plus boundary, correction, stale-method and mode-specific tier tests. No venue, formula, account mode or runtime selected. Phase 02 ACTIVE; Phases 03–19 LOCKED.
+
+
+### Phase 02 perpetual funding and mark-price semantics refresh — checkpoint 110 (18 November 2026)
+
+Created [Perpetual Funding and Mark-Price Semantics Source Refresh](docs/IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) from current official Binance, Bybit and OKX material. Funding interval/cap and mark-price methodology are effective-dated, instrument-specific configuration—not global constants. Funding forecasts are not realised ledger events; settlement can affect available balance or position margin. Added logical schemas and data-freshness/margin architecture integration plus boundary, correction, stale-method and mode-specific tier tests. No venue, formula, account mode or runtime selected. Phase 02 ACTIVE; Phases 03–19 LOCKED.
