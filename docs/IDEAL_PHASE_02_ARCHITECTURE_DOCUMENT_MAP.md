@@ -225,3 +225,8 @@ The Phase 02 map contains 34 distinct local Markdown links; all 34 targets were 
 ## 20. Phase 02 completion readiness — checkpoint 103
 
 [Phase 02 Completion Readiness Assessment](IDEAL_PHASE_02_COMPLETION_READINESS_ASSESSMENT.md) evaluates every exit criterion and all ODR-01–ODR-13. Disposition: NOT COMPLETE. Independent reviews and explicit owner acceptance remain outstanding; ODR-02/03 and platform-dependent decisions retain their documented dependency gates. Phase 03 remains locked.
+
+
+## 21. Three-lens review and assurance limits — checkpoint 105
+
+[Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md) records internal architecture, security/operations and testability findings. It explicitly does not claim independent assurance; unavailability of an external reviewer is presented for ODR-12 owner disposition.
