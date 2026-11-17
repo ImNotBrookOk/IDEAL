@@ -396,3 +396,17 @@ See [IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md).
 Security controls SEC-01–SEC-14 now map protected assets and 28 threat paths to owning authorities, enforcement controls, residual risks and future tests. The matrix distinguishes design-specified controls from implemented/verified controls and explicitly records common-host, external-side-effect and single-owner residual risks.
 
 See [IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md). No runtime security tests or external scans were performed.
+
+
+## Checkpoint 084 — maintainability and complexity traceability
+
+| Requirement | Simplification rule | Required verification |
+|---|---|---|
+| Logical separation without distributed-system overhead | Bounded contexts may remain modules in one modular monolith | No separate service without measured need |
+| Single authoritative transaction boundary | Prefer one ACID store initially if durability is proven | Crash, concurrency, WAL/fsync and restore tests |
+| Deterministic controls | Risk/accounting/reconciliation/validation are deterministic | Independent oracle and replay tests |
+| AI remains optional/untrusted | No agent authority, credentials or generic egress | AI disabled and compromised-agent negative tests |
+| Avoid premature infrastructure | No broker, service mesh, Kubernetes, lakehouse or multi-agent scheduler absent need | Complexity/cost justification review |
+| Documentation has one authority per concern | Canonical ownership map and link-first summaries | Contradictory status scan and reviewer findability test |
+
+See [Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md). No source files were consolidated or deleted.
