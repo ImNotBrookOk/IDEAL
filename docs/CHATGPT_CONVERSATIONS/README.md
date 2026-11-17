@@ -204,21 +204,21 @@ A conversation record is complete when the available transcript, operational evi
 
 | [2026-11-17-087-current-state-consistency.md](2026-11-17-087-current-state-consistency.md) | Repository-wide current-state scan: corrected stale RULES Phase 01-only instruction and EXECUTION_QUALITY_RESEARCH phase status; marked dated L2 status statements as historical; no runtime or policy changes |
 
-| [2026-11-17-091-freshness-clock-contract.md](2026-11-17-088-freshness-clock-contract.md) | Phase 02 data freshness/clock contract: consumer-specific thresholds, event vs availability age, sequence/gap and tail-latency metrics, clock uncertainty and decision invalidation; no numeric thresholds or time service selected |
+| [2026-11-17-091-freshness-clock-contract.md](2026-11-17-091-freshness-clock-contract.md) | Phase 02 data freshness/clock contract: consumer-specific thresholds, event vs availability age, sequence/gap and tail-latency metrics, clock uncertainty and decision invalidation; no numeric thresholds or time service selected |
 
 
 | [2026-11-17-088-architecture-document-map.md](2026-11-17-088-architecture-document-map.md) | Phase 02 canonical document ownership and source precedence formalised; architecture pack indexed; grouped unresolved decisions inventoried without approval; README/roadmap/plan/review updated; scoped local read-back only, no runtime or phase changes |
 
-| [2026-11-17-092-critical-contract-schemas.md](2026-11-17-091-critical-contract-schemas.md) | Phase 02 logical field schemas for owner/security/health/risk/action/reconciliation/personal-finance/tax/audit/recovery contracts; digest/version-vector/idempotency and value semantics; no wire format, API or database selected |
+| [2026-11-17-092-critical-contract-schemas.md](2026-11-17-092-critical-contract-schemas.md) | Phase 02 logical field schemas for owner/security/health/risk/action/reconciliation/personal-finance/tax/audit/recovery contracts; digest/version-vector/idempotency and value semantics; no wire format, API or database selected |
 
-| [2026-11-17-093-owner-decision-register.md](2026-11-17-092-owner-decision-register.md) | Draft consolidated Phase 02 owner decision register: 12 groups covering scope, D-006/D-008, portfolio/risk, bank/tax/data, host trust/recovery, audit and final architecture acceptance; not presented for approval |
+| [2026-11-17-093-owner-decision-register.md](2026-11-17-093-owner-decision-register.md) | Draft consolidated Phase 02 owner decision register: 12 groups covering scope, D-006/D-008, portfolio/risk, bank/tax/data, host trust/recovery, audit and final architecture acceptance; not presented for approval |
 
 
 | [2026-11-17-089-final-integrated-architecture-challenge.md](2026-11-17-089-final-integrated-architecture-challenge.md) | Final Phase 02 internal integrated challenge; corrected fiat/crypto AssetId semantics in canonical contracts; added R-CONTRACT-001 and T-ASSET-01–06; ten findings and remaining blockers recorded; no runtime tests, independent review or phase advancement |
 
 
 
-| [2026-11-17-092-critical-contract-schemas.md](2026-11-17-091-critical-contract-schemas.md) | Phase 02 logical field schemas aligned to canonical fiat/crypto AssetId semantics; exact asset identity, amount precision, version vectors and idempotency; no wire format or database selected |
-| [2026-11-17-093-owner-decision-register.md](2026-11-17-092-owner-decision-register.md) | Draft consolidated Phase 02 owner decision register: 12 groups covering scope, D-006/D-008, portfolio/risk, bank/tax/data, host trust/recovery, audit and final architecture acceptance; not presented for approval |
+| [2026-11-17-092-critical-contract-schemas.md](2026-11-17-092-critical-contract-schemas.md) | Phase 02 logical field schemas aligned to canonical fiat/crypto AssetId semantics; exact asset identity, amount precision, version vectors and idempotency; no wire format or database selected |
+| [2026-11-17-093-owner-decision-register.md](2026-11-17-093-owner-decision-register.md) | Draft consolidated Phase 02 owner decision register: 12 groups covering scope, D-006/D-008, portfolio/risk, bank/tax/data, host trust/recovery, audit and final architecture acceptance; not presented for approval |
 
 | [2026-11-17-090-official-source-revalidation.md](2026-11-17-090-official-source-revalidation.md) | Revalidated current NZ Privacy Act section 27/11 and IPP 12, IRD cryptoasset records/CARF/tax-bill status, NIST key management/crypto agility and Firecracker host hardening; documented CARF registration date conflict; updated canonical privacy/data/security sources; no legal conclusion or implementation |
