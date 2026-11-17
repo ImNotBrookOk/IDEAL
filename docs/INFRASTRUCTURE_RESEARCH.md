@@ -182,3 +182,32 @@ Sources:
 - https://nautilustrader.io/docs/latest/getting_started/installation/
 - https://nautilustrader.io/docs/latest/concepts/architecture/
 - https://nautilustrader.io/docs/latest/concepts/overview/
+
+
+## 8. Infrastructure revalidation — checkpoint 094 (17 November 2026)
+
+### 8.1 SQLite WAL-reset incident: version and test gate
+
+Tailscale documented 19 database-corruption incidents over six months in a production single-writer SQLite deployment. The root cause was a WAL-reset race in the checkpoint path; two incidents also exposed committed writes that were not visible to later transactions. Antithesis reports SQLite 3.51.3 fixed the bug. A generic concurrent writer/checkpoint workload reproduced the defect against 3.51.2 in 15 minutes and passed against 3.51.3.
+
+Any future SQLite POC must: (1) pin a SQLite runtime >=3.51.3 and record the actual linked runtime version; (2) distinguish Python wrapper, system library and bundled/native extension versions; (3) test concurrent writes/checkpoints, committed-write visibility, process termination at transaction boundaries, integrity_check, backup consistency, restore and replay; (4) retain one authoritative writer per DB file unless a different design is separately proven; and (5) use a supported consistent backup procedure rather than copying a live database file without a snapshot contract. WAL mode and synchronous FULL alone are not a complete durability case.
+
+This is a future test requirement, not evidence of corruption in IDEAL. No database was created or tested.
+
+Sources: https://tailscale.com/blog/sqlite-wal-reset-bug ; https://antithesis.com/blog/2026/wal-reset-bug/
+
+### 8.2 OCI Always Free quota documentation conflict
+
+Oracle's general Always Free resources page states 1,500 OCPU-hours and 9,000 GB-hours per month for A1, equivalent to 2 OCPUs and 12 GB continuously. Oracle's A1-specific compute page states 3,000 OCPU-hours and 18,000 GB-hours. Both are official pages. Use the lower general allowance conservatively until Oracle resolves the discrepancy or tenancy-level evidence confirms the applicable quota. The general page also confirms home-region capacity constraints, seven-day idle reclamation thresholds (CPU/network <20% at p95 and memory <20% for A1), and that PAYG upgrade does not guarantee physical capacity. Quotas/compartment limits are not a hard spending cap.
+
+No account, region, quota, capacity or pricing was tested for IDEAL. No provisioning or upgrade is authorised.
+
+Sources: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm ; https://docs.oracle.com/en-us/iaas/Content/Compute/References/arm.htm
+
+### 8.3 NautilusTrader current platform and persistence semantics
+
+Current upstream installation docs list Ubuntu Linux ARM64 as supported. This aligns with IDEAL's isolated architecture test coverage, but is not an OCI A1 performance benchmark.
+
+Current architecture docs describe asynchronous database persistence from an in-memory cache. Synchronous persistence/enqueue errors may be logged without preventing cache insertion/publication, and later asynchronous database errors do not roll back in-memory state. IDEAL must own its durable ledger, audit, intent, reservation, outbox and reconciliation semantics outside the engine cache. The engine is a component, not the system-of-record for financial authority or accounting.
+
+Sources: https://nautilustrader.io/docs/latest/getting_started/installation/ ; https://nautilustrader.io/docs/latest/concepts/architecture/ ; https://nautilustrader.io/docs/latest/concepts/overview/
