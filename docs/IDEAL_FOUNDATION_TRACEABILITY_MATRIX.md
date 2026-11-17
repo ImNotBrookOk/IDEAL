@@ -255,3 +255,21 @@ The autonomy authority closure assessment maps technology-neutral invariants, pr
 | Failures remain within justified blast radius | Dependency registry / health supervisor | Consumer-specific safe state; unrelated contexts remain operational when isolated | Feed/provider failure propagation and containment tests |
 
 See [Integrated System and Bounded-Context Architecture](IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md), sections 2–11. These are proposed controls and tests; no runtime tests have been performed.
+
+
+## Checkpoint 073 — data trust and point-in-time traceability
+
+| Requirement | Control | Owner boundary | Required verification |
+|---|---|---|---|
+| Integrity is not confused with truth | Source authentication, independent plausibility and provenance; digest only proves captured-byte identity | Source Registry / Data Integrity | Correctly hashed but manipulated or incomplete source must remain untrusted |
+| Raw evidence is preserved | Immutable raw observation and linked revisions | Evidence Archive | Correction, deletion, duplicate and replay tests |
+| Temporal semantics are explicit | Event/publication/receive/ingest/process/valid/known/decision-as-of fields | Data Integrity / domain owner | Bitemporal, late-arrival, clock-skew and boundary tests |
+| Backtests are point-in-time correct | Availability-time cutoff and immutable dataset manifest | Dataset Registry / Research | Look-ahead, label leakage, survivorship and late-correction tests |
+| Quality is consumer-specific | Quality vector and declared fitness contract | Data Integrity / consumer | Stale/conflicted/unlicensed/unknown propagation tests |
+| Private financial data is purpose-limited | Separate data plane, least privilege, retention and deletion policy | Personal Finance / Security | Cross-domain retrieval/training, deletion and backup-expiry tests |
+| Bank records reconcile safely | Source observation before journal posting; explicit update/delete/pending semantics | Personal Finance | Duplicate, changed row, pending-to-posted and transfer tests |
+| Tax rules are effective-dated | Rule status, source class, enactment and applicability interval | Tax Intelligence | Proposed-vs-enacted, retroactive change and historical replay tests |
+| Market-data rights are enforced | Entitlement/retention/training rights attached to source and dataset manifests | Source Registry / Security | Licence expiry, export and training-denial tests |
+| Clock uncertainty is bounded | Trusted clock evidence and monotonic local ordering | Health / Data Integrity | Clock rollback/skew and expiry denial tests |
+
+See [Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). These are proposed controls and tests; no runtime tests have been performed.
