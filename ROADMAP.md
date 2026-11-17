@@ -499,3 +499,10 @@ Created [IDEAL Data Classification, Retention, Deletion and Audit Policy Archite
 Fresh official-source research clarified that Privacy Act section 11 treats agent-only processing differently from provider own-purpose use, while the principal remains responsible for agent-held data. IRD's cryptoasset record guidance requires at least seven years for records within its scope; CARF's separate seven-year record duty applies to RCASPs, not automatically to individual users. The scope of that cryptoasset guidance for perpetual/futures contracts remains unresolved.
 
 No universal retention periods, processor, storage, backup or deletion technology is selected. Phase 02 remains active; Phases 03–19 locked. No real records, provider, cloud/AI upload, integration or implementation is authorised.
+
+
+### Phase 02 host trust topology research (checkpoint 080)
+
+Created [IDEAL Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) and updated infrastructure/component-selection research. Findings: WSL2 is explicitly not a security sandbox; Hyper-V provides a VM boundary but remains dependent on the host; KVM/Firecracker requires a carefully hardened host/jailer/seccomp/cgroups/namespaces and host egress filtering; Android background restrictions and mobile-data limits make the phone unsuitable as a persistent core worker; a separate physical action gateway is a future option if host-root compromise must be survived.
+
+The lowest-cost current choice remains no deployment. If a later requirement demands a persistent research worker, inspect the existing Windows PC first; do not assume it is a suitable trust root. No host, cloud provider, hardware, tunnel or isolation stack is selected or authorised. Phase 02 active; Phases 03–19 locked.
