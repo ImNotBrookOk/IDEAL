@@ -318,3 +318,8 @@ See [IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTR
 ## 10. Security-source revalidation — checkpoint 090
 
 NIST's current Key Management Guidelines page continues to list SP 800-57 Part 1 Revision 5 as the final publication and identifies Revision 6 only as an initial public draft (published 5 December 2025; comment period through 5 February 2026). NIST CSWP 39 was withdrawn on 29 June 2026 and superseded by CSWP 39-upd1; use the updated paper if crypto-agility guidance is needed. Current upstream Firecracker production-host guidance confirms that jailer/equivalent restrictions, restrictive seccomp, resource limits, host-level egress filtering, and host/guest kernel and microcode maintenance are necessary layers; Firecracker itself does not filter guest network traffic. These sources reinforce the existing design but do not select a sandbox, key store or host topology. See [Official Source Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md).
+
+
+## Infrastructure security source refresh — checkpoint 107
+
+The dated upstream refresh confirms that Firecracker does not filter guest egress and that production containment requires host firewall enforcement, restrictive default seccomp, jailer/equivalent restrictions, protected jailer paths, resource ceilings, bounded guest-influenced logs/serial output, watchdog supervision, and host/guest kernel plus microcode maintenance. Upstream advisories CVE-2026-1386 and CVE-2026-5747 demonstrate concrete jailer-path and virtio-PCI attack surfaces. See [Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md). No runtime control or platform selected.
