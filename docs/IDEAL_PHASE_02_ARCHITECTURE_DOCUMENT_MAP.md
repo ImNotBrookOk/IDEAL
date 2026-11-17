@@ -205,3 +205,8 @@ Checkpoint 094 changes no owner-approved component disposition. SQLite, Nautilus
 ## 15. Audit integrity and external witness evidence — checkpoint 098
 
 [Audit Integrity and External Witness Options](IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md) owns the local hash/Merkle versus independent checkpoint distinction, Rekor/Tessera/Trillian/immudb comparison, privacy implications, witness trust boundary and recovery verification requirements. ODR-11 remains open; no database, log or witness selected.
+
+
+## 16. Margin, collateral and liquidation — checkpoint 099
+
+[Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md) owns the canonical margin/collateral model, tiered IM/MM, mark/index/last separation, collateral eligibility/haircuts, multi-currency valuation, portfolio stress/hedge-credit boundaries, order reservations, liquidation lifecycle, failure behaviour and verification plan. It extends [Risk Management Architecture](IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) §23. ODR-02/03 remain open; ODR-04 remains deferred; no venue or margin mode selected.
