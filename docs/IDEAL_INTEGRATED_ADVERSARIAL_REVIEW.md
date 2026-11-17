@@ -303,3 +303,10 @@ No runtime fault injection, supervisor compromise test, key ceremony, database c
 | ADV-39 | Approval UI displays a harmless summary while the signed artefact contains expanded scope, hidden fields or altered limits | Approval challenge binds exact digest; summary generated from same immutable artefact; critical diff shown; ambiguous/truncated/mismatched presentation denied |
 
 A valid authenticator assertion is not proof of informed consent if the owner was not shown the exact scope and consequences. The approval interface, challenge and verifier are one security protocol and require end-to-end tests.
+
+
+## Checkpoint 071 — consolidated residual-risk and workstream closure assessment
+
+The new [Autonomy Authority Closure Assessment](IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md) distinguishes design invariants from provisional deployment recommendations and platform-dependent owner decisions. The following cannot be designed away and must be explicitly accepted/mitigated before any future execution approval: already transmitted venue requests cannot be recalled; host root/kernel compromise defeats same-host process isolation; offline recovery checkpoints may be stale without an independent anchor; one owner cannot provide true two-person control; local audit integrity is not independently provable if all storage and checkpoint keys are compromised; external venue state remains outside IDEAL's ACID transaction; research cannot prove every vulnerability has been found.
+
+Workstream closure is not Phase 02 closure. Explicit owner acceptance and other Phase 02 foundation/architecture work remain required.
