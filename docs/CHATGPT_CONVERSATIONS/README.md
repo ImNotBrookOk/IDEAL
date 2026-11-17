@@ -159,3 +159,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-064-integrated-foundation-traceability.md](2026-11-17-064-integrated-foundation-traceability.md) | System-wide requirements-to-controls-to-components-to-tests matrix for governance, risk, data integrity, health, security, audit and cross-pillar interfaces; records integrated failure scenarios and Phase 02 acceptance criteria |
 
 | [2026-11-17-065-integrated-adversarial-review.md](2026-11-17-065-integrated-adversarial-review.md) | STRIDE-style integrated threat review; records autonomy/human-approval ambiguity, common-mode supervisor failure, policy root of trust, audit/action atomicity, time, privacy and recovery gaps |
+
+| [2026-11-17-066-bounded-autonomy-governance.md](2026-11-17-066-bounded-autonomy-governance.md) | Records accepted D-023: bounded owner-authorised autonomy, reserved owner-approval actions, cross-pillar requirements and explicit no-execution boundary |
