@@ -1,14 +1,14 @@
 # IDEAL Requirements
 
 ## Product objective
-Build an autonomous crypto-perpetuals intelligence system that researches strategies, validates them statistically, classifies them by market regime and operates eligible strategies in paper trading under deterministic controls.
+Build a private, integrated financial intelligence and decision-support platform. Its initial active research domain is crypto-perpetual futures strategy research and statistical validation. No paper or live execution is currently authorised; any future execution capability requires separate explicit owner approval.
 
 ## Scope
 - Initial instruments: crypto perpetual futures. Exchange selection remains an open research decision.
 - Context timeframes: 1W/1D macro; 4H/1H structure; 30M intermediate; 15M entry evaluation; optional 5M refinement.
 - Android phone is the primary user control/monitoring device. Compute may run on a free-tier remote worker or local-compatible environment, subject to Phase 01 feasibility.
 - Autonomous strategy discovery is a core requirement; users should not need to hand-author strategies.
-- Paper trading is the only permitted execution mode at this stage.
+- Current authority is research, architecture and documentation only. No paper orders, live orders, exchange account access or execution credentials are authorised. A future paper-execution proposal must pass architecture, legal/venue, security, data, risk and owner-approval gates before implementation or use.
 
 ## Strategy lifecycle
 Generate candidates → validate code/data → backtest → cost-adjust → walk-forward/out-of-sample validation → classify by regime → apply absolute quality gates → rank comparable passing cohort → select eligible candidates. No eligible candidate means no trade.
@@ -23,8 +23,8 @@ The user's initial screen is more than 100 trades and win rate above 30%. This i
 - Initial per-trade risk target: 0.5% equity.
 - Research objective: 1:3 reward/risk, assessed using realised net R after costs.
 - Daily hard loss boundary: 10% of UTC day-start equity, realised plus unrealised, then 24-hour cooldown.
-- Define and approve earlier warning/suspension levels, portfolio exposure limits, leverage caps, correlated exposure controls, liquidation buffers and order-rate limits before paper execution.
-- Position sizing, order validation, stop/exit logic and gate enforcement must be deterministic.
+- Define and approve the D-006 equity denominator; earlier warning/suspension levels; portfolio and concentration limits; leverage/margin/collateral constraints; correlated exposure controls; liquidation buffers; order-rate limits; working-order reservations; and emergency-state semantics before any future paper-execution proposal. Existing D-006 and D-008 values remain unchanged pending review.
+- Position sizing, any future order validation, stop/exit logic, reservations, loss controls and gate enforcement must be deterministic. A risk decision must bind to the exact proposed action and current evidence; a changed or expired action requires a fresh decision.
 
 ## Learning requirements
 Store trade context, regime, timeframe, strategy/version, indicators, risk state, execution details, outcome and a concise AI-generated lesson. Lessons must be searchable and survive strategy demotion or gate rollback.
