@@ -587,3 +587,13 @@ WebAuthn can provide scoped, origin-bound user-presence/user-verification assert
 6. Hardware keys, WebAuthn, TPM, secure boot, remote witness, TUF-style metadata and microVMs are candidate controls, not adopted dependencies.
 7. Exact physical topology depends on future deployment. Phase 02 can define trust invariants and tiered assurance profiles, but cannot claim an Android device, VM, host or cloud platform satisfies them without platform-specific verification.
 8. These findings require updates to the integrated adversarial review, security architecture, risk handshake, requirements, architecture, roadmap and traceability matrix. They do not approve implementation or Phase 03.
+
+
+### Additional primary sources for checkpoint 068
+
+- [Linux kernel Landlock documentation](https://www.kernel.org/doc/html/latest/userspace-api/landlock.html) — unprivileged stackable filesystem/network restrictions, ABI feature detection, explicit handled-access semantics and limitations.
+- [Firecracker design and threat containment](https://github.com/firecracker-microvm/firecracker/blob/main/docs/design.md) — nested trust zones, malicious guest vCPU assumption, production jailer guidance and host-level egress filtering.
+- [OWASP Transaction Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Transaction_Authorization_Cheat_Sheet.html) — final execution-time authorization gate, TOCTOU prevention and operation-specific limited-time credentials.
+- [TUF specification](https://theupdateframework.github.io/specification/latest/) — threshold root rotation, version monotonicity, rollback/freeze and metadata integrity patterns.
+- [NIST SP 800-207 Zero Trust Architecture](https://csrc.nist.gov/pubs/sp/800/207/final) — resource-centric trust, separate authentication/authorization and no implicit trust based on network location.
+
