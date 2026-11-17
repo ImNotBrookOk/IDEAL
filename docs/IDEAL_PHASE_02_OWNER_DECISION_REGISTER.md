@@ -261,3 +261,8 @@ Required evidence before decision:
 - binding-specific licence, maintenance, vulnerability and compatibility review.
 
 Status: DEFERRED until the architecture baseline and runtime/topology evidence are ready. This research entry creates no engine selection or execution permission. See [Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md).
+
+
+#### Checkpoint 097 evidence refinement — ODR-10
+
+W3C WebAuthn Level 3 distinguishes backup-eligible (BE) from backup-state (BS); synced credentials are not equivalent to device-bound credentials. NIST SP 800-63B-4 AAL3 is a useful high-assurance benchmark (phishing-resistant, non-exportable public-key credential and two distinct factors), not an IDEAL compliance claim. Android Keystore can use TEE/StrongBox, but StrongBox is optional/device-dependent and an app-process compromise may still invoke a key unless per-use authorizations prevent it. WebAuthn proves credential control, not transaction comprehension: owner approval must bind an immutable action digest, one-time nonce, origin/RP ID, policy/authority generation and expiry, then recheck at dispatch. Recovery must revoke old credentials/sessions/permits and re-enrol fresh key material; backup restore cannot resurrect authority. No option selected. See [Owner Authenticator and Recovery Options](IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md).
