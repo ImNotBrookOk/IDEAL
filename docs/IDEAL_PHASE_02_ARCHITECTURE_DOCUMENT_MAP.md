@@ -230,3 +230,8 @@ The Phase 02 map contains 34 distinct local Markdown links; all 34 targets were 
 ## 21. Three-lens review and assurance limits — checkpoint 105
 
 [Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md) records internal architecture, security/operations and testability findings. It explicitly does not claim independent assurance; unavailability of an external reviewer is presented for ODR-12 owner disposition.
+
+
+## 22. Final document-map link read-back — checkpoint 106
+
+The current map contains 36 distinct local Markdown targets; all 36 were fetched successfully from GitHub main. See [checkpoint 106 audit](CHATGPT_CONVERSATIONS/2026-11-18-106-final-phase-02-document-map-link-audit.md). This is path-existence verification only, not anchor, semantic, source-freshness or independent assurance.
