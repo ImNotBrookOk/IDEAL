@@ -161,3 +161,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-065-integrated-adversarial-review.md](2026-11-17-065-integrated-adversarial-review.md) | STRIDE-style integrated threat review; records autonomy/human-approval ambiguity, common-mode supervisor failure, policy root of trust, audit/action atomicity, time, privacy and recovery gaps |
 
 | [2026-11-17-066-bounded-autonomy-governance.md](2026-11-17-066-bounded-autonomy-governance.md) | Records accepted D-023: bounded owner-authorised autonomy, reserved owner-approval actions, cross-pillar requirements and explicit no-execution boundary |
+
+| [2026-11-17-067-autonomy-authority-and-permission-architecture.md](2026-11-17-067-autonomy-authority-and-permission-architecture.md) | Phase 02 research/design for bounded autonomy enforcement: owner envelope, workload identity, policy/root-of-trust, exact-action authorisation, independent risk reservation, revocation, audit, recovery, open-source candidate review and adversarial assurance; no tool adoption or implementation authority |
