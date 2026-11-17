@@ -248,3 +248,10 @@ The four foundations must jointly support three hard requirements: (1) revocatio
 - Policy publication and activation are immutable, owner-approved, signed, versioned and serialised with revocation/dispatch.
 - A shared host root/kernel compromise defeats local process-level independence; trust boundaries must state this limitation.
 - Remote side effects are never claimed exactly-once; ambiguous outcomes remain UNKNOWN and require authoritative reconciliation.
+
+
+## Domain risk and capital boundaries — checkpoint 074
+
+Risk controls are domain-specific even though their governance and data-quality foundations are shared. Derivatives risk, future investment risk, personal-finance cash-flow visibility and tax estimation must not be collapsed into one universal score or capital gate. A read-only portfolio/capital view may aggregate evidence but cannot transfer, net, hedge, lock, allocate or liquidate funds by implication.
+
+Preserve separate concepts for ledger balance, pending/available cash, investment market value, derivatives economic equity, risk-adjusted equity, venue margin equity, available margin, collateral, encumbered capital, tax estimate, assessed liability and owner-designated reserve. No implicit cross-account netting or collateral portability is permitted. See [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md).
