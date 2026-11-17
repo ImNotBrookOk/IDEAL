@@ -235,3 +235,10 @@ Sources:
 - Kata architecture: https://kata-containers.github.io/kata-containers/design/architecture/
 - Kata threat model: https://github.com/kata-containers/kata-containers/blob/main/docs/threat-model/threat-model.md
 - Firecracker design: https://github.com/firecracker-microvm/firecracker/blob/main/docs/design.md
+
+
+## 16. Owner authenticator and recovery evidence — checkpoint 097
+
+WebAuthn Level 3 now formally distinguishes single-device credentials from backup-eligible multi-device credentials and records backup state separately. Android Keystore may bind application keys to TEE or optional StrongBox hardware; actual security level and key-use authorizations must be verified on the target device. Android Credential Manager passkey support does not itself prove a credential is device-bound or StrongBox-backed. Dedicated FIDO2 keys offer a more explicit device-bound model but require spare-key, PIN-reset and replacement procedures.
+
+The owner approval ceremony must bind the exact canonical action digest and current policy/authority generation to a one-time WebAuthn challenge. Credential authentication alone does not prove the user reviewed transaction details. Lost-device recovery must revoke credentials, sessions and permits, establish fresh keys, verify current independent revocation state and reconcile outstanding actions; restored backups cannot resurrect authority. No device or authenticator selected or inspected. Full analysis: [Owner Authenticator and Recovery Options](IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md).
