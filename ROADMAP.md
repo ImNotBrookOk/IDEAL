@@ -530,3 +530,8 @@ Created [IDEAL Security Control and Threat Traceability Matrix](docs/IDEAL_SECUR
 Created [IDEAL Architecture Complexity and Maintainability Review](docs/IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md). The review finds the logical domain/security complexity justified, but warns against mirroring it into dozens of microservices, databases, agents or always-on infrastructure. The smallest viable future direction is a modular monolith, one authoritative transactional store if durability is proven, deterministic services/scripts, immutable evidence manifests, one narrow future action boundary and phone-first read/control UI.
 
 A canonical document ownership map is proposed to reduce drift. No source documents were deleted or consolidated; that cleanup requires explicit owner approval. No technology stack or deployment is selected. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 canonical contract catalogue (checkpoint 085)
+
+Created [IDEAL Canonical Contract Catalogue](docs/IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) with 22 owned logical contracts, shared event-envelope semantics, money/quantity/time/identity definitions, typed failure outcomes, compatibility/versioning rules and transaction/ownership boundaries. It closes the logical interface catalogue at design level; no wire schema, API, database, broker or implementation is selected. Phase 02 active; Phases 03–19 locked.
