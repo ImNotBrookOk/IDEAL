@@ -233,3 +233,8 @@ The final integrated architecture challenge has been refreshed through checkpoin
 
 
 Phase 02 documentation integrity check: all 34 local Markdown targets in the architecture document map were fetched successfully at checkpoint 101. This is path verification only; independent reviews and owner acceptance remain open.
+
+
+## Phase 02 completion readiness
+
+The current [Phase 02 Completion Readiness Assessment](docs/IDEAL_PHASE_02_COMPLETION_READINESS_ASSESSMENT.md) records the remaining gates. Phase 02 remains active; independent reviews and explicit owner acceptance are outstanding. Phase 03 remains locked.
