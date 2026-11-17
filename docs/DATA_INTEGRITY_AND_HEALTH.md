@@ -306,3 +306,12 @@ The action gateway validates supervisor identity, message scope, generation, fre
 A separate process identity is the minimum logical separation; it does not protect against shared host root/kernel compromise. Stronger independence requires a separate VM/host or hardware/remote watchdog when that threat is in scope. A compromised supervisor may cause denial of service but must not gain financial authority. It cannot certify its own health or security posture.
 
 Keep operational health, data trust, security posture, financial-state trust and authority state as distinct dimensions. No single supervisor or pillar self-certifies all others. See the autonomy authority architecture §§23–24.
+
+
+## Evidence lifecycle and point-in-time contract — checkpoint 073
+
+The data architecture now distinguishes source event/publication time, receive time, durable ingest time, processing time, valid/effective time, knowledge/transaction time and decision-as-of time. Corrections are linked revisions, not destructive overwrites. Point-in-time datasets must preserve the exact source revisions and availability cutoff that were knowable at the simulated decision time; event time alone is insufficient to prevent look-ahead leakage.
+
+Quality is a consumer-specific vector covering source authenticity, schema, completeness/sequence, freshness, plausibility, cross-source consistency, revision, licence, reconciliation and clock confidence. Unknown, conflicted, stale, incomplete or unlicensed evidence must not be silently converted into valid data. Market, private-finance, security/audit and AI traces remain separate data planes.
+
+See [IDEAL Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md) for lifecycle, bitemporal semantics, bank/market/tax-specific rules, retention, verification and current NZ provider/tax evidence. W3C PROV, Apache Iceberg and MLflow are conceptual/candidate references only; none is adopted.
