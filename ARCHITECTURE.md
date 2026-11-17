@@ -171,3 +171,10 @@ See [IDEAL Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CRO
 All data is classified (public, internal research, confidential financial/personal or restricted security/authority), assigned a purpose/owner and retention rule, and kept within its permitted access and processing boundaries. Market data, private finance/tax records, security/audit evidence and AI traces remain separate. Deletion must propagate across replicas, caches, exports, derived datasets and backups; restore must not resurrect deleted data or revoked authority.
 
 NZ record-retention rules are data-class specific: IRD cryptoasset record guidance requires at least seven years for records within its scope, while CARF's seven-year provider record obligation applies to RCASPs. The exact treatment of crypto perpetual records remains unresolved. See [Data Classification, Retention, Deletion and Audit Policy Architecture](docs/IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md).
+
+
+## Host trust topology — checkpoint 080
+
+No deployment topology is selected. The phone is a presentation/owner-control device; the existing Windows PC is a fallback only if a concrete requirement justifies it; mobile-data bandwidth and intermittent connectivity constrain bulk ingestion. WSL2 is not a security sandbox or boundary from the Windows user. A Hyper-V VM remains within the physical host's trust domain. KVM/Firecracker are candidates for future isolated workloads, but require host-enforced egress and do not defeat host-root compromise. A separate physical action gateway is a future option only if execution is ever separately authorised.
+
+See [Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). Current disposition remains undeployed.
