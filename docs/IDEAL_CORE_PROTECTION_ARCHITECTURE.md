@@ -276,3 +276,10 @@ See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDE
 The four pillars require an explicit failure-domain analysis. A process or VM on the same physical host is not independent of host-root/kernel compromise. Health supervision, owner recovery root, policy signing and action gateway must be placed according to the threat they claim to survive. WSL2 is not a security sandbox; Hyper-V remains host-dependent; KVM/Firecracker adds workload isolation but not an independent host trust root.
 
 See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No deployment is selected or authorised.
+
+
+## Integrated cross-authority state machine — checkpoint 081
+
+The four foundations do not share a universal status flag. Risk, Data Integrity, Health and Security each own distinct states and attest only to their scope. The action boundary requires their applicable approvals conjunctively, binds the exact evidence/policy/identity/reservation/interlock version vector and rechecks immediately before dispatch. A restrictive interlock can reduce capability but never grant authority.
+
+See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
