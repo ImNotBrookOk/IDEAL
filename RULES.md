@@ -9,7 +9,7 @@ These rules are mandatory for every contributor and agent.
 - A task is not complete without isolated, integration, regression and audit evidence.
 - Record deviations and failures; never claim an unrun test passed.
 - No paid service, subscription or billing activation without explicit owner approval.
-- Work on one approved task at a time. Completing a task does not authorise the next task.
+- Work on one bounded roadmap task at a time; do not skip, bundle or reorder. D-022 authorises autonomous progression through the defined Phase 02 architecture/research sequence without interim approval at every task boundary. Do not exceed that standing scope.
 
 ## Conversation accountability
 - At the close of every IDEAL work conversation, create a dated record under `docs/CHATGPT_CONVERSATIONS/`.
@@ -19,7 +19,7 @@ These rules are mandatory for every contributor and agent.
 - Do not record hidden chain-of-thought, private system/developer instructions, credentials, tokens or unnecessary sensitive information. Record concise decision rationales and verifiable actions instead.
 - Conversation records are append-only. Correct errors with a dated addendum; do not silently rewrite history.
 - A standing owner authorisation may cover a bounded sequence of roadmap research tasks. Record its exact scope and limits in DECISIONS.md; proceed through that scope in roadmap order without requesting approval at every gate.
-- Under the current standing authorisation, continue Phase 01 research gates in order. For each research change, complete isolated/integration/regression tests, a five-axis audit and documentation before merging its PR. Automatically squash-merge a research PR only when CI is green, the reviewed diff is within the authorised research scope, no material blocker remains, and the PR head SHA is unchanged at merge time. If any condition fails, do not merge; record and report the blocker.
+- Current active authority is Phase 02 architecture/research/documentation only. For documentation-only work, update all affected source/traceability/roadmap/audit files, fetch changed files back from GitHub and verify required content; record any unverified result. No code/runtime tests are applicable to a documentation-only change. If a future owner decision separately authorises code work, the applicable isolated/integration/regression tests, five-axis audit, review, CI and PR/merge controls must be completed before merge; no such code authority currently exists.
 - Commit each conversation audit record and its index update directly to main after the work is complete; do not create a separate PR solely for the transcript. Verify the saved record by reading it back.
 - Current active authority: Phase 01 is closed under D-015. D-022 authorises the architecture-first Phase 02 research/design sequence; the owner has explicitly directed autonomous continuation without interim progress interruptions. Continue in roadmap order and document each material checkpoint. Phase 02 authority is limited to research, architecture, contracts, source review and documentation. It does not authorise runtime implementation, test/runtime integration, dependency adoption, exchange/bank/account connections, credentials, real financial records, paper/live execution, tax filing/payment, external security testing, hosting, paid infrastructure or risk-policy changes. Phases 03–19 remain locked.
 - If no substantive project work occurred, a brief closeout entry may record that fact rather than manufacture a transcript.
