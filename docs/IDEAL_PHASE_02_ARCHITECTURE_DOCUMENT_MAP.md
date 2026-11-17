@@ -142,3 +142,22 @@ Only after that challenge and independent review are complete should the grouped
 ## 9. Official source register — checkpoint 090
 
 The dated [Official Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md) records current primary-source positions for NZ Privacy Act sections 11/27 and IPP 12, IRD cryptoasset records/CARF/tax-bill status, NIST key-management/crypto-agility guidance and Firecracker host hardening. External URLs and legal/provider facts must be rechecked before implementation or provider selection.
+
+
+## 10. Current architecture pack refresh — checkpoint 093
+
+Additional canonical sources added after the original checkpoint 088 map:
+
+| Concern | Canonical source | Supporting sources / role |
+|---|---|---|
+| Data freshness and clock quality | [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md) | Data Trust architecture; source-specific consumer fitness |
+| Critical field-level logical schemas | [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md) | Canonical Contract Catalogue; no wire format selected |
+| Consolidated owner decisions | [Phase 02 Owner Decision Register](IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md) | Draft only; not presented for approval |
+| Official primary-source revalidation | [Phase 02 Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md) | NZ Privacy/IRD, NIST and Firecracker source status |
+| Final integrated architecture challenge | [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) | Internal challenge; independent review remains open |
+
+The canonical contract and critical field schemas now consistently require AssetId for all fiat/crypto-denominated amounts. Fiat may map to ISO 4217; crypto-native assets and tokens require canonical identities including network/contract where applicable and effective-dated provider/venue symbol mappings. Stablecoins are distinct assets; no par assumption is permitted. The final challenge's T-ASSET-01–06 remain future tests, not executed evidence.
+
+The audit index now contains checkpoints through 093. The checkpoint 088 and 089 entries remain historical and retain their original meaning; later work is numbered 090–093. Older duplicate audit paths from the numbering correction are retained with explicit supersession notes for continuity.
+
+The architecture pack remains design-level. Independent architecture/security/operations and maintainability/testability reviews, finding disposition, owner acceptance and separate implementation approval remain outstanding. Phase 02 active; Phases 03–19 locked.
