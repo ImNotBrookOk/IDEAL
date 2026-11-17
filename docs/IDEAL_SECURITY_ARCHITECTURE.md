@@ -285,3 +285,10 @@ Policy and envelope artefacts follow immutable DRAFT → VALIDATED → OWNER_APP
 The health supervisor may issue only scoped restrictive interlocks; it cannot grant permission, change policy or initiate financial side effects. Separate process identity is not independent against shared host root/kernel compromise.
 
 The durable local action intent, authority evidence, risk reservation, audit event and outbox are committed before dispatch. Dispatch-start and its audit event are committed atomically before network write. A remote venue side effect cannot be atomically committed with local state; ambiguous outcomes remain UNKNOWN and are reconciled. Audit failure before dispatch blocks new risk-increasing actions. See autonomy authority architecture §§23–25.
+
+
+## Reconciliation and verified recovery integration — checkpoint 076
+
+Security incident containment, credential/identity revocation and recovery attestations remain separate from health supervision and financial risk authority. A restored backup does not restore active authority: old tokens, envelopes and admission permits must be invalidated or checked against an independent current revocation anchor. Restored services/data remain quarantined pending rebuild/attestation, audit integrity, external-state reconciliation and owner release where required.
+
+The security incident control plane may contain/revoke identities and isolate integrations under its own audited permissions; it cannot initiate cancellation, flattening, transfer, withdrawal, payment or other financial side effects. See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
