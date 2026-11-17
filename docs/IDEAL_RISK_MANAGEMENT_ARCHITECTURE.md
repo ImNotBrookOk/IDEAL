@@ -1952,3 +1952,10 @@ See [Reconciliation, Incident Containment and Verified Recovery Architecture](ID
 Worked synthetic examples are recorded in [IDEAL Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). They distinguish spot market value from derivative notional, realised funding/fees from unrealised P&L, free assets from encumbered collateral, cash transfers from income, bank pending/posted rows, tax estimate/designation/assessment/payment, and valid versus stale FX.
 
 The examples are proposed deterministic acceptance fixtures. No numerical risk policy, tax treatment or accounting standard is selected, and no tests were executed.
+
+
+## 25. Integrated state-machine and version-vector binding — checkpoint 081
+
+A risk approval is one gate, not an action permission. It binds the exact action, risk policy, capital/equity measure, evidence snapshot, account/position/reconciliation version and reservation. Owner authority, workload identity, security incident, health interlock and audit durability are independently checked by the action boundary. Any material version change invalidates the admission and requires fresh evaluation.
+
+See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
