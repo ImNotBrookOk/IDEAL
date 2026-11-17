@@ -205,3 +205,8 @@ The Phase 02 decision register groups unresolved scope, risk, portfolio, banking
 ## Final integrated architecture challenge
 
 The Phase 02 internal challenge and its remaining blockers are recorded in [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md). It is design-level review only; independent review and owner acceptance remain outstanding.
+
+
+## Authorization policy engine research
+
+Cedar and Open Policy Agent have been compared against IDEAL's fail-closed authorization boundary, policy validation, signing, versioning and revocation requirements. Neither is selected. Both need an IDEAL-owned wrapper that rejects missing, undefined, stale or diagnostic/error results. See [Policy Engine Evaluation](docs/IDEAL_POLICY_ENGINE_EVALUATION.md).
