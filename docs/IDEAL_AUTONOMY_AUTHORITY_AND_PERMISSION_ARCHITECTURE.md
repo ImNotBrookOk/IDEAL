@@ -856,3 +856,10 @@ Reject hidden scope expansion, ambiguous units, truncated critical fields, misle
 ## 28. Workstream closure assessment
 
 The consolidated technology-neutral invariants, provisional private-deployment recommendations, platform-dependent choices, deferred owner decisions, residual risks and workstream acceptance criteria are maintained in [IDEAL Autonomy Authority — Phase 02 Closure Assessment](IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md). That assessment does not close Phase 02 or approve implementation.
+
+
+## Integrated state-machine composition — checkpoint 081
+
+The canonical cross-authority composition, version vector and conjunctive admission contract are consolidated in [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). This preserves the existing DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE policy lifecycle, revocation/dispatch serialisation, one-use permit semantics and reservation/action/reconciliation lifecycle while making health, data, security incident and recovery gates explicit as separate state machines.
+
+No policy schema, state storage, version encoding or implementation is selected.
