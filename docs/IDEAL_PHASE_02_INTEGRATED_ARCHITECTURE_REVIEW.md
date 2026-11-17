@@ -171,3 +171,8 @@ The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_C
 ## Checkpoint 084 — simplicity and maintainability review
 
 [IDEAL Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md) recommends preserving logical bounded contexts and independent authorities while avoiding a direct translation into many services, databases, agents or always-on infrastructure. The provisional smallest viable build is a modular monolith with one authoritative store if proven durable, deterministic services, evidence manifests and a phone-first read/control UI. No original documents were deleted or consolidated.
+
+
+## Checkpoint 085 — interface contract completeness
+
+[IDEAL Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) expands the shared interface families into 22 owner/consumer contracts and defines event envelope semantics, money/time/identity values, typed errors, compatibility and transaction boundaries. Exact wire schemas and implementation technology remain deferred.
