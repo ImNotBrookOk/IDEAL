@@ -540,3 +540,13 @@ Created [IDEAL Canonical Contract Catalogue](docs/IDEAL_CANONICAL_CONTRACT_CATAL
 ### Phase 02 requirement-to-component-to-control-to-test traceability (checkpoint 086)
 
 Created [IDEAL Requirement → Component → Control → Test Traceability](docs/IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md). It maps stable requirement aliases across active/future domains to bounded-context owners, controls/contracts and future deterministic verification IDs. It records open semantics and explicitly distinguishes planned tests from executed evidence. This closes the traceability artefact at design level, not runtime verification. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 repository-wide current-state consistency pass (checkpoint 087)
+
+A targeted scan of the 46 current Markdown files found and corrected two remaining active-status issues:
+- `RULES.md` still contained an obsolete Phase 01-only instruction and an overly strict one-task authorisation statement. It now reflects D-022's bounded autonomous Phase 02 sequence and distinguishes documentation-only verification from future code-test requirements.
+- `docs/EXECUTION_QUALITY_RESEARCH.md` still claimed Phase 01 was in progress and Phase 02 locked. It now reflects Phase 01 closed / Phase 02 architecture research active / Phases 03–19 locked while preserving the historical L2 gate as blocked for execution calibration and venue selection.
+- `docs/HISTORICAL_L2_SAMPLE_VALIDATION.md` now explicitly marks old phase-status lines as historical snapshots, without rewriting dated findings or changing the sample's conditional research-only disposition.
+
+The targeted scan found no other active statements authorising paper/live execution or marking Phase 02 locked in the core current documents. This is a documentation scan, not a semantic proof of every file or runtime behaviour.
