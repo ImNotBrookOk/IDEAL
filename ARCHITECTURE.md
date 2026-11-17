@@ -157,3 +157,10 @@ See [IDEAL Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPI
 Reconciliation is domain-owned, evidence-based and explicit; no universal last-write-wins source of truth exists. External venue state, bank observations, IDEAL ledgers, IRD assessments, raw market evidence, policy trust and operational health have distinct authorities. Mismatches remain visible and corrections are linked revisions.
 
 Restored data and services remain quarantined until integrity, identity/revocation, audit continuity, external-state reconciliation, derived-state recomputation and scoped pillar attestations pass. A restart or reconnect does not prove recovery. See [IDEAL Reconciliation, Incident Containment and Verified Recovery Architecture](docs/IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
+
+
+## Cross-domain accounting and valuation fixtures — checkpoint 078
+
+Synthetic worked examples now test bank-to-exchange transfers, spot-plus-perpetual exposure, funding/fees versus unrealised P&L, collateral encumbrance, pending-to-posted bank transactions, tax estimates versus owner-designated reserves/assessments/payments, stale FX and late corrections. They enforce no double-counting, no notional-as-asset, no transfer-as-income and no tax-reserve capital lock.
+
+See [IDEAL Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). These are illustrative design fixtures, not accounting/tax advice or executed tests.
