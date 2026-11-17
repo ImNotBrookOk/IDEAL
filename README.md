@@ -105,3 +105,8 @@ The future owner-authorised autonomy model is being translated into enforceable 
 ### Current Phase 02 security focus
 
 The bounded-autonomy work now includes explicit revocation/dispatch ordering, host/process/network trust zones, and recovery anti-rollback requirements. Revocation cannot recall requests already transmitted; host root compromise is a trust-boundary failure; backups cannot restore authority without independent current-state verification. See [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) and [Checkpoint 068](docs/CHATGPT_CONVERSATIONS/2026-11-17-068-adversarial-revocation-isolation-recovery-review.md). This remains research/design, not implementation or execution approval.
+
+
+
+
+The bounded-autonomy authority workstream has a consolidated Phase 02 closure assessment, separating settled governance, technology-neutral requirements, provisional recommendations and platform-dependent owner decisions. It remains a research/design draft and does not authorise implementation or execution. See [Autonomy Authority Closure Assessment](docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md).
