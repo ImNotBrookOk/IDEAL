@@ -200,3 +200,8 @@ Field-level logical schemas now define the owner, security, health, risk, action
 ## Deferred owner decisions
 
 The Phase 02 decision register groups unresolved scope, risk, portfolio, banking, tax, data, host trust, recovery, audit and final architecture decisions. It is a draft and does not change current permissions. See [Phase 02 Owner Decision Register](docs/IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md).
+
+
+## Final integrated architecture challenge
+
+The Phase 02 internal challenge and its remaining blockers are recorded in [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md). It is design-level review only; independent review and owner acceptance remain outstanding.
