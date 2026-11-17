@@ -210,3 +210,8 @@ Checkpoint 094 changes no owner-approved component disposition. SQLite, Nautilus
 ## 16. Margin, collateral and liquidation — checkpoint 099
 
 [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md) owns the canonical margin/collateral model, tiered IM/MM, mark/index/last separation, collateral eligibility/haircuts, multi-currency valuation, portfolio stress/hedge-credit boundaries, order reservations, liquidation lifecycle, failure behaviour and verification plan. It extends [Risk Management Architecture](IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) §27. ODR-02/03 remain open; ODR-04 remains deferred; no venue or margin mode selected.
+
+
+## 17. Integrated challenge refresh — checkpoint 100
+
+[Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) was reopened after checkpoints 096–099. Checkpoint 100 corrected a section-numbering defect and integrated margin/collateral logical schemas, liquidation/reservation state composition and requirement-to-test traceability. Eight findings are recorded. Independent review remains outstanding; this is not Phase 02 closure.
