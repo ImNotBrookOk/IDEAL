@@ -197,3 +197,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-083-security-control-threat-matrix.md](2026-11-17-083-security-control-threat-matrix.md) | Phase 02 security assurance traceability: 10 protected asset classes, SEC-01–SEC-14 controls, 28 threat paths, owners, future tests and residual risks; design-level only, no runtime scans or certification |
 
 | [2026-11-17-084-complexity-maintainability-review.md](2026-11-17-084-complexity-maintainability-review.md) | Phase 02 complexity review: preserve logical boundaries but avoid unnecessary microservices, databases, agents and always-on infrastructure; modular monolith/one durable store/deterministic services as provisional smallest design; canonical document ownership proposed; no files deleted or consolidated |
+
+| [2026-11-17-085-canonical-contract-catalogue.md](2026-11-17-085-canonical-contract-catalogue.md) | Phase 02 canonical interface design: 22 contracts with owner/consumer, semantics, failure response, event envelope, value/time types, error taxonomy, versioning and transaction boundaries; no API or wire schema selected |
