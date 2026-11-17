@@ -163,3 +163,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-066-bounded-autonomy-governance.md](2026-11-17-066-bounded-autonomy-governance.md) | Records accepted D-023: bounded owner-authorised autonomy, reserved owner-approval actions, cross-pillar requirements and explicit no-execution boundary |
 
 | [2026-11-17-067-autonomy-authority-and-permission-architecture.md](2026-11-17-067-autonomy-authority-and-permission-architecture.md) | Phase 02 research/design for bounded autonomy enforcement: owner envelope, workload identity, policy/root-of-trust, exact-action authorisation, independent risk reservation, revocation, audit, recovery, open-source candidate review and adversarial assurance; no tool adoption or implementation authority |
+
+| [2026-11-17-068-adversarial-revocation-isolation-recovery-review.md](2026-11-17-068-adversarial-revocation-isolation-recovery-review.md) | Deep adversarial review of revocation/dispatch races, host/process/network isolation, root compromise, backup rollback and authority resurrection; adds ADV-19–ADV-30; no implementation or testing performed |
