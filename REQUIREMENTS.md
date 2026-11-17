@@ -98,3 +98,12 @@ Human approval remains mandatory for initial activation/reactivation; envelope, 
 AI, strategy and agent components cannot create or modify the envelope, change hard risk policy, approve their own exceptions or grant themselves permissions. Out-of-envelope, expired, revoked, stale, unknown or compromised state denies the affected risk-increasing action.
 
 D-023 is a future governance/architecture decision only. It does not authorise implementation, exchange/account access, credentials, paper/live orders or phase advancement.
+
+
+## Autonomy authority and permission requirements (D-023 technical design)
+
+Future consequential actions must pass independent owner-authority/security and risk gates. Authority must be enforced at a dedicated action boundary outside strategy/AI processes. The boundary must authenticate distinct workload identities; verify an immutable, owner-approved, scoped, versioned, time-bounded and revocable envelope; authorise the exact canonical action; verify current revocation state; require trusted data and health/security interlocks; obtain deterministic risk approval and reservation; and require durable audit evidence before dispatch.
+
+Permissions default to deny. Missing, stale, malformed, ambiguous, unverifiable or unsupported state denies the affected risk-increasing action. Authentication does not imply authorisation. A policy-engine Allow result is not sufficient authority. AI/strategy cannot create or modify envelopes, policy, hard limits or permissions. Exact action changes invalidate prior authorisation. Financial quantities require decimal/fixed-point semantics. External side effects require idempotency, conservative unknown-state handling and authoritative reconciliation; cancellation requests and timeouts do not release reservations.
+
+Key purposes must be separated for owner root/recovery, owner approval, policy publication, workload identity, audit checkpoints, data encryption and any future venue credentials. Secrets must not enter source control, model context or audit logs. Revocation must be independently propagated and measurable. See [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). This is a Phase 02 design requirement only; no implementation, dependency or execution capability is authorised.
