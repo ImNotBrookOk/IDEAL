@@ -171,3 +171,10 @@ Phase 02 remains active; Phases 03–19 remain locked. No implementation, schema
 CT-01/02/03/05/09/14 require source event/publication/availability/receive/ingest times, sequence/cursor, clock quality and consumer fitness rules where relevant. Freshness thresholds are per consumer and versioned; they are not a shared global TTL. Decision validity is invalidated by bound source age, clock uncertainty, correction, account or policy state change.
 
 See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md).
+
+
+## Field-level logical schemas — checkpoint 089
+
+Critical contract field semantics are expanded in [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md), including common evidence references, owner envelopes, security authorisation, health interlocks, risk decisions/reservations, action intents/permits, dispatch receipts, reconciliation cases, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations.
+
+The schemas define logical types and constraints only; no serialization, database or API format is selected.
