@@ -40,7 +40,17 @@ This continues the owner's instruction to proceed with architecture research. It
 
 ## Verification
 
-Read-back hashes and content checks are to be recorded after the GitHub operations complete.
+All five files below were fetched back from GitHub main and content-checked:
+
+| File | Read-back blob SHA | Checks |
+|---|---|---|
+| docs/IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md | 43e96dd8d0890eaaff50892a3773175138ba5362 | ADV-01, STRIDE coverage, owner-decision status and Phase 02 boundary present |
+| docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md | c78a30d8328a2d544a444d7115ac58884020f152 | Adversarial review cross-reference present |
+| docs/IDEAL_SECURITY_ARCHITECTURE.md | 45f0f7d46dbc275e54b87398f5d47147906b2925 | Review cross-reference and non-certification caveat present |
+| This checkpoint audit | 4fa8a366b9522af4b90e46f59c48594be46de0a9 | Checkpoint and approval boundary present |
+| docs/CHATGPT_CONVERSATIONS/README.md | 4f5c86ea3cb5f59788c26bafdf2c492515e8f923 | Checkpoint 065 indexed |
+
+The adversarial review read-back length is 17,604 characters. All listed content checks passed. This verifies document contents only; no live security scan, penetration test or runtime test was performed.
 
 ## Current state
 
