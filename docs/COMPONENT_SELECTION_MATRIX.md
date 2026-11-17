@@ -67,7 +67,7 @@ This matrix consolidates the repository landscape review, proof-of-concept evide
 - [x] Component matrix and recommendation dispositions reviewed and explicitly approved by owner (16 November 2026).
 - [x] Evidence, decisions, risks and audit records saved and read-back verified.
 
-**Current phase state:** Phase 01 IN PROGRESS. Phase 02 and implementation phases remain LOCKED. This matrix does not approve runtime integration, exchange access, paper/live execution or spend.
+**Historical checkpoint status (superseded by owner approval below):** Phase 01 was IN PROGRESS when this matrix was first written. Current state: Phase 01 CLOSED; Phase 02 architecture/contracts ACTIVE; Phases 03–19 LOCKED. This matrix does not approve runtime integration, exchange access, paper/live execution or spend.
 
 
 ## Owner disposition — seven-day OKX sample
@@ -88,3 +88,8 @@ The scoped audit [#43807450930](https://github.com/ImNotBrookOk/IDEAL/actions/ru
 ## Owner approval — 16 November 2026
 
 The owner approved the component dispositions in this matrix, including preferred POC/research candidates, research-only references, holds, rejections, and deferred hosting and legal/venue decisions. Approval closes Phase 01 research disposition only; it does not select or adopt runtime dependencies, select a venue, authorise exchange connectivity, account credentials, paper/live execution, risk-policy changes or paid infrastructure. Phase 02 architecture/contracts is authorised to begin under the existing scope and governance constraints.
+
+
+## Checkpoint 080 — current host topology disposition
+
+The current host trust analysis is in [IDEAL Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No host is selected. Phone-first control, Windows PC fallback only if required and mobile-data constraints remain. WSL2 is not a security boundary; Hyper-V remains within the host trust domain; KVM/Firecracker and a separate action gateway are future candidates only. No provisioning, device inspection, hosting or purchase is authorised.
