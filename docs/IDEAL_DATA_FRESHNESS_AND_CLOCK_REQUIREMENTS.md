@@ -1,7 +1,7 @@
 # IDEAL Data Freshness, Clock Quality and Decision-Validity Requirements
 
 **Status:** Phase 02 source/consumer contract; thresholds intentionally unselected  
-**Checkpoint:** 090 — 17 November 2026  
+**Checkpoint:** 091 — 17 November 2026  
 **Scope:** Source-specific freshness, availability, clock uncertainty, decision validity and data-age measurement  
 **Authority:** D-019, D-020, D-021, D-022, D-023  
 **Boundary:** Design only. No feed, venue, bank provider, clock service, runtime monitor or threshold is selected or implemented.
