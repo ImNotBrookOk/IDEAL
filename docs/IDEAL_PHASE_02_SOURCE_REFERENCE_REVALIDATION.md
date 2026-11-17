@@ -93,3 +93,8 @@ This supports the existing IDEAL position that VM isolation is one layer, not a 
 ## 7. Disposition
 
 The existing architecture's privacy, tax, and host-isolation boundaries remain appropriate at the design level. The source review adds precision but does not settle tax classification, provider status, host topology or retention periods. Keep those as explicit open decisions. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 8. Infrastructure security refresh — checkpoint 107 (18 November 2026)
+
+A later targeted refresh is recorded in [Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md). It updates Linux kernel and Firecracker lifecycle facts, records CVE-2026-1386 and CVE-2026-5747, and expands future host acceptance criteria. This dated addendum supersedes no legal/tax/privacy findings in this source review.
