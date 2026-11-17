@@ -140,3 +140,8 @@ The Phase 02 desk review now challenges the complete system across domain bounda
 ## Cross-domain accounting and valuation
 
 Synthetic worked examples now define how IDEAL should avoid double-counting transfers, confusing derivative notional with assets, misclassifying funding/fees, treating collateral as free cash, duplicating pending bank transactions, or turning tax estimates into capital restrictions. See [Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md).
+
+
+## Data classification, retention and audit
+
+IDEAL's retention model is purpose- and source-specific. Private financial records, market data, security evidence and AI traces have separate classifications and access boundaries. Deletion must account for replicas, derived data and backups; audit minimisation does not override legal or contractual retention/deletion rules. See [Data Classification, Retention, Deletion and Audit Policy Architecture](docs/IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md).
