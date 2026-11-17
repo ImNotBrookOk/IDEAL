@@ -147,3 +147,20 @@ A weekly IDEAL research review has been scheduled for Mondays at approximately 1
 ## 10. Immediate next work
 
 Begin the Phase 02 deep research sequence with the risk-management architecture, while explicitly designing its contracts with data integrity, system health and security. Continue through the other foundations and cross-pillar integration. Do not begin implementation or broad repository harvesting until the architecture work has reached its acceptance gate.
+
+
+## 11. Checkpoint 077 — current progress and next architecture work
+
+The initial risk architecture, bounded autonomy authority, integrated system/domain map, temporal evidence model, domain risk/capital model and reconciliation/recovery model have all been developed at provisional design level. An internal integrated consistency/adversarial review is recorded in [IDEAL Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md).
+
+The remaining Phase 02 sequence is:
+1. Build worked end-to-end examples for cross-domain accounting, FX, transfers, collateral, spot-plus-derivative exposure, tax estimates and reconciled cash.
+2. Complete a single integrated data classification, retention, deletion, audit and backup policy.
+3. Define provider/venue source-specific freshness, clock and point-in-time fidelity requirements without selecting integrations.
+4. Complete host trust topology, recovery root, watchdog and failure-domain decision analysis against realistic low-cost host options.
+5. Reconcile every state machine and exact contract across authority, risk, data, health, security, reconciliation and recovery.
+6. Perform independent architecture reviews (security/operations, simplicity/pattern fit, maintainability/testability) and disposition every finding.
+7. Consolidate owner decisions into one review pack. Do not interrupt the owner with interim questions.
+8. Obtain explicit owner acceptance of the full Phase 02 architecture before Phase 03 can be considered.
+
+The sequence remains research/design/documentation only. No runtime, implementation, dependency, account, credential, paper/live execution, paid service or phase transition is authorised.
