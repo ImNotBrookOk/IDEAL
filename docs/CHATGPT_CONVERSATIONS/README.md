@@ -193,3 +193,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-081-integrated-state-machine-contracts.md](2026-11-17-081-integrated-state-machine-contracts.md) | Phase 02 cross-authority state-machine composition: policy/identity/security/health/data/risk/reservation/action/reconciliation/recovery; conjunctive admission, version-vector binding, restrictive precedence and dispatch-time recheck; no schemas or runtime selected |
 
 | [2026-11-17-082-system-architecture-diagrams.md](2026-11-17-082-system-architecture-diagrams.md) | Phase 02 logical diagrams: domain/evidence flow, trust zones/forbidden flows, action admission/dispatch, incident recovery and temporal evidence lifecycle; physical topology diagrams remain deferred; no deployment or implementation |
+
+| [2026-11-17-083-security-control-threat-matrix.md](2026-11-17-083-security-control-threat-matrix.md) | Phase 02 security assurance traceability: 10 protected asset classes, SEC-01–SEC-14 controls, 28 threat paths, owners, future tests and residual risks; design-level only, no runtime scans or certification |
