@@ -95,3 +95,33 @@ These are not silently resolved by the contract correction or this challenge.
 The logical asset-denomination contract gap is corrected and traceable. The other findings are either consistent design invariants or explicitly open platform/owner/assurance decisions.
 
 Next: obtain independent read-only reviews across (a) architecture simplicity and maintainability, (b) security and operations, and (c) maintainability and testability; reconcile their evidence-backed findings without weakening controls. Only after independent review and finding disposition should the grouped owner decision pack be finalised. Phase 02 remains active; Phases 03–19 remain locked.
+
+ 
+## 8. Integrated challenge update — checkpoint 100
+
+The checkpoint 089 challenge was re-opened against the current main-branch documents after checkpoints 096–099. This is a second internal challenge, not an independent review.
+
+### 8.1 Findings and dispositions
+
+| ID | Severity | Finding | Disposition / evidence |
+|---|---|---|---|
+| IAC-100-01 | Medium | Risk architecture section numbering collided: new margin section was labelled §23 although §23–26 already existed. | Corrected to §27; document map pointer corrected. |
+| IAC-100-02 | High | Margin/collateral research added domain records and lifecycle semantics not yet represented in the critical contract field-schema catalogue. | Add canonical logical field requirements and traceability; implementation format remains open. |
+| IAC-100-03 | High | Integrated state-machine catalogue did not explicitly bind venue liquidation/ADL events to reservation conservation and account reconciliation. | Add explicit composition rule: exchange-reported liquidation is external evidence; local reservations remain until fill/account reconciliation; ADL/insurance events never create local authority. |
+| IAC-100-04 | High | Requirement traceability did not yet have dedicated margin/collateral/liquidation aliases and test IDs. | Add requirement-to-control-to-test rows; all tests remain planned, not executed. |
+| IAC-100-05 | Medium | Exchange support pages are mutable and some are educational rather than binding rules. | Record effective date/source provenance and require revalidation of binding contract specifications before any venue decision. |
+| IAC-100-06 | High | Venue rule data could otherwise be treated as configuration without a controlled provenance/version lifecycle. | Require signed/approved source snapshots, effective interval, freshness, digest and independent venue-vs-local reconciliation; missing/stale rule data blocks risk increases. |
+| IAC-100-07 | High | Independent architecture/security/operations review remains unavailable within this internal workstream. | Explicit blocker; do not label internal self-review as independent. A read-only independent review must occur before Phase 02 acceptance, or its unavailability and residual risks must be presented to owner. |
+| IAC-100-08 | Medium | ODR-02/03 and platform-dependent topology/key/witness decisions remain open. | Correctly retained as owner decisions; no defaults silently promoted. |
+
+### 8.2 Additional invariants
+
+- A venue liquidation notification, insurance-fund event or ADL notice is not proof of final position/account state; reconcile authoritative fills, balances, fees and position snapshots.
+- The local risk reservation must not be released on a liquidation trigger or a close request. It is transferred to reconciled exposure/fills and only residual capacity is released after terminal reconciliation.
+- Venue risk-tier and collateral rules are external evidence with version, effective time and account-mode scope. A changed tier or haircut invalidates a prior risk decision.
+- Local shadow margin is a conservative independent check, not an attempt to override the venue's actual liquidation engine.
+- External witnessing of audit commitments and venue liquidation evidence are separate concerns; neither grants action authority.
+
+### 8.3 Updated disposition
+
+The new margin architecture is logically integrated through explicit schema, state-machine and traceability additions in checkpoint 100. The remaining independent-review gate, unresolved owner decisions and absence of runtime verification remain open. This challenge does not close Phase 02 or approve implementation.
