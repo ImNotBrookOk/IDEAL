@@ -225,3 +225,5 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-094-infrastructure-revalidation.md](2026-11-17-094-infrastructure-revalidation.md) | Revalidated SQLite WAL durability, NautilusTrader persistence semantics/ARM64 support, Firecracker production controls and OCI A1 free-tier conflicts; refined future acceptance gates; no component adoption or host selection |
+
+| [2026-11-17-095-workload-sandbox-comparison.md](2026-11-17-095-workload-sandbox-comparison.md) | Compared gVisor, Kata Containers and Firecracker trust boundaries, operational costs and host assumptions; no runtime selected or deployed |
