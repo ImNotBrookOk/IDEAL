@@ -422,7 +422,7 @@ The [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) define
 The [Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) matrix maps stable requirement aliases to bounded-context owners, controls/contracts and deterministic future test IDs. It explicitly records open semantics and status; no future test is represented as passed.
 
 
-## Checkpoint 090 — freshness and clock traceability
+## Checkpoint 091 — freshness and clock traceability
 
 | Requirement | Control | Future verification |
 |---|---|---|
