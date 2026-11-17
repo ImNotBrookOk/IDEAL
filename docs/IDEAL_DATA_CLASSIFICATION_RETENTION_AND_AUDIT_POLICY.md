@@ -210,3 +210,8 @@ Phase 02 remains active; Phases 03–19 remain locked. No data processor, bank c
 ## 11. Privacy Act source clarification — checkpoint 090
 
 The current consolidated Privacy Act 2020 text (in force as at 8 October 2026) reflects amendments to section 27. The personal/domestic-affairs collection exception refers to IPPs 1–3A and 4(b). The holding exception for IPPs 5–12 applies where an individual holds information solely for personal/domestic affairs and the information was collected lawfully, received unsolicited or created by the individual. Both are conditional and do not apply where the collection, use or disclosure would be highly offensive to a reasonable person. This does not automatically exempt separate processor agencies or providers. Section 11 agent-only processing and IPP 12 overseas disclosure must be assessed separately. See [Official Source Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md).
+
+
+## Checkpoint 098 — external audit witness privacy refinement
+
+Public transparency logs are append-only by design and cannot remove an individual submitted record. Do not submit personal finance, bank, tax, account, instrument, order or AI-trace data to a public log, including encrypted payloads or low-entropy event hashes. If external witnessing is approved, transmit only a minimal batched commitment/root and protocol metadata; keep event mappings, salts and payloads inside IDEAL. Hashing is not anonymization where an event can be guessed or correlated. External witness records require their own data classification, purpose, retention and deletion assessment. See [Audit Integrity and External Witness Options](IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md).
