@@ -190,3 +190,10 @@ See [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](d
 ## Integrated system diagrams — checkpoint 082
 
 The logical domain/evidence flow, trust zones and forbidden flows, consequential action admission/dispatch, incident recovery and temporal evidence lifecycle are illustrated in [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md). These diagrams are technology-neutral and do not select network topology or implementation.
+
+
+## Canonical cross-domain contracts — checkpoint 085
+
+A logical contract catalogue now defines 22 cross-domain/pillar contracts, a shared event envelope, money/quantity/time/identity semantics, typed error outcomes, versioning rules and transaction/ownership boundaries. It does not select an API, wire schema, broker or database.
+
+See [IDEAL Canonical Contract Catalogue](docs/IDEAL_CANONICAL_CONTRACT_CATALOGUE.md).
