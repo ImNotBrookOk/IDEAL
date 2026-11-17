@@ -94,3 +94,8 @@ These initial trading constraints do not define the risk policies for future dom
 One explicitly authorised task at a time. Research and design findings are documented with sources, assumptions, alternatives, limitations and open questions. Repository changes are fetched back and checked. When implementation is eventually authorised, each task must be implemented and tested in isolation, integration-tested, regression-tested, audited and documented before the next task is proposed.
 
 A research checkpoint does not itself approve a decision, change policy, unlock a phase or authorise execution. IDEAL advances only through explicit owner review and approval. No task is complete without recorded verification.
+
+
+## Bounded autonomy authority design
+
+The future owner-authorised autonomy model is being translated into enforceable architecture, including signed operating envelopes, workload identity, exact-action authorisation, independent risk reservations, revocation, audit and recovery. This remains Phase 02 research; no execution capability or technology has been adopted. See [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md).
