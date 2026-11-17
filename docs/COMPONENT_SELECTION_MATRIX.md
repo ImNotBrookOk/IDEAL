@@ -116,3 +116,26 @@ Sources: https://nautilustrader.io/docs/latest/concepts/architecture/ ; https://
 Current NautilusTrader installation documentation explicitly lists Linux Ubuntu ARM64 as a supported platform. This strengthens the platform-compatibility evidence alongside IDEAL's isolated x86_64/ARM64 tests, but does not validate the current 2.0.0rc9 API maturity, a specific OCI A1 instance, workload throughput, durability or production suitability.
 
 Source: https://nautilustrader.io/docs/latest/getting_started/installation/
+
+
+## Checkpoint 094 — infrastructure revalidation and operational caveats (17 November 2026)
+
+The following findings refine, but do not replace, owner-approved dispositions. No component is adopted and no host is selected.
+
+### SQLite durability gate
+
+Tailscale documented 19 production database-corruption incidents over six months in a single-writer SQLite deployment, traced to a WAL-reset race. Antithesis reports SQLite 3.51.3 fixed the defect; a concurrent writer/checkpoint workload reproduced it on 3.51.2 and passed on 3.51.3. Any future SQLite POC must pin a runtime >=3.51.3, verify the actual linked SQLite library, and test writer/checkpoint overlap, committed-write visibility, crash boundaries, integrity checks, backup/restore and recovery. This is a future acceptance condition, not evidence IDEAL is affected.
+
+Sources: https://tailscale.com/blog/sqlite-wal-reset-bug ; https://antithesis.com/blog/2026/wal-reset-bug/
+
+### NautilusTrader persistence boundary
+
+Current upstream architecture documentation describes an in-memory cache and asynchronous database persistence. A synchronous persistence/enqueue error may be logged without preventing cache insertion/publication, and a later asynchronous database error does not roll back in-memory state. Therefore NautilusTrader cache/database backing must not be treated as IDEAL's authoritative financial ledger, durable audit log, transactional outbox or authority store. Any future adapter must use IDEAL-owned durable intent/reservation/audit/dispatch contracts and reconcile engine state against the canonical journal.
+
+Sources: https://nautilustrader.io/docs/latest/concepts/architecture/ ; https://nautilustrader.io/docs/latest/concepts/overview/
+
+### ARM64 support clarification
+
+Current NautilusTrader installation documentation lists Linux Ubuntu ARM64 as supported. This strengthens platform-compatibility evidence alongside IDEAL's isolated x86_64/ARM64 tests, but does not validate 2.0.0rc9 maturity, a specific OCI A1 instance, throughput, durability or production suitability.
+
+Source: https://nautilustrader.io/docs/latest/getting_started/installation/
