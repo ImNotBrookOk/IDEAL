@@ -255,3 +255,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 21. Perpetual funding and mark-price semantics — checkpoint 110
 
 [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) owns the current official-source refinement for effective-dated funding schedules/caps, mark methodology versions, settlement accounting, funding-to-margin effects and additional conformance tests. It extends the margin/liquidation and data-freshness sources. No venue or formula selected.
+
+
+## 21. Perpetual funding and mark-price semantics — checkpoint 110
+
+[Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) owns the current official-source refinement for effective-dated funding schedules/caps, mark methodology versions, settlement accounting, funding-to-margin effects and additional conformance tests. It extends the margin/liquidation and data-freshness sources. No venue or formula selected.
