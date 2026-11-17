@@ -372,3 +372,8 @@ These are required logical field groups, not wire schemas or selected database t
 | VenueRuleSet | venue, product, account_mode, instrument_scope, rules_version, effective_from/to, fetched_at, source_ref, content_digest, approval_ref | Rule changes invalidate decisions; no unversioned live defaults |
 
 No wire format, database, numeric haircut or venue has been selected.
+
+
+## Canonical serialization profile requirement — checkpoint 109
+
+The logical Digest type remains incomplete until the byte-level canonical profile is approved. See [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md). In particular, exact Decimal/Quantity/Price/AssetAmount values must not pass through unconstrained IEEE-754 JSON numbers. Any future JCS use requires canonical decimal strings and a strict application profile; deterministic CBOR also requires an IDEAL profile for tags, optionality and semantic encoding. No format selected.
