@@ -389,3 +389,10 @@ See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_I
 | Evidence/temporal lifecycle | Immutable raw evidence, corrections, point-in-time snapshots | Late-arrival, correction and historical replay tests |
 
 See [IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md). Diagrams are logical only; no runtime topology was deployed or tested.
+
+
+## Checkpoint 083 — security control-to-threat traceability
+
+Security controls SEC-01–SEC-14 now map protected assets and 28 threat paths to owning authorities, enforcement controls, residual risks and future tests. The matrix distinguishes design-specified controls from implemented/verified controls and explicitly records common-host, external-side-effect and single-owner residual risks.
+
+See [IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md). No runtime security tests or external scans were performed.
