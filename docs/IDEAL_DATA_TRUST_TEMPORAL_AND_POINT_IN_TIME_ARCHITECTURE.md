@@ -246,3 +246,10 @@ Sources:
 Freshness is a consumer-specific fitness contract, not a global TTL. Each consumer declares source cadence, event/availability semantics, maximum decision/event age, clock uncertainty, completeness/gap rules, degradation behaviour and restoration evidence. Market L2, trades, candles, funding, mark/index, contract metadata, account state, FX, bank data, tax rules and health telemetry have distinct source-specific requirements.
 
 See [IDEAL Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). Numeric thresholds remain open until sources, host and decision tolerance are known.
+
+
+## 12. Official-source revalidation — checkpoint 090
+
+The current Privacy Act section 27 wording includes the 2025/2026 amendments and the lawful/unsolicited/created-information conditions for the holding exception. Section 11 agent-only processing remains distinct from IPP 12 disclosure; the principal remains responsible, and provider own-purpose use changes the analysis.
+
+IRD's CARF overview excludes persons/entities only engaged in crypto-asset activities for their own benefit; a private individual trading for their own benefit is not an RCASP merely because they use an exchange. IRD pages conflict on myIR CARF registration availability (overview updated 8 June 2026: March 2027; reporting instructions updated 6 November 2026: 3 December 2026). Do not hard-code either date. The 2026–27 Taxation Bill remains a proposal at Select Committee stage on the latest official status page checked (12 October 2026). Crypto-perpetual/futures tax treatment remains unresolved and requires specialist NZ interpretation. See [Official Source Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md).
