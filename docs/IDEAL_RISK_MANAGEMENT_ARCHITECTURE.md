@@ -1945,3 +1945,10 @@ D-006 and D-008 remain specific to the initial crypto-perpetual risk policy. D-0
 Risk state is not recovered by process restart or by trusting a restored internal snapshot. Account/position/order/collateral/funding state must be reconciled against authoritative venue evidence. Unknown or contradictory order state retains conservative exposure/reservations and blocks conflicting risk increases. Reconciliation is domain-owned; no blind retries, timeout-based release or last-write-wins correction is allowed.
 
 See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). No live account or venue reconciliation has been performed.
+
+
+## 24. Cross-domain accounting and valuation examples — checkpoint 078
+
+Worked synthetic examples are recorded in [IDEAL Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). They distinguish spot market value from derivative notional, realised funding/fees from unrealised P&L, free assets from encumbered collateral, cash transfers from income, bank pending/posted rows, tax estimate/designation/assessment/payment, and valid versus stale FX.
+
+The examples are proposed deterministic acceptance fixtures. No numerical risk policy, tax treatment or accounting standard is selected, and no tests were executed.
