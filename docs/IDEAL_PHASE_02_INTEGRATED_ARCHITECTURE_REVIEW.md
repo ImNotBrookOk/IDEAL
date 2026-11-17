@@ -176,3 +176,8 @@ The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_C
 ## Checkpoint 085 — interface contract completeness
 
 [IDEAL Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) expands the shared interface families into 22 owner/consumer contracts and defines event envelope semantics, money/time/identity values, typed errors, compatibility and transaction boundaries. Exact wire schemas and implementation technology remain deferred.
+
+
+## Checkpoint 086 — requirement traceability closure
+
+[IDEAL Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) now maps stable requirement aliases to component owners, controls/contracts and future deterministic test identifiers. This closes the requirement traceability deliverable at design level; test implementation/execution and independent review remain outstanding.
