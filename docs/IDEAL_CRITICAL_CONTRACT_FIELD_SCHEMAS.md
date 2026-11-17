@@ -17,7 +17,7 @@
 | AssetAmount | Decimal + canonical AssetId + precision/scale + rounding context + valuation metadata where converted |
 | AssetId | Canonical fiat or crypto asset identity; fiat may map to ISO 4217, crypto-native/token identity includes network and contract address where applicable, with effective-dated provider/venue symbol mappings |
 | Quantity | Decimal plus unit, precision and contract multiplier/specification version |
-| Price | Decimal plus instrument, price type, quote currency, source and timestamp |
+| Price | Decimal plus instrument, price type, canonical quote AssetId, source and timestamp |
 | Instant | UTC instant plus source precision and original offset/timezone when relevant |
 | Duration | Explicit unit and value; no ambiguous bare integer |
 | Enum | Closed set for a contract version; unknown security/risk states fail closed |
@@ -30,7 +30,7 @@
 Common rules:
 - Every contract has contract ID/version, owner context and sensitivity/retention class.
 - All timestamps declare what event they represent; a field named simply timestamp is prohibited in critical contracts. All monetary/asset amounts bind to AssetId; ISO 4217 is used for fiat identity only.
-- Amounts carry currency, unit, account/owner and valuation basis.
+- Amounts carry canonical AssetId, unit, account/owner and valuation basis; fiat ISO 4217 codes are one AssetId family, not a universal amount type.
 - Missing values are explicit absent/unknown states, not zero or empty-string defaults.
 - Unknown enum values are rejected at authority/risk boundaries.
 - Optional fields cannot silently change a default permission, risk limit or accounting meaning.
