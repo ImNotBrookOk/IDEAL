@@ -88,3 +88,16 @@ This matrix closes the requirement-to-component-to-control-to-test mapping at de
 ## Checkpoint 092 — critical field-schema traceability
 
 The field-level schemas for OwnerEnvelope, SecurityAuthorization, HealthInterlock, RiskEvaluation, RiskReservation, ActionIntent, AdmissionPermit, DispatchReceipt, ReconciliationCase, PersonalFinanceImport, JournalPosting, TaxWorkpaper, AuditEvent and RecoveryAttestation are defined in [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md). Future tests must assert exact digest binding, type/unit validity, version-vector consistency, idempotency and forbidden fields such as capital restriction in tax workpapers.
+
+ 
+## Margin, collateral and liquidation traceability — checkpoint 100
+
+| Req ID / source anchor | Requirement summary | Owning component(s) | Control / contract | Future verification ID and expected result | Status |
+|---|---|---|---|---|---|
+| R-MARGIN-001 — REQUIREMENTS / Margin | Distinguish risk-adjusted equity from venue margin equity and available margin | Derivatives Risk, Capital Ledger | Risk-adjusted equity contract; CT-RISK | T-MARGIN-01: venue margin fields cannot silently replace risk denominator | Design specified; denominator open |
+| R-MARGIN-002 — REQUIREMENTS / Margin | Eligible collateral with source-bound valuation and separate IM/MM haircuts | Collateral Registry, Data Integrity, Risk | CollateralEligibilityRule / CollateralValuation | T-MARGIN-02: stale/ineligible/depegged collateral cannot increase risk capacity | Design specified; values open |
+| R-MARGIN-003 — REQUIREMENTS / Margin | Effective-dated margin tiers and contract/account-mode semantics | Venue Rule Registry, Risk | VenueRuleSet / InstrumentRiskTier | T-MARGIN-03: tier boundary and stale-rule tests reject optimistic risk | Design specified; venue open |
+| R-MARGIN-004 — REQUIREMENTS / Margin | Mark/index/last/executable prices remain separate | Market Data, Data Integrity, Risk | PositionRiskSnapshot | T-MARGIN-04: mark breach triggers risk restriction even if last price does not; stale mark blocks risk increases | Design specified |
+| R-MARGIN-005 — REQUIREMENTS / Margin | Reserve active/conditional/uncertain orders until reconciled | Risk Reservation Ledger, Reconciliation | OpenOrderRiskReservation | T-MARGIN-05: timeout/cancel ambiguity never releases exposure; partial fills conserve reservation | Design specified |
+| R-MARGIN-006 — REQUIREMENTS / Margin | Liquidation, insurance/ADL and partial fills are external events requiring reconciliation | Action Gateway, Risk, Reconciliation | LiquidationEvent; integrated state machine | T-MARGIN-06: trigger/ADL notice alone cannot release reservation or assert terminal position | Design specified |
+| R-MARGIN-007 — REQUIREMENTS / Margin | No implicit cross-venue/account/collateral hedge credit | Portfolio Risk | D-001/D-020; ODR-04 | T-MARGIN-07: offset denied absent approved enforceable netting set | Design specified; future domain deferred |
