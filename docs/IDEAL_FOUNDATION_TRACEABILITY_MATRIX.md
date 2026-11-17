@@ -273,3 +273,19 @@ See [Integrated System and Bounded-Context Architecture](IDEAL_INTEGRATED_SYSTEM
 | Clock uncertainty is bounded | Trusted clock evidence and monotonic local ordering | Health / Data Integrity | Clock rollback/skew and expiry denial tests |
 
 See [Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). These are proposed controls and tests; no runtime tests have been performed.
+
+
+## Checkpoint 074 — domain risk and capital traceability
+
+| Requirement | Control | Owner boundary | Required verification |
+|---|---|---|---|
+| Risk remains domain-specific | Separate risk contracts and policy scopes per domain | Domain risk authority / owner | No inheritance of derivatives limits into other domains |
+| Capital concepts remain distinct | Typed balances/valuations with currency, owner, account, source and timestamp | Domain ledger / data integrity | Double-counting and semantic confusion tests |
+| Consolidated view is read-only | Versioned domain projections; no cross-context writes | Portfolio & Capital View | Forbidden write/transfer/permission tests |
+| No implicit netting | Gross exposure plus explicitly justified netting sets | Domain risk / portfolio view | Legal entity/account/venue/collateral isolation tests |
+| Hedge credit is evidence-based | Basis, correlation, liquidity, expiry and counterparty stress | Portfolio risk authority | Hedge-breakdown and one-leg failure scenarios |
+| D-006/D-008 scope is preserved | Policy scope explicitly limited to initial perpetual domain | Owner policy registry / derivatives risk | Negative tests for future-domain inheritance |
+| Tax reserve is informational | D-018; no capital lock, deduction or forced payment | Tax Intelligence / Personal Finance | Attempted lock/payment path denied or absent |
+| Unknown valuation/FX stays unknown | Consumer-specific quality and freshness gate | Data Integrity / consuming risk domain | Stale FX and missing-price aggregate tests |
+
+See [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md). Proposed controls only; no runtime tests performed.
