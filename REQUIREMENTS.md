@@ -138,3 +138,6 @@ Key purposes must be separated for owner root/recovery, owner approval, policy p
 - Reservation states are explicit: NONE, HELD, IN_FLIGHT, PARTIALLY_FILLED, TERMINAL_PENDING_RECONCILIATION, RELEASED and INCIDENT_HOLD.
 - Fill transfer is idempotent and exactly once within the local ledger; residual reservation remains until authoritative terminal reconciliation. Cancellation request, timeout, restart or ambiguous acknowledgement never releases risk.
 - Material change to any bound version before dispatch-start invalidates prior admission and requires fresh evaluation.
+
+
+- Owner approval UI MUST display the exact canonical artefact digest context in human-readable form, including environment, account/venue scope, action permissions, limits, expiry, stop conditions and before/after policy diff. The signed challenge must bind the exact displayed artefact digest, operation, audience, nonce and expiry; hidden/truncated/ambiguous scope is denied.
