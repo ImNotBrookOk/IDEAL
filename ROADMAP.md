@@ -416,3 +416,8 @@ Close the revocation/dispatch linearisation contract, define measurable propagat
 ### Phase 02 — supervisor, policy root and audit atomicity gates (checkpoint 069)
 
 Define supervisor independence/failure-domain profile and one-way restrictive authority; immutable policy publication/activation and separated key hierarchy; transaction boundaries for intent/reservation/audit/outbox/dispatch-start; audit failure and alternate logging behaviour; external UNKNOWN reconciliation; and cross-pillar assurance tests. Resolve remaining deployment-dependent choices before owner review. No runtime work or phase advancement is implied.
+
+
+### Phase 02 — unified authority and reservation state machine (checkpoint 069)
+
+Reconcile the action, authority, policy, workload identity, risk reservation, health/security interlock, data evidence, account reconciliation and venue metadata state machines. Define the global authority generation and version-binding rules, event ordering/clock semantics, exact invalidation behaviour, and reservation lifecycle through partial fills and terminal reconciliation. Complete cross-document traceability and adversarial tests before owner acceptance.
