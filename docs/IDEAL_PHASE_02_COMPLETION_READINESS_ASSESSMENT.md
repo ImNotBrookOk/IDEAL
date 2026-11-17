@@ -91,3 +91,8 @@ Fifteen findings across architecture simplicity, security/operations and contrac
 ## Checkpoint 107 — infrastructure security evidence
 
 [Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md) adds dated upstream kernel/Firecracker lifecycle evidence, two concrete Firecracker advisories and nine future host acceptance checks. This strengthens the ODR-09/11 evidence but does not close host topology, patch operations, independent watchdog or host-root threat decisions. No host was selected or inspected.
+
+
+## Checkpoint 108 — document-map verification
+
+All 38 distinct local Markdown targets in the Phase 02 Architecture Document Map were fetched successfully. This verifies path existence only. See [checkpoint 108 audit](CHATGPT_CONVERSATIONS/2026-11-18-108-phase-02-source-refresh-verification.md). The map now also links to this audit, so a subsequent complete link check must include the new entry.
