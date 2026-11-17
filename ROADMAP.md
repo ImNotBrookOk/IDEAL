@@ -567,3 +567,10 @@ Created [IDEAL Phase 02 Architecture Document Map](docs/IDEAL_PHASE_02_ARCHITECT
 ### Phase 02 critical contract field schemas (checkpoint 089)
 
 Created [IDEAL Critical Contract Field Schemas](docs/IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md), defining logical field types, requiredness and constraints for evidence references, owner envelopes, security authorisation, health interlocks, risk evaluation/reservations, action intents/permits, dispatch receipts, reconciliation, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations. This closes the field-level logical schema deliverable; no serialization, API or database is selected. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 owner decision register — checkpoint 090
+
+Created [IDEAL Phase 02 Owner Decision Register](docs/IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md), consolidating 12 decision groups: future domain scope; D-006 denominator; D-008 daily loss semantics; cross-domain risk/netting; portfolio valuation/FX; personal-finance bank path; NZ tax interpretation; data licensing/retention/training; host trust topology; owner authenticator/root/recovery; revocation/health/audit witness; and final architecture baseline/Phase 03 gate.
+
+This is a draft, not yet presented for approval. Existing accepted decisions remain unchanged; no new permission or numerical policy is created. It will be presented only after final consistency checks and independent review disposition.
