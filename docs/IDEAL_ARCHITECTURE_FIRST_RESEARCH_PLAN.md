@@ -183,3 +183,10 @@ Independent security/operations review and runtime assurance remain future accep
 The [Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md) establishes a provisional simplicity constraint: logical bounded contexts and independent authorities must not automatically become separate microservices, databases, agents or infrastructure. The smallest viable future direction is a modular monolith, one authoritative transactional store if durability is proven, deterministic services/scripts, immutable evidence manifests and a phone-first read/control UI.
 
 A canonical document ownership map is proposed. Historical evidence remains intact; any document consolidation/deletion requires explicit owner approval. This is a design recommendation, not a selected implementation stack.
+
+
+## 15. Requirement-to-component-to-test coverage — checkpoint 086
+
+[IDEAL Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) now provides stable requirement aliases, component owners, controls/contracts and future verification IDs. Coverage includes active perpetual research, strategy validation, four foundations, autonomy, reconciliation/recovery, personal finance, tax, retention, privacy, host/UI and cost constraints.
+
+This closes the traceability artefact at design level; tests are not implemented or executed. D-006/D-008, source-specific fidelity, host topology, retention periods and independent review remain open.
