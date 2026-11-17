@@ -260,3 +260,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 21. Perpetual funding and mark-price semantics — checkpoint 110
 
 [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) owns the current official-source refinement for effective-dated funding schedules/caps, mark methodology versions, settlement accounting, funding-to-margin effects and additional conformance tests. It extends the margin/liquidation and data-freshness sources. No venue or formula selected.
+
+
+## 22. Checkpoint 110 audit record
+
+[Checkpoint 110 audit](CHATGPT_CONVERSATIONS/2026-11-18-110-perpetual-funding-mark-price-refresh.md) records the funding/mark-price source refresh, document integrations and fetch-back verification. The checkpoint did not perform a fresh full-map crawl; the 38/38 result remains the historical checkpoint 108 result.
