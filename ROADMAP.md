@@ -552,7 +552,7 @@ A targeted scan of the 46 current Markdown files found and corrected two remaini
 The targeted scan found no other active statements authorising paper/live execution or marking Phase 02 locked in the core current documents. This is a documentation scan, not a semantic proof of every file or runtime behaviour.
 
 
-### Phase 02 data freshness and clock-quality contract (checkpoint 088)
+### Phase 02 data freshness and clock-quality contract (checkpoint 091)
 
 Created [IDEAL Data Freshness, Clock Quality and Decision-Validity Requirements](docs/IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). It defines source/consumer-specific freshness contracts, distinct event/availability/receive/ingest/process ages, sequence/gap handling, tail-latency measurement, clock uncertainty, decision invalidation and relative consumer profiles.
 
