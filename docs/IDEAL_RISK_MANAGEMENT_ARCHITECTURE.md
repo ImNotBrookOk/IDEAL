@@ -1901,3 +1901,10 @@ No strategy, model, agent or risk calculation may create, edit, sign or expand t
 Initial capability activation/reactivation, envelope/policy/limit/permission changes, new accounts/venues/integrations, credential/privilege expansion, transfers/withdrawals/payments, safeguard disablement, reserved irreversible operations and designated incident recovery/release remain owner-approved actions. No risk authority is granted by a UI state, model confidence, strategy eligibility or venue acceptance.
 
 D-023 is a governance decision for future design only. It does not approve a running envelope, execution capability, account, venue, credential, paper/live trading, implementation or policy threshold. The remaining policy schema, signing trust chain, reservation/action transaction boundary, audit durability and revocation/recovery contracts remain unresolved Phase 02 work.
+
+
+## Authority and risk reservation handshake (D-023 technical design)
+
+Owner/security authorisation and risk approval are independent gates. A valid owner envelope or policy-engine Allow does not imply that an action is financially acceptable. The risk decision must bind the exact canonical action digest, risk-policy version, current evidence snapshot, account/instrument scope, validity window and reservation identifier. Any material action change requires fresh security authorisation and fresh risk approval.
+
+The reservation/dispatch boundary must conservatively handle concurrency, duplicate requests, partial fills, cancel-pending/unknown orders, timeouts, restarts and lost acknowledgements. Persist intent and reservation before dispatch; unknown external state retains the reservation until authoritative reconciliation. A cancellation request is not a confirmed cancellation. Filled quantity transfers to position exposure exactly once; residual quantity remains reserved until a definitive terminal order state. See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). This is provisional contract design, not execution authorisation.
