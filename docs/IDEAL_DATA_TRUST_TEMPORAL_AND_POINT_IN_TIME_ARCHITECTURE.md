@@ -226,3 +226,16 @@ Phase 02 remains active. Phases 03–19 remain locked. No implementation, data s
 - New Zealand Legislation, 2026–27 Taxation Bill: https://www.legislation.govt.nz/bill/government/2026/344/en/latest/
 - IRD financial arrangements rules: https://www.ird.govt.nz/income-tax/income-tax-for-businesses-and-organisations/types-of-business-income/interest-and-dividends/financial-arrangements-rules
 - IRD officials' report on cryptoasset derivatives: https://www.taxpolicy.ird.govt.nz/publications/2022/officials-report-2021-taxation-bill
+
+
+## Privacy processor and tax-record retention clarification — checkpoint 079
+
+Further official-source review clarifies two retention/privacy details:
+- Privacy Act section 11 treats information held by a third-party processor solely as an agent for the principal differently from a provider using the data for its own purposes. Where the provider acts only on the principal's behalf and does not use/disclose for its own purposes, the principal remains responsible for the information; IPP 12 generally does not treat the agent-only processing as a disclosure. If the provider uses/discloses data for its own purposes (including its own model training), both may be treated as holding the information and IPP 11/12 analysis may apply.
+- IRD's cryptoasset record-keeping guidance says records supporting cryptoasset tax positions must be kept at least seven years, even if the person no longer holds cryptoassets. It lists transaction type/date/units/NZD value, opening/closing unit totals, exchange records, bank statements and wallet addresses. This duration must be applied to records within the guidance's scope; the precise treatment of perpetual/futures contracts requires separate interpretation. The separate CARF seven-year record obligation applies to RCASPs, not automatically to individual users.
+
+Sources:
+- https://www.privacy.org.nz/resources-and-learning/a-z-topics/working-with-third-party-providers/
+- https://www.privacy.org.nz/responsibilities/disclosing-personal-information-outside-new-zealand/
+- https://www.ird.govt.nz/cryptoassets/taxing/record-keeping
+- https://www.ird.govt.nz/international-tax/exchange-of-information/crypto-asset-reporting-framework/crypto-asset-reporting-framework-overview
