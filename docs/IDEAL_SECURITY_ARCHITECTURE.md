@@ -292,3 +292,10 @@ The durable local action intent, authority evidence, risk reservation, audit eve
 Security incident containment, credential/identity revocation and recovery attestations remain separate from health supervision and financial risk authority. A restored backup does not restore active authority: old tokens, envelopes and admission permits must be invalidated or checked against an independent current revocation anchor. Restored services/data remain quarantined pending rebuild/attestation, audit integrity, external-state reconciliation and owner release where required.
 
 The security incident control plane may contain/revoke identities and isolate integrations under its own audited permissions; it cannot initiate cancellation, flattening, transfer, withdrawal, payment or other financial side effects. See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
+
+
+## Data classification, retention and third-party processing — checkpoint 079
+
+Security controls must follow data classification and purpose. C2 personal financial/tax records and C3 credentials/authority material are excluded from general prompts, telemetry and default AI training. Provider/processor assessment distinguishes agent-only storage/processing from own-purpose reuse; section 11 of the NZ Privacy Act may leave the principal responsible for agent-held data, while own-purpose use changes the holding/disclosure analysis. Retention and deletion cover replicas, caches, logs, exports, derived datasets and backups. Audit minimisation is mandatory; hash-only evidence is not automatically anonymous.
+
+See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md). No processor or retention technology is selected.
