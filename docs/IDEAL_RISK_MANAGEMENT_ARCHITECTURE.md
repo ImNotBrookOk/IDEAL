@@ -1959,3 +1959,10 @@ The examples are proposed deterministic acceptance fixtures. No numerical risk p
 A risk approval is one gate, not an action permission. It binds the exact action, risk policy, capital/equity measure, evidence snapshot, account/position/reconciliation version and reservation. Owner authority, workload identity, security incident, health interlock and audit durability are independently checked by the action boundary. Any material version change invalidates the admission and requires fresh evaluation.
 
 See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
+
+
+## 26. Risk decision freshness and invalidation — checkpoint 088
+
+A risk approval is valid only for its declared interval and the exact source/account/policy snapshot. It expires on the earliest of decision expiry, required data staleness, policy/authority/identity/security change, risk reservation change, account/position reconciliation change, instrument metadata change, interlock change, material source correction or clock uncertainty breach. The action boundary rechecks invalidation-sensitive versions immediately before dispatch; cached approval is not reusable permission.
+
+See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). Numeric thresholds remain open.
