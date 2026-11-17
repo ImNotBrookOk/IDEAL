@@ -181,3 +181,8 @@ The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_C
 ## Checkpoint 086 — requirement traceability closure
 
 [IDEAL Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) now maps stable requirement aliases to component owners, controls/contracts and future deterministic test identifiers. This closes the requirement traceability deliverable at design level; test implementation/execution and independent review remain outstanding.
+
+
+## Checkpoint 088 — canonical pack map and decision inventory
+
+[IDEAL Phase 02 Architecture Document Map](IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md) now formalises canonical document ownership, source-of-truth precedence and the grouped unresolved-decision inventory. It does not close the review blockers or replace independent challenge. The next gate is a final integrated architecture challenge; independent architecture/security/operations and maintainability review plus owner acceptance remain required.
