@@ -1,0 +1,134 @@
+# IDEAL Phase 02 Architecture Document Map
+
+**Status:** Canonical documentation ownership and navigation index; design-only  
+**Checkpoint:** 088 — 17 November 2026  
+**Authority:** D-015, D-018–D-023  
+**Boundary:** This index does not approve implementation, dependency adoption, runtime integration, account/provider access, paper/live execution, hosting, paid infrastructure or phase advancement.
+
+## 1. Purpose
+
+This document establishes one navigation and ownership map for the Phase 02 architecture pack. It formalises the documentation-ownership proposal in [the complexity and maintainability review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md), including architecture artefacts added after checkpoint 084.
+
+It does not replace detailed evidence, rewrite historical checkpoints or consolidate/delete source documents. New substantive requirements belong in the canonical source for that concern; other documents should link to it and keep only a concise summary.
+
+## 2. Authority and conflict precedence
+
+When statements conflict, use this order:
+
+1. **Accepted owner decisions:** `DECISIONS.md` (append-only; a proposal or assistant recommendation is not an accepted decision).
+2. **Current phase/status and task order:** the authoritative current-state section of `ROADMAP.md`.
+3. **Normative requirements and operating constraints:** `REQUIREMENTS.md` and `RULES.md`, interpreted consistently with accepted decisions.
+4. **Canonical architecture/contract source:** the single primary document named in the map below.
+5. **Supporting research, diagrams, matrices and summaries:** useful evidence, but not independent authority to change policy.
+6. **Conversation audit records:** chronological evidence of work and decisions; never supersede the decision register.
+
+Historical dated status statements remain historical. Do not silently rewrite them to mimic current status.
+
+## 3. Canonical document ownership
+
+| Concern | Canonical source | Supporting sources / role |
+|---|---|---|
+| Owner decisions and accepted policy | `DECISIONS.md` | Append-only decision register; proposals remain proposals |
+| Current phase, task order and gates | `ROADMAP.md` | `RULES.md`, `README.md` summaries |
+| Normative product/system requirements | `REQUIREMENTS.md` | Requirement traceability matrix |
+| Contributor and agent constraints | `RULES.md` | `TESTING.md` for future verification discipline |
+| Public project identity and navigation | `README.md` | This document map |
+| Overall system and bounded contexts | [Integrated System and Bounded-Context Architecture](IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md) | `ARCHITECTURE.md`, [System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md) |
+| Four foundational pillars and their integration | [Core Protection Architecture](IDEAL_CORE_PROTECTION_ARCHITECTURE.md) | [Foundation Traceability Matrix](IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md) |
+| Derivatives risk and initial crypto-perpetual policy | [Risk Management Architecture](IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) | [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md), [Risk Architecture Reconciliation](RISK_ARCHITECTURE_RECONCILIATION.md) |
+| Domain risk/capital separation and aggregation | [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md) | [Cross-Domain Accounting Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md) |
+| Data provenance, temporal semantics and point-in-time evidence | [Data Trust and Point-in-Time Architecture](IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md) | `DATA_INTEGRITY_AND_HEALTH.md`, historical data validation report |
+| Operational health model | `DATA_INTEGRITY_AND_HEALTH.md` | [Core Protection Architecture](IDEAL_CORE_PROTECTION_ARCHITECTURE.md), risk and security architecture |
+| Security requirements, trust boundaries and incident authority | [Security Architecture](IDEAL_SECURITY_ARCHITECTURE.md) | [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md) |
+| Security asset/control/threat/test mapping | [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md) | Security Architecture; this matrix does not certify security |
+| Data classification, privacy, retention and deletion | [Data Classification, Retention and Audit Policy](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md) | Security Architecture |
+| Owner authority, policy and bounded autonomy | [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) | [Autonomy Authority Closure Assessment](IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md) |
+| Cross-authority state machines and admission | [Integrated State-Machine and Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md) | Autonomy, risk, security and reconciliation sources |
+| Cross-domain interface semantics | [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) | Bounded-context and state-machine architecture |
+| Reconciliation, incident containment and recovery | [Reconciliation and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md) | Data Integrity and Health, Security, Risk |
+| Host trust, topology and recovery options | [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) | `INFRASTRUCTURE_RESEARCH.md`; no host is selected |
+| Worked accounting and valuation examples | [Cross-Domain Accounting and Valuation Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md) | Personal Finance Research; examples are design fixtures, not advice or executed tests |
+| Requirements to owners, controls and future tests | [Requirement Component Control Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) | [Foundation Traceability Matrix](IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md), security control matrix |
+| Whole-system internal desk review | [Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md) | [Integrated Adversarial Review](IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md) |
+| Architecture-first sequence and exit criteria | [Architecture-First Research Plan](IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md) | Roadmap and this map |
+| Complexity, simplicity and maintainability constraints | [Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md) | This map formalises its proposed document ownership |
+| Execution-quality research and simulator evidence | `EXECUTION_QUALITY_RESEARCH.md` and `research/nautilus_poc/` | Research only; not venue calibration or engine adoption |
+| Venue and market-data research | `EXCHANGE_AND_DATA_SHORTLIST.md`, `HISTORICAL_L2_SAMPLE_VALIDATION.md` | Conditional research evidence; no venue/account selected |
+| Personal finance and tax research | `PERSONAL_FINANCE_RESEARCH.md` | Proposed future domain; no bank/tax provider connection or filing/payment |
+| Conversation/audit chronology | `docs/CHATGPT_CONVERSATIONS/README.md` | Individual dated checkpoint records; append-only evidence |
+
+## 4. Phase 02 architecture pack contents
+
+The architecture pack is logically complete enough for a final integrated challenge, but not accepted or implementation-ready. Its evidence layers are:
+
+- **Governance:** decisions, requirements, roadmap, rules and explicit non-authorisations.
+- **System definition:** domain/context ownership, active versus deferred scope, system diagrams and complexity constraints.
+- **Four foundations:** risk, data integrity, health and security with independent authority and bounded interlocks.
+- **Cross-pillar control:** owner authority, identity, policy, revocation, state-machine composition, canonical contracts and action/transaction boundaries.
+- **Financial integrity:** domain-specific risk/capital semantics, accounting examples, reconciliation and recovery.
+- **Operational trust:** host threat assumptions, backup/recovery, audit, privacy, retention and data rights.
+- **Assurance:** requirement/control/test traceability, security threat traceability, internal adversarial review and future deterministic test catalogue.
+- **Evidence history:** dated checkpoint records and source research.
+
+## 5. Consolidated unresolved-decision inventory
+
+This is an inventory for eventual grouped owner review, not a request for decisions now. No default or assistant recommendation in this list is an owner-approved choice.
+
+### A. Scope, authority and domain activation
+- Confirm final active/deferred domain map and exact owner-reserved actions.
+- Confirm the exact authority/envelope semantics and activation/recovery boundaries.
+- Preserve D-001 crypto-perpetual-only active market scope unless the owner changes it through a new decision.
+
+### B. Derivatives risk policy
+- D-006 equity denominator and exact risk-sizing basis.
+- D-008 UTC day-start snapshot, deposits/withdrawals, multi-currency valuation, funding/fees and reset semantics.
+- Any additional warning/suspension thresholds, portfolio/concentration/leverage caps, and approved netting/hedge-credit rules.
+- No numerical risk parameter is changed by this inventory.
+
+### C. Capital, accounting and personal finance
+- Included assets, liabilities, accounts and ownership boundaries in any future consolidated view.
+- FX source/side/freshness, valuation basis and treatment of incomplete values.
+- Whether to use manual imports only or later assess a private Personal App data path; provider terms, freshness and legal role must be verified first.
+- Budget categories remain owner-controlled; D-018 prohibits tax-estimate-driven capital locks or forced payments.
+
+### D. Tax and legal interpretation
+- Whether to commission specialist New Zealand advice for crypto perpetual contract classification and any future asset classes.
+- Provider/processor roles, cross-border processing, retention and legal obligations before any external connection.
+- No tax classification, filing, payment or legal conclusion is selected here.
+
+### E. Data, archive and learning
+- Source-specific point-in-time availability, sequence continuity, corrections, freshness thresholds and permitted-use/licence constraints.
+- Archive retention/deletion classes and whether any data may be used for model training; private financial data remains excluded by default.
+- Cross-vendor comparison and representative fill/impact calibration remain unproven.
+
+### F. Security, host trust and recovery
+- Host-root/kernel compromise threat tier and whether a separate gateway/watchdog/recovery trust domain is required from day one.
+- Owner authenticator, root/recovery key custody, loss/replacement and manual recovery procedure.
+- Independent revocation anchor and measured revocation propagation objective.
+- Workload identity, sandbox and egress enforcement depend on actual host/runtime capabilities.
+
+### G. Storage, contracts and audit
+- Transactional store, single-writer topology, WAL/fsync/durability and restore semantics.
+- Exact contract canonicalisation, schema/serialization, monetary/quantity/time types and error-code mapping.
+- Audit retention classes/durations, legal holds, deletion interactions and optional independent witness.
+- Worker inventory completeness and proof that all dispatch boundaries are fenced.
+
+### H. Assurance and phase acceptance
+- Independent architecture, security/operations and maintainability/testability reviews.
+- Disposition of each finding with evidence, severity, owner and residual-risk treatment.
+- Owner acceptance of the complete Phase 02 architecture baseline.
+- Separate explicit owner decision before any Phase 03 consideration; no automatic phase transition.
+
+## 6. Evidence and verification status
+
+- Core local document targets in this map were checked against the current GitHub `main` tree; the canonical sources were fetched back for read-back inspection during checkpoint 088.
+- The conversation audit index and checkpoint records through 087 are present in the repository.
+- This was a scoped manual cross-reference/read-back check, not a full automated link crawler across every Markdown file.
+- External source URLs remain recorded in their owning research/architecture documents. This checkpoint does not claim that every external URL, current legal interpretation or provider term was revalidated live.
+- No runtime tests, security scans, penetration tests, recovery drills or implementation verification were performed.
+
+## 7. Next gate
+
+The next task is a final integrated architecture challenge against this map, the current requirements, canonical contracts, four foundations, threat matrix, failure/recovery paths and unresolved-decision inventory. The challenge must identify contradictions, unowned responsibilities, ambiguous authority, missing negative tests and residual risks. It must not silently close open decisions.
+
+Only after that challenge and independent review are complete should the grouped owner decision pack be presented. Phase 02 remains active; Phases 03–19 remain locked.
