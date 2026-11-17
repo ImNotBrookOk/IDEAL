@@ -420,3 +420,17 @@ The [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) define
 ## Checkpoint 086 — requirement-to-component-to-control-to-test mapping
 
 The [Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) matrix maps stable requirement aliases to bounded-context owners, controls/contracts and deterministic future test IDs. It explicitly records open semantics and status; no future test is represented as passed.
+
+
+## Checkpoint 088 — freshness and clock traceability
+
+| Requirement | Control | Future verification |
+|---|---|---|
+| Freshness is consumer-specific | Versioned source/consumer fitness contract; no global TTL | Per-consumer stale/aging/unknown thresholds |
+| Event age differs from availability age | Preserve source event/publication/receive/ingest/process/decision times | Late publication and point-in-time eligibility |
+| Tail latency is measured | p50/p90/p95/p99/max and clustered gap analysis | Stale-tail and burst-outage tests |
+| Clock uncertainty is explicit | Clock source, offset, uncertainty, monotonic duration and rollback detection | Clock drift/rollback/VM suspend and expiry boundary tests |
+| Decision validity is bounded | Bind expiry and invalidation-sensitive versions | Data/policy/account/interlock change invalidates permit |
+| Source-specific gaps are preserved | Sequence/cursor, checksum and resnapshot rules | Missing/reordered event and recovery tests |
+
+See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). No thresholds or clock service selected.
