@@ -201,3 +201,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-085-canonical-contract-catalogue.md](2026-11-17-085-canonical-contract-catalogue.md) | Phase 02 canonical interface design: 22 contracts with owner/consumer, semantics, failure response, event envelope, value/time types, error taxonomy, versioning and transaction boundaries; no API or wire schema selected |
 
 | [2026-11-17-086-requirement-traceability.md](2026-11-17-086-requirement-traceability.md) | Phase 02 requirement traceability: 34 requirement groups mapped to component owners, controls/contracts and future deterministic test IDs; tests are planned only, open semantics retained; updates REQUIREMENTS, traceability, architecture plan, roadmap and README |
+
+| [2026-11-17-087-current-state-consistency.md](2026-11-17-087-current-state-consistency.md) | Repository-wide current-state scan: corrected stale RULES Phase 01-only instruction and EXECUTION_QUALITY_RESEARCH phase status; marked dated L2 status statements as historical; no runtime or policy changes |
