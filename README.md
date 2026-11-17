@@ -99,3 +99,9 @@ A research checkpoint does not itself approve a decision, change policy, unlock 
 ## Bounded autonomy authority design
 
 The future owner-authorised autonomy model is being translated into enforceable architecture, including signed operating envelopes, workload identity, exact-action authorisation, independent risk reservations, revocation, audit and recovery. This remains Phase 02 research; no execution capability or technology has been adopted. See [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md).
+
+
+
+### Current Phase 02 security focus
+
+The bounded-autonomy work now includes explicit revocation/dispatch ordering, host/process/network trust zones, and recovery anti-rollback requirements. Revocation cannot recall requests already transmitted; host root compromise is a trust-boundary failure; backups cannot restore authority without independent current-state verification. See [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) and [Checkpoint 068](docs/CHATGPT_CONVERSATIONS/2026-11-17-068-adversarial-revocation-isolation-recovery-review.md). This remains research/design, not implementation or execution approval.
