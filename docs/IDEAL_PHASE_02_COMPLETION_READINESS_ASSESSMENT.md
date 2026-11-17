@@ -62,7 +62,7 @@ Open decisions are not all blockers to research completion. They must remain vis
 - Re-read current Phase 02 exit criteria and owner decision register.
 - Confirmed Phase 01 CLOSED and Phase 02 ACTIVE from authoritative ROADMAP current-state section.
 - Confirmed Phases 03–19 remain locked.
-- Confirmed 34/34 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
+- Confirmed 36/36 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
 - Checkpoint 099 margin/collateral/liquidation architecture is integrated into requirements, logical schemas, state machines, traceability and integrated challenge.
 - Checkpoint 100 internal challenge findings and checkpoint 101 documentation integrity findings are recorded.
 - Checkpoint 102 document-map section numbering corrected and fetched back.
@@ -71,7 +71,7 @@ Open decisions are not all blockers to research completion. They must remain vis
 
 **Phase 02 is not complete.** Architecture research and internal challenge are substantially advanced, but the explicit exit criteria still require independent reviews and owner acceptance. Capital semantics (ODR-02/03) and other owner/platform decisions must remain open with their future dependency gates. No internal self-review is represented as independent.
 
-The next valid gate is a read-only independent review of the current baseline, followed by evidence-based finding disposition and presentation of the grouped owner decision pack. Only the owner can accept the architecture baseline. Phase 03 remains locked and requires a separate explicit owner decision.
+The next valid gate is owner review of the grouped decision pack and residual-risk disposition. An independent external review was not available within this workstream; this limitation and the three internal review lenses are documented in IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md. The owner may commission independent review or consider the stated residual risk. Only the owner can accept the architecture baseline. Phase 03 remains locked and requires a separate explicit owner decision.
 
 ## 7. Authority boundary
 
@@ -81,3 +81,8 @@ No code, runtime, dependencies, venue/account connection, credentials, host prov
 ## Checkpoint 105 — three-lens review
 
 [Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md) records 15 internal findings across architecture simplicity, security/operations and contract testability. This is not independent assurance. No independent human reviewer or separate review service was available in this workstream. The limitation is explicitly documented for owner disposition under ODR-12. High residual gates: dispatcher inventory/revocation objective, host-root/failure-domain separation, root/recovery custody, canonical serialization/schema evolution, and ODR-02/03. Phase 02 remains NOT COMPLETE.
+
+
+## Checkpoint 105 — internal three-lens review
+
+Fifteen findings across architecture simplicity, security/operations and contract testability are recorded in [Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md). These are internal passes, not independent assurance. No independent reviewer was available in this workstream; owner disposition is required under ODR-12.
