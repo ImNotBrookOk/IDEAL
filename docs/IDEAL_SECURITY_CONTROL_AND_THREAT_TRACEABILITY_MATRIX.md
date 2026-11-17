@@ -131,3 +131,8 @@ The threat IDs are traceability identifiers, not a claim that the listed vulnera
 ## 9. Disposition
 
 This matrix provides design traceability. It is not a security certification, runtime test report or proof that the system is secure. Phase 02 remains active; Phases 03–19 remain locked. No implementation or external security test is authorised.
+
+
+## Checkpoint 097 — owner authenticator and transaction approval refinement
+
+Owner-authentication controls must distinguish synced/backup-eligible passkeys from device-bound credentials (WebAuthn BE/BS flags), verify actual authenticator properties rather than rely on product labels, and enforce user verification for consequential approval. Android Keystore security level (TEE vs StrongBox) and per-use key authorization are platform facts to be verified, not assumed. A WebAuthn assertion must bind the exact action proposal digest, one-time nonce, origin/RP ID, expiry and policy/authority generation; dispatch rechecks the version vector. Credential loss/compromise requires revocation and fresh enrollment; backup restore cannot resurrect old authority. See [Owner Authenticator and Recovery Options](IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md). These are design requirements only; no runtime test or device inspection was performed.
