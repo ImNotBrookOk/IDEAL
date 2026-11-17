@@ -188,3 +188,19 @@ At minimum: initial capability activation/reactivation; envelope, policy, hard-l
 | Audit and recovery | Durable append-only evidence, protected checkpoints and revocation-preserving restore | Audit/security/health | Truncation, reorder, storage outage, backup restore and incident exercise |
 
 See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) for the full contract and adversarial test catalogue. These are proposed traceability requirements, not test results.
+
+
+## Checkpoint 068 — adversarial assurance traceability
+
+| Requirement | Control | Owner boundary | Required evidence |
+|---|---|---|---|
+| Revocation wins before dispatch | Linearizable generation check and durable DISPATCH_STARTED transition | Authority registry / action gateway | Race tests with dispatch paused at each instruction boundary |
+| In-flight side effects remain honest | UNKNOWN/in-flight state and reservation retention | Adapter / risk authority | Crash around socket write, lost ACK, venue late receipt |
+| All dispatchers fenced | Registered worker inventory, generation acknowledgements | Security / action gateway | Partition, omitted worker, stale cache, restart tests |
+| Agent cannot reach credentials or venue | Separate trust zone, no credentials, host-enforced egress | Host OS / gateway | Procfs/FD/env scan, network bypass, SSRF/DNS rebinding tests |
+| Sandbox escape contained | Layered OS controls or disposable VM for high-risk code | Host isolation boundary | Guest compromise, syscall, mount, namespace and lateral movement tests |
+| Host root compromise handled | Separate gateway/credential trust domain or fail-safe disablement | Deployment trust boundary | Host-root compromise tabletop and recovery exercise |
+| Backup cannot resurrect grants | Independent high-water anchor, epoch advance, restore quarantine | Recovery root / authority registry | Pre-revocation snapshot restore and offline-witness test |
+| Recovery re-establishes trust | Clean rebuild, re-attestation, key rotation, audit validation and owner release | Security / owner | Full recovery drill and independent evidence review |
+
+These are proposed controls and tests; no runtime tests have been performed.
