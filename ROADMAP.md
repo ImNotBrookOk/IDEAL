@@ -44,6 +44,8 @@ Any new component, changed requirement, altered risk parameter or reordered depe
 
 ## Current state
 
+> **Status precedence:** This current-state section and the accepted decision register are authoritative. Older dated progress notes later in this file are historical snapshots and are superseded wherever they conflict with the current-state summary. They are retained as audit history, not as active phase status.
+
 - Planning baseline: owner-approved for the research-to-architecture progression under the governance and scope decisions recorded in `DECISIONS.md`.
 - Phase 01: **CLOSED — owner approved 16 November 2026.** Component recommendations and the complete matrix were reviewed and approved; the seven-day OKX dataset remains conditional research evidence, scoped security gates pass with limits, host selection is deferred, and venue selection/connectivity remain excluded pending independent NZ legal review.
 - Phase 01 progress: isolated exchange-neutral NautilusTrader POC is merged under `research/nautilus_poc/`; exact `2.0.0rc9` package installed in Ubuntu 24.04/Python 3.14 CI. The 22-test liquidation baseline plus 2 mark-price precedence/replay tests passed (24 total) in [CI run 43692019956](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43692019956). The mark test confirms a 20,000 mark triggers liquidation while the matching-engine quote remains 40,000, and the synthetic close executes at the stale 40,000 bid, reconciling to `0.62500000 BTC`. The earlier quote-gap fixture still produces `-249.56250000 BTC`, exposing the absence of bankruptcy-price/insurance-fund protection in that simulation.
