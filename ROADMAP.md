@@ -421,3 +421,8 @@ Define supervisor independence/failure-domain profile and one-way restrictive au
 ### Phase 02 — unified authority and reservation state machine (checkpoint 069)
 
 Reconcile the action, authority, policy, workload identity, risk reservation, health/security interlock, data evidence, account reconciliation and venue metadata state machines. Define the global authority generation and version-binding rules, event ordering/clock semantics, exact invalidation behaviour, and reservation lifecycle through partial fills and terminal reconciliation. Complete cross-document traceability and adversarial tests before owner acceptance.
+
+
+### Phase 02 — bounded autonomy closure assessment
+
+The authority workstream now has a consolidated closure assessment separating technology-neutral invariants, provisional initial-deployment recommendations, platform-dependent decisions, deferred owner approvals and residual risks. It remains provisional and is not Phase 02 closure or implementation approval. See docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md.
