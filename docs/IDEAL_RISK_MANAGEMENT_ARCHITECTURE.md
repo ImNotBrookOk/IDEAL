@@ -1762,7 +1762,7 @@ Provisional state sequence:
 2. Data, account, health and security prerequisites are evaluated.
 3. Risk evaluates the exact proposed action under current policy and portfolio state.
 4. If approved, risk creates an atomic reservation against available allocation.
-5. Execution adapter verifies decision authenticity, scope, expiry and payload hash before any submission.
+5. The action gateway performs the final exact-action, authority-generation, risk-reservation, interlock and durable-audit check; it atomically records DISPATCH_STARTED before allowing the narrow adapter to perform the network write.
 6. Submission receives a unique client/idempotency identifier; retries must not create a second live order.
 7. Venue acknowledgement/fill/reject/cancel events are recorded with source and sequence evidence.
 8. Risk atomically transfers filled exposure from order reservation to position exposure; residual quantity remains reserved.
