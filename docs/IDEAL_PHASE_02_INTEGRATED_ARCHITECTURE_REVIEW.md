@@ -149,3 +149,10 @@ Implementation blueprint research is subsequent work, not a substitute for these
 ## 8. Explicit non-authorisations
 
 No implementation, runtime integration, dependency adoption, deployment, account/venue/bank connection, credentials, real financial records, paper/live execution, tax filing/payment, external security testing, paid infrastructure or phase advancement is authorised by this review.
+
+
+## Checkpoint 081 — cross-state-machine closure extension
+
+The integrated state-machine contract now defines separate state owners, policy/identity/data/health/security/risk/reservation/action/reconciliation/recovery lifecycles, conjunctive admission, version-vector binding and restrictive precedence. It preserves the exact-action dispatch linearisation point and no-exactly-once external-effect semantics.
+
+This closes a logical composition gap at design level, not the platform-specific implementation gaps. See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
