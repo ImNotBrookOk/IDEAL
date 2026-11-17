@@ -584,3 +584,10 @@ Created [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTE
 ### Phase 02 official source reference revalidation (checkpoint 090)
 
 Created [Official Source Reference Revalidation](docs/IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md). It rechecked New Zealand privacy, cryptoasset record-keeping, CARF, tax-bill status, NIST key-management/crypto-agility and Firecracker host-hardening references. It records amended Privacy Act section 27 conditions, the own-benefit RCASP exclusion and conflicting CARF registration dates across IRD pages. No legal/tax conclusion or provider status was determined. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 infrastructure revalidation — checkpoint 094 (17 November 2026)
+
+Revalidated infrastructure assumptions against current primary engineering/vendor documentation. Added a SQLite WAL-reset durability gate (runtime SQLite >=3.51.3 plus actual linked-library verification and writer/checkpoint/crash/restore tests); documented NautilusTrader's asynchronous cache-persistence boundary so it cannot be IDEAL's authoritative ledger/audit/outbox; expanded Firecracker's required production controls (jailer, default seccomp, resource limits, host egress, bounded logs, overwatcher and patching); and recorded conflicting official Oracle A1 free-quota figures, using the lower allowance conservatively.
+
+These findings refine future acceptance tests only. No component, host, provider, runtime or dependency is selected; no implementation, account, provisioning, exchange access or spend. Phase 02 remains active; Phases 03–19 remain locked.
