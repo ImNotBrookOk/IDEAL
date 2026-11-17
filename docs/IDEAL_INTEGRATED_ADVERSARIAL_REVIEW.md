@@ -1,6 +1,6 @@
 # IDEAL Integrated Adversarial Architecture Review
 
-**Status:** Phase 02 review draft; owner decisions and independent review pending  
+**Status:** Phase 02 review draft; autonomy governance decision accepted (D-023); remaining design gaps and independent review pending  
 **Date:** 17 November 2026  
 **Scope:** Cross-pillar threats, trust boundaries, authority conflicts, common-mode failures and recovery  
 **Authority:** Read-only architecture review and documentation. No code, runtime integration, external scanning, account access, credentials, paper/live execution or phase advancement is authorised.
@@ -25,7 +25,7 @@ The four-pillar architecture is directionally sound: authority is separated, unk
 
 The main remaining weaknesses are not missing slogans or additional product features. They are unresolved enforcement details at trust boundaries:
 
-1. **Autonomy versus human approval:** the security document's requirement for human approval of consequential financial operations is ambiguous against the intended autonomous operating model.
+1. **Bounded-autonomy enforcement:** the owner has selected the bounded-authority model (D-023). The governance ambiguity is resolved; its policy schema, signing, identity, revocation and enforcement mechanisms remain open design work.
 2. **Supervisor independence:** a supervisor on the same compromised host/process/storage failure domain may provide false assurance.
 3. **Policy root of trust:** signed/versioned policy is proposed, but bootstrap trust, key compromise, rotation, revocation and recovery are not designed.
 4. **Action/audit atomicity:** the system has not decided when durable audit acknowledgement is mandatory relative to reservation and action submission.
@@ -43,9 +43,9 @@ The security architecture requires explicit human approval for sensitive permiss
 
 If every trade/order is classified as a consequential operation requiring a fresh human approval, the system is not autonomous in the intended sense. If all trades are treated as automatically approved, the human approval requirement could be bypassed in spirit.
 
-### Proposed bounded-authority model — not accepted
+### Owner decision — accepted as D-023
 
-Separate owner approval into three layers:
+The owner selected the following three-layer authority model:
 
 1. **Constitutional approval:** owner explicitly approves the domain, capability, account scope, operating mode, hard policy, maximum permissions, risk limits, stop conditions and duration. This grants a bounded capability, not unlimited authority.
 2. **Autonomous in-envelope operation:** a future authorised engine may submit individual actions without per-action human approval only when every action is inside the pre-approved envelope and passes fresh security, data, health and risk checks.
@@ -53,15 +53,17 @@ Separate owner approval into three layers:
 
 Every autonomous action remains attributable, exact-action-bound, risk-approved, auditable and revocable. The owner can suspend the capability. No AI agent may expand the envelope or approve its own exception.
 
-### Owner decision required
+### Decision outcome
 
-Does the owner intend bounded autonomous financial actions to be permitted in a future, separately approved operating mode, or should every consequential financial operation require individual human approval? Until resolved, do not design a final permission matrix or claim that the architecture supports autonomous execution.
+**Resolved:** the owner approved bounded, owner-authorised autonomy for the future architecture. Individual actions inside an active, explicitly approved envelope do not require per-action human approval, but still require fresh deterministic risk approval, exact security authorisation, trusted data, required health interlocks and durable audit. The owner retains approval of capability activation, envelope/policy/permission changes, new account/venue/integration scope, credential and privilege changes, transfers/withdrawals/payments, safeguard disablement and reserved irreversible or incident-recovery actions.
+
+D-023 is a future governance decision only. It does not activate an envelope or authorise implementation, exchange access, credentials, paper/live execution or phase advancement.
 
 ## 4. Highest-severity findings
 
 | ID | Severity | Finding | Failure/attack path | Required design response | Status |
 |---|---|---|---|---|---|
-| ADV-01 | Critical | Human-approval semantics conflict with autonomy objective | Every order requires approval, or an agent bypasses approval by labelling trades routine | Define bounded pre-authorised capability envelope and reserved human-approval classes | Owner decision |
+| ADV-01 | Critical | Bounded-autonomy enforcement is not yet specified | Envelope bypass, stale approval, privilege escalation or agent self-modification | Implementable policy schema, signed versioning, external permission enforcement, revocation and exact-action risk binding | Governance resolved by D-023; enforcement open |
 | ADV-02 | Critical | Health supervisor may share host/process/storage trust with monitored system | Host compromise disables or falsifies both application and monitor | Define independent failure domains, external heartbeat/log path and out-of-band alert/recovery proportionate to deployment | Open |
 | ADV-03 | Critical | Policy root of trust and bootstrap recovery unspecified | Attacker replaces policy and signing key, or legitimate key rotation locks out owner | Define offline/bootstrap trust, signing, approval, rotation, revocation, rollback and compromise recovery | Open |
 | ADV-04 | Critical | Audit durability versus action atomicity unresolved | Action occurs but evidence is lost, or audit failure causes unsafe partial state | Define durable intent/decision/reservation/action protocol and per-action audit-ack requirement | Open |
@@ -189,3 +191,13 @@ These are proposals for owner review, not accepted architecture decisions.
 - No code, scanner, penetration test, dependency, runtime, host, account, venue or integration is selected or activated.
 - No paper or live trading is authorised.
 - Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 10. D-023 governance decision incorporated
+
+The owner has explicitly selected bounded, owner-authorised autonomy. The architecture must therefore distinguish:
+- **Owner constitutional authority:** approves the future capability envelope and reserved action classes.
+- **Autonomous in-envelope authority:** permits individual actions without per-action human approval only after all deterministic and security gates pass.
+- **Reserved owner actions:** activation, scope/policy/permission changes, credentials/privilege expansion, fund movement, safeguard disablement and specified irreversible/recovery actions.
+
+This resolves the policy ambiguity identified in ADV-01. It does not resolve the engineering controls needed to make the envelope tamper-resistant and enforceable. Those remain critical Phase 02 work, including policy root of trust, key recovery, action-bound permission checks, risk reservations, audit/action atomicity and independent health/security interlocks.
