@@ -237,3 +237,21 @@ These are proposed controls and tests; no runtime tests have been performed.
 ## Checkpoint 071 — workstream closure traceability
 
 The autonomy authority closure assessment maps technology-neutral invariants, provisional controls, platform-dependent decisions, owner approvals and residual risks. Workstream acceptance requires all authority/action/risk/health/security/data/reconciliation state machines to align, each invariant to map to adversarial tests, and repository read-back verification. See docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md. No test execution or implementation is implied.
+
+
+## Checkpoint 072 — integrated domain and bounded-context traceability
+
+| Requirement | Owning context/control | Required boundary | Required verification |
+|---|---|---|---|
+| Domain state has one authoritative owner | Each bounded context owns canonical records | Other contexts consume versioned projections; no direct cross-context writes | Forbidden-write tests, stale projection and replay tests |
+| Future domains remain separately gated | Owner authority / decision register | Proposal status cannot activate a domain or grant capability | Scope/phase gate and negative activation tests |
+| Cross-domain aggregation is honest | Portfolio & Capital View | Read-only projections; native currency, ownership, source, valuation and freshness preserved | Missing/stale projection, currency mismatch, no-netting and collateral isolation tests |
+| Personal finance imports are not treated as truth | Personal Finance reconciliation | Source observations precede journal posting; corrections/deletions/pending rows remain visible | Duplicate, changed/deleted row, pending-to-posted and transfer tests |
+| Tax intelligence cannot control user capital | Tax context / D-018 | Informational estimates only; no lock, forced reserve or payment authority | Attempted capital restriction/payment path must be impossible |
+| Market, private finance and AI traces are segregated | Data archive / Security | Purpose-limited references and least-privilege access | Cross-domain retrieval and training leakage negative tests |
+| Learning cannot self-promote | Model registry / owner release gate | Offline reproducible evaluation; no online weight updates or agent self-grant | OOS, provenance, rollback and self-promotion denial tests |
+| Shared foundations constrain all domains | Risk, Data, Health, Security | Conjunctive gates; distinct authority and statuses | Cross-product state tests; health/security cannot approve financial action |
+| UI is not a trust root | Mobile presentation / authority boundary | UI issues scoped requests and renders projections only | Device loss, stale display, replay and approval-digest mismatch tests |
+| Failures remain within justified blast radius | Dependency registry / health supervisor | Consumer-specific safe state; unrelated contexts remain operational when isolated | Feed/provider failure propagation and containment tests |
+
+See [Integrated System and Bounded-Context Architecture](IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md), sections 2–11. These are proposed controls and tests; no runtime tests have been performed.
