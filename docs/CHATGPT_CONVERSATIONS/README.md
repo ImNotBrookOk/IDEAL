@@ -253,3 +253,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-18-107-infrastructure-security-source-refresh.md](2026-11-18-107-infrastructure-security-source-refresh.md) | Updated Linux kernel and Firecracker lifecycle/security evidence; documented future host acceptance checks without selecting a platform |
 
 | [2026-11-18-108-phase-02-source-refresh-verification.md](2026-11-18-108-phase-02-source-refresh-verification.md) | Fetch-back verification for checkpoint 107 and 38/38 document-map targets |
+
+| [2026-11-18-109-canonical-serialization-contract-research.md](2026-11-18-109-canonical-serialization-contract-research.md) | Specifies deterministic digest/signature profile requirements; identifies JCS binary64 precision limitation and keeps JCS/CBOR unselected |
