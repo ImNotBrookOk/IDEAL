@@ -290,3 +290,8 @@ The owner decision register is now ready for owner review of the grouped decisio
 ## 8. Checkpoint 109 — canonical serialization remains an explicit architecture gate
 
 [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md) defines the missing byte-level requirements for exact digests, signatures, idempotency and replay. JCS and deterministic CBOR are candidates only; neither is selected. Before Phase 03 contract implementation, the approved baseline must choose a deterministic encoding and IDEAL profile, including exact decimal strings or equivalent exact representation, schema evolution, domain separation and cross-implementation golden vectors. TST-105-01 remains open. No library, database, language or cryptographic suite is selected by this research.
+
+
+#### Checkpoint 110 evidence refinement — funding and mark-price semantics
+
+Official Binance, Bybit and OKX sources confirm that funding schedules/caps and mark-price methods are contract-specific and may change. Effective-dated rule snapshots, funding-settlement event provenance and margin-mode-specific tests are now documented. No venue or formula is selected; D-006/D-008 remain unchanged and ODR-02/03 remain OPEN. TST-105-01 and ODR-12 remain unresolved gates. See [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md).
