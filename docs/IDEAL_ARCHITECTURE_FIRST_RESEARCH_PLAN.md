@@ -169,3 +169,10 @@ The sequence remains research/design/documentation only. No runtime, implementat
 ## 12. Architecture diagram coverage — checkpoint 082
 
 [IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md) now provides logical domain/evidence flow, trust zones and forbidden flows, action admission/dispatch, incident/recovery lifecycle and temporal evidence lineage. These satisfy the logical diagram deliverable at design level; physical deployment, network, storage and process diagrams remain deferred until topology and technology selection evidence exists.
+
+
+## 13. Security control-to-threat matrix — checkpoint 083
+
+[IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md) now maps the security architecture's control families to protected assets, threat paths, owners, enforcement points, evidence status and future tests. It explicitly marks all future controls as design-level and preserves residual host-root, external-side-effect, single-owner and third-party risks.
+
+Independent security/operations review and runtime assurance remain future acceptance gates; no external scan or implementation is authorised.
