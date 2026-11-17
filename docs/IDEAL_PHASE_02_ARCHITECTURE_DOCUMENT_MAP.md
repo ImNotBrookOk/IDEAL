@@ -215,3 +215,8 @@ Checkpoint 094 changes no owner-approved component disposition. SQLite, Nautilus
 ## 17. Integrated challenge refresh — checkpoint 100
 
 [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) was reopened after checkpoints 096–099. Checkpoint 100 corrected a section-numbering defect and integrated margin/collateral logical schemas, liquidation/reservation state composition and requirement-to-test traceability. Eight findings are recorded. Independent review remains outstanding; this is not Phase 02 closure.
+
+
+## 18. Documentation integrity and review status — checkpoint 101
+
+The Phase 02 map contains 34 distinct local Markdown links; all 34 targets were fetched successfully from GitHub main. This confirms target-path existence only. Semantic consistency, fragment anchors, external-source freshness and independent review are separate assurance activities. The integrated review and adversarial review were refreshed at checkpoint 101; independent review remains outstanding.
