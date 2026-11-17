@@ -101,3 +101,8 @@ All 38 distinct local Markdown targets in the Phase 02 Architecture Document Map
 ## Checkpoint 109 — canonical serialization gap specified
 
 [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md) now defines the 14 required elements of a versioned canonical profile and a negative/conformance test catalogue. TST-105-01 remains open: no encoding/profile is selected and no cross-implementation vectors have been executed. The contract-semantics exit criterion remains PARTIAL until this is resolved in the approved architecture and later verified in implementation.
+
+
+## Checkpoint 110 — funding and mark-price semantics refreshed
+
+Official Binance, Bybit and OKX material confirms that funding intervals/limits and mark-price methodology cannot be represented as universal constants. The new source refresh is integrated into the margin/liquidation, data-freshness and logical-schema documents. This improves the contract definition but does not close implementation semantics: venue-specific effective-dated configuration, canonical serialization, exact accounting and independent oracle tests remain unexecuted. Contract-semantics readiness remains PARTIAL; ODR-02/03 and ODR-12 remain open. No venue or account mode is selected.
