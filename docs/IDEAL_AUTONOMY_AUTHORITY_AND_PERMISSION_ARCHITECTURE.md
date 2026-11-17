@@ -712,7 +712,7 @@ A threshold signature scheme may reduce single-key risk but adds owner recovery/
 
 Use TUF-inspired principles for root rotation, delegated roles, threshold verification where justified, monotonically increasing versions, expiry/freeze detection, consistent snapshots and explicit revocation. TUF is a pattern/reference, not an automatic runtime authority solution. The action gateway pins the currently active version/generation and fails closed if metadata is stale, expired, unverifiable, rolled back or contradictory.
 
-Activation, revocation and dispatch-start share a single serialized authority generation. Policy publication cannot race a dispatch under a stale policy. A policy change that narrows authority may be applied as a restriction; any expansion waits for the owner approval and activation protocol.
+Activation, revocation and dispatch-start share a single serialized authority generation. Policy publication cannot race a dispatch under a stale policy. A temporary restrictive health/security interlock may reduce available capability without editing the owner envelope or hard policy; it must be scoped, attributable, time/evidence-bound and independently cleared under the incident process. Any persistent policy/envelope/limit change, including a change that narrows or expands the owner-approved policy, follows the owner-approval process required by D-023. No emergency interlock may grant authority or initiate a financial side effect.
 
 ### 25.5 Key compromise and recovery
 
