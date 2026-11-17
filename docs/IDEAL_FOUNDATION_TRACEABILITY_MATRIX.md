@@ -330,3 +330,19 @@ See [IDEAL Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_AR
 | Late source correction | As-known-then snapshot remains reproducible | New latest-corrected view without historical leakage |
 
 See [Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). No fixture tests were executed.
+
+
+## Checkpoint 079 — data classification, retention and audit traceability
+
+| Requirement | Control | Owner boundary | Required verification |
+|---|---|---|---|
+| Every dataset has purpose/classification/owner | Data policy registry and quarantine for unclassified sources | Data owner / Security | Unknown class denied from new use |
+| C2/C3 data remains isolated | Least privilege; no default prompt, telemetry, retrieval or training path | Security / AI boundary | Cross-domain access and training-denial tests |
+| Retention follows legal/licence purpose | Per-class retention schedule and source entitlement | Data owner / legal policy | Expiry, legal hold and licence-expiry tests |
+| Deletion covers all copies | Primary, replica, cache, index, export, derived dataset and backup lifecycle | Data Integrity / operations | End-to-end deletion and restore-after-deletion tests |
+| Processor role is explicit | Agent-only processing distinguished from own-purpose use | Security / provider governance | Contract/processor-role and subprocessor review |
+| Tax evidence retained appropriately | IRD cryptoasset 7-year requirement applied only within scope; RCASP duty not misapplied to individual | Tax Intelligence / owner | Scope-specific retention tests and tax-adviser review |
+| Audit minimises sensitive payload | Opaque references, redaction, retention class and tombstone | Audit / Security | Secret/PII leakage and hash re-identification review |
+| Backup cannot resurrect revoked/deleted state | Bounded expiry, key lifecycle and restore quarantine | Security / Health | Restore after deletion, revocation and key rotation |
+
+See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md). These are future controls; no retention/deletion runtime tests have been performed.
