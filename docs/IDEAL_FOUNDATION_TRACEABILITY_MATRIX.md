@@ -434,3 +434,13 @@ The [Requirement → Component → Control → Test Traceability](IDEAL_REQUIREM
 | Source-specific gaps are preserved | Sequence/cursor, checksum and resnapshot rules | Missing/reordered event and recovery tests |
 
 See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). No thresholds or clock service selected.
+
+
+## Checkpoint 093 — canonical fiat/crypto asset identity traceability
+
+| Requirement | Control | Future verification |
+|---|---|---|
+| Monetary/asset amounts use canonical AssetId | Asset registry and effective-dated venue/provider symbol mapping; fiat ISO 4217 where applicable; crypto network/contract identity | T-ASSET-01–06: reject ticker-only ambiguity, distinguish fiat/native/token/stablecoin, no par assumption, exact precision, historical mapping and no double-counting |
+| Portfolio/risk/ledger conversions preserve asset identity | Evidence-bearing conversion with source, side, time, spread/haircut and completeness | Missing/stale conversion remains UNKNOWN/PARTIAL; no silent zero or 1:1 stablecoin conversion |
+
+See [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) and [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md). These are planned tests only.
