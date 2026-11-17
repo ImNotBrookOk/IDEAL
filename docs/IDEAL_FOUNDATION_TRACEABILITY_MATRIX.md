@@ -314,3 +314,19 @@ See [Reconciliation, Incident Containment and Verified Recovery Architecture](ID
 The integrated review maps 24 cross-domain attack/failure scenarios to required outcomes and classifies remaining blockers. Critical future-action scenarios include compromised AI/action mutation, revocation/dispatch races, audit commit failure, unknown venue acknowledgement, host-root compromise and stale backup authority resurrection. High-severity scenarios include point-in-time leakage, bank-row mutation, stale balances, false netting/hedge credit, tax/capital conflation, privacy scope errors and shared data-plane leakage.
 
 See [IDEAL Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md). The review is an internal desk assessment only; it does not prove vulnerabilities absent or satisfy the independent-review exit gate.
+
+
+## Checkpoint 078 — cross-domain accounting fixture traceability
+
+| Scenario | Required invariant | Future test assertion |
+|---|---|---|
+| Bank-to-exchange transfer | Transfer is not income; in-transit leg not double-counted | Total wealth changes only for evidenced fee/FX effect |
+| Spot plus perpetual | Spot market value differs from derivative notional | Net worth includes spot asset and derivative MTM, not derivative notional |
+| Funding/fees/MTM | Settled cashflows and unrealised valuation are separate | Each venue event is booked once; no duplicate P&L |
+| Collateral posted | Encumbrance is not new wealth or loss | Total units conserved; free/encumbered buckets reconcile |
+| Pending-to-posted bank row | Same economic transaction posted once | Revised final amount, one journal posting |
+| Tax reserve | Estimate/designation/assessment/payment remain separate | No lock, deduction or payment side effect |
+| Stale FX | Missing conversion is unknown/incomplete | No silent zero or stale unlabelled total |
+| Late source correction | As-known-then snapshot remains reproducible | New latest-corrected view without historical leakage |
+
+See [Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). No fixture tests were executed.
