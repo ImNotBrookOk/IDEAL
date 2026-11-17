@@ -265,3 +265,6 @@ Created [Perpetual Funding and Mark-Price Semantics Source Refresh](../IDEAL_PHA
 ### Phase 02 — perpetual funding and mark-price semantics refresh (checkpoint 110, 18 November 2026)
 
 Created [Perpetual Funding and Mark-Price Semantics Source Refresh](../IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md). Official Binance, Bybit and OKX sources show funding intervals/limits and mark-price methods are contract-specific and may change; funding settlement affects margin state and must remain distinct from forecasts. Added effective-dated logical schemas, freshness and liquidation integration, and adversarial test requirements. No venue or formula selected; Phase 02 remains active.
+
+
+| [2026-11-18-111-funding-mark-price-integration-and-map-verification.md](2026-11-18-111-funding-mark-price-integration-and-map-verification.md) | Revalidated official perpetual funding/mark-price semantics; added funding, mark and margin event traceability; corrected checkpoint 110 map numbering; fetched all 42 current document-map targets; Phase 02 remains active and not complete |
