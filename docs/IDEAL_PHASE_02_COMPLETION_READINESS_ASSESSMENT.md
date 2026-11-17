@@ -106,3 +106,8 @@ All 38 distinct local Markdown targets in the Phase 02 Architecture Document Map
 ## Checkpoint 110 — funding and mark-price semantics refreshed
 
 Official Binance, Bybit and OKX material confirms that funding intervals/limits and mark-price methodology cannot be represented as universal constants. The new source refresh is integrated into the margin/liquidation, data-freshness and logical-schema documents. This improves the contract definition but does not close implementation semantics: venue-specific effective-dated configuration, canonical serialization, exact accounting and independent oracle tests remain unexecuted. Contract-semantics readiness remains PARTIAL; ODR-02/03 and ODR-12 remain open. No venue or account mode is selected.
+
+
+## Checkpoint 110 — funding and mark-price semantics refreshed
+
+Official Binance, Bybit and OKX material confirms that funding intervals/limits and mark-price methodology cannot be represented as universal constants. The new source refresh is integrated into the margin/liquidation, data-freshness and logical-schema documents. This improves the contract definition but does not close implementation semantics: venue-specific effective-dated configuration, canonical serialization, exact accounting and independent oracle tests remain unexecuted. Contract-semantics readiness remains PARTIAL; ODR-02/03 and ODR-12 remain open. No venue or account mode is selected.
