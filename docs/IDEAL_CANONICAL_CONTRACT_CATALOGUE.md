@@ -164,3 +164,10 @@ No contract runtime tests have been run.
 This catalogue defines semantic ownership and interface expectations, not a final API or schema. It is sufficient for a cross-document architecture review but remains provisional until owner acceptance and platform-specific design.
 
 Phase 02 remains active; Phases 03–19 remain locked. No implementation, schema, database, broker, API, credentials, external integration, paper/live execution or phase advancement is authorised.
+
+
+## Freshness and clock contract reference — checkpoint 088
+
+CT-01/02/03/05/09/14 require source event/publication/availability/receive/ingest times, sequence/cursor, clock quality and consumer fitness rules where relevant. Freshness thresholds are per consumer and versioned; they are not a shared global TTL. Decision validity is invalidated by bound source age, clock uncertainty, correction, account or policy state change.
+
+See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md).
