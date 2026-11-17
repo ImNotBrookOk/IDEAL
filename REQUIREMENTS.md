@@ -158,3 +158,16 @@ See [Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_AR
 ## Requirement-to-component-to-control-to-test traceability
 
 Stable traceability aliases map each requirement to its owning component, control/contract and future verification identifier. See [IDEAL Requirement → Component → Control → Test Traceability](docs/IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md). The test IDs are planned verification work, not executed test evidence.
+
+ 
+## Margin, collateral and liquidation requirements — checkpoint 100
+
+- IDEAL MUST distinguish risk-adjusted equity, venue margin equity, available margin, eligible collateral, encumbered assets, liabilities and uncertainty reserves.
+- Collateral MUST be explicitly eligible for the account/margin mode and valued using current source-bound evidence, separate initial/maintenance haircuts, concentration and depeg/liquidity/transferability risk.
+- Instrument margin tiers, contract multipliers, settlement currency, account mode and effective-dated venue rules MUST be versioned and provenance-backed; missing or stale critical rules block risk increases.
+- Mark, index, last trade and executable prices MUST remain distinct. A liquidation threshold is not an execution-price guarantee.
+- Active, conditional, amendment-increasing and uncertain orders MUST reserve worst-case risk until authoritative terminal reconciliation.
+- Liquidation, partial fills, insurance-fund handoff and ADL MUST be modelled as external-event-driven states with explicit reconciliation; no timeout or trigger alone releases reservations.
+- No hedge credit or collateral portability is assumed across venues, accounts, legal entities, instruments or collateral pools without explicit owner-approved policy and enforceable netting evidence.
+- Venue-reported margin is retained alongside IDEAL's independent shadow calculation; disagreement beyond tolerance blocks risk increases pending reconciliation.
+- D-006/D-008 numerical decisions remain unchanged; their denominator, cash-flow and valuation semantics remain open. These requirements do not select a venue, mode, haircut or threshold.
