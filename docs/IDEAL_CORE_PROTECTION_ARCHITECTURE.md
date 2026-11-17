@@ -229,3 +229,8 @@ The owner retains approval authority over capability activation, envelope/policy
 Unknown, stale, revoked, expired, compromised or out-of-envelope state denies the affected risk-increasing action. Emergency restrictions can reduce authority; they cannot create financial authority or autonomously initiate liquidation.
 
 This is a governance and architecture direction only. No execution capability, account, venue, credential, paper/live trading or implementation is authorised. See [Security Architecture §9](IDEAL_SECURITY_ARCHITECTURE.md#9-bounded-owner-authorised-autonomy-d-023) and [Decision D-023](../DECISIONS.md).
+
+
+## Autonomy authority as a cross-foundation control
+
+D-023's bounded autonomy model requires a separate owner-authority/security gate and deterministic risk gate. The action-enforcement boundary consumes trusted data evidence, independent health/security interlocks and durable audit preconditions before admitting an exact action. Risk approval reserves capacity; security/owner permission establishes authority; neither can replace the other. Emergency interlocks may restrict capability but cannot create financial authority or initiate liquidation. Full provisional design: [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md).
