@@ -165,3 +165,8 @@ Logical diagrams cover domain/evidence flow, trust zones and forbidden flows, ac
 ## Security control and threat traceability
 
 Security controls SEC-01–SEC-14 are mapped to protected assets, 28 threat paths, owners, future tests and residual risks. This is a design traceability matrix, not a security certification or runtime test report. See [Security Control and Threat Traceability Matrix](docs/IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md).
+
+
+## Architecture simplicity and maintainability
+
+IDEAL keeps strong logical boundaries without assuming a microservice for every domain. The provisional smallest viable future design is a modular monolith with deterministic controls, one authoritative store if durability is proven, evidence manifests and a phone-first control UI. See [Architecture Complexity and Maintainability Review](docs/IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md).
