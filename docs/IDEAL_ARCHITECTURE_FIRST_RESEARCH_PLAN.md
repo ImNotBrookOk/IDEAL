@@ -195,3 +195,8 @@ This closes the traceability artefact at design level; tests are not implemented
 ## 16. Canonical architecture document ownership — checkpoint 088
 
 [IDEAL Phase 02 Architecture Document Map](IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md) formalises the canonical source for each governance, system, foundation, authority, contract, recovery, privacy and assurance concern. It defines conflict precedence and records unresolved owner decisions as an inventory, not an approval request. The map preserves historical evidence and does not authorise consolidation/deletion or implementation.
+
+
+## 16. Critical contract field schemas — checkpoint 089
+
+[IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md) now defines logical field-level semantics and constraints for all critical cross-pillar/domain contracts. This closes the technology-neutral schema deliverable at design level. Serialization, database DDL, API and compatibility tooling remain deferred until platform selection.
