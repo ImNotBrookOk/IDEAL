@@ -276,3 +276,12 @@ Treat all AI/strategy/generated-code processes as hostile. They receive no venue
 A root/kernel compromise on a shared host defeats the assurance of local process separation. Stronger protection requires a separately protected action gateway and credential trust domain with independent network enforcement. Exact topology remains deployment-dependent.
 
 Recovery must not restore authority from backups. Restored envelopes, policy, identities, keys, epochs and permits are quarantined; all ephemeral capabilities are invalidated; generation advances; current revocation high-water state is checked against an independent trust anchor. If current state cannot be proven, remain in RECOVERY_HOLD. Rebuild/attest, rotate identities, validate audit, reconcile external state and obtain explicit owner approval before reactivation. Full contracts and tests are in [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). No sandbox, key manager, VM or runtime control has been selected or adopted.
+
+
+## Policy root, audit atomicity and supervisor boundaries — checkpoint 069
+
+Policy and envelope artefacts follow immutable DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE lifecycle states, then SUPERSEDED or REVOKED. Owner approval binds to the exact artefact digest/environment/operation; a policy publisher signature is a separate role and cannot expand the owner grant. Policy activation, revocation and dispatch-start serialize against one monotonic authority generation. Root/recovery, owner approval, policy publisher, workload identity, audit checkpoint, data encryption and venue credentials remain distinct key purposes. Suspected key compromise requires revocation and replacement, not restoration/re-enablement of the same key.
+
+The health supervisor may issue only scoped restrictive interlocks; it cannot grant permission, change policy or initiate financial side effects. Separate process identity is not independent against shared host root/kernel compromise.
+
+The durable local action intent, authority evidence, risk reservation, audit event and outbox are committed before dispatch. Dispatch-start and its audit event are committed atomically before network write. A remote venue side effect cannot be atomically committed with local state; ambiguous outcomes remain UNKNOWN and are reconciled. Audit failure before dispatch blocks new risk-increasing actions. See autonomy authority architecture §§23–25.
