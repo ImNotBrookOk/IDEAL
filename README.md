@@ -150,3 +150,8 @@ IDEAL's retention model is purpose- and source-specific. Private financial recor
 ## Host trust and deployment boundaries
 
 IDEAL remains undeployed. The phone is the control surface; no always-on worker or cloud host has been selected. WSL2 is not a security sandbox, Hyper-V remains within the host trust domain, and KVM/Firecracker require full host/egress hardening. A separate physical action gateway is only a future option. See [Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md).
+
+
+## Integrated state-machine governance
+
+Owner authority, policy, identity, security incident, health, data quality, risk, reservation, action, reconciliation and recovery are separate state machines. Consequential actions require conjunctive gates and bind a version vector that is rechecked at dispatch. See [Integrated State-Machine and Cross-Authority Contract Architecture](docs/IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
