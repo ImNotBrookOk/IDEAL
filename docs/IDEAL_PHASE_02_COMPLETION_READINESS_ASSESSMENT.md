@@ -111,3 +111,6 @@ Official Binance, Bybit and OKX material confirms that funding intervals/limits 
 ## Checkpoint 110 — funding and mark-price semantics refreshed
 
 Official Binance, Bybit and OKX material confirms that funding intervals/limits and mark-price methodology cannot be represented as universal constants. The new source refresh is integrated into the margin/liquidation, data-freshness and logical-schema documents. This improves the contract definition but does not close implementation semantics: venue-specific effective-dated configuration, canonical serialization, exact accounting and independent oracle tests remain unexecuted. Contract-semantics readiness remains PARTIAL; ODR-02/03 and ODR-12 remain open. No venue or account mode is selected.
+
+
+**Document-map verification clarification:** The 38/38 path check is the historical result at checkpoint 108. Checkpoint 110 added one research document and an audit record to the map; a fresh full-map crawl has not yet been completed. Those new targets were individually fetched back successfully. Do not treat the historical 38/38 figure as a current total.
