@@ -125,3 +125,8 @@ The architecture's security and domain complexity is justified at the *logical d
 The smallest viable future build is likely a modular monolith, one transactional authority store, deterministic scripts/services, immutable evidence manifests, one narrowly scoped action boundary (only if later approved), and a phone-first read/control UI. All other technologies remain candidates until requirements and measurements justify them.
 
 No original documents were deleted or consolidated in this checkpoint. No implementation, dependencies, host provisioning, account integration, paper/live execution or phase advancement is authorised.
+
+
+## Checkpoint 085 — canonical contract ownership
+
+The [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) is the single logical source for cross-domain interface semantics. Keep contracts as typed module interfaces in the provisional modular monolith; do not introduce a broker/schema registry unless the chosen runtime and measured workload justify it.
