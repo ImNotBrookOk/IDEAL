@@ -401,3 +401,16 @@ Amounts use exact signed decimal semantics and canonical AssetId; timestamps and
 | FundingSettlementEvent | venue_event_id, instrument_id, position_ref, signed_amount, settlement_asset, rate, basis, event_at, effective_at, received_at, source_ref, correction_of | Immutable/idempotent; correction is a linked event, never silent overwrite |
 
 Amounts use exact signed decimal semantics and canonical AssetId; timestamps and revisions follow the approved canonical profile. The fields are logical only; no wire encoding or runtime is selected.
+
+
+## 20. Funding observation and historical coverage schema refinement — checkpoint 112
+
+The checkpoint 110 records remain the base logical schema. This refinement prevents one overloaded rate/timestamp field from hiding venue event state.
+
+| Logical record | Required fields | Invariant |
+|---|---|---|
+| FundingObservation | venue, instrument_id, formula_type, method_id, api_schema_revision, predicted_rate, realised_rate, assessed_rate, prior_settled_rate, funding_time, next_funding_time, min_rate, max_rate, settlement_state, premium, source_event_time, received_at, observed_at, source_ref, payload_digest | Predicted/realised/assessed/settled values are distinct; unknown enum or contradictory times invalidates dependent calculations |
+| FundingHistoryCoverage | venue, instrument_id, dataset_type, first_event_at, last_event_at, retrieved_at, page_cursor_state, known_gaps, duplicate_count, correction_count, retention_limit, licence_ref, source_refs, completeness_state | A retrieval window is not proof of complete history; missing/expired history is UNKNOWN, never zero |
+| MarkSeriesEvidence | venue, instrument_id, price_type, interval, first_event_at, last_event_at, observed_at, source_revision, known_gaps, payload_digest, source_ref, completeness_state | Mark candles and trade candles are distinct; incomplete series cannot silently stand in for point-in-time mark inputs |
+
+FundingObservation fields are venue-normalised logical concepts, not a claim that every venue publishes every field. Missing fields remain explicitly absent/unknown; do not synthesise them. FundingHistoryCoverage records public API retention constraints and local permitted archive coverage separately. Linear/inverse PnL and funding amounts remain denomination-specific and use exact signed decimal values.
