@@ -89,3 +89,10 @@ The future execution architecture uses an owner-approved capability envelope. Th
 Owner approval remains mandatory for capability activation, envelope/policy/permission changes, new accounts/venues/integrations, credential/privilege expansion, fund transfers/withdrawals/payments, safeguard disablement and reserved irreversible or incident-recovery actions. AI/strategy components cannot change or approve the envelope.
 
 The policy registry, signing/root-of-trust, identity enforcement, revocation propagation, reservation/action state machine and audit durability remain Phase 02 contract work. This architecture direction does not activate an envelope or authorise an execution adapter, exchange connection, credentials, paper/live trading or implementation.
+
+
+## Autonomy authority and permission enforcement (D-023)
+
+A future execution-capable domain must route all consequential operations through a dedicated, non-bypassable action-enforcement boundary outside strategy/AI processes. The boundary separates owner grant, workload authentication, policy authorisation, risk approval/reservation, data trust, health/security interlocks, revocation and audit. It canonicalises the exact action and binds all approvals to its digest, scope, versions, evidence and expiry. Any material change requires fresh decisions.
+
+The action boundary is the only permitted route to a future execution adapter. Durable intent and risk reservation precede dispatch. Ambiguous external outcomes remain UNKNOWN and reserved until authoritative reconciliation; no blind retries or timeout-based reservation release. Policy evaluation, owner approval and risk approval remain separate authorities. Detailed provisional contracts and technology research are in [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). No runtime implementation or execution is authorised.
