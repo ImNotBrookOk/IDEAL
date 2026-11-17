@@ -535,3 +535,8 @@ A canonical document ownership map is proposed to reduce drift. No source docume
 ### Phase 02 canonical contract catalogue (checkpoint 085)
 
 Created [IDEAL Canonical Contract Catalogue](docs/IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) with 22 owned logical contracts, shared event-envelope semantics, money/quantity/time/identity definitions, typed failure outcomes, compatibility/versioning rules and transaction/ownership boundaries. It closes the logical interface catalogue at design level; no wire schema, API, database, broker or implementation is selected. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 requirement-to-component-to-control-to-test traceability (checkpoint 086)
+
+Created [IDEAL Requirement → Component → Control → Test Traceability](docs/IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md). It maps stable requirement aliases across active/future domains to bounded-context owners, controls/contracts and future deterministic verification IDs. It records open semantics and explicitly distinguishes planned tests from executed evidence. This closes the traceability artefact at design level, not runtime verification. Phase 02 active; Phases 03–19 locked.
