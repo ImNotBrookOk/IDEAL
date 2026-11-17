@@ -218,3 +218,14 @@ These are proposed controls and tests; no runtime tests have been performed.
 | Dispatch-start is auditable | Atomic one-use permit consumption + generation check + DISPATCH_STARTED event before network write | Action gateway | Crash injection around commit/socket write |
 | External side effect ambiguity is safe | UNKNOWN state, retained reservation and authoritative reconciliation | Adapter / risk authority | Lost ACK, duplicate delivery, venue late acceptance and restore tests |
 | Audit sink compromise is detected | Separate privileges, append-only events, signed independent checkpoints | Audit/security | Truncation, rewrite, checkpoint substitution and sink outage |
+
+
+## Checkpoint 069 — unified state-machine traceability
+
+| Invariant | Required binding/state | Failure outcome | Evidence |
+|---|---|---|---|
+| Action uses current authority | Global authority generation + envelope/policy digest | Reject stale generation | Revocation/policy update races against dispatch-start |
+| Action uses current data/control state | Data/account/instrument evidence + health/security generations | Re-evaluate or hold | Correction, interlock, account sequence and contract-version races |
+| Reservation is conservative | HELD → IN_FLIGHT → PARTIALLY_FILLED / TERMINAL_PENDING_RECONCILIATION → RELEASED | Retain unknown residual | Duplicate/out-of-order fill, cancel-unknown, crash and replay |
+| Ordering is deterministic | Durable event sequence/transaction order; clock-quality separately recorded | Deny when order/expiry unprovable | Clock rollback/skew, sequence gaps and restart tests |
+| Cross-domain states are not conflated | Separate authority, identity, policy, risk, health, security, data and reconciliation state machines | Restrict affected action | Cross-product state and property-based tests |
