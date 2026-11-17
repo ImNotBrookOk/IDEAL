@@ -42,3 +42,8 @@ No code, runtime, schema registry, database, API, provider, account, credential,
 ## 4. Next work
 
 Finalise policy/decision register coverage, verify source links and all repository cross-references, check unresolved owner decisions and complete one final adversarial review. Independent review and explicit owner acceptance remain open.
+
+
+## Audit numbering correction
+
+> This record was originally assigned checkpoint 089 in error. The repository already contained checkpoint 089 for the final integrated architecture challenge. The critical contract schema work is correctly numbered checkpoint 091; the canonical audit record is [2026-11-17-091-critical-contract-schemas.md](2026-11-17-091-critical-contract-schemas.md). This original path is retained for audit continuity.
