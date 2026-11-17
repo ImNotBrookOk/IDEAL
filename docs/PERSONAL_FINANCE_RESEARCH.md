@@ -878,3 +878,10 @@ Personal-finance provider rows remain source observations until reconciled into 
 A provider outage or token revocation must not erase the journal. Historical rows, source entitlement and retention/deletion obligations are distinct. Restore requires verification of the journal, source evidence, encryption/key state, provider authorisation status and reconciliation differences before dependent projections are marked current.
 
 See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). No bank account was connected and no real financial data was used.
+
+
+## 24. Cross-domain accounting examples — checkpoint 078
+
+Synthetic worked examples now cover bank-to-exchange transfers, pending-to-posted rows, collateral, tax estimates versus owner-designated reserves/assessments/payments, and stale FX. The core rule remains that imported bank rows are observations until reconciled, transfers are not income, pending rows are not final postings, and tax reserves do not restrict capital.
+
+See [Cross-Domain Accounting and Valuation Worked Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). No real records or bank integration were used.
