@@ -597,3 +597,137 @@ WebAuthn can provide scoped, origin-bound user-presence/user-verification assert
 - [TUF specification](https://theupdateframework.github.io/specification/latest/) — threshold root rotation, version monotonicity, rollback/freeze and metadata integrity patterns.
 - [NIST SP 800-207 Zero Trust Architecture](https://csrc.nist.gov/pubs/sp/800/207/final) — resource-centric trust, separate authentication/authorization and no implicit trust based on network location.
 
+## 23. Independent health supervisor and security interlocks
+
+### 23.1 Independence is a failure-domain property
+
+The supervisor must observe components from outside their own process boundary. A component's self-reported health is telemetry, not proof. The supervisor must independently probe critical dependencies, compare expected and observed state, monitor process/host configuration, and retain its own health evidence.
+
+Logical module separation inside one process does not provide independent oversight. A separate process with a distinct service identity is a minimum logical boundary for a local deployment; a separate VM/host or hardware-backed watchdog is required when the threat model includes compromise of the application host/root/kernel. Exact topology remains open until deployment is selected.
+
+### 23.2 One-way restrictive authority
+
+The health supervisor receives read-only telemetry and has only a narrow restrictive output channel to the action gateway:
+
+- It may assert a scoped interlock such as DATA_STALE, ACCOUNT_STATE_UNKNOWN, SECURITY_INCIDENT, AUDIT_UNAVAILABLE or CONTROL_HEARTBEAT_LOST.
+- It may request suspension of new risk-increasing actions in the affected domain/scope.
+- It cannot create/modify owner envelopes, policy, hard limits, risk approvals, reservations or credentials.
+- It cannot initiate cancellation, flattening, transfer, withdrawal, payment or any other financial side effect.
+- It cannot release an interlock by itself after a critical incident; recovery evidence and the designated owner approval process apply.
+- A supervisor message can reduce authority but never increase authority.
+
+The action gateway independently validates the interlock message identity, scope, sequence/generation, freshness and signature. A malformed, replayed or unverifiable message is an incident, not a trusted state transition. Loss of the supervisor heartbeat causes the defined fail-closed restriction for affected risk-increasing actions.
+
+### 23.3 Avoiding supervisor-as-single-point-of-failure
+
+A compromised supervisor should at worst be able to cause a denial of service by asserting restrictions; it must not gain financial authority. To limit false restrictions, require reason-coded, scoped evidence and hysteresis/clearance rules for non-critical transient conditions. Critical security or integrity failures remain latched until independently cleared. The gateway must not accept a supervisor's self-issued HEALTHY status as proof that its own process or host is uncompromised.
+
+Use independent signals where practical: host/process observations, data-source heartbeats, database integrity probes, external venue reconciliation, audit checkpoint verification and a separate watchdog heartbeat. No single monitor can certify every other foundation. If all monitors share a compromised host/kernel, their independence is limited and must be stated.
+
+### 23.4 Health/security state contract
+
+Keep separate:
+- operational health (availability, liveness, resource capacity);
+- data trust (freshness, completeness, lineage, reconciliation);
+- security posture (identity/key/policy/host integrity, incident status);
+- financial state trust (account/order/position reconciliation);
+- authority state (envelope, policy, revocation generation and owner activation).
+
+A component can be operationally healthy but security-compromised. A healthy supervisor cannot prove its own trustworthiness. A healthy system cannot infer that an external account state is reconciled.
+
+## 24. Audit and external side-effect atomicity
+
+### 24.1 The boundary cannot be one distributed ACID transaction
+
+IDEAL cannot atomically commit a local database transaction and a remote exchange side effect. The design must not claim exactly-once execution across that boundary. It uses durable local intent, idempotency, conservative UNKNOWN state and authoritative reconciliation.
+
+### 24.2 Three durable local boundaries
+
+**Transaction A — admission preparation:** in one local durable transaction, persist the canonical action intent, exact digest, owner/security decision reference, current authority generation, risk reservation, audit event and transactional outbox item. If any required record fails, roll back the entire local transaction and do not admit dispatch.
+
+**Transaction B — dispatch start:** immediately before the external network write, atomically consume the one-use permit, verify the current revocation generation and policy/identity state, transition the action to DISPATCH_STARTED, and append the corresponding audit event. This commit is the local linearisation point shared with revocation. The network write occurs only after this transaction is durably committed.
+
+**External side effect:** send the exact approved payload with stable client-side idempotency identity where the venue supports it. Do not expose generic request construction to strategy/AI. A timeout, crash or missing acknowledgement after dispatch-start is UNKNOWN.
+
+**Transaction C — outcome/reconciliation:** after receiving a definitive venue response or authoritative reconciliation, atomically append the outcome event and update order/position/reservation state. Filled exposure transfers exactly once; residual reservation is retained until terminal venue state is authoritative. If this transaction fails after the venue accepted the request, retain UNKNOWN/in-flight state and reconcile again; never erase the prior dispatch-start record.
+
+### 24.3 Audit precondition and failure policy
+
+- The durable local audit/intent record is a precondition to dispatch.
+- If the primary audit/transaction store cannot durably commit Transaction A or B, no new risk-increasing external side effect is permitted.
+- A separate append-only audit projection or remote witness may be asynchronously updated from a committed outbox, but it does not replace the pre-dispatch durable local evidence.
+- If the external request may have been sent but the outcome/audit projection is unavailable, retain in-flight status and reservation; restore audit pipeline and reconcile before further related actions.
+- An alternate audit path can preserve essential incident events during a primary sink outage, but it cannot be used to bypass the durable action-intent/dispatch-start requirement.
+- Audit log storage, audit administration and action execution credentials are separate privileges. Agents cannot write trusted audit records directly.
+- Hash chaining and signed checkpoints detect some tampering but do not prevent an attacker controlling both event store and checkpoint key from rewriting history. Store checkpoints independently and test truncation, reordering, substitution and restore.
+- Security logs, business/financial event records and transaction/audit trails have distinct purposes and retention; correlate them without conflating them.
+- Log safe identifiers, decision references and digests; never log private keys, API secrets, session tokens, recovery codes or raw authentication assertions.
+
+### 24.4 Failure matrix
+
+| Failure point | Expected state | Required recovery |
+|---|---|---|
+| Transaction A fails | No admission/dispatch; no reservation committed | Retry only after store health restored and request revalidated |
+| Transaction B fails | No network write | Do not dispatch; investigate audit/authority store |
+| Crash after B, before socket write | UNKNOWN unless non-dispatch is provable | Query venue by stable client identity; do not blindly resend |
+| Venue accepts, response lost | UNKNOWN/in-flight; reservation retained | Authoritative venue reconciliation |
+| Venue responds, Transaction C fails | UNKNOWN/in-flight; prior dispatch-start preserved | Reconcile and append outcome later |
+| Audit projection/witness unavailable after local durable event | Local event retained; new admissions follow defined audit-degradation policy | Repair projection and verify chain/checkpoints |
+| Primary audit and alternate audit unavailable | Block new risk-increasing actions | Restore audit trust before release |
+| Disk full or fsync/durability error | No successful durable commit may be assumed | Fail closed; preserve possible in-flight state |
+| Duplicate outbox delivery | Idempotent consumer; one external action identity | Deduplicate by action ID/digest; reconcile venue |
+| Out-of-order event delivery | Sequence/generation checks reject invalid transition | Replay from durable ordered source |
+
+## 25. Policy publication, root of trust and key lifecycle hardening
+
+### 25.1 Separate authority roles
+
+The root trust role is not a runtime policy editor or exchange credential. Keep separate roles for owner root/recovery, owner approval, policy publisher, workload identity issuer, audit checkpoint signer, data encryption and any future venue credentials. No one operational key should be able to both expand owner authority and dispatch financial actions.
+
+### 25.2 Immutable policy publication lifecycle
+
+A policy/envelope publication is an immutable artefact with a monotonically increasing version/generation and exact content digest. Proposed lifecycle:
+
+DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE → SUPERSEDED or REVOKED.
+
+- DRAFT/VALIDATED are non-authoritative and cannot be consumed by the action gateway.
+- Validation checks schema, semantic constraints, scope narrowing/expansion, expiry, key purpose, signature, version, references and forbidden combinations.
+- OWNER_APPROVED binds the owner-authentication ceremony to exact artefact digest, environment, operation, version and expiry.
+- SIGNED verifies the correct policy-publisher role; signing is not itself owner approval.
+- PUBLISHED makes immutable metadata available but not active.
+- ACTIVE requires a serialized activation event and new authority generation; dispatchers observe the activation atomically with revocation state.
+- SUPERSEDED artefacts remain historical evidence but cannot regain authority through rollback.
+- REVOKED artefacts and compromised signing keys are denied regardless of a valid historical signature.
+
+Policy changes never edit a live record in place. Scope expansion, hard-limit changes, new account/venue/environment, credential permission expansion and reserved actions require owner approval under D-023. A policy publisher cannot enlarge the owner envelope by itself.
+
+### 25.3 Root and delegated key design
+
+A root/recovery key should be offline or hardware-protected and used rarely to establish/rotate delegated trust roles. Operational policy signing uses a delegated key with narrow purpose, short cryptoperiod, revocation and auditable rotation. Owner approval remains a separate authority event. Workload identity keys are short-lived and automatically replaceable; audit checkpoint and encryption keys have independent purposes.
+
+A threshold signature scheme may reduce single-key risk but adds owner recovery/availability complexity. D-023 is a single-owner model; do not invent a second human approver or imply two-person control exists. Evaluate hardware-backed owner key plus independent recovery key, and whether a user-verification factor is required for each high-impact ceremony. The recovery path must be at least as carefully protected as the primary path.
+
+### 25.4 Anti-rollback metadata and activation
+
+Use TUF-inspired principles for root rotation, delegated roles, threshold verification where justified, monotonically increasing versions, expiry/freeze detection, consistent snapshots and explicit revocation. TUF is a pattern/reference, not an automatic runtime authority solution. The action gateway pins the currently active version/generation and fails closed if metadata is stale, expired, unverifiable, rolled back or contradictory.
+
+Activation, revocation and dispatch-start share a single serialized authority generation. Policy publication cannot race a dispatch under a stale policy. A policy change that narrows authority may be applied as a restriction; any expansion waits for the owner approval and activation protocol.
+
+### 25.5 Key compromise and recovery
+
+Suspected compromise means revoke the key identity and all grants/artefacts whose trust depends on it according to a defined scope analysis. Do not simply restore the old key from backup or re-enable it. Generate a new key identity, rotate delegated trust, distribute updated trust metadata, invalidate old sessions/capabilities, verify clients have advanced their trusted root and retain signed evidence of the transition. Loss without compromise may permit documented recovery; suspected compromise requires replacement and independent validation.
+
+## 26. Additional open decisions and closure criteria
+
+- Exact transactional store and durability semantics for authority, risk reservation, audit event and outbox.
+- Whether the local authority registry is single-writer or distributed; if distributed, consensus/linearizability and partition behaviour.
+- Worker inventory/attestation and how a dispatch boundary proves the complete set of active workers.
+- Health supervisor process/host failure-domain topology and independent watchdog design.
+- Scoped interlock schema, freshness, signature, latching and clearance rules.
+- Audit event schema, append-only storage, checkpoint cadence, independent witness and alternate logging capability.
+- Exact policy root/delegated key roles, owner ceremony, cryptoperiod, recovery and compromise response.
+- Whether hardware-backed key support is available consistently across future Android, PC and server targets.
+- Required durability level and whether local-only storage is sufficient for the future action gateway.
+- Numerical revocation propagation target and the exact set of boundaries included in the measurement.
+
+Phase 02 cannot close until these semantics are reconciled across security, risk, health, data integrity, audit and recovery; mapped to adversarial tests; independently challenged; and accepted by the owner. No technology selection or implementation follows automatically.
