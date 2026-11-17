@@ -43,3 +43,8 @@ No data provider, feed, clock protocol/daemon, threshold, monitor, runtime integ
 ## 4. Next work
 
 Complete final cross-document source/contract consistency, validate the historical L2 status note, review open owner decisions and assemble the Phase 02 owner decision pack only after all remaining architecture gates are met.
+
+
+## Audit numbering correction
+
+> This record was originally assigned checkpoint 088 in error. The repository already contained checkpoint 088 for the architecture document map. The freshness/clock work is correctly numbered checkpoint 090; the canonical audit record is [2026-11-17-090-freshness-clock-contract.md](2026-11-17-090-freshness-clock-contract.md). This original path is retained for audit continuity.
