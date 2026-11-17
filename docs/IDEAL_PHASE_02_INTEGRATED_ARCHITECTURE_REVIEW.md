@@ -188,7 +188,7 @@ The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_C
 [IDEAL Phase 02 Architecture Document Map](IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md) now formalises canonical document ownership, source-of-truth precedence and the grouped unresolved-decision inventory. It does not close the review blockers or replace independent challenge. The next gate is a final integrated architecture challenge; independent architecture/security/operations and maintainability review plus owner acceptance remain required.
 
 
-## Checkpoint 089 — critical contract schema completeness
+## Checkpoint 092 — critical contract schema completeness
 
 Field-level logical schemas are now specified for owner envelopes, security decisions, health interlocks, risk decisions/reservations, action intents/permits, dispatch receipts, reconciliation, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations. See [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md). No wire format or implementation is selected.
 
