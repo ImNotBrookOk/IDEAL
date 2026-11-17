@@ -41,3 +41,8 @@ The register is a draft and is not ready to present for approval until final con
 ## 4. Boundaries
 
 No implementation, runtime, dependency, account, credential, bank connection, provider, payment, tax filing, paper/live execution, paid infrastructure or phase advancement.
+
+
+## Audit numbering correction
+
+> This record was originally assigned checkpoint 090 in error because the preceding checkpoint numbers were not reconciled against the existing audit index. The owner decision register is correctly numbered checkpoint 092; the canonical audit record is [2026-11-17-092-owner-decision-register.md](2026-11-17-092-owner-decision-register.md). This original path is retained for audit continuity.
