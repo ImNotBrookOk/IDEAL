@@ -162,3 +162,29 @@ Do not ask these questions until the complete architecture pack is ready.
 This document narrows future host research but selects no deployment. The current correct choice is to remain undeployed while Phase 02 architecture is completed. Any future topology must be evaluated against the actual host, mobile-data constraints, privacy model, threat tier, operational capability and total cost.
 
 Phase 02 remains active; Phases 03–19 remain locked. No provisioning, configuration, purchase, account, credentials, integration, implementation or execution is authorised.
+
+
+## 14. Checkpoint 094 — Firecracker operational controls and cloud caveats
+
+A fresh read of the Firecracker production host guidance adds operational controls that must be explicit in any future deployment assessment:
+
+- Run the matching Firecracker release's `jailer`, or enforce constraints at least as restrictive. Use a dedicated unprivileged UID/GID; preferably unique identities per microVM.
+- Protect every jailer input path and parent directory from unprivileged modification. The jailer treats its paths as trusted inputs.
+- Retain default seccomp filters; upstream does not recommend `--seccomp-filter` overrides or `--no-seccomp` for production.
+- Bound CPU, memory, disk I/O, file size and file descriptors using cgroups/resource limits.
+- Apply host-enforced TAP-interface egress filtering (nftables/iptables). Firecracker does not filter guest network traffic itself.
+- Bound guest-influenced serial/log output to prevent disk exhaustion. Consider disabling the serial device in production and use bounded log rotation/ring buffers.
+- Operate a host-side overwatcher for unresponsive Firecracker processes; the upstream guide describes a possible signal-handler deadlock.
+- Patch host and guest kernels and CPU microcode; Firecracker does not mitigate host hardware vulnerabilities or eliminate side-channel risks.
+
+These details increase the operational burden. Firecracker remains a future candidate only if the actual threat model justifies a dedicated Linux/KVM host and the owner can operate its patching, monitoring, egress, backup and recovery controls. It is not a lightweight shortcut to a secure host.
+
+### OCI free-tier caution
+
+The official general Always Free resources page currently states 1,500 OCPU-hours and 9,000 GB-hours per month for A1, while Oracle's A1-specific page states 3,000 OCPU-hours and 18,000 GB-hours. Until clarified, use the lower allowance for planning. The general page also confirms home-region capacity constraints and seven-day idle reclamation thresholds. Neither a nominal free quota nor a PAYG account guarantees physical capacity or caps all possible charges.
+
+Sources:
+- https://github.com/firecracker-microvm/firecracker/blob/main/docs/prod-host-setup.md
+- https://github.com/firecracker-microvm/firecracker/blob/main/docs/seccomp.md
+- https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
+- https://docs.oracle.com/en-us/iaas/Content/Compute/References/arm.htm
