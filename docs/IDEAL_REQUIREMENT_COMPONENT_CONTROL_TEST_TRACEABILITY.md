@@ -1,7 +1,7 @@
 # IDEAL Requirement → Component → Control → Test Traceability
 
 **Status:** Phase 02 architecture traceability; proposed test catalogue, not executed test evidence  
-**Checkpoint:** 086 — 17 November 2026  
+**Checkpoint:** 089 — 17 November 2026  
 **Source of requirements:** REQUIREMENTS.md, DECISIONS.md, RULES.md, ROADMAP.md  
 **Authority:** D-001, D-006–D-008, D-018–D-023  
 **Boundary:** Documentation only. No implementation, runtime tests, paper/live execution or phase advancement is authorised.
@@ -54,12 +54,14 @@ Status values:
 | R-DEP-001 — REQUIREMENTS / Cost and deployment | $0 recurring target; open-source/free tiers; no spend without approval | Architecture / Operations | Cost and hosting gates | T-DEP-01: every selected component has cost/limit/exit analysis; no unapproved billing | Design specified |
 | R-UI-001 — REQUIREMENTS / Scope | Android phone is primary control/monitoring device; compute can be headless | Mobile UI / Host Operations | Phone-first topology principles | T-UI-01: device loss/stale UI does not change authority or stop independent safe state | Design specified; host open |
 | R-AI-001 — Foundational protection / D-023 | AI proposes/analyses only; no self-authority, credentials or generic egress | AI Boundary, Security, Action Boundary | SEC-08; CT-07/13/14 | T-AI-01: prompt injection/compromised agent cannot access secrets or invoke action without gates | Design specified |
+| R-CONTRACT-001 — Canonical Contract Catalogue / checkpoint 089 | Financial amounts preserve canonical fiat/crypto asset identity, denomination, precision and explicit valuation lineage | Asset Registry (logical), Canonical Evidence, Risk, Personal Finance, Portfolio View | CT-03/06/09/18; AssetAmount semantics | T-ASSET-01–06: ambiguous ticker rejected; fiat/native/token identities distinct; stablecoin parity not assumed; precision deterministic; historical mappings effective-dated; projections preserve denomination | Design specified; registry/schema open |
 | R-ARCH-003 — Architecture-first completion | Complete architecture, contracts, diagrams, threat model, failure analysis, traceability, independent review and owner acceptance before implementation | Architecture Governance | Phase 02 exit gate | T-ARCH-03: all artefacts, review findings and owner approval recorded before Phase 03 consideration | Open: independent review and owner acceptance |
 
 ## 3. Coverage summary
 
 - Requirements are mapped to a logical component owner, control/contract and future verification identifier.
 - The matrix includes both current active scope and future proposed domains, with their authority status preserved.
+- The current matrix contains 35 requirement groups; checkpoint 086's 34-group count remains a historical snapshot.
 - Future test identifiers are planning labels only. No code/test suite has been created or run by this matrix.
 - The D-006 denominator, D-008 semantics, host topology, data source fidelity, retention durations and future domain policies remain open.
 - Independent architecture/security/operations review and explicit owner acceptance remain mandatory before Phase 02 closure.
