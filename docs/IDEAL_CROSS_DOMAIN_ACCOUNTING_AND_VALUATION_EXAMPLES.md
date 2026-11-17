@@ -185,3 +185,8 @@ No synthetic fixture tests were executed as part of this checkpoint.
 These examples make cross-domain accounting and valuation assumptions explicit enough for review, but they do not establish a final chart of accounts, tax treatment, valuation policy, FX source, portfolio risk model or accounting standard. They are illustrative design tests only.
 
 Phase 02 remains active; Phases 03–19 remain locked. No implementation, provider integration, real records, financial action or execution is authorised.
+
+
+## Canonical asset identity for worked examples — checkpoint 093
+
+The synthetic labels NZD, USD, BTC and USDT in these examples are display labels only. A future implementation must bind each amount to a canonical AssetId: NZD/USD to their fiat identities; BTC to the native asset identity; USDT to a distinct stablecoin identity on its specific network/contract where relevant. No ticker-only identity, stablecoin par assumption or implicit 1:1 conversion is permitted. All conversion and valuation examples require explicit source, side, timestamp, spread/haircut and completeness. See [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md).
