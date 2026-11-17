@@ -523,3 +523,10 @@ Created [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAG
 ### Phase 02 security control-to-threat traceability (checkpoint 083)
 
 Created [IDEAL Security Control and Threat Traceability Matrix](docs/IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md). It defines protected assets, SEC-01–SEC-14 control families, ownership/enforcement boundaries, 28 threat paths, future verification, assurance lifecycle and residual risks. All controls remain design-level; no runtime security test or penetration test was performed. Independent security/operations review remains an architecture acceptance gate. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 architecture complexity and maintainability review (checkpoint 084)
+
+Created [IDEAL Architecture Complexity and Maintainability Review](docs/IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md). The review finds the logical domain/security complexity justified, but warns against mirroring it into dozens of microservices, databases, agents or always-on infrastructure. The smallest viable future direction is a modular monolith, one authoritative transactional store if durability is proven, deterministic services/scripts, immutable evidence manifests, one narrow future action boundary and phone-first read/control UI.
+
+A canonical document ownership map is proposed to reduce drift. No source documents were deleted or consolidated; that cleanup requires explicit owner approval. No technology stack or deployment is selected. Phase 02 active; Phases 03–19 locked.
