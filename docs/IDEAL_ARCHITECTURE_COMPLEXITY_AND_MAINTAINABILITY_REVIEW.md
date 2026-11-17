@@ -130,3 +130,8 @@ No original documents were deleted or consolidated in this checkpoint. No implem
 ## Checkpoint 085 — canonical contract ownership
 
 The [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) is the single logical source for cross-domain interface semantics. Keep contracts as typed module interfaces in the provisional modular monolith; do not introduce a broker/schema registry unless the chosen runtime and measured workload justify it.
+
+
+## Checkpoint 088 — document ownership map formalised
+
+The proposed ownership map in §5 is now formalised and extended by [IDEAL Phase 02 Architecture Document Map](IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md), which includes the later system diagrams, security threat matrix, canonical contract catalogue and requirement traceability artefacts. This is a navigation/ownership change only; no historical document was deleted or consolidated.
