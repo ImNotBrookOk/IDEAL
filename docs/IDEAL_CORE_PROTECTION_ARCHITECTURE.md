@@ -269,3 +269,10 @@ See [Reconciliation, Incident Containment and Verified Recovery Architecture](ID
 All four pillars consume a shared data classification and retention policy without sharing authority. Security enforces least privilege and confidentiality; Data Integrity preserves provenance/correction/deletion lineage; Health observes retention/backup/restore control operation; Risk consumes only permitted, current evidence. Retention and deletion are per data class, purpose, source licence and legal obligation. Audit immutability does not override privacy or contractual deletion requirements.
 
 See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md).
+
+
+## Host trust and independent recovery topology — checkpoint 080
+
+The four pillars require an explicit failure-domain analysis. A process or VM on the same physical host is not independent of host-root/kernel compromise. Health supervision, owner recovery root, policy signing and action gateway must be placed according to the threat they claim to survive. WSL2 is not a security sandbox; Hyper-V remains host-dependent; KVM/Firecracker adds workload isolation but not an independent host trust root.
+
+See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No deployment is selected or authorised.
