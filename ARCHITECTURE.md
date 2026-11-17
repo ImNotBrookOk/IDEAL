@@ -164,3 +164,10 @@ Restored data and services remain quarantined until integrity, identity/revocati
 Synthetic worked examples now test bank-to-exchange transfers, spot-plus-perpetual exposure, funding/fees versus unrealised P&L, collateral encumbrance, pending-to-posted bank transactions, tax estimates versus owner-designated reserves/assessments/payments, stale FX and late corrections. They enforce no double-counting, no notional-as-asset, no transfer-as-income and no tax-reserve capital lock.
 
 See [IDEAL Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md). These are illustrative design fixtures, not accounting/tax advice or executed tests.
+
+
+## Data classification, retention and audit policy — checkpoint 079
+
+All data is classified (public, internal research, confidential financial/personal or restricted security/authority), assigned a purpose/owner and retention rule, and kept within its permitted access and processing boundaries. Market data, private finance/tax records, security/audit evidence and AI traces remain separate. Deletion must propagate across replicas, caches, exports, derived datasets and backups; restore must not resurrect deleted data or revoked authority.
+
+NZ record-retention rules are data-class specific: IRD cryptoasset record guidance requires at least seven years for records within its scope, while CARF's seven-year provider record obligation applies to RCASPs. The exact treatment of crypto perpetual records remains unresolved. See [Data Classification, Retention, Deletion and Audit Policy Architecture](docs/IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md).
