@@ -54,7 +54,7 @@ The owner remains the final authority. Consequential actions require explicit pe
 **Current status:** Phase 02 — active | Design and research only
 
 - Phase 01 open-source and infrastructure research is closed.
-- Phase 02 architecture and contract design is active. The current priority is completing and challenging the four shared foundations, beginning with the risk-management architecture.
+- Phase 02 architecture and contract design is active. The current priority is completing and challenging the four shared foundations and their cross-pillar contracts, including risk management and bounded-autonomy authority.
 - Phase 03 and all later phases remain locked.
 - No runtime implementation, trading execution, exchange credentials, bank connections, paid infrastructure, hosting or external security scans are authorised.
 - No live trading is authorised. The initial market scope remains crypto perpetual futures research; any later paper or live execution capability requires its own explicit approval and gates.
