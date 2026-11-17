@@ -195,3 +195,8 @@ The canonical ownership map, source-of-truth precedence and grouped unresolved-d
 ## Critical contract schemas
 
 Field-level logical schemas now define the owner, security, health, risk, action, reconciliation, personal-finance, tax, audit and recovery contracts. They specify semantics without selecting a database or wire format. See [Critical Contract Field Schemas](docs/IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md).
+
+
+## Deferred owner decisions
+
+The Phase 02 decision register groups unresolved scope, risk, portfolio, banking, tax, data, host trust, recovery, audit and final architecture decisions. It is a draft and does not change current permissions. See [Phase 02 Owner Decision Register](docs/IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md).
