@@ -616,3 +616,8 @@ Compared local hash/Merkle audit integrity, Sigstore Rekor/Rekor v2 and Tessera,
 ### Phase 02 — margin, collateral and liquidation architecture (checkpoint 099, 18 November 2026)
 
 Created [Margin, Collateral and Liquidation Architecture](docs/IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md), based on official Binance, Bybit (15 October 2026), OKX (11 August 2026) and Hyperliquid documentation. Defined separate risk-adjusted and venue margin equity, collateral eligibility/haircuts, tiered IM/MM, mark versus executable price, multi-currency valuation, open-order reservations, stress/hedge-credit boundaries and uncertain liquidation lifecycle. No venue/mode/formula selected; D-006/D-008 unchanged; ODR-02/03 remain open. Research only; no tests or runtime integration. Phase 02 active.
+
+
+### Phase 02 — integrated challenge refresh (checkpoint 100, 18 November 2026)
+
+Reopened the final integrated architecture challenge after policy-engine, owner-authenticator, audit-witness and margin/liquidation work. Corrected risk-document numbering; added margin/collateral/liquidation logical schemas; bound venue liquidation events to reservation conservation and reconciliation; added seven requirements and planned tests. Eight findings and dispositions are in [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md). Independent architecture/security/operations review remains outstanding. Phase 02 active; Phases 03–19 locked.
