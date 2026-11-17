@@ -128,3 +128,13 @@ Key purposes must be separated for owner root/recovery, owner approval, policy p
 - Owner root/recovery, owner approval, policy publisher, workload identity, audit checkpoint, encryption and future venue credentials MUST have distinct key purposes and access paths.
 - Canonical action intent, authority evidence, risk reservation, audit event and outbox MUST be durably committed before dispatch. Dispatch-start and its audit event MUST commit before network write.
 - Failure to durably commit pre-dispatch evidence blocks new risk-increasing side effects. A possibly transmitted request with lost acknowledgement remains UNKNOWN; reservations are retained until authoritative reconciliation. No exactly-once remote side-effect claim is permitted.
+
+
+## Unified state and reservation requirements — checkpoint 069
+
+- Every consequential action binds owner authority generation, policy version/digest, workload identity generation, risk policy/decision/reservation, health/security interlock generations, data evidence versions, account reconciliation sequence, instrument metadata version and exact action digest.
+- Initial authority generation is monotonic and never resets after restart/restore. Policy activation, owner suspension/revocation and relevant key/identity revocation are serialized against dispatch-start.
+- Local event commit order, not unsynchronised wall-clock timestamps, determines authority ordering. Clock uncertainty denies time-dependent admission.
+- Reservation states are explicit: NONE, HELD, IN_FLIGHT, PARTIALLY_FILLED, TERMINAL_PENDING_RECONCILIATION, RELEASED and INCIDENT_HOLD.
+- Fill transfer is idempotent and exactly once within the local ledger; residual reservation remains until authoritative terminal reconciliation. Cancellation request, timeout, restart or ambiguous acknowledgement never releases risk.
+- Material change to any bound version before dispatch-start invalidates prior admission and requires fresh evaluation.
