@@ -15,3 +15,8 @@ Fetched the revised document back from GitHub main and checked that each heading
 ## Boundaries
 
 No implementation, code, dependency, runtime, credentials, venue, account, financial action or phase transition. Phase 02 active; Phases 03–19 locked.
+
+
+## Read-back correction
+
+The first automated renumbering pass inverted the two duplicate §11 headings. A subsequent read-back detected this before closure. The map was corrected so the first infrastructure revalidation remains §11 and the duplicated second historical entry is §12; following sections are §13–§19. Final verification is based on the fetched-back heading sequence.
