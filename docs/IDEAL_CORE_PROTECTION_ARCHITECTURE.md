@@ -212,3 +212,6 @@ The architecture must be challenged as a whole through threat modelling, abuse c
 The architecture-first process, implementation-candidate due-diligence standard and acceptance gate are specified in [IDEAL Architecture-First Research and Design Plan](IDEAL_ARCHITECTURE_FIRST_RESEARCH_PLAN.md). The first detailed research task is the risk-management architecture, with data integrity, system health and security integrated from the beginning. Implementation ecosystem research follows architecture acceptance; code availability must not dictate the protection model.
 
 This section records design requirements only. It does not authorise runtime implementation, dependency adoption, deployment, external testing or phase advancement.
+
+
+The working requirements-to-controls-to-components-to-tests matrix across governance, risk, data integrity, system health, security, audit and cross-pillar interfaces is maintained in [IDEAL Integrated Foundation Traceability Matrix](IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md). It is a Phase 02 working design, not an implementation authorisation or frozen contract.
