@@ -139,7 +139,7 @@ The health/security oversight design should monitor:
 
 Security posture must be reported independently from operational availability. Suggested states include SECURE/ASSESSED, DEGRADED, AT_RISK, INCIDENT and UNKNOWN, with explicit scope, timestamp, evidence and assessment freshness. These are not absolute guarantees: an assessment only describes what was checked and when.
 
-A health/security monitor may trigger predefined containment actions such as disabling a compromised integration, revoking a token, isolating a workload or restricting affected actions. These controls require carefully defined authority, safeguards against false positives, recovery procedures and owner visibility. Monitoring must not silently change financial policy or initiate financial transactions.
+Separate the health supervisor from the security incident-response control plane. The health supervisor has only scoped restrictive-interlock authority and cannot issue/revoke credentials or change security policy. A separately authenticated and audited security incident-response authority may revoke a compromised token/identity or isolate an integration/workload under its own explicit permissions. Neither control plane may grant financial permissions or initiate cancellation, flattening, transfer, withdrawal or payment. All containment actions require scoped authority, false-positive safeguards, recovery procedures and owner visibility.
 
 The monitor itself must be protected and independently observed. A compromised host may falsify local telemetry; eventual architecture should consider external heartbeat, independent log destination, immutable backup, host integrity and out-of-band alerting proportionate to deployment risk.
 
