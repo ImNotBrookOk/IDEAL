@@ -206,3 +206,57 @@ This resolves the policy ambiguity identified in ADV-01. It does not resolve the
 ## Checkpoint 067 — autonomy authority and permission design follow-up
 
 The bounded-autonomy ambiguity identified in ADV-01 is resolved at the governance level by D-023, but technical enforcement remains an open Phase 02 design risk. The authority design now requires a non-bypassable action boundary, separate owner/security and risk gates, exact-action digest binding, independent workload identity, signed/versioned envelope and policy artefacts, revocation epochs, conservative reservation/dispatch semantics, and audit-before-admission. New explicit attack cases include Cedar policy-error skip semantics, OPA unsigned-bundle configuration, replayed owner approval, stale/revoked admission, key-purpose confusion, revocation partition, backup resurrection, clock rollback, policy-update/dispatch race and external side-effect acknowledgement loss. See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). These are design findings, not runtime test results.
+
+
+## Checkpoint 068 — adversarial closure review: revocation, host isolation and recovery
+
+### A. Revocation race finding
+
+A single revoked flag and short-lived token are insufficient. IDEAL must serialize revocation against the dispatch-start transition at one authoritative boundary. The durable transition to DISPATCH_STARTED is the local linearisation point:
+
+- Revocation committed first: dispatch is denied.
+- Dispatch-start committed first: the request is in-flight and cannot be recalled by IDEAL.
+- Crash/acknowledgement ambiguity: classify as potentially dispatched, retain reservation and reconcile.
+
+Revocation lifecycle is ACTIVE → REVOKE_REQUESTED → FENCING → DRAINING → EFFECTIVE, with RECONCILIATION_REQUIRED or RECOVERY_HOLD when worker acknowledgement, external outcome or authority integrity is uncertain. Global EFFECTIVE requires all registered dispatch boundaries to acknowledge the new monotonic generation and all unstarted actions to be fenced. A network partition prevents a false EFFECTIVE claim. The venue may still receive a request already transmitted.
+
+### B. Host compromise finding
+
+A strategy/AI process must not share credentials, UID, writable trust-anchor storage, unrestricted sockets or privileged IPC with the authority/action gateway. Logical trust zones Z0–Z4 are now defined in the autonomy architecture. For Linux, evaluate separate UIDs, capabilities removal, namespaces/cgroups, seccomp, Landlock/SELinux/AppArmor, read-only images, strict IPC and default-deny egress. Namespaces/containers alone are not a sufficient security boundary.
+
+For hostile generated code, evaluate disposable microVMs. Firecracker's own design treats guest vCPU code as malicious, recommends its jailer in production and leaves guest egress filtering to host-level controls. Firecracker does not protect a compromised host kernel/root. If the gateway and agent share a root-compromised host, local process separation cannot guarantee gateway integrity. Stronger assurance requires a separately protected gateway/credential trust domain and independently enforced network policy.
+
+### C. Recovery and rollback finding
+
+Backups restore historical data, not current authority. A restored snapshot can resurrect revoked envelopes, keys, identities, policy, epochs or one-use capabilities. All restored authority state is quarantined; ephemeral capabilities are invalidated; recovery advances the generation; the latest revocation state must be checked against a trust anchor independent of ordinary backup. If current authority cannot be established, remain in RECOVERY_HOLD. Rebuild, re-attest, rotate identities, validate audit, reconcile external venue state and require explicit owner approval before reactivation.
+
+### D. New prioritised attack cases
+
+| Case | Attack | Required outcome |
+|---|---|---|
+| ADV-19 | Revocation commits after permit issuance but before dispatch-start | Generation mismatch; no network write |
+| ADV-20 | Revocation and dispatch-start race concurrently | One serialised winner; in-flight semantics if dispatch-start wins |
+| ADV-21 | Partitioned worker resumes using cached authority | Deny; no stale-generation dispatch |
+| ADV-22 | Worker omitted from revocation registry | No global EFFECTIVE; inventory/attestation discrepancy triggers hold |
+| ADV-23 | Strategy escapes container and reaches host gateway | Independent boundary/network isolation prevents privileged action |
+| ADV-24 | Agent reads gateway credential through procfs, FD, environment or shared mount | No credential exists in agent trust zone; access denied |
+| ADV-25 | DNS rebinding/redirect/proxy abuse reaches venue API from Z0 | Host-enforced egress denial |
+| ADV-26 | Root/kernel compromise on shared host alters local gateway | Treat host trust as lost; disable capability and recover in separate trust domain |
+| ADV-27 | Restore old snapshot predating revocation | Independent high-water anchor rejects old generation |
+| ADV-28 | Restore while disconnected from trust witness | RECOVERY_HOLD; no execution activation |
+| ADV-29 | Old workload token/owner assertion replayed after recovery | New generation/nonce/credential state rejects replay |
+| ADV-30 | Backup attacker alters both authority DB and local checkpoint | Independent trust anchor detects or forces manual recovery hold |
+
+### E. Evidence and limitations
+
+The analysis is grounded in NIST SP 800-207's resource-centric zero-trust model, OWASP transaction authorisation guidance requiring a final execution gate and operation-specific short-lived authorisation, Linux Landlock documentation (including kernel ABI/feature limits and its warning that namespaces alone are not designed as complete access-control), Firecracker's own threat-containment and egress-filtering design, and TUF anti-rollback/freeze-attack protections. See the source register in the autonomy architecture.
+
+This is a design review only. No sandbox escape, penetration test, kernel test, external scan, recovery exercise or runtime fault injection was performed. The threat model is not proof that every vulnerability is known or prevented.
+
+### F. Remaining gates
+
+- Physical topology and gateway separation depend on deployment decision and are not frozen.
+- Revocation propagation SLO, worker inventory authority and strong-consistency store remain open.
+- Root/recovery key custody and independent high-water anchor remain open.
+- Exact OS sandbox profile, microVM selection and egress implementation remain open.
+- These are Phase 02 architecture decisions; no runtime implementation or Phase 03 advancement is authorised.
