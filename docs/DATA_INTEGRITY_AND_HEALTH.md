@@ -315,3 +315,12 @@ The data architecture now distinguishes source event/publication time, receive t
 Quality is a consumer-specific vector covering source authenticity, schema, completeness/sequence, freshness, plausibility, cross-source consistency, revision, licence, reconciliation and clock confidence. Unknown, conflicted, stale, incomplete or unlicensed evidence must not be silently converted into valid data. Market, private-finance, security/audit and AI traces remain separate data planes.
 
 See [IDEAL Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md) for lifecycle, bitemporal semantics, bank/market/tax-specific rules, retention, verification and current NZ provider/tax evidence. W3C PROV, Apache Iceberg and MLflow are conceptual/candidate references only; none is adopted.
+
+
+## Reconciliation and verified recovery — checkpoint 076
+
+Reconciliation is a domain-owned comparison between independent state representations, not a generic sync or last-write-wins merge. There is no universal source of truth: venue evidence is required for external order/fill/position facts; IDEAL's journal is the personal-finance accounting record after controlled posting; bank/provider records remain observations; IRD assessments differ from IDEAL tax estimates; raw market observations differ from reconstructed canonical state.
+
+Mismatch, unknown and quarantine states remain explicit. Corrections preserve both source sides and create linked revisions. Recovery requires restore into quarantine, integrity/identity/policy checks, external-state reconciliation, recomputation of dependent projections, scoped attestations from each foundation and owner release where reserved. Restart or reconnect alone never establishes recovery.
+
+See [IDEAL Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). No runtime recovery or account reconciliation has been performed.
