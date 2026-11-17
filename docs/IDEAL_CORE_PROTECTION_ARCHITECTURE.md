@@ -262,3 +262,10 @@ Preserve separate concepts for ledger balance, pending/available cash, investmen
 No component may self-certify full recovery. Reconciliation is domain-owned and uses the authoritative evidence for the fact in question. Restored state remains quarantined until data/audit integrity, current identity and revocation state, external account state, derived projections and all required pillar attestations are verified. Health, security, data and risk attest only to their own scope. Owner release remains mandatory for D-023-reserved authority restoration.
 
 See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
+
+
+## Data classification and retention governance — checkpoint 079
+
+All four pillars consume a shared data classification and retention policy without sharing authority. Security enforces least privilege and confidentiality; Data Integrity preserves provenance/correction/deletion lineage; Health observes retention/backup/restore control operation; Risk consumes only permitted, current evidence. Retention and deletion are per data class, purpose, source licence and legal obligation. Audit immutability does not override privacy or contractual deletion requirements.
+
+See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md).
