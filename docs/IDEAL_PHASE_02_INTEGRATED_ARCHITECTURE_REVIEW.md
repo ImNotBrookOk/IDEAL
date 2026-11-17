@@ -161,3 +161,8 @@ This closes a logical composition gap at design level, not the platform-specific
 ## Checkpoint 082 — logical diagram coverage
 
 The logical domain/evidence flow, trust zones, forbidden flows, action admission/dispatch, incident/recovery and temporal evidence lineage are now represented in [IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md). Physical deployment/network diagrams remain open until a host topology is approved.
+
+
+## Checkpoint 083 — security assurance traceability
+
+The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md) maps SEC-01–SEC-14 to protected assets, 28 threat paths, control owners, future verification and residual risks. This improves traceability but does not replace independent security review or runtime evidence.
