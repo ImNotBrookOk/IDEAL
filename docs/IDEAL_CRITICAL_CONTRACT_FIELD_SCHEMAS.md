@@ -1,7 +1,7 @@
 # IDEAL Critical Contract Field Schemas
 
 **Status:** Phase 02 technology-neutral logical schemas; provisional  
-**Checkpoint:** 091 — 17 November 2026  
+**Checkpoint:** 092 — 17 November 2026  
 **Scope:** Field-level semantics and constraints for critical cross-domain/pillar contracts  
 **Authority:** D-018, D-019, D-020, D-021, D-022, D-023  
 **Boundary:** Logical schema only. No JSON Schema, protobuf, SQL DDL, API, broker, serializer or runtime is selected.
