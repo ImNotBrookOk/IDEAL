@@ -579,3 +579,8 @@ This is a draft, not yet presented for approval. Existing accepted decisions rem
 ### Phase 02 final integrated architecture challenge (checkpoint 089)
 
 Created [Final Integrated Architecture Challenge](docs/IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md). The cross-pillar review identified and corrected a logical contract gap: financial amounts now bind to canonical fiat/crypto AssetIds rather than ISO currency alone. R-CONTRACT-001 and future T-ASSET-01–06 were added to traceability. Other platform/owner/assurance blockers remain open. No runtime tests or independent review were performed. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 official source reference revalidation (checkpoint 090)
+
+Created [Official Source Reference Revalidation](docs/IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md). It rechecked New Zealand privacy, cryptoasset record-keeping, CARF, tax-bill status, NIST key-management/crypto-agility and Firecracker host-hardening references. It records amended Privacy Act section 27 conditions, the own-benefit RCASP exclusion and conflicting CARF registration dates across IRD pages. No legal/tax conclusion or provider status was determined. Phase 02 active; Phases 03–19 locked.
