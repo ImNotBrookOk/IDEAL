@@ -513,3 +513,8 @@ The lowest-cost current choice remains no deployment. If a later requirement dem
 Created [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](docs/IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). It composes owner/policy, workload identity, security incident, health, data evidence, risk, reservation, action, reconciliation and recovery lifecycles; defines conjunctive admission, action version-vector binding, restrictive precedence, transition invariants and future verification.
 
 The existing policy lifecycle DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE is preserved. The action gateway rechecks authority generation and all relevant version-vector elements immediately before dispatch. No pass in one state machine implies a pass in another. Exact schemas, numeric thresholds, state storage and topology remain open. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 logical architecture diagrams (checkpoint 082)
+
+Created [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md), covering bounded-context/evidence flow, trust zones and forbidden flows, conjunctive action admission/dispatch, incident/recovery lifecycle and temporal evidence lineage. This closes the logical diagram deliverable at design level. Physical network, process and storage diagrams remain deferred pending topology/technology evidence. No deployment or implementation is authorised.
