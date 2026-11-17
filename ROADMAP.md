@@ -651,3 +651,8 @@ Updated official Linux kernel and Firecracker evidence, including supported rele
 ### Phase 02 — canonical serialization contract research (checkpoint 109, 18 November 2026)
 
 Specified the missing byte-level canonicalization requirements for exact financial values, digests, signatures, idempotency and replay. RFC 8785 JCS and RFC 8949 deterministic CBOR remain candidates; neither is selected. TST-105-01 remains open pending an owner-approved profile and cross-implementation vectors. See [Canonical Serialization and Digest Contract Research](docs/IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md). Phase 02 ACTIVE; Phases 03–19 LOCKED.
+
+
+### Phase 02 perpetual funding and mark-price semantics refresh — checkpoint 110 (18 November 2026)
+
+Created [Perpetual Funding and Mark-Price Semantics Source Refresh](docs/IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) from current official Binance, Bybit and OKX material. Funding interval/cap and mark-price methodology are effective-dated, instrument-specific configuration—not global constants. Funding forecasts are not realised ledger events; settlement can affect available balance or position margin. Added logical schemas and data-freshness/margin architecture integration plus boundary, correction, stale-method and mode-specific tier tests. No venue, formula, account mode or runtime selected. Phase 02 ACTIVE; Phases 03–19 LOCKED.
