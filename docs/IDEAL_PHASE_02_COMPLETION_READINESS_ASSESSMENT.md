@@ -76,3 +76,8 @@ The next valid gate is a read-only independent review of the current baseline, f
 ## 7. Authority boundary
 
 No code, runtime, dependencies, venue/account connection, credentials, host provisioning, external security test, paper/live execution, paid service, policy change or phase advancement. This assessment creates no new owner decision and changes no accepted numerical policy.
+
+
+## Checkpoint 105 — three-lens review
+
+[Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md) records 15 internal findings across architecture simplicity, security/operations and contract testability. This is not independent assurance. No independent human reviewer or separate review service was available in this workstream. The limitation is explicitly documented for owner disposition under ODR-12. High residual gates: dispatcher inventory/revocation objective, host-root/failure-domain separation, root/recovery custody, canonical serialization/schema evolution, and ODR-02/03. Phase 02 remains NOT COMPLETE.
