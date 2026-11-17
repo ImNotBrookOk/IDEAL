@@ -43,7 +43,18 @@ Prior context was supplied as a project continuity summary. It records the user'
 
 ## Verification
 
-GitHub write outcomes and read-back verification are recorded after the operations complete. A commit/API response alone is not proof that resulting file contents were fetched and checked.
+All six changed/created files were fetched back from GitHub main and content-checked:
+
+| File | Read-back blob SHA | Checks |
+|---|---|---|
+| docs/RISK_ARCHITECTURE_RECONCILIATION.md | 436a15ea1ae3f5c1b24d7fc6ce464ed56fa9e089 | RM-20, D-006, adversarial review, Phase 02 boundary present |
+| REQUIREMENTS.md | 8fe31d501df4af7b4ef9f8e79a421b131ac42d8c | No paper/live orders; future proposal gates; exact-action binding present |
+| ARCHITECTURE.md | 64aaeb3788f9785e70568e9c1066b10db522ae71 | Future paper simulator explicitly unauthorised; no active order flow present |
+| ROADMAP.md | 11f0d7e9ab218e122b205d8fae5c1e649bbe141d | Current-state precedence note and Phase 02 unlocked status present |
+| This checkpoint audit | c5ced49ddbef450b654cae00800c8789bd331038 | Checkpoint and approval boundary present |
+| docs/CHATGPT_CONVERSATIONS/README.md | 7f8a16433982987f0b50902fe228898a3fd89328 | Checkpoint 063 indexed |
+
+The reconciliation document read-back length is 27,881 characters. All listed content checks passed. This verifies the fetched contents, not runtime behaviour; no runtime tests were run or applicable.
 
 ## Current state
 
