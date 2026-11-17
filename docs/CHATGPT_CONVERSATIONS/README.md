@@ -167,3 +167,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-068-adversarial-revocation-isolation-recovery-review.md](2026-11-17-068-adversarial-revocation-isolation-recovery-review.md) | Deep adversarial review of revocation/dispatch races, host/process/network isolation, root compromise, backup rollback and authority resurrection; adds ADV-19–ADV-30; no implementation or testing performed |
 
 | [2026-11-17-069-supervisor-policy-root-audit-atomicity-review.md](2026-11-17-069-supervisor-policy-root-audit-atomicity-review.md) | Phase 02 design of restrictive-only health supervisor, immutable policy publication/key-role separation, and atomic local intent/reservation/audit/outbox/dispatch-start sequencing; ADV-31–ADV-38; no runtime tests or implementation |
+
+| [2026-11-17-070-cross-document-state-machine-consistency-review.md](2026-11-17-070-cross-document-state-machine-consistency-review.md) | Cross-document reconciliation of health vs security authority, DISPATCH_STARTED, atomic local intent/reservation/audit/outbox, monotonic authority generation, reservation states, D-023 owner approval and ADV-39 approval-UI integrity |
