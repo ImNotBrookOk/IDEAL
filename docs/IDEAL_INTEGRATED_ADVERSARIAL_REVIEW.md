@@ -260,3 +260,37 @@ This is a design review only. No sandbox escape, penetration test, kernel test, 
 - Root/recovery key custody and independent high-water anchor remain open.
 - Exact OS sandbox profile, microVM selection and egress implementation remain open.
 - These are Phase 02 architecture decisions; no runtime implementation or Phase 03 advancement is authorised.
+
+
+## Checkpoint 069 — supervisor, policy root and audit atomicity challenge
+
+The architecture now specifies the following additional invariants:
+
+1. The health supervisor is an observer with a one-way restrictive interlock channel. It can deny/restrict affected risk-increasing actions, but cannot create authority, edit policy, approve risk, release restrictions after critical incidents, or initiate financial side effects.
+2. A separate process identity is not independent against shared host root/kernel compromise. Stronger threat models require a separate host/VM/hardware watchdog or an explicit loss-of-trust response.
+3. Policy/envelope lifecycle is immutable: DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE → SUPERSEDED/REVOKED. Owner approval binds exact digest and context; publisher signature is a distinct role. Activation, revocation and dispatch-start share a monotonic serialized generation.
+4. Transaction A atomically commits canonical intent, authority evidence, risk reservation, audit event and outbox. Transaction B atomically consumes the one-use permit, checks generation and commits DISPATCH_STARTED plus audit before network write. Transaction C appends authoritative outcome/reconciliation and updates reservation/order state.
+5. The local store and remote exchange cannot share an ACID transaction. A potentially transmitted request with missing acknowledgement remains UNKNOWN; idempotency and reconciliation replace impossible exactly-once claims.
+6. Audit projection/witness outage does not erase durable local pre-dispatch evidence; failure to commit required local intent/dispatch-start evidence blocks new risk-increasing side effects.
+
+### New adversarial cases
+
+| Case | Attack/failure | Required outcome |
+|---|---|---|
+| ADV-31 | Compromised health supervisor asserts HEALTHY to hide failure | Gateway does not trust self-attestation; independent signals/heartbeat and scoped fail-closed controls |
+| ADV-32 | Compromised supervisor issues a financial action | No interface/permission exists; restrictive-only channel |
+| ADV-33 | Supervisor false-positive floods restrictions | Scoped reason codes, rate limits/hysteresis; availability impact is visible and owner-resolved |
+| ADV-34 | Policy publisher signs an owner-unapproved scope expansion | Exact owner approval missing/mismatched; activation denied |
+| ADV-35 | Owner approval for one digest is replayed against another policy | Digest/context/nonce mismatch; reject |
+| ADV-36 | Policy update races dispatch-start | Shared generation serialises; stale policy cannot dispatch |
+| ADV-37 | Audit/outbox write fails but adapter still dispatches | No durable Transaction A/B, therefore no network side effect |
+| ADV-38 | External venue accepts but Transaction C/audit projection fails | Preserve DISPATCH_STARTED/UNKNOWN and reservation; reconcile and append outcome later |
+
+### Residual risks
+
+- A single-owner root/recovery design cannot obtain true two-person separation without changing the ownership model. Hardware-backed possession plus user verification may reduce risk but is not equivalent to dual control.
+- A local-only host cannot independently prove its own root/kernel integrity after root compromise. A separate trust domain or fail-closed dormant state is required for that threat.
+- Audit hash chains do not prevent rewrite if attacker controls both event store and checkpoint trust. Independent checkpoint storage and recovery tests are required.
+- Local transactional durability is not the same as external side-effect atomicity. The adapter boundary remains an uncertainty boundary.
+
+No runtime fault injection, supervisor compromise test, key ceremony, database crash test or venue reconciliation exercise was performed.
