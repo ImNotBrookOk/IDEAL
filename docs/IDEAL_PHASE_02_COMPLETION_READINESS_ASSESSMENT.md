@@ -62,7 +62,7 @@ Open decisions are not all blockers to research completion. They must remain vis
 - Re-read current Phase 02 exit criteria and owner decision register.
 - Confirmed Phase 01 CLOSED and Phase 02 ACTIVE from authoritative ROADMAP current-state section.
 - Confirmed Phases 03–19 remain locked.
-- Confirmed 36/36 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
+- Confirmed 37/37 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
 - Checkpoint 099 margin/collateral/liquidation architecture is integrated into requirements, logical schemas, state machines, traceability and integrated challenge.
 - Checkpoint 100 internal challenge findings and checkpoint 101 documentation integrity findings are recorded.
 - Checkpoint 102 document-map section numbering corrected and fetched back.
