@@ -240,3 +240,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 23. Infrastructure security source refresh — checkpoint 107
 
 [Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md) records current Linux/Firecracker lifecycle evidence, upstream advisories and future host acceptance requirements.
+
+
+## 24. Source refresh verification — checkpoint 108
+
+[Checkpoint 108 audit](CHATGPT_CONVERSATIONS/2026-11-18-108-phase-02-source-refresh-verification.md) records the fetch-back of checkpoint 107 integration and 38/38 local Markdown target path checks.
