@@ -1929,3 +1929,12 @@ If A or B cannot durably commit, do not dispatch. If the request may have been s
 Use explicit reservation states: NONE → HELD → IN_FLIGHT → PARTIALLY_FILLED / TERMINAL_PENDING_RECONCILIATION → RELEASED, with INCIDENT_HOLD for compromised or contradictory state. HELD is committed before dispatch; DISPATCH_STARTED moves it to IN_FLIGHT. Filled quantity transfers to position exposure exactly once; residual remains reserved. Cancel-pending, timeout, restart, lost acknowledgement or non-authoritative terminal indication cannot release residual capacity.
 
 Dispatch-start serializes against the monotonic authority generation and rechecks risk-policy version, health interlock generation, data/account evidence and instrument metadata. If any required version changed before dispatch-start, reject and atomically release only a provably pre-dispatch reservation. After dispatch-start, retain UNKNOWN/in-flight state and reconcile. Full version binding and reservation states are in autonomy authority architecture §§27.1–27.7.
+
+
+## 22. Domain risk and capital semantics — checkpoint 074
+
+The system-wide risk taxonomy and capital ontology are consolidated in [IDEAL Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md). Risk remains domain-specific: derivatives, spot investments, equities/ETFs, commodity products, cross-asset hedging, personal finance and tax intelligence do not share one interchangeable risk score or permission model.
+
+The portfolio/capital view is read-only by default. It must preserve gross exposure, net directional exposure, factor exposure, liquidity, counterparty/custody, margin/collateral, economic net worth, cash-flow capacity and tax exposure as distinct views. No implicit legal-entity netting, cross-venue collateral portability, hedge credit or capital reallocation is assumed.
+
+D-006 and D-008 remain specific to the initial crypto-perpetual risk policy. D-006's equity denominator remains unresolved; D-008's accepted UTC day-start baseline remains unchanged pending owner decision. No numerical risk limit or allocation is introduced. D-018 remains a hard user-autonomy rule: tax reserves are informational and cannot lock or restrict capital.
