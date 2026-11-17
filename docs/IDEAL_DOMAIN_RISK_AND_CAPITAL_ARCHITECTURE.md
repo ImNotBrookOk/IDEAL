@@ -209,3 +209,8 @@ These are proposed future tests, not executed results.
 This architecture defines the risk taxonomy and capital semantics needed to avoid a misleading single-balance/single-risk model. It does not approve a unified risk budget, new numerical limits, portfolio allocation, hedge credit, domain activation or capital restriction.
 
 Phase 02 remains active; Phases 03–19 remain locked. No implementation, execution, external account access, credentials, paid infrastructure or financial action is authorised.
+
+
+## Canonical asset identity — checkpoint 093
+
+All capital, exposure, collateral, fee, funding, tax and valuation amounts must bind to a canonical AssetId, not a ticker or ISO currency string alone. Fiat uses ISO 4217 where applicable; crypto-native assets and tokens require network/contract-aware identities and effective-dated venue/provider symbol mappings. Stablecoins remain distinct assets and are not assumed to equal USD. Conversions require an explicit source, side, timestamp, spread/haircut and completeness record. See [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md) and the [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md).
