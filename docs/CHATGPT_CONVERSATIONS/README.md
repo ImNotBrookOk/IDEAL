@@ -215,3 +215,6 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-089-final-integrated-architecture-challenge.md](2026-11-17-089-final-integrated-architecture-challenge.md) | Final Phase 02 internal integrated challenge; corrected fiat/crypto AssetId semantics in canonical contracts; added R-CONTRACT-001 and T-ASSET-01–06; ten findings and remaining blockers recorded; no runtime tests, independent review or phase advancement |
+
+
+| [2026-11-17-090-official-source-revalidation.md](2026-11-17-090-official-source-revalidation.md) | Revalidated current NZ Privacy Act section 27/11 and IPP 12, IRD cryptoasset records/CARF/tax-bill status, NIST key management/crypto agility and Firecracker host hardening; documented CARF registration date conflict; updated canonical privacy/data/security sources; no legal conclusion or implementation |
