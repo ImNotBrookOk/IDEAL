@@ -166,3 +166,8 @@ The logical domain/evidence flow, trust zones, forbidden flows, action admission
 ## Checkpoint 083 — security assurance traceability
 
 The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md) maps SEC-01–SEC-14 to protected assets, 28 threat paths, control owners, future verification and residual risks. This improves traceability but does not replace independent security review or runtime evidence.
+
+
+## Checkpoint 084 — simplicity and maintainability review
+
+[IDEAL Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md) recommends preserving logical bounded contexts and independent authorities while avoiding a direct translation into many services, databases, agents or always-on infrastructure. The provisional smallest viable build is a modular monolith with one authoritative store if proven durable, deterministic services, evidence manifests and a phone-first read/control UI. No original documents were deleted or consolidated.
