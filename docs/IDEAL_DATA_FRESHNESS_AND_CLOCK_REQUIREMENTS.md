@@ -188,3 +188,8 @@ Phase 02 remains active; Phases 03–19 remain locked. No provider, feed, clock 
 ## Asset identity in freshness and FX evidence — checkpoint 093
 
 FX freshness is evaluated for an explicit canonical AssetId pair, not an ambiguous ticker/currency string. For crypto-native tokens and stablecoins, the network/contract identity and effective-dated provider mapping are part of the source contract. Price/FX freshness does not establish peg stability or asset equivalence. See [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md).
+
+
+## Funding schedule and mark-method revisions — checkpoint 110
+
+Funding schedules are source data, not a global eight-hour timer. Retain effective-dated interval, next settlement time, cap/floor, publication time, observed settlement time and source revision. Forecast funding remains distinct from realised settlement. Mark-price observations must bind to the applicable effective-dated methodology/configuration revision; stale or missing revision invalidates dependent liquidation-risk decisions. See [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md).
