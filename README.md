@@ -135,3 +135,8 @@ IDEAL treats reconciliation as a domain-owned evidence comparison, not a generic
 ## Integrated architecture review
 
 The Phase 02 desk review now challenges the complete system across domain boundaries, data time/provenance, risk/capital, autonomy, security, privacy, reconciliation and recovery. It records adversarial scenarios, residual blockers and deferred owner decisions. It is not independent assurance or implementation approval. See [Phase 02 Integrated Architecture Review](docs/IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md).
+
+
+## Cross-domain accounting and valuation
+
+Synthetic worked examples now define how IDEAL should avoid double-counting transfers, confusing derivative notional with assets, misclassifying funding/fees, treating collateral as free cash, duplicating pending bank transactions, or turning tax estimates into capital restrictions. See [Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md).
