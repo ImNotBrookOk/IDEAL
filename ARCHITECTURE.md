@@ -150,3 +150,10 @@ Risk policy is domain-specific. The shared platform provides common governance, 
 Portfolio/capital aggregation is read-only by default and preserves gross exposure, net exposure, factor risk, liquidity, counterparty/custody, margin/collateral, economic net worth, cash-flow capacity and tax exposure separately. It cannot infer netting, collateral transferability, hedge credit or permission to reallocate capital. D-006/D-008 remain initial crypto-perpetual policy only; D-018 prevents tax reserve estimates from restricting capital.
 
 See [IDEAL Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md).
+
+
+## Reconciliation and verified recovery — checkpoint 076
+
+Reconciliation is domain-owned, evidence-based and explicit; no universal last-write-wins source of truth exists. External venue state, bank observations, IDEAL ledgers, IRD assessments, raw market evidence, policy trust and operational health have distinct authorities. Mismatches remain visible and corrections are linked revisions.
+
+Restored data and services remain quarantined until integrity, identity/revocation, audit continuity, external-state reconciliation, derived-state recomputation and scoped pillar attestations pass. A restart or reconnect does not prove recovery. See [IDEAL Reconciliation, Incident Containment and Verified Recovery Architecture](docs/IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
