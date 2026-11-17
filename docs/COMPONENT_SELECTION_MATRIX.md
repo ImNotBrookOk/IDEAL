@@ -93,3 +93,26 @@ The owner approved the component dispositions in this matrix, including preferre
 ## Checkpoint 080 — current host topology disposition
 
 The current host trust analysis is in [IDEAL Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No host is selected. Phone-first control, Windows PC fallback only if required and mobile-data constraints remain. WSL2 is not a security boundary; Hyper-V remains within the host trust domain; KVM/Firecracker and a separate action gateway are future candidates only. No provisioning, device inspection, hosting or purchase is authorised.
+
+
+## Checkpoint 094 — infrastructure revalidation and operational caveats (17 November 2026)
+
+The following findings refine, but do not replace, the owner-approved dispositions above. No component is adopted and no host is selected.
+
+### SQLite durability gate
+
+SQLite remains the preferred storage POC candidate, but the 2026 WAL-reset incident demonstrates that WAL mode and synchronous settings alone are not a complete durability assurance. Tailscale documented repeated corruption in a production single-writer deployment; Antithesis reports that the race was fixed in SQLite 3.51.3 and reproduced with a concurrent writer/checkpoint workload. Any future SQLite POC must pin a SQLite runtime at or above the fixed release, verify the actual linked SQLite library rather than infer it from a wrapper version, and add crash/concurrency tests covering writer/checkpoint overlap, committed-write visibility, `PRAGMA integrity_check`, backup/restore and recovery. This is a future acceptance condition, not evidence that IDEAL is affected.
+
+Sources: https://tailscale.com/blog/sqlite-wal-reset-bug ; https://antithesis.com/blog/2026/wal-reset-bug/
+
+### NautilusTrader persistence boundary
+
+Current upstream architecture documentation describes an in-memory cache and asynchronous database persistence. A synchronous persistence/enqueue error may be logged without preventing cache insertion/publication, and a later asynchronous database error does not roll back the in-memory state. Therefore NautilusTrader's cache/database backing must not be treated as IDEAL's authoritative financial ledger, durable audit log, transactional outbox or authority store. Any future adapter must sit behind IDEAL-owned durable intent/reservation/audit/dispatch contracts and reconcile engine state against the canonical journal.
+
+Sources: https://nautilustrader.io/docs/latest/concepts/architecture/ ; https://nautilustrader.io/docs/latest/concepts/overview/
+
+### ARM64 support clarification
+
+Current NautilusTrader installation documentation explicitly lists Linux Ubuntu ARM64 as a supported platform. This strengthens the platform-compatibility evidence alongside IDEAL's isolated x86_64/ARM64 tests, but does not validate the current 2.0.0rc9 API maturity, a specific OCI A1 instance, workload throughput, durability or production suitability.
+
+Source: https://nautilustrader.io/docs/latest/getting_started/installation/
