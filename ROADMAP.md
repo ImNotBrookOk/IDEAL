@@ -449,3 +449,12 @@ Fresh official-source research clarified three important matters:
 Updated [Personal Finance Research](docs/PERSONAL_FINANCE_RESEARCH.md) §22 and [Data Integrity and Health](docs/DATA_INTEGRITY_AND_HEALTH.md). W3C PROV, Apache Iceberg and MLflow remain references/candidates only. No implementation, real data, provider credentials, bank connection, subscription, tax filing/payment, model training or phase advancement. Phase 02 active; Phase 03–19 locked.
 
 Next: reconcile evidence/time semantics with risk decision validity, account and portfolio reconciliation, audit retention and recovery; then define domain-specific risk and capital aggregation contracts.
+
+
+### Phase 02 architecture checkpoint — domain risk and capital semantics (checkpoint 074)
+
+Created [IDEAL Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md) and reconciled it into the risk, core-protection, architecture, requirements and traceability documents. It establishes domain-specific risk taxonomies, separate authority for derivatives/investment/personal-finance/tax domains, capital ontology, honest gross/net/factor/liquidity/counterparty aggregation, explicit no-implicit-netting rules, D-006/D-008 scope preservation and D-018 user capital autonomy.
+
+No universal risk score, unified risk budget, cross-asset hedge credit, capital allocation, netting set, numerical threshold or domain activation was approved. D-006 denominator and D-008 baseline semantics remain unresolved. Portfolio/capital aggregation is read-only by default. Phase 02 active; Phases 03–19 locked.
+
+Next: reconcile risk and capital contracts with reconciliation/account state, authority/action lifecycle, health/security incident containment and audit/retention; then perform an integrated cross-document adversarial challenge.
