@@ -153,3 +153,8 @@ Key purposes must be separated for owner root/recovery, owner approval, policy p
 - Under D-018, tax estimates/reserve designations are informational and cannot lock, segregate, deduct or force payment of owner capital.
 - Data quality, freshness, source and valuation time are mandatory for each capital/risk measure. Missing or stale FX/valuation evidence yields an explicitly incomplete/unknown aggregate, not a silent zero or unbounded stale carry-forward.
 See [Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md). These are design requirements, not implementation or new numerical policy.
+
+
+## Requirement-to-component-to-control-to-test traceability
+
+Stable traceability aliases map each requirement to its owning component, control/contract and future verification identifier. See [IDEAL Requirement → Component → Control → Test Traceability](docs/IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md). The test IDs are planned verification work, not executed test evidence.
