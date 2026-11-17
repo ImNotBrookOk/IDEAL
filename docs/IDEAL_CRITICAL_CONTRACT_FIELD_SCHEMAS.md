@@ -1,7 +1,7 @@
 # IDEAL Critical Contract Field Schemas
 
 **Status:** Phase 02 technology-neutral logical schemas; provisional  
-**Checkpoint:** 089 — 17 November 2026  
+**Checkpoint:** 091 — 17 November 2026  
 **Scope:** Field-level semantics and constraints for critical cross-domain/pillar contracts  
 **Authority:** D-018, D-019, D-020, D-021, D-022, D-023  
 **Boundary:** Logical schema only. No JSON Schema, protobuf, SQL DDL, API, broker, serializer or runtime is selected.
@@ -14,7 +14,8 @@
 | Version | Monotonic integer or immutable version token scoped to its owner |
 | Digest | Algorithm identifier plus digest value; canonicalisation rules must be versioned |
 | Decimal | Exact decimal/fixed-point value; never binary floating-point for authoritative money/quantity |
-| Currency | ISO 4217 currency code where applicable; non-fiat assets use explicit asset/instrument identifier |
+| AssetAmount | Decimal + canonical AssetId + precision/scale + rounding context + valuation metadata where converted |
+| AssetId | Canonical fiat or crypto asset identity; fiat may map to ISO 4217, crypto-native/token identity includes network and contract address where applicable, with effective-dated provider/venue symbol mappings |
 | Quantity | Decimal plus unit, precision and contract multiplier/specification version |
 | Price | Decimal plus instrument, price type, quote currency, source and timestamp |
 | Instant | UTC instant plus source precision and original offset/timezone when relevant |
@@ -28,7 +29,7 @@
 
 Common rules:
 - Every contract has contract ID/version, owner context and sensitivity/retention class.
-- All timestamps declare what event they represent; a field named simply timestamp is prohibited in critical contracts.
+- All timestamps declare what event they represent; a field named simply timestamp is prohibited in critical contracts. All monetary/asset amounts bind to AssetId; ISO 4217 is used for fiat identity only.
 - Amounts carry currency, unit, account/owner and valuation basis.
 - Missing values are explicit absent/unknown states, not zero or empty-string defaults.
 - Unknown enum values are rejected at authority/risk boundaries.
@@ -69,7 +70,7 @@ Common rules:
 | permitted_action_classes | Enum[] | Yes | Positive allowlist |
 | prohibited_action_classes | Enum[] | Yes | Explicit denylist/reserved actions |
 | operating_mode | Enum | Yes | Capability mode |
-| hard_limits | Structured limit set | Yes | Units, currencies, aggregation basis and scope explicit |
+| hard_limits | Structured limit set | Yes | AssetId, units, aggregation basis, conversion source and scope explicit |
 | maximum_permissions | Structured scope | Yes | Upper bound; no inferred permissions |
 | stop_conditions | Structured predicates | Yes | Deterministic trigger and safe-state mapping |
 | starts_at / expires_at | Instant | Yes | Validity window |
@@ -129,7 +130,7 @@ A health interlock can restrict only. It cannot issue credentials, grant permiss
 | domain/account/instrument_scope | Scope | Yes | Risk perimeter |
 | risk_policy_version | Version | Yes | Policy used |
 | capital_measure | Enum | Yes | Named basis: economic equity, risk-adjusted equity, venue margin equity etc. |
-| capital_value | Decimal + Currency | Yes | Value and valuation basis/time |
+| capital_value | AssetAmount | Yes | Value and valuation basis/time; conversion is explicit and evidence-bearing |
 | exposure_snapshot_ref | EvidenceRef | Yes | Positions, orders, liabilities and reservations |
 | market_evidence_refs | EvidenceRef[] | Yes | Prices, liquidity, funding, FX and metadata |
 | data_quality_vector | Structured vector | Yes | Freshness, completeness, conflict, clock, source |
@@ -151,7 +152,7 @@ Risk APPROVED does not grant security permission or owner authority.
 | action_digest | Digest | Yes | Exact action |
 | account/instrument_scope | Scope | Yes | Exposure perimeter |
 | reserved_quantity | Quantity | If quantity-based | Remaining potential fill |
-| reserved_margin/capital | Decimal + Currency | If capital-based | Explicit risk capacity |
+| reserved_margin/capital | AssetAmount | If capital-based | Explicit risk capacity and collateral asset identity |
 | state | Enum | Yes | NONE/HELD/IN_FLIGHT/PARTIALLY_FILLED/TERMINAL_PENDING_RECONCILIATION/RELEASED/INCIDENT_HOLD |
 | filled_quantity | Quantity | Yes | Filled portion transferred exactly once |
 | residual_quantity | Quantity | Yes | Still reserved |
@@ -245,7 +246,7 @@ A network attempt is not proof of venue receipt. UNKNOWN remains unresolved unti
 | provider_revision | ID/Version | If available | Provider update/correction marker |
 | raw_evidence_ref | EvidenceRef | Yes | Original statement/API row |
 | transaction_status | Enum | Yes | PENDING/POSTED/REVERSED/DELETED/UNKNOWN |
-| amount/currency | Decimal + Currency | Yes | Native amount |
+| amount/asset_id | AssetAmount | Yes | Native amount bound to canonical AssetId; fiat uses ISO 4217 mapping |
 | initiated/authorised/posted/value_date | Instant/Date | Where available | Distinct source dates |
 | source_refresh_time | Instant | Yes | Provider snapshot time |
 | cursor/page | ID | If supported | Pagination/replay state |
@@ -259,12 +260,12 @@ Import does not create a journal posting automatically.
 |---|---|---:|---|
 | posting_id | ID | Yes | Stable journal transaction |
 | posting_date | Date | Yes | Accounting date |
-| lines | Debit/Credit[] | Yes | At least two balanced entries per currency/accounting policy |
+| lines | Debit/Credit[] | Yes | Each line carries canonical AssetId; balancing is per asset/functional-currency policy with explicit conversion entries |
 | source_import_refs | EvidenceRef[] | Yes | Source observations |
 | reconciliation_ref | EvidenceRef | Yes | Matched case |
 | correction_of | ID | If correcting | Original posting reference |
 | reversal_of | ID | If reversing | Original posting reference |
-| currency/FX_refs | Structured | Where applicable | Native currency and evidenced conversion |
+| asset_amount/FX_refs | Structured | Where applicable | Native AssetId and evidenced conversion; no stablecoin peg assumption |
 | status | Enum | Yes | DRAFT/POSTED/REVERSED |
 
 ## 12. Tax workpaper / assessment
@@ -279,7 +280,7 @@ Import does not create a journal posting automatically.
 | rule_source/status/version | EvidenceRef/Enum/Version | Yes | Act/ruling/guidance/bill status and effective date |
 | method/assumptions | Structured | Yes | Reproducible calculation inputs |
 | fx/rounding_refs | EvidenceRef[] | Where applicable | Source and policy |
-| result/uncertainty | Decimal + Currency / structured | Yes | Estimate with confidence/limitations |
+| result/uncertainty | AssetAmount / structured | Yes | Estimate with confidence/limitations and explicit tax reporting asset denomination |
 | reviewer_ref | EvidenceRef | If reviewed | Human/adviser review |
 | assessment_ref | EvidenceRef | If assessed | Official IRD evidence |
 | payment_ref | EvidenceRef | If paid | Bank/IRD confirmation |
