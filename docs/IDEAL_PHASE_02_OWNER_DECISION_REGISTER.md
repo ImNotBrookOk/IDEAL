@@ -1,7 +1,7 @@
 # IDEAL Phase 02 Owner Decision Register — Draft for Final Review
 
 **Status:** Draft; not yet presented for approval  
-**Checkpoint:** 090 — 17 November 2026  
+**Checkpoint:** 092 — 17 November 2026  
 **Purpose:** Consolidate all material owner decisions deferred during Phase 02 research  
 **Authority:** D-001, D-006–D-008, D-010, D-014–D-023  
 **Boundary:** Decision preparation only. Nothing in this register changes accepted decisions, activates domains, authorises implementation or unlocks Phase 03.
