@@ -195,3 +195,8 @@ Checkpoint 094 changes no owner-approved component disposition. SQLite, Nautilus
 ## 13. Authorization policy engine evidence — checkpoint 096
 
 [Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md) owns the Cedar vs OPA comparison, current release/advisory revalidation, fail-closed wrapper requirements, signed policy publication and future acceptance tests. No engine or binding is selected; the decision is deferred under ODR-13 until the trusted-core runtime and deployment topology are known.
+
+
+## 14. Owner authenticator and recovery evidence — checkpoint 097
+
+[Owner Authenticator and Recovery Options](IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md) owns the WebAuthn BE/BS and origin-binding model, Android Keystore/StrongBox constraints, device-bound versus synced credential trade-offs, action-digest-bound approval ceremony, key-role separation and recovery lifecycle. ODR-10 remains open; no authenticator or vendor selected.
