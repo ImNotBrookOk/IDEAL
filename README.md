@@ -225,3 +225,8 @@ IDEAL distinguishes the authoritative local audit journal from tamper-evidence a
 ## Margin, collateral and liquidation research
 
 Phase 02 includes a venue-neutral margin/collateral/liquidation architecture. It distinguishes risk-adjusted capital from venue margin, requires collateral eligibility and haircuts, tiered margin rules, worst-case reservations for uncertain orders, and explicit liquidation/reconciliation states. No venue or margin mode is selected. See [Margin, Collateral and Liquidation Architecture](docs/IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md).
+
+
+## Phase 02 assurance status
+
+The final integrated architecture challenge has been refreshed through checkpoint 100. Margin/collateral schemas, liquidation/reservation transitions and traceability have been integrated. This remains an internal design review: independent architecture/security/operations review and owner acceptance are outstanding. No implementation or phase advancement is authorised.
