@@ -557,3 +557,8 @@ The targeted scan found no other active statements authorising paper/live execut
 Created [IDEAL Data Freshness, Clock Quality and Decision-Validity Requirements](docs/IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). It defines source/consumer-specific freshness contracts, distinct event/availability/receive/ingest/process ages, sequence/gap handling, tail-latency measurement, clock uncertainty, decision invalidation and relative consumer profiles.
 
 No global TTL or numeric threshold is chosen. L2, trades, candles, funding, account state, FX, bank snapshots, tax rules and health telemetry have distinct requirements. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 canonical architecture document map (checkpoint 088)
+
+Created [IDEAL Phase 02 Architecture Document Map](docs/IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md). It formalises canonical document ownership and conflict precedence, indexes the architecture evidence pack, and groups unresolved owner decisions without requesting or inferring approval. Scoped local link/read-back checks were performed; a full automated Markdown link crawl and live external-source revalidation were not performed. Phase 02 remains active; Phases 03–19 remain locked. No implementation or runtime change.
