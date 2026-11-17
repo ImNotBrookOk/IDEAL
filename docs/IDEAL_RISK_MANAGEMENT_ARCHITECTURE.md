@@ -1968,6 +1968,6 @@ A risk approval is valid only for its declared interval and the exact source/acc
 See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). Numeric thresholds remain open.
 
 
-## 23. Margin, collateral and liquidation contract — checkpoint 099
+## 27. Margin, collateral and liquidation contract — checkpoint 099
 
 The dedicated [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md) specifies the provisional venue-neutral model. Requirements: distinguish risk-adjusted equity from venue margin equity; use versioned tiered IM/MM rules; price collateral with eligibility, separate IM/MM haircuts, concentration and stale-price handling; preserve native-currency ledgers; reserve risk for active/conditional/uncertain orders; model liquidation as a venue-evidenced state machine with partial fills and uncertain outcomes; never treat insurance funds as guaranteed protection or a liquidation price as an executable fill. No venue/margin mode/haircut/formula selected. D-006/D-008 unchanged.
