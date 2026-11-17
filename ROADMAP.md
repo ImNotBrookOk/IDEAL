@@ -458,3 +458,10 @@ Created [IDEAL Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_
 No universal risk score, unified risk budget, cross-asset hedge credit, capital allocation, netting set, numerical threshold or domain activation was approved. D-006 denominator and D-008 baseline semantics remain unresolved. Portfolio/capital aggregation is read-only by default. Phase 02 active; Phases 03–19 locked.
 
 Next: reconcile risk and capital contracts with reconciliation/account state, authority/action lifecycle, health/security incident containment and audit/retention; then perform an integrated cross-document adversarial challenge.
+
+
+### Phase 02 governance/documentation consistency correction (checkpoint 075)
+
+A repository-wide wording audit found that `RULES.md` still described paper trading as the only permitted mode and still framed the active standing authorisation as Phase 01 research. Both were stale and contradicted the current owner-approved Phase 02 architecture-only boundary and README/roadmap status. `RULES.md` is corrected: no paper or live execution is authorised; D-006/D-007/D-008 are scoped to the initial crypto-perpetual policy; D-006 denominator and D-008 semantics remain unresolved; D-022 governs the current autonomous Phase 02 research/design sequence; Phases 03–19 remain locked.
+
+This is a documentation consistency correction, not a change to owner decisions or permissions. No paper/live execution, runtime integration, credentials, account access or implementation is authorised.
