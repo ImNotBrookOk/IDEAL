@@ -242,3 +242,8 @@ No runtime tests have been run.
 The integrated state-machine composition is sufficiently specified for an architecture challenge, but schemas, numeric thresholds, topology, platform-specific mechanisms and several owner decisions remain open. It is not implementation-ready and does not authorise any execution.
 
 Phase 02 remains active; Phases 03–19 remain locked. No implementation, dependencies, runtime, accounts, credentials, external integrations, paper/live execution, paid infrastructure or phase advancement is authorised.
+
+
+## Canonical interface contracts — checkpoint 085
+
+The contract catalogue in [IDEAL Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) defines the payload semantics and ownership for the state transitions in this document. In particular, action permits bind exact action/evidence/policy versions; dispatch outcomes preserve UNKNOWN; health interlocks are restrictive-only; reconciliation and recovery attestations remain domain-owned.
