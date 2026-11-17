@@ -190,3 +190,8 @@ Checkpoint 094 changes no owner-approved component disposition. SQLite, Nautilus
 ## 12. Workload isolation comparison — checkpoint 095
 
 [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) and [Infrastructure Research](INFRASTRUCTURE_RESEARCH.md) now compare gVisor, Kata Containers and Firecracker from their official security/architecture documentation. No runtime is selected; the decision remains dependent on the actual threat model, host platform, workload compatibility and ability to operate the controls.
+
+
+## 13. Authorization policy engine evidence — checkpoint 096
+
+[Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md) owns the Cedar vs OPA comparison, current release/advisory revalidation, fail-closed wrapper requirements, signed policy publication and future acceptance tests. No engine or binding is selected; the decision is deferred under ODR-13 until the trusted-core runtime and deployment topology are known.
