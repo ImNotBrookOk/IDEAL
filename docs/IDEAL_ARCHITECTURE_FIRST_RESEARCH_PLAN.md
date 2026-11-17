@@ -200,3 +200,8 @@ This closes the traceability artefact at design level; tests are not implemented
 ## 16. Critical contract field schemas — checkpoint 089
 
 [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md) now defines logical field-level semantics and constraints for all critical cross-pillar/domain contracts. This closes the technology-neutral schema deliverable at design level. Serialization, database DDL, API and compatibility tooling remain deferred until platform selection.
+
+
+## 17. Consolidated owner decision register — checkpoint 090
+
+[IDEAL Phase 02 Owner Decision Register](IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md) consolidates deferred decisions with evidence, recommended defaults, dependencies and readiness status. It is a draft and must not be presented for approval until the full architecture, independent review findings and final traceability pass are complete.
