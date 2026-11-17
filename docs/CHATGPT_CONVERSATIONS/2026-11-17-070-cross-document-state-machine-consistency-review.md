@@ -79,3 +79,46 @@ Phase 01 remains closed. Phase 02 remains active. Phases 03–19 remain locked. 
 ## Next autonomous work
 
 Perform the final Phase 02 bounded-autonomy closure review across all open architecture decisions: root-of-trust and recovery anchor, owner approval, policy registry, workload identity, revocation SLO, authority transaction store, worker inventory, health/security interlocks, audit retention/privacy and deployment trust topology. Separate what can be specified technology-neutrally from decisions that require the eventual platform. Then update the acceptance checklist and report the exact remaining owner decisions without asking interim questions.
+
+
+## GitHub read-back verification
+
+All twelve affected/new files were fetched from the repository default branch. Required-content checks passed. One initial phrase check for the main architecture document used wording that differed from the actual equivalent control text; direct inspection confirmed the required same-transaction boundary is present. No content failure was found.
+
+| File | Read-back blob SHA |
+|---|---|
+| docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md | 0ba0e8b73488ba3a66dd7891d45598994d6f5194 |
+| docs/DATA_INTEGRITY_AND_HEALTH.md | 1ff31234b4d8f09887bae0873b62f1b406c9248e |
+| docs/IDEAL_SECURITY_ARCHITECTURE.md | c008d0d56eccb2da31b6579b3d8f5f670ba3d7a2 |
+| docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md | 165c601bddbd358baced615e47ef6bbf052f4403 |
+| docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md | 207ec6392df56c779f2f9d4f92e6da5d96ca0b58 |
+| REQUIREMENTS.md | 751c5ee7ca4c6232af8c2011f0df716c5535ad29 |
+| ARCHITECTURE.md | 652d01b8d2a717ea0be560b2ca5896f767f95cf8 |
+| ROADMAP.md | 7e2b5e73d1385f50be133b45443fb6abe8e91978 |
+| docs/IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md | 3741a91d9350f361b970cc2d5a357936a9b0d1d5 |
+| docs/IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md | fe849efb6d088b46afae85b6b8a579549aabe418 |
+| docs/CHATGPT_CONVERSATIONS/2026-11-17-070-cross-document-state-machine-consistency-review.md (before evidence addendum) | c50b21733f2ddf31d763529713effc26c85516c6 |
+| docs/CHATGPT_CONVERSATIONS/README.md | cf8556b8c9144aaef3bff87a93a797a9e7e33353 |
+
+### Commit ledger
+
+| Change | Commit SHA |
+|---|---|
+| Add DISPATCH_STARTED state and transaction-boundary clarification | 3acf8b7194d64bde70737c2bc3f52241a111f09f |
+| Add unified authority/reservation event ordering | 999716e8cd31d8d8f04fc7a21d3e338820c10b89 |
+| Align restrictive overlays with D-023 | f0403f441d63b6abe5b9086d50013cdb115a6ffc |
+| Add owner approval ceremony | f0da431efeec96b22ebac5b377a27aa3855e5d83 |
+| Requirements owner-approval presentation | 6aea0ba2e3f6e9a611e9a88bd2c9e6b9cb476c19 |
+| Traceability owner-approval presentation | bd2f2d26019fb6aff9394711f2858a85157c96e6 |
+| Clarify health supervisor/security controller separation | 1c83d1719cd7cc7188bcfc11fce04d83223da3f7 |
+| Clarify security authority separation | 825891a292739e311376caa1f5b7493507fd153d |
+| Align risk handshake with action gateway | a0c5e1a21779e42d3dd22fad693bac3db4e5df33 |
+| Risk reservation lifecycle | 66728208bedaec1a02866c3d7c3355aba0199852 |
+| Architecture unified state model | 3deb34fbd9ae37dfe646404b69baa80f1f49e58c |
+| Roadmap unified state model | beeabf71b001aac3475f0028662eebbb06e51dbb |
+| Traceability unified state model | ed307430eea2fe8869e5dac424b69809f1508eb5 |
+| ADV-39 approval UI threat | 2a7d73a9a16d9cac18fd5b1b0f9156ae51ebb3fd |
+| Create checkpoint 070 audit | 55641359ed4edb2759630ccf3c1e3f6bf8df1bda |
+| Index checkpoint 070 | 56eaa01493ce4f6e25782256b534bcd9e90cfc1c |
+
+This verifies repository content only. It does not constitute runtime, security, database durability, host isolation or exchange execution testing.
