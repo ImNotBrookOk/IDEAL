@@ -301,3 +301,8 @@ These are architecture and future verification requirements only. No database, m
 2. **MicroVM isolation is an operated control set, not a product checkbox.** Firecracker production guidance requires jailer/least privilege, default seccomp, resource limits, host egress filtering, bounded guest-influenced logging, host/guest patching and an external overwatcher. Host root/kernel and hardware remain in the threat model.
 
 These are architecture and future verification requirements only. No database, microVM, host, runtime or dependency was deployed or tested. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## Workload sandbox comparison — checkpoint 095
+
+The host-trust research now distinguishes userspace-kernel sandboxing (gVisor), container-managed VMs (Kata Containers) and directly managed KVM microVMs (Firecracker). They have different trusted computing bases and operational costs. None removes the need for host egress enforcement, resource controls, secret separation, monitoring and recovery. gVisor still relies on the host kernel/platform for hardware threat mitigation and cgroups for resource exhaustion; Kata adds guest kernel/VMM/agent/IPC surfaces; Firecracker requires KVM, jailer/seccomp/cgroups and host TAP filtering. No runtime is selected. The eventual choice must follow the explicit attacker model and an actual compatibility/negative-test plan.
