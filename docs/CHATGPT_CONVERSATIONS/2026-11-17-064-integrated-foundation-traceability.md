@@ -37,7 +37,16 @@ This checkpoint continues the explicit instruction to proceed with Phase 02 rese
 
 ## Verification
 
-Read-back verification hashes and content checks are to be added after the GitHub operations complete.
+All four files below were fetched back from GitHub main and content-checked:
+
+| File | Read-back blob SHA | Checks |
+|---|---|---|
+| docs/IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md | b1356db150f3b623424c270c9ea2f5e688041cca | GOV/RSK/DAT/HLT/SEC/AUD/XPL requirement families and Phase 02 boundary present |
+| docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md | 12015f62ae76dd756826d7212612dcfd0dc94916 | Matrix cross-reference present |
+| This checkpoint audit | 3fb3d4005419cb586e09aad7aa6607faec948359 | Checkpoint and approval boundary present |
+| docs/CHATGPT_CONVERSATIONS/README.md | f408180aeb4908fc11eb6e14fd482ed90837bdac | Checkpoint 064 indexed |
+
+The matrix read-back length is 18,531 characters. All listed content checks passed. This verifies the fetched document contents only; no runtime tests were run or applicable.
 
 ## Current state
 
