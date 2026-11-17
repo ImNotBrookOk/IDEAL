@@ -68,3 +68,43 @@ The existing margin/collateral architecture correctly separates mark, index, las
 ## 6. Source limitations
 
 This is a focused official-document refresh, not a legal or contractual interpretation. Some official help pages are explanatory and may be generic, regional or stale relative to a specific contract. The Binance Default Procedures PDF is a formal rule document but its applicability must be confirmed for the eventual product/entity and contract. Bybit/OKX generic guides do not establish all current per-instrument exceptions. A later venue-specific review must fetch the then-current contract rules, instrument metadata, funding history, risk-limit schedule and account-mode documentation together and archive their effective versions.
+
+
+## 7. API-level event semantics refinement — checkpoint 112
+
+A further review of the official OKX V5 API guide and exchange mark/funding documentation exposed additional distinctions that should be preserved in the canonical evidence model:
+
+- OKX funding-rate history returns `fundingRate` as a predicted rate and `realizedRate` as the actual rate, with `fundingTime`, `formulaType` (`noRate` / `withRate`) and `method` fields. The guide states that intervals for some volatile altcoin swaps may be adjusted from the nominal eight hours to six, four, two or one hour; it specifically directs consumers to compare `fundingTime` and `nextFundingTime` rather than assume a fixed interval.
+- OKX public WebSocket funding-rate messages include current rate, funding time, next funding time, min/max rate, premium, formula type, method, settlement state and settled funding rate. `settState` distinguishes `processing` from `settled`; `settFundingRate` semantics differ according to that state. The API documentation also labels the former `next_period` method as no longer supported. Treat this as a versioned API contract, not a permanent schema guarantee.
+- OKX historical funding-rate endpoint documents a maximum three-month lookback. Historical reconstruction therefore cannot assume indefinite availability from one public endpoint; archive permitted contemporaneous evidence or use other independently verified sources where long-history research requires it.
+- OKX mark-price help (updated 5 August 2026) describes mark as index plus a moving-average basis, with basis derived from contract mid-price minus index. It provides different PnL formulae for crypto-margined reciprocal contracts versus USDT/USDC-margined linear contracts. The formula and denomination therefore require instrument identity, contract face value, multiplier and settlement asset; a single generic linear PnL formula is invalid.
+- Binance's funding-rate documentation says funding interval may be adjusted dynamically; its 2025 update describes automatic transition to hourly settlement after a cap/floor event for affected USDⓈ-M perpetuals, and directs API consumers to `GET /fapi/v1/fundingInfo` for current funding information. Its documentation also says a funding debit may first reduce available balance and then position margin, affecting liquidation price.
+- Bybit exposes mark-price klines as a distinct historical series from ordinary price klines. This is useful for point-in-time mark reconstruction but does not itself provide the full contemporaneous mark-method inputs or prove the series is complete for a given period.
+
+### Additional contract requirements
+
+1. Preserve predicted rate, realised rate, rate currently being assessed, prior settled rate and next-period estimate as distinct typed values; do not overload a single `funding_rate` field.
+2. Preserve funding formula/method identifier and API/schema revision, plus the exact source payload digest.
+3. Preserve `fundingTime`, `nextFundingTime`, settlement state, source event time, receive time and local observation time. Do not infer settlement completion from the clock alone.
+4. Historical funding and mark datasets require explicit coverage bounds, retention/licence status, gaps, corrections and retrieval limits. Absence outside endpoint retention is UNKNOWN, not zero funding.
+5. PnL/risk calculations must dispatch by verified contract denomination and settlement asset; linear and inverse formulae must not share an untyped amount path.
+6. Funding-to-margin effects must be represented as ordered venue balance/position-margin events and reconciled against account/position snapshots. Never apply a predicted funding amount as if it were a settled debit or credit.
+
+### Additional future tests
+
+- Distinguish predicted, processing, settled and corrected rates across API revisions; reject unknown method/formula enums.
+- Reconstruct interval from adjacent funding timestamps when metadata is incomplete; detect contradictory interval metadata and event times.
+- Test the deprecated OKX `next_period` method as a compatibility rejection/normalisation case, not a current assumption.
+- Simulate funding endpoint history truncation, missing pages, duplicated timestamps and corrections; preserve explicit coverage gaps.
+- Verify linear and inverse PnL and funding amounts in native settlement assets using independent exact-decimal oracles.
+- Verify mark-price series and ordinary trade series cannot be substituted for each other in liquidation replay.
+- Verify funding debit order (available balance then position margin) only when the selected venue/account mode's current rule proves it; otherwise mark the projection UNKNOWN.
+
+### Sources
+
+- OKX API V5 documentation, public funding history and WebSocket funding-rate channel: https://app.okx.com/docs-v5/en/ (sections “Get funding rate history” and “Funding rate channel”; reviewed 18 November 2026)
+- OKX mark price and Last price, updated 5 August 2026: https://www.okx.com/en-gb/help/ii-mark-price-and-last-price
+- Binance Introduction to Futures Funding Rates: https://www.binance.com/en-AU/support/faq/detail/360033525031
+- Bybit Get Mark Price Kline: https://bybit-exchange.github.io/docs/v5/market/mark-kline
+
+This refinement remains research only. No API, venue, formula, dependency or runtime is selected.
