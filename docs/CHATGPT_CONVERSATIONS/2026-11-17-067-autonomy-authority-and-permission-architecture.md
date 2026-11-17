@@ -71,7 +71,7 @@ All twelve affected/new files were fetched from GitHub after the writes. Require
 |---|---|
 | docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md | e226c91b5cac52fe6d0314bd32a27a833c30707c |
 | docs/CHATGPT_CONVERSATIONS/2026-11-17-067-autonomy-authority-and-permission-architecture.md (before this evidence addendum) | 5868b4fb9ac520dae9874e3c00dea6780e95d5dc |
-| README.md | d625c25a075a83a89fa23a82d589d189cfd55e5f |
+| README.md | 1d6a567244d0016a9ce398d79fec0071eab342c5 |
 | REQUIREMENTS.md | e332199715f551d792e52206e29f963794e6b2e1 |
 | ARCHITECTURE.md | e911ae9ef858d1012b7f1b6f3c59e996996b4897 |
 | ROADMAP.md | 7ece2e7c59a35adbd206787d74431c70c4e7ce8d |
@@ -83,3 +83,4 @@ All twelve affected/new files were fetched from GitHub after the writes. Require
 | docs/CHATGPT_CONVERSATIONS/README.md | 84598a77a6c873d5e993e2fd3b09190062bafae8 |
 
 The architecture document creation commit was a8ca3d7f146233f010472b8d6aaa1910de718a6b. The checkpoint audit creation commit was dc47b8ade541c9fcd1cd68797d12b4fde20b3c6e. The ten cross-reference/index updates completed successfully; their commit SHAs are available in the work record from the current conversation.
+\n\n## Commit ledger\n\n| Change | Commit SHA |\n|---|---|\n| Create autonomy authority architecture | a8ca3d7f146233f010472b8d6aaa1910de718a6b |\n| Create checkpoint 067 audit record | dc47b8ade541c9fcd1cd68797d12b4fde20b3c6e |\n| README bounded-autonomy cross-reference | b73627db135fd99b3b4a05b05f47b4b276f98b35 |\n| REQUIREMENTS authority requirements | b05ba5cfd8955901d6457c4788b5c8992b71c9a4 |\n| ARCHITECTURE enforcement boundary | 02528520b4d65d827eba21b9aa250210e768204a |\n| ROADMAP Phase 02 workstream | 989c01fee8f4666535d8182837510eb4f385cb00 |\n| Security architecture cross-reference | e5e0bcf8ae999778b53a9f273fbdabf1627c876a |\n| Risk architecture reservation handshake | 14b46f765a6e71630c0baad0458d80deca09b75c |\n| Core protection cross-reference | ebe33504128ac28c7e61bb1879be1194423f424c |\n| Integrated adversarial review additions | 8deb0a3b46ae575a37604d531f8330c5c31407c1 |\n| Foundation traceability additions | e2584dedc8cb2a71ed4c58be822ce44a583fc172 |\n| Audit index update | 12cf17a071a3aae06ae240e4972a9223b93debe8 |\n| README Phase 02 priority wording | b042c2abe9acab8e4b7045a330aeca9b9d62551b |\n| Audit verification evidence update | 1b43295d7c6b7cd1cb1c0c8bddf93ee9254c8c72 |\n
