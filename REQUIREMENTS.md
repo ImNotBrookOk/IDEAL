@@ -141,3 +141,15 @@ Key purposes must be separated for owner root/recovery, owner approval, policy p
 
 
 - Owner approval UI MUST display the exact canonical artefact digest context in human-readable form, including environment, account/venue scope, action permissions, limits, expiry, stop conditions and before/after policy diff. The signed challenge must bind the exact displayed artefact digest, operation, audience, nonce and expiry; hidden/truncated/ambiguous scope is denied.
+
+
+## Domain-specific risk and capital semantics — checkpoint 074
+
+- Shared risk governance must not collapse distinct domain risks into one universal score or permission model. Derivatives, investments, commodities, hedging, personal-finance cash flow and tax intelligence require separate domain-specific risk contracts.
+- A consolidated portfolio/capital view is read-only by default. It must preserve gross exposure, net exposure, factor risk, liquidity, counterparty/custody, collateral/margin, net worth, cash-flow capacity and tax exposure as separate measures.
+- No implicit netting across legal entities, accounts, venues, instruments or collateral pools. Hedge credit and cross-domain risk offsets require explicit owner-approved policy and independently validated assumptions.
+- Distinguish ledger balance, pending/available cash, investment market value, economic equity, risk-adjusted equity, venue margin equity, available margin, collateral, encumbered capital, tax estimate, assessed liability and owner-designated reserve.
+- D-006 and D-008 apply to the initial crypto-perpetual policy only. Their semantics remain open as recorded; no future domain inherits those numerical parameters by default.
+- Under D-018, tax estimates/reserve designations are informational and cannot lock, segregate, deduct or force payment of owner capital.
+- Data quality, freshness, source and valuation time are mandatory for each capital/risk measure. Missing or stale FX/valuation evidence yields an explicitly incomplete/unknown aggregate, not a silent zero or unbounded stale carry-forward.
+See [Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md). These are design requirements, not implementation or new numerical policy.
