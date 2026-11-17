@@ -518,3 +518,8 @@ The existing policy lifecycle DRAFT → VALIDATED → OWNER_APPROVED → SIGNED 
 ### Phase 02 logical architecture diagrams (checkpoint 082)
 
 Created [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md), covering bounded-context/evidence flow, trust zones and forbidden flows, conjunctive action admission/dispatch, incident/recovery lifecycle and temporal evidence lineage. This closes the logical diagram deliverable at design level. Physical network, process and storage diagrams remain deferred pending topology/technology evidence. No deployment or implementation is authorised.
+
+
+### Phase 02 security control-to-threat traceability (checkpoint 083)
+
+Created [IDEAL Security Control and Threat Traceability Matrix](docs/IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md). It defines protected assets, SEC-01–SEC-14 control families, ownership/enforcement boundaries, 28 threat paths, future verification, assurance lifecycle and residual risks. All controls remain design-level; no runtime security test or penetration test was performed. Independent security/operations review remains an architecture acceptance gate. Phase 02 active; Phases 03–19 locked.
