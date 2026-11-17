@@ -205,3 +205,8 @@ Phase 02 remains active; Phases 03–19 remain locked. No data processor, bank c
 - IRD — CARF overview and RCASP record obligations: https://www.ird.govt.nz/international-tax/exchange-of-information/crypto-asset-reporting-framework/crypto-asset-reporting-framework-overview
 - IRD — business record keeping: https://www.ird.govt.nz/records
 - Akahu — app accreditation and data deletion: https://developers.akahu.nz/docs/app-accreditation
+
+
+## 11. Privacy Act source clarification — checkpoint 090
+
+The current consolidated Privacy Act 2020 text (in force as at 8 October 2026) reflects amendments to section 27. The personal/domestic-affairs collection exception refers to IPPs 1–3A and 4(b). The holding exception for IPPs 5–12 applies where an individual holds information solely for personal/domestic affairs and the information was collected lawfully, received unsolicited or created by the individual. Both are conditional and do not apply where the collection, use or disclosure would be highly offensive to a reasonable person. This does not automatically exempt separate processor agencies or providers. Section 11 agent-only processing and IPP 12 overseas disclosure must be assessed separately. See [Official Source Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md).
