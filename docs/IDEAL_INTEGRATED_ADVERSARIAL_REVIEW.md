@@ -201,3 +201,8 @@ The owner has explicitly selected bounded, owner-authorised autonomy. The archit
 - **Reserved owner actions:** activation, scope/policy/permission changes, credentials/privilege expansion, fund movement, safeguard disablement and specified irreversible/recovery actions.
 
 This resolves the policy ambiguity identified in ADV-01. It does not resolve the engineering controls needed to make the envelope tamper-resistant and enforceable. Those remain critical Phase 02 work, including policy root of trust, key recovery, action-bound permission checks, risk reservations, audit/action atomicity and independent health/security interlocks.
+
+
+## Checkpoint 067 — autonomy authority and permission design follow-up
+
+The bounded-autonomy ambiguity identified in ADV-01 is resolved at the governance level by D-023, but technical enforcement remains an open Phase 02 design risk. The authority design now requires a non-bypassable action boundary, separate owner/security and risk gates, exact-action digest binding, independent workload identity, signed/versioned envelope and policy artefacts, revocation epochs, conservative reservation/dispatch semantics, and audit-before-admission. New explicit attack cases include Cedar policy-error skip semantics, OPA unsigned-bundle configuration, replayed owner approval, stale/revoked admission, key-purpose confusion, revocation partition, backup resurrection, clock rollback, policy-update/dispatch race and external side-effect acknowledgement loss. See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). These are design findings, not runtime test results.
