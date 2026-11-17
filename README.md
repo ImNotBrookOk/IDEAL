@@ -170,3 +170,8 @@ Security controls SEC-01–SEC-14 are mapped to protected assets, 28 threat path
 ## Architecture simplicity and maintainability
 
 IDEAL keeps strong logical boundaries without assuming a microservice for every domain. The provisional smallest viable future design is a modular monolith with deterministic controls, one authoritative store if durability is proven, evidence manifests and a phone-first control UI. See [Architecture Complexity and Maintainability Review](docs/IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md).
+
+
+## Canonical contract catalogue
+
+IDEAL's cross-domain interfaces have explicit owners, consumers, semantics, versioning and failure behaviour. The catalogue covers 22 contract families without selecting a wire format or API. See [Canonical Contract Catalogue](docs/IDEAL_CANONICAL_CONTRACT_CATALOGUE.md).
