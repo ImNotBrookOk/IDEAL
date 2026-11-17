@@ -606,3 +606,8 @@ Compared Cedar 4.15.0 and OPA 1.22.4 against IDEAL's authorization and dispatch 
 ### Phase 02 owner authenticator and recovery research — checkpoint 097 (18 November 2026)
 
 Revalidated W3C WebAuthn Level 3, NIST SP 800-63B-4, Android Keystore/Credential Manager and FIDO high-assurance guidance. Distinguished synced/backup-eligible from device-bound credentials; documented StrongBox/TEE variability and app-process invocation risk; established that WebAuthn credential authentication is not transaction-content approval. Added action-digest-bound challenge, nonce/replay, policy-generation and dispatch-recheck requirements plus revoke-and-re-enrol recovery. No device, authenticator or vendor selected; ODR-10 remains open. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 audit integrity and external witness research — checkpoint 098 (18 November 2026)
+
+Compared local hash/Merkle audit integrity, Sigstore Rekor/Rekor v2 and Tessera, Trillian and immudb. Established that local anchors cannot detect full-host rewrite; independent monotonic checkpoints can detect rollback/split-view when retained outside the host. Public append-only logs must not receive financial or personal records. Trillian is maintenance-only; Tessera is its successor but adds real operations; immudb is an immutable database, not an independent witness. Provisional direction is local authoritative audit plus minimal external batch-root checkpoint, with raw records kept local. ODR-11 remains open; no service selected. Phase 02 active; Phases 03–19 locked.
