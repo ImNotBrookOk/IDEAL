@@ -229,3 +229,6 @@ These are proposed controls and tests; no runtime tests have been performed.
 | Reservation is conservative | HELD → IN_FLIGHT → PARTIALLY_FILLED / TERMINAL_PENDING_RECONCILIATION → RELEASED | Retain unknown residual | Duplicate/out-of-order fill, cancel-unknown, crash and replay |
 | Ordering is deterministic | Durable event sequence/transaction order; clock-quality separately recorded | Deny when order/expiry unprovable | Clock rollback/skew, sequence gaps and restart tests |
 | Cross-domain states are not conflated | Separate authority, identity, policy, risk, health, security, data and reconciliation state machines | Restrict affected action | Cross-product state and property-based tests |
+
+
+| Owner understands exact grant | Human-readable approval summary derived from signed artefact digest; explicit before/after diff and step-up confirmation | Owner approval interface / verifier | UI tampering, truncation, hidden scope, stale digest, replay and wrong-origin tests |
