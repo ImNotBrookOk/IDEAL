@@ -175,3 +175,8 @@ IDEAL keeps strong logical boundaries without assuming a microservice for every 
 ## Canonical contract catalogue
 
 IDEAL's cross-domain interfaces have explicit owners, consumers, semantics, versioning and failure behaviour. The catalogue covers 22 contract families without selecting a wire format or API. See [Canonical Contract Catalogue](docs/IDEAL_CANONICAL_CONTRACT_CATALOGUE.md).
+
+
+## Requirement traceability
+
+Requirements are mapped to their owning components, controls/contracts and planned deterministic tests. The matrix distinguishes design coverage from tests actually executed. See [Requirement → Component → Control → Test Traceability](docs/IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md).
