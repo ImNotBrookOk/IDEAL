@@ -869,3 +869,12 @@ Sources:
 - https://www.taxpolicy.ird.govt.nz/publications/2022/officials-report-2021-taxation-bill
 
 No bank connection, credential, tax filing, payment, legal opinion or provider integration was performed or approved.
+
+
+## 23. Reconciliation and recovery architecture cross-reference — checkpoint 076
+
+Personal-finance provider rows remain source observations until reconciled into the IDEAL-owned journal. Changed/deleted rows, pending-to-posted transitions, transfer legs, pagination overlap, cursor resets and FX corrections require explicit semantics. Provider balance snapshots must retain refresh time and statement coverage; a difference from journal balance is not automatically a missing transaction.
+
+A provider outage or token revocation must not erase the journal. Historical rows, source entitlement and retention/deletion obligations are distinct. Restore requires verification of the journal, source evidence, encryption/key state, provider authorisation status and reconciliation differences before dependent projections are marked current.
+
+See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). No bank account was connected and no real financial data was used.
