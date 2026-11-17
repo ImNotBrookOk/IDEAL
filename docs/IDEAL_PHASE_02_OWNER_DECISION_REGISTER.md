@@ -244,3 +244,20 @@ The register is sufficiently complete for internal preparation but **not ready t
 - publish one final architecture baseline and review summary.
 
 No decision in this draft is accepted by silence. No new authority or phase transition is created.
+
+
+### ODR-13 — Authorization policy engine and publication protocol
+
+**Question:** Which policy engine, runtime binding and policy publication/activation protocol should implement the future authorization decision point?
+
+Research candidates: Cedar Rust 4.15.0 and OPA 1.22.4 (as observed 18 November 2026). Cedar offers an authorization-specific model and schema validation but skips individual policy evaluation errors; OPA supports embedded Go evaluation and signed bundles but has application-defined decision semantics, undefined-result behaviour and eventually consistent bundle rollout. Both require an IDEAL-owned fail-closed wrapper and exact policy/schema/bundle digest binding. CedarJava is a separate binding with its own security advisories.
+
+Required evidence before decision:
+- final trusted-core language/runtime and host topology;
+- tested wrapper semantics for missing, undefined, malformed and diagnostic/error responses;
+- signed immutable policy publication, monotonic generation, revocation and rollback rules;
+- policy/schema digest binding to action admission and dispatch;
+- negative tests, resource limits, deterministic replay and audit integration;
+- binding-specific licence, maintenance, vulnerability and compatibility review.
+
+Status: DEFERRED until the architecture baseline and runtime/topology evidence are ready. This research entry creates no engine selection or execution permission. See [Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md).
