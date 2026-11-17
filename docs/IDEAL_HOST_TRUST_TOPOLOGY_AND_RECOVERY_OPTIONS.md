@@ -210,3 +210,28 @@ These details increase operational burden. Firecracker remains a future candidat
 Oracle's general Always Free page states 1,500 OCPU-hours / 9,000 GB-hours monthly for A1, while its A1-specific page states 3,000 / 18,000. Use the lower allowance conservatively until clarified. The general page confirms home-region capacity constraints and seven-day idle reclamation thresholds. Neither nominal free quota nor PAYG account guarantees physical capacity or caps all possible charges.
 
 Sources: https://github.com/firecracker-microvm/firecracker/blob/main/docs/prod-host-setup.md ; https://github.com/firecracker-microvm/firecracker/blob/main/docs/seccomp.md ; https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm ; https://docs.oracle.com/en-us/iaas/Content/Compute/References/arm.htm
+
+
+## 15. Workload isolation alternatives — checkpoint 095
+
+A targeted comparison of official gVisor, Kata Containers and Firecracker documentation clarifies that these are not interchangeable products:
+
+| Option | Isolation model | Host exposure / dependencies | IDEAL fit and limitation |
+|---|---|---|---|
+| gVisor (`runsc`) | Userspace Sentry reimplements the Linux system API; application syscalls are not passed directly through to the host | Still a host process; relies on host kernel/platform for hardware side channels and cgroups for resource exhaustion; Gofer/filesystem and network configuration remain security-sensitive. Network policy must be applied outside/at container boundary. Host-network/passthrough modes increase host API exposure. | Potentially lower-operational-cost containment for untrusted research/agent code where compatibility permits. Not an independent guest kernel or defence against host root/kernel compromise. Must test exact workload compatibility and disable risky passthrough modes. |
+| Kata Containers | Container workload runs inside a lightweight VM with a guest kernel, managed through containerd/CRI and a hypervisor/VMM | Adds VM, guest kernel, agent, runtime/shim, VMM, guest assets and host/guest communication paths. Threat model explicitly includes VMM, host kernel, device/virtio, shared resource and configuration risks. | VM boundary integrated with container workflows; potentially more operational surface than IDEAL needs for a single owner. Not automatically simpler/safer than a directly managed microVM. |
+| Firecracker | Minimal KVM microVM with one VM per Firecracker process and small device model | Requires Linux/KVM, jailer, seccomp, cgroups/namespaces, host network/TAP policy, bounded logs and external monitoring; host kernel/hardware remain trusted. | Strong candidate when a dedicated host and explicit microVM lifecycle are justified, but requires substantial host engineering and ongoing operations. |
+
+### Provisional research disposition
+
+Do not select a sandbox runtime yet. For a future low-cost, single-host research worker, evaluate gVisor first as a compatibility/performance/security trade-off only if untrusted agent execution is actually needed. If the threat model requires a guest-kernel boundary, compare Firecracker directly with Kata on the chosen host and operator capability. Do not infer that gVisor replaces a VM for host-root threat models, or that Kata automatically improves on Firecracker without measuring its larger runtime and IPC surface.
+
+For all options, IDEAL's independent host egress policy, secret separation, resource limits, audit, monitoring, immutable workloads and recovery requirements remain mandatory. No sandbox receives exchange credentials, policy-root material or unrestricted network access.
+
+Sources:
+- gVisor security model: https://gvisor.dev/docs/architecture_guide/security/
+- gVisor networking: https://gvisor.dev/docs/architecture_guide/networking/
+- gVisor network passthrough trade-off: https://gvisor.dev/blog/2020/04/02/gvisor-networking-security/
+- Kata architecture: https://kata-containers.github.io/kata-containers/design/architecture/
+- Kata threat model: https://github.com/kata-containers/kata-containers/blob/main/docs/threat-model/threat-model.md
+- Firecracker design: https://github.com/firecracker-microvm/firecracker/blob/main/docs/design.md
