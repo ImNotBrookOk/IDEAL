@@ -105,3 +105,12 @@ The authority registry and dispatch boundary serialise revocation against the du
 AI/strategy/generated-code processes are hostile workloads in a separate trust zone, with no credentials, direct venue egress or privileged host interfaces. Enforce least-privilege OS identities, syscall and filesystem restrictions, namespaces/cgroups, strict IPC and host-level egress controls. Disposable microVMs are a candidate for high-risk code. Shared host root/kernel compromise defeats local process separation and requires a separate trust domain.
 
 Backups restore data, not authority. Recovery quarantines restored permissions, invalidates old capabilities, advances generation, verifies an independent revocation anchor, rebuilds/attests and reconciles external state. If current trust is uncertain, remain in RECOVERY_HOLD. See autonomy architecture §§19–21.
+
+
+## Health supervisor, policy activation and audit transaction boundaries — checkpoint 069
+
+The health supervisor is an independent observer with a one-way restrictive interlock channel; it cannot create authority or initiate financial actions. Its failure or untrusted status blocks affected risk-increasing actions. Process separation on a shared host does not protect against host root/kernel compromise.
+
+Policy/envelope artefacts are immutable, owner-approved against exact digest, separately signed, versioned and anti-rollback protected. Activation, revocation and dispatch-start serialize against one authority generation.
+
+Before any external side effect, IDEAL durably commits canonical intent, authority evidence, risk reservation, audit event and outbox. It commits DISPATCH_STARTED and its audit event before network write. Remote side effects are not atomic with local storage; ambiguous outcomes remain UNKNOWN and require authoritative reconciliation.
