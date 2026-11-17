@@ -210,3 +210,8 @@ The Phase 02 internal challenge and its remaining blockers are recorded in [Fina
 ## Authorization policy engine research
 
 Cedar and Open Policy Agent have been compared against IDEAL's fail-closed authorization boundary, policy validation, signing, versioning and revocation requirements. Neither is selected. Both need an IDEAL-owned wrapper that rejects missing, undefined, stale or diagnostic/error results. See [Policy Engine Evaluation](docs/IDEAL_POLICY_ENGINE_EVALUATION.md).
+
+
+## Owner authentication and recovery
+
+The owner-authenticator research distinguishes synced and device-bound passkeys, Android hardware-backed keys, dedicated FIDO2 keys, action-bound approval challenges and recovery that cannot restore revoked authority. No authenticator or vendor is selected. See [Owner Authenticator and Recovery Options](docs/IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md).
