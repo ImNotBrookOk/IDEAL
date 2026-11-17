@@ -307,3 +307,10 @@ See [Domain Risk and Capital Architecture](IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITE
 | Unaffected domains remain available where safe | Dependency-aware blast-radius matrix | Health / domain owners | Feed/bank/provider failure isolation tests |
 
 See [Reconciliation, Incident Containment and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). All verification entries are future requirements; no runtime recovery tests have been run.
+
+
+## Checkpoint 077 — integrated adversarial architecture review
+
+The integrated review maps 24 cross-domain attack/failure scenarios to required outcomes and classifies remaining blockers. Critical future-action scenarios include compromised AI/action mutation, revocation/dispatch races, audit commit failure, unknown venue acknowledgement, host-root compromise and stale backup authority resurrection. High-severity scenarios include point-in-time leakage, bank-row mutation, stale balances, false netting/hedge credit, tax/capital conflation, privacy scope errors and shared data-plane leakage.
+
+See [IDEAL Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md). The review is an internal desk assessment only; it does not prove vulnerabilities absent or satisfy the independent-review exit gate.
