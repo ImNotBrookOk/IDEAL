@@ -1,5 +1,8 @@
 # IDEAL — Historical L2 Sample Validation Report
 
+
+> **Current phase-status clarification (checkpoint 087):** This file is a historical validation log. Phase 01 IN PROGRESS / Phase 02 LOCKED statements in dated sections are accurate snapshots of the state at those earlier checkpoints and are not current. D-015 later closed Phase 01 and authorised Phase 02 architecture/contracts research; Phase 02 is currently active and Phases 03–19 remain locked. The dataset's own technical disposition is unchanged: accepted conditionally for historical market-structure research, not approved for venue selection, execution calibration or runtime integration.
+
 **Research date:** 16 November 2026  
 **Phase:** 01 — Open-source, venue and infrastructure research  
 **Gate status:** BLOCKED — no dataset bytes were obtained in this execution environment.  
