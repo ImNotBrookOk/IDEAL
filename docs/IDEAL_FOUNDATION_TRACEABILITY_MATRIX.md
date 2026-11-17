@@ -232,3 +232,8 @@ These are proposed controls and tests; no runtime tests have been performed.
 
 
 | Owner understands exact grant | Human-readable approval summary derived from signed artefact digest; explicit before/after diff and step-up confirmation | Owner approval interface / verifier | UI tampering, truncation, hidden scope, stale digest, replay and wrong-origin tests |
+
+
+## Checkpoint 071 — workstream closure traceability
+
+The autonomy authority closure assessment maps technology-neutral invariants, provisional controls, platform-dependent decisions, owner approvals and residual risks. Workstream acceptance requires all authority/action/risk/health/security/data/reconciliation state machines to align, each invariant to map to adversarial tests, and repository read-back verification. See docs/IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md. No test execution or implementation is implied.
