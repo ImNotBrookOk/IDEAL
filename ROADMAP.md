@@ -406,3 +406,8 @@ Expanded [IDEAL Risk Management Architecture — Research Draft](docs/IDEAL_RISK
 ## Phase 02 workstream — autonomy authority and permission architecture
 
 Design the owner-approved envelope schema and semantics; owner authentication/approval ceremony; workload identity; policy registry/root of trust/key lifecycle; exact-action canonicalisation and authorisation; non-bypassable action enforcement; revocation/suspension; risk reservation and dispatch/reconciliation state machine; cross-pillar interlocks; audit/privacy/retention; recovery; and adversarial assurance. Research Cedar, OPA, SPIFFE/SPIRE, OpenBao, Cosign and in-toto as candidates only. No tool or dependency is selected. Completion requires owner-reviewed contracts, measurable revocation/failure semantics, independent challenge and explicit owner acceptance. See docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md. This work does not unlock Phase 03 or authorise implementation, accounts, credentials, exchange access or execution.
+
+
+### Phase 02 — adversarial closure gates added (checkpoint 068)
+
+Close the revocation/dispatch linearisation contract, define measurable propagation and worker inventory, prove partition/crash handling; define the logical and physical trust-zone topology and host-root compromise assumptions; specify layered host sandbox and egress profiles including microVM comparison; define independent revocation high-water anchor and restore quarantine; complete recovery/reconciliation protocol; and map adversarial fault-injection tests to requirements. No tool adoption, runtime change, implementation or Phase 03 advancement follows automatically.
