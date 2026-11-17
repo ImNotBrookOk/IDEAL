@@ -96,3 +96,8 @@ Fifteen findings across architecture simplicity, security/operations and contrac
 ## Checkpoint 108 — document-map verification
 
 All 38 distinct local Markdown targets in the Phase 02 Architecture Document Map were fetched successfully. This verifies path existence only. See [checkpoint 108 audit](CHATGPT_CONVERSATIONS/2026-11-18-108-phase-02-source-refresh-verification.md). The map now also links to this audit, so a subsequent complete link check must include the new entry.
+
+
+## Checkpoint 109 — canonical serialization gap specified
+
+[Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md) now defines the 14 required elements of a versioned canonical profile and a negative/conformance test catalogue. TST-105-01 remains open: no encoding/profile is selected and no cross-implementation vectors have been executed. The contract-semantics exit criterion remains PARTIAL until this is resolved in the approved architecture and later verified in implementation.
