@@ -247,3 +247,20 @@ Phase 02 remains active; Phases 03–19 remain locked. No implementation, depend
 ## Canonical interface contracts — checkpoint 085
 
 The contract catalogue in [IDEAL Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) defines the payload semantics and ownership for the state transitions in this document. In particular, action permits bind exact action/evidence/policy versions; dispatch outcomes preserve UNKNOWN; health interlocks are restrictive-only; reconciliation and recovery attestations remain domain-owned.
+
+ 
+## Margin and liquidation composition — checkpoint 100
+
+Margin/position risk is owned by the risk authority; venue-reported liquidation and ADL events are external evidence; reservation lifecycle remains owned by the reservation ledger; account/position truth is resolved by reconciliation. These authorities must not be collapsed.
+
+- A mark-price/tier/margin change invalidates affected risk decisions and admission permits before dispatch-start.
+- A liquidation warning or venue trigger imposes the applicable restrictive risk state; it does not itself prove a close or terminal position state.
+- Risk-increasing orders are blocked while liquidation, account uncertainty or reconciliation hold is active.
+- Cancellation/close requests retain the full conservative reservation until terminal order state, fills, remaining position and account balances are reconciled.
+- Partial fills transfer filled quantity into reconciled position exposure exactly once; unfilled residual remains reserved.
+- Venue insurance-fund or ADL notices are recorded as external venue events. They cannot grant IDEAL permission, release unrelated reservations or establish final account state without reconciliation.
+- A venue-reported bankruptcy/liquidation handoff does not mean IDEAL can control the venue's liquidation engine or guarantee execution price.
+- If venue event sequence, fill totals, position snapshot and balance evidence conflict, retain INCIDENT_HOLD / RECONCILIATION_REQUIRED and do not infer a terminal state.
+- Recovery after liquidation requires current venue/account state, local journal continuity, current policy/authority generation and scoped health/security/data attestations.
+
+The canonical logical records are in [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md) §18 and the detailed risk requirements in [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md). These are design contracts only.
