@@ -410,3 +410,8 @@ See [IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTR
 | Documentation has one authority per concern | Canonical ownership map and link-first summaries | Contradictory status scan and reviewer findability test |
 
 See [Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md). No source files were consolidated or deleted.
+
+
+## Checkpoint 085 — canonical contract traceability
+
+The [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) defines 22 contract families with authoritative owner, consumers, required semantics and failure response, plus event envelope, value semantics, error taxonomy, version compatibility and transaction boundaries. Every contract requires negative tests for stale, malformed, replayed, cross-scope and unauthorised inputs.
