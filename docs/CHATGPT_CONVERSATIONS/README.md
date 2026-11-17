@@ -233,3 +233,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-18-097-owner-authenticator-recovery-research.md](2026-11-18-097-owner-authenticator-recovery-research.md) | Revalidated WebAuthn L3, NIST 800-63B-4, Android Keystore/StrongBox and FIDO recovery; distinguished synced/device-bound credentials and bound approval to exact action digest; no device/vendor selected |
 
 | [2026-11-18-098-audit-integrity-external-witness-research.md](2026-11-18-098-audit-integrity-external-witness-research.md) | Compared local hash/Merkle integrity, Rekor/Tessera/Trillian and immudb; defined independent checkpoint and privacy boundaries; no external witness/database selected |
+
+| [2026-11-18-099-margin-collateral-liquidation-architecture.md](2026-11-18-099-margin-collateral-liquidation-architecture.md) | Researched official Binance, Bybit, OKX and Hyperliquid margin/liquidation rules; documented venue-neutral collateral, tier, reservation and liquidation contracts; no venue or mode selected |
