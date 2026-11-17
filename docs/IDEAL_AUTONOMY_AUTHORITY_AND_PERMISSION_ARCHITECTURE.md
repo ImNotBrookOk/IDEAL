@@ -731,3 +731,11 @@ Suspected compromise means revoke the key identity and all grants/artefacts whos
 - Numerical revocation propagation target and the exact set of boundaries included in the measurement.
 
 Phase 02 cannot close until these semantics are reconciled across security, risk, health, data integrity, audit and recovery; mapped to adversarial tests; independently challenged; and accepted by the owner. No technology selection or implementation follows automatically.
+
+
+### Additional primary sources for checkpoint 069
+
+- [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) — structured security event logging, separation of audit/security/transaction logs, event context, sanitisation, secret exclusion, log protection and failure testing.
+- [NIST SP 800-53 Rev. 5](https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final) — audit protection, logging failure response and alternate audit capability control families.
+- [NIST SP 800-57 Part 1 Rev. 5](https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final) — key lifecycle, compromise scope, replacement and recovery planning.
+- [AWS Prescriptive Guidance — Transactional Outbox](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html) — atomic local state/outbox commit and duplicate-delivery/idempotency handling. This is a distributed-systems pattern reference, not an endorsement of AWS infrastructure for IDEAL.
