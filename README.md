@@ -180,3 +180,8 @@ IDEAL's cross-domain interfaces have explicit owners, consumers, semantics, vers
 ## Requirement traceability
 
 Requirements are mapped to their owning components, controls/contracts and planned deterministic tests. The matrix distinguishes design coverage from tests actually executed. See [Requirement → Component → Control → Test Traceability](docs/IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md).
+
+
+## Data freshness and clock quality
+
+IDEAL measures source availability, event age, receive/ingest latency, sequence continuity and clock uncertainty separately. Freshness is consumer-specific; no global TTL or stale-data fallback is assumed. See [Data Freshness and Clock Requirements](docs/IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md).
