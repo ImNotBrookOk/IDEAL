@@ -86,3 +86,8 @@ No code, runtime, dependencies, venue/account connection, credentials, host prov
 ## Checkpoint 105 — internal three-lens review
 
 Fifteen findings across architecture simplicity, security/operations and contract testability are recorded in [Three-Lens Review and Assurance Limits](IDEAL_PHASE_02_THREE_LENS_REVIEW_AND_ASSURANCE_LIMITS.md). These are internal passes, not independent assurance. No independent reviewer was available in this workstream; owner disposition is required under ODR-12.
+
+
+## Checkpoint 107 — infrastructure security evidence
+
+[Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md) adds dated upstream kernel/Firecracker lifecycle evidence, two concrete Firecracker advisories and nine future host acceptance checks. This strengthens the ODR-09/11 evidence but does not close host topology, patch operations, independent watchdog or host-root threat decisions. No host was selected or inspected.
