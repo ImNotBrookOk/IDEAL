@@ -164,3 +164,8 @@ The remaining Phase 02 sequence is:
 8. Obtain explicit owner acceptance of the full Phase 02 architecture before Phase 03 can be considered.
 
 The sequence remains research/design/documentation only. No runtime, implementation, dependency, account, credential, paper/live execution, paid service or phase transition is authorised.
+
+
+## 12. Architecture diagram coverage — checkpoint 082
+
+[IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md) now provides logical domain/evidence flow, trust zones and forbidden flows, action admission/dispatch, incident/recovery lifecycle and temporal evidence lineage. These satisfy the logical diagram deliverable at design level; physical deployment, network, storage and process diagrams remain deferred until topology and technology selection evidence exists.
