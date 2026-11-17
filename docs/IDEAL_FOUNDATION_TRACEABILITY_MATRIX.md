@@ -415,3 +415,8 @@ See [Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMP
 ## Checkpoint 085 — canonical contract traceability
 
 The [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) defines 22 contract families with authoritative owner, consumers, required semantics and failure response, plus event envelope, value semantics, error taxonomy, version compatibility and transaction boundaries. Every contract requires negative tests for stale, malformed, replayed, cross-scope and unauthorised inputs.
+
+
+## Checkpoint 086 — requirement-to-component-to-control-to-test mapping
+
+The [Requirement → Component → Control → Test Traceability](IDEAL_REQUIREMENT_COMPONENT_CONTROL_TEST_TRACEABILITY.md) matrix maps stable requirement aliases to bounded-context owners, controls/contracts and deterministic future test IDs. It explicitly records open semantics and status; no future test is represented as passed.
