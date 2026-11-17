@@ -216,3 +216,16 @@ This section records design requirements only. It does not authorise runtime imp
 
 The working requirements-to-controls-to-components-to-tests matrix across governance, risk, data integrity, system health, security, audit and cross-pillar interfaces is maintained in [IDEAL Integrated Foundation Traceability Matrix](IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md). It is a Phase 02 working design, not an implementation authorisation or frozen contract.
 The integrated cross-pillar adversarial review, including STRIDE-style threat coverage, authority conflicts, common-mode failure and recovery gaps, is maintained in [IDEAL Integrated Adversarial Architecture Review](IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md). It remains a Phase 02 review draft; independent review and owner acceptance are pending.
+
+
+## 8. Bounded owner-authorised autonomy
+
+D-023 establishes bounded autonomy as the intended future operating model for any execution-capable IDEAL domain. Owner approval grants a versioned, revocable operating envelope, not unrestricted authority.
+
+Inside that envelope, a future engine may act without per-action human approval only when exact-action security authorisation, trusted/reconciled data, required health interlocks, deterministic risk approval and reservation, and durable audit requirements all pass. Risk may further restrict the envelope but cannot expand it. Data, health and security foundations provide independent prerequisites; none may substitute for risk approval or owner policy.
+
+The owner retains approval authority over capability activation, envelope/policy/permission changes, new account/venue/integration scope, credentials and privilege expansion, fund transfers/withdrawals/payments, safeguard disablement and designated irreversible or incident-recovery actions. Agents and strategies cannot modify the envelope, approve exceptions or self-grant authority.
+
+Unknown, stale, revoked, expired, compromised or out-of-envelope state denies the affected risk-increasing action. Emergency restrictions can reduce authority; they cannot create financial authority or autonomously initiate liquidation.
+
+This is a governance and architecture direction only. No execution capability, account, venue, credential, paper/live trading or implementation is authorised. See [Security Architecture §9](IDEAL_SECURITY_ARCHITECTURE.md#9-bounded-owner-authorised-autonomy-d-023) and [Decision D-023](../DECISIONS.md).
