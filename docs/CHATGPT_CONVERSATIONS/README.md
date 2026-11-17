@@ -191,3 +191,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-080-host-trust-topology.md](2026-11-17-080-host-trust-topology.md) | Phase 02 host trust research: Android/CI/WSL2/Hyper-V/Linux KVM/Firecracker/cloud/two-host comparison; WSL is not a security boundary, VMs remain host-dependent, mobile data/background limits, separate gateway future option; no host selected or provisioned |
 
 | [2026-11-17-081-integrated-state-machine-contracts.md](2026-11-17-081-integrated-state-machine-contracts.md) | Phase 02 cross-authority state-machine composition: policy/identity/security/health/data/risk/reservation/action/reconciliation/recovery; conjunctive admission, version-vector binding, restrictive precedence and dispatch-time recheck; no schemas or runtime selected |
+
+| [2026-11-17-082-system-architecture-diagrams.md](2026-11-17-082-system-architecture-diagrams.md) | Phase 02 logical diagrams: domain/evidence flow, trust zones/forbidden flows, action admission/dispatch, incident recovery and temporal evidence lifecycle; physical topology diagrams remain deferred; no deployment or implementation |
