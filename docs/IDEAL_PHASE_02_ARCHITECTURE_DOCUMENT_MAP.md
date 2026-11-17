@@ -185,3 +185,8 @@ The infrastructure evidence pack now includes dated revalidation of SQLite WAL d
 - [Core Protection Architecture](IDEAL_CORE_PROTECTION_ARCHITECTURE.md) owns cross-foundation implications.
 
 Checkpoint 094 changes no owner-approved component disposition. SQLite, NautilusTrader, Firecracker and OCI A1 remain candidates with explicit gates; no host or runtime is selected. Phase 02 remains active.
+
+
+## 12. Workload isolation comparison — checkpoint 095
+
+[Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) and [Infrastructure Research](INFRASTRUCTURE_RESEARCH.md) now compare gVisor, Kata Containers and Firecracker from their official security/architecture documentation. No runtime is selected; the decision remains dependent on the actual threat model, host platform, workload compatibility and ability to operate the controls.
