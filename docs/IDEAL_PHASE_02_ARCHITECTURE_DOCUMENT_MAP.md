@@ -161,3 +161,15 @@ The canonical contract and critical field schemas now consistently require Asset
 The audit index now contains checkpoints through 093. The checkpoint 088 and 089 entries remain historical and retain their original meaning; later work is numbered 090–093. Older duplicate audit paths from the numbering correction are retained with explicit supersession notes for continuity.
 
 The architecture pack remains design-level. Independent architecture/security/operations and maintainability/testability reviews, finding disposition, owner acceptance and separate implementation approval remain outstanding. Phase 02 active; Phases 03–19 locked.
+
+
+## 11. Infrastructure revalidation — checkpoint 094
+
+The infrastructure evidence pack now includes a dated revalidation of SQLite WAL durability, NautilusTrader persistence boundaries, Firecracker production host controls and OCI Always Free quota/capacity caveats:
+
+- [Infrastructure Research](INFRASTRUCTURE_RESEARCH.md) owns the component/hosting evidence and POC caveats.
+- [Component Selection Matrix](COMPONENT_SELECTION_MATRIX.md) owns candidate dispositions and adoption gates.
+- [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) owns host and trust-domain trade-offs.
+- [Core Protection Architecture](IDEAL_CORE_PROTECTION_ARCHITECTURE.md) owns cross-foundation implications.
+
+Checkpoint 094 changes no owner-approved component disposition. SQLite, NautilusTrader, Firecracker and OCI A1 remain candidates with explicit gates; no host or runtime is selected. Phase 02 remains active.
