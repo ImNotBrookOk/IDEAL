@@ -255,3 +255,8 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-18-108-phase-02-source-refresh-verification.md](2026-11-18-108-phase-02-source-refresh-verification.md) | Fetch-back verification for checkpoint 107 and 38/38 document-map targets |
 
 | [2026-11-18-109-canonical-serialization-contract-research.md](2026-11-18-109-canonical-serialization-contract-research.md) | Specifies deterministic digest/signature profile requirements; identifies JCS binary64 precision limitation and keeps JCS/CBOR unselected |
+
+
+### Phase 02 — perpetual funding and mark-price semantics refresh (checkpoint 110, 18 November 2026)
+
+Created [Perpetual Funding and Mark-Price Semantics Source Refresh](../IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md). Official Binance, Bybit and OKX sources show funding intervals/limits and mark-price methods are contract-specific and may change; funding settlement affects margin state and must remain distinct from forecasts. Added effective-dated logical schemas, freshness and liquidation integration, and adversarial test requirements. No venue or formula selected; Phase 02 remains active.
