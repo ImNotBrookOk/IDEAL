@@ -823,3 +823,49 @@ The owner explicitly rejects a mandatory tax reserve or any mechanism that makes
 The user may choose to deploy funds shown as a recommended reserve. IDEAL should then update available-balance views and estimated tax coverage/shortfall, explain relevant tax obligations and deadlines, and record the user's decision only where useful and authorised. It must not moralise or obstruct. A tax estimate is not an IRD assessment; a recommended reserve is not money held by IDEAL; software permission is not a statement about legal tax obligations.
 
 Tax Intelligence remains responsible for calculations, classifications, provenance and due-date estimates. Personal Finance remains responsible for representing actual cash movements and confirmed payments. No automatic payment or custody function is implied. This owner clarification is accepted as D-018 and applies across IDEAL, not only the Personal Finance domain.
+
+
+## 22. Current provider, privacy and NZ tax update — 17 November 2026
+
+### 22.1 Akahu Personal App versus full-app accreditation
+
+A fresh read of Akahu's official developer documentation clarifies the boundary:
+- Personal App is free and restricted to one user (the owner's own Akahu account); ongoing account information only; no payments or webhooks; daily scheduled refresh; one-hour manual refresh rest period.
+- Creating a Personal App requires an Akahu profile, account connection, developer terms, identity verification and MFA. Advanced settings support IPv4 IP allowlisting, immediate user-token rotation and deletion/revocation of the app.
+- Akahu's App Accreditation guide is expressly for enduring connectivity/full apps. It requires a privacy notice, consumer information page, security and penetration testing, application review, server-validated MFA, credential protection, account-access revocation handling, inactive-account alerts and data deletion when no longer reasonably required. First application review is free; subsequent review after the first may cost NZ$1,000.
+
+**Correction/clarification to earlier disposition:** Akahu Personal App is not equivalent to a production full app. It remains a plausible low-cost private one-user research path, but daily/no-webhook freshness is not real-time and its current terms/topology suitability must be confirmed. A full app's Tier 2 enduring account-information accreditation is a separate path with materially greater security and review burden. Do not assume full-app accreditation is automatically required for Personal App use or that a private app is exempt from all provider terms. No provider path is selected or authorised.
+
+Sources:
+- https://developers.akahu.nz/docs/personal-apps
+- https://developers.akahu.nz/docs/personal-apps-advanced
+- https://developers.akahu.nz/docs/app-accreditation
+- https://developers.akahu.nz/docs/data-refreshes
+
+### 22.2 New Zealand Privacy Act position
+
+The current legislation includes a personal/domestic affairs exception in section 27 for an individual, subject to conditions and a highly-offensive exception. It is not a blanket exemption for every processor in the system. Third-party providers and agencies retain their own obligations and contractual controls. Architecture should still follow minimisation, purpose limitation, correction, security, retention, access/export and secure deletion. Cross-border processing needs a separate assessment.
+
+Sources:
+- https://www.legislation.govt.nz/act/public/2025/53/en/latest/sections/LMS899135/LMS23347/
+- https://www.privacy.org.nz/privacy-principles/5/
+- https://www.privacy.org.nz/privacy-principles/9/
+- https://www.privacy.org.nz/privacy-principles/12/
+
+### 22.3 CARF and crypto-derivative tax classification
+
+IRD's CARF guidance states that New Zealand-connected Reporting Crypto-Asset Service Providers must collect/report from 1 April 2026; the first reporting period ends 31 March 2027 and the first report is due 30 June 2027. IRD states that users do not register for CARF; RCASPs report. CARF reporting is a tax-information visibility regime, not itself a tax charge or a determination of taxable income. IRD's description excludes persons merely trading cryptoassets for their own benefit from being an RCASP, but the role of any counterparty/platform must be assessed separately.
+
+The official IRD cryptoasset overview says cryptoassets are generally excepted financial arrangements except where economically equivalent to debt arrangements. That does not settle the treatment of a futures/perpetual contract over a cryptoasset. The 2022 officials' report discussed crypto futures under the financial-arrangements rules, but this historical policy material must not be hard-coded as current legal advice. Contract terms, current law, residence and taxpayer facts require specialist interpretation.
+
+The 2026–27 Taxation Bill was introduced 10 September 2026 and IRD Tax Policy records it at select-committee stage as at 12 October 2026. Proposed FIF changes must remain tagged PROPOSED until enactment and commencement are verified.
+
+Sources:
+- https://www.ird.govt.nz/international-tax/exchange-of-information/crypto-asset-reporting-framework/crypto-asset-reporting-framework-overview
+- https://www.ird.govt.nz/updates/news-folder/2026/what-carf-means-for-crypto-asset-users
+- https://www.taxtechnical.ird.govt.nz/overviews/cryptoassets
+- https://www.ird.govt.nz/crypto-currency
+- https://www.taxpolicy.ird.govt.nz/bills/2026-fbt-simplification-tax-bill
+- https://www.taxpolicy.ird.govt.nz/publications/2022/officials-report-2021-taxation-bill
+
+No bank connection, credential, tax filing, payment, legal opinion or provider integration was performed or approved.
