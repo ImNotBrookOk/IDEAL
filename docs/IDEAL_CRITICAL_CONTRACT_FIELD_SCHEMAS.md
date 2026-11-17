@@ -377,3 +377,15 @@ No wire format, database, numeric haircut or venue has been selected.
 ## Canonical serialization profile requirement — checkpoint 109
 
 The logical Digest type remains incomplete until the byte-level canonical profile is approved. See [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md). In particular, exact Decimal/Quantity/Price/AssetAmount values must not pass through unconstrained IEEE-754 JSON numbers. Any future JCS use requires canonical decimal strings and a strict application profile; deterministic CBOR also requires an IDEAL profile for tags, optionality and semantic encoding. No format selected.
+
+
+## 19. Funding configuration and settlement evidence — checkpoint 110
+
+| Logical record | Required fields | Invariant |
+|---|---|---|
+| FundingRuleSnapshot | venue, instrument_id, settlement_asset, contract_multiplier, funding_interval, next_funding_at, cap, floor, position_basis, effective_from/to, observed_at, source_ref, revision | Effective-dated; no global interval or cap assumption |
+| MarkMethodSnapshot | venue, instrument_id, method_id/version, index_method/constituents, inputs, effective_from/to, observed_at, source_ref, revision | Every mark used for critical risk binds to its method revision |
+| FundingEstimate | instrument_id, rate, estimated_signed_amount, settlement_asset, position_snapshot_ref, schedule_revision, observed_at, valid_until | Forecast only; cannot post to authoritative ledger |
+| FundingSettlementEvent | venue_event_id, instrument_id, position_ref, signed_amount, settlement_asset, rate, basis, event_at, effective_at, received_at, source_ref, correction_of | Immutable/idempotent; correction is a linked event, never silent overwrite |
+
+Amounts use exact signed decimal semantics and canonical AssetId; timestamps and revisions follow the approved canonical profile. The fields are logical only; no wire encoding or runtime is selected.
