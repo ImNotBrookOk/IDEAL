@@ -490,3 +490,12 @@ This is an internal desk review only, not independent assurance or proof of secu
 Created [IDEAL Cross-Domain Accounting and Valuation Worked Examples](docs/IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md) with synthetic flows for bank-to-exchange transfers, spot plus perpetual exposure, funding/fees/unrealised P&L, collateral encumbrance, pending-to-posted transactions, tax estimates and reserves, stale FX, late corrections and partial portfolio projections.
 
 These examples expose the accounting and valuation invariants that future deterministic fixtures must assert. They are not tax/accounting advice, do not choose an accounting standard or tax classification, and were not executed as tests. No real financial data or provider connection was used. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 architecture checkpoint — data classification, retention, deletion and audit policy (checkpoint 079)
+
+Created [IDEAL Data Classification, Retention, Deletion and Audit Policy Architecture](docs/IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md). It defines C0–C3 data classes, purpose/owner registry, per-class retention model, deletion lifecycle, audit minimisation, backup/key interactions, AI/retrieval boundaries and provider-processing assessment.
+
+Fresh official-source research clarified that Privacy Act section 11 treats agent-only processing differently from provider own-purpose use, while the principal remains responsible for agent-held data. IRD's cryptoasset record guidance requires at least seven years for records within its scope; CARF's separate seven-year record duty applies to RCASPs, not automatically to individual users. The scope of that cryptoasset guidance for perpetual/futures contracts remains unresolved.
+
+No universal retention periods, processor, storage, backup or deletion technology is selected. Phase 02 remains active; Phases 03–19 locked. No real records, provider, cloud/AI upload, integration or implementation is authorised.
