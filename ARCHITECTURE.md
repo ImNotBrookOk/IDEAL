@@ -178,3 +178,10 @@ NZ record-retention rules are data-class specific: IRD cryptoasset record guidan
 No deployment topology is selected. The phone is a presentation/owner-control device; the existing Windows PC is a fallback only if a concrete requirement justifies it; mobile-data bandwidth and intermittent connectivity constrain bulk ingestion. WSL2 is not a security sandbox or boundary from the Windows user. A Hyper-V VM remains within the physical host's trust domain. KVM/Firecracker are candidates for future isolated workloads, but require host-enforced egress and do not defeat host-root compromise. A separate physical action gateway is a future option only if execution is ever separately authorised.
 
 See [Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). Current disposition remains undeployed.
+
+
+## Integrated state-machine and contract composition — checkpoint 081
+
+The owner/policy, workload identity, security incident, health, data evidence, risk, reservation, action, reconciliation and recovery state machines have been composed into one cross-authority admission contract. No pass in one machine implies a pass in another. Future consequential actions bind a version vector (owner authority, policy/key/identity, security incident, health interlock, risk policy/decision/reservation, data snapshot, instrument/account reconciliation, audit and clock evidence) and recheck invalidation-sensitive versions immediately before dispatch.
+
+See [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](docs/IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). No schema or runtime implementation is approved.
