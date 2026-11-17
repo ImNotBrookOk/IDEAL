@@ -351,3 +351,24 @@ These decisions must be made only after platform research and owner approval. Th
 ## 17. Disposition
 
 Critical contract field semantics are now specified to a reviewable level. They remain logical schemas, not deployable API/DB schemas. Phase 02 remains active; Phases 03–19 remain locked. No implementation, runtime, credentials, integrations, paper/live execution or phase advancement is authorised.
+
+ 
+## 18. Margin, collateral and liquidation logical schemas — checkpoint 100
+
+These are required logical field groups, not wire schemas or selected database tables. All monetary/asset quantities use canonical AssetId and exact decimal semantics from the existing denomination contract. All evidence is source-bound, time-bound, versioned and integrity-referenced.
+
+| Record | Required logical fields | Safety semantics |
+|---|---|---|
+| CollateralAssetState | asset_id, account_scope, native_quantity, encumbrance, borrow/liability, custody/location, observed_at, source_ref | Native units preserved; no assumed transferability or stablecoin par |
+| CollateralEligibilityRule | asset_id, venue/account_mode, eligible, initial_weight, maintenance_weight, concentration_tier, effective_from/to, source_ref, rule_digest | Separate IM/MM weights; effective-dated and fail closed if absent/stale |
+| CollateralValuation | asset_id, quantity, price, quote_asset_id, price_type, source_ref, observed_at, age, haircut, valuation_amount, quality_state | Conservative side/rounding; stale/missing price cannot inflate capacity |
+| FxConversionEvidence | from_asset_id, to_asset_id, rate, side, source_ref, observed_at, spread, haircut, quality_state | Conversion is explicit; no silent FX or peg assumption |
+| InstrumentRiskTier | instrument_id, margin_mode, settlement_asset_id, notional_lower/upper, max_leverage, initial_rate, maintenance_rate, maintenance_deduction, effective_from/to, source_ref, rule_digest | Boundary continuity and exact account/product scope |
+| AccountMarginSnapshot | venue/account_scope, margin_mode, settlement_asset_id, equity, available_margin, initial_margin, maintenance_margin, margin_ratio, observed_at, source_ref, quality_state | Venue-reported values kept distinct from local risk-adjusted equity |
+| PositionRiskSnapshot | position_id, instrument_id, side, quantity, entry_price, mark_price, index_price, last_price, unrealised_pnl, tier_id, IM, MM, liquidation_estimate, observed_at, source_ref | Mark, index, last and executable prices remain distinct |
+| OpenOrderRiskReservation | order_id, action_digest, remaining_quantity, worst_case_exposure, state, venue_order_state, reservation_ref | Unknown/cancel-pending orders retain conservative reservation |
+| StressScenario / StressResult | scenario_id, version, shocks, basis/liquidity/collateral/funding/FX dimensions, result, worst_loss, evidence_refs | No hedge credit outside approved netting set; scenario provenance retained |
+| LiquidationEvent | venue_event_id, account_scope, instrument_id, event_type, trigger_price_type, trigger_price, requested_quantity, filled_quantity, bankruptcy_price, fee, insurance/ADL status, observed_at, source_ref, reconciliation_ref | Venue report is evidence, not final state; reconcile fills and account |
+| VenueRuleSet | venue, product, account_mode, instrument_scope, rules_version, effective_from/to, fetched_at, source_ref, content_digest, approval_ref | Rule changes invalidate decisions; no unversioned live defaults |
+
+No wire format, database, numeric haircut or venue has been selected.
