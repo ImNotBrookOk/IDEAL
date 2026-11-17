@@ -465,3 +465,12 @@ Next: reconcile risk and capital contracts with reconciliation/account state, au
 A repository-wide wording audit found that `RULES.md` still described paper trading as the only permitted mode and still framed the active standing authorisation as Phase 01 research. Both were stale and contradicted the current owner-approved Phase 02 architecture-only boundary and README/roadmap status. `RULES.md` is corrected: no paper or live execution is authorised; D-006/D-007/D-008 are scoped to the initial crypto-perpetual policy; D-006 denominator and D-008 semantics remain unresolved; D-022 governs the current autonomous Phase 02 research/design sequence; Phases 03–19 remain locked.
 
 This is a documentation consistency correction, not a change to owner decisions or permissions. No paper/live execution, runtime integration, credentials, account access or implementation is authorised.
+
+
+### Phase 02 architecture checkpoint — reconciliation, incident containment and verified recovery (checkpoint 076)
+
+Created [IDEAL Reconciliation, Incident Containment and Verified Recovery Architecture](docs/IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md). It defines fact-specific authority/source-of-truth boundaries, reconciliation case states, mismatch/correction rules, trading and personal-finance reconciliation, tax assessment/payment distinctions, incident containment, recovery quarantine, scoped pillar attestations, backup/audit continuity and a dependency-aware capability matrix.
+
+Key invariant: process restart, reconnect, database restore or a green dashboard does not establish recovery. Restored state remains quarantined until identity/revocation, policy, data/audit integrity, external-state reconciliation, dependent-state recomputation and scoped attestations pass. Security and health cannot grant financial authority or initiate financial side effects. No runtime recovery or external reconciliation was performed.
+
+Phase 02 remains active; Phases 03–19 locked. Next: integrated adversarial consistency review across all Phase 02 architecture documents and consolidated owner-decision register.
