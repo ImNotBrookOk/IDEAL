@@ -310,3 +310,10 @@ A valid authenticator assertion is not proof of informed consent if the owner wa
 The new [Autonomy Authority Closure Assessment](IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md) distinguishes design invariants from provisional deployment recommendations and platform-dependent owner decisions. The following cannot be designed away and must be explicitly accepted/mitigated before any future execution approval: already transmitted venue requests cannot be recalled; host root/kernel compromise defeats same-host process isolation; offline recovery checkpoints may be stale without an independent anchor; one owner cannot provide true two-person control; local audit integrity is not independently provable if all storage and checkpoint keys are compromised; external venue state remains outside IDEAL's ACID transaction; research cannot prove every vulnerability has been found.
 
 Workstream closure is not Phase 02 closure. Explicit owner acceptance and other Phase 02 foundation/architecture work remain required.
+
+
+## Checkpoint 077 — whole-system review extension
+
+The prior adversarial assessment concentrated on autonomy, host trust, revocation and dispatch. The new [Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md) extends the threat analysis across bounded contexts, point-in-time data, personal-finance imports, tax/CARF semantics, cross-domain netting, capital autonomy, privacy, retention and recovery. It records 24 scenarios, residual blockers and deferred owner decisions.
+
+The current paper-execution wording conflict noted in earlier risk reconciliation has been corrected at checkpoint 075. This does not close Phase 02 or replace an independent review.
