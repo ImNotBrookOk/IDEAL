@@ -294,3 +294,12 @@ The architecture now specifies the following additional invariants:
 - Local transactional durability is not the same as external side-effect atomicity. The adapter boundary remains an uncertainty boundary.
 
 No runtime fault injection, supervisor compromise test, key ceremony, database crash test or venue reconciliation exercise was performed.
+
+
+### Additional owner-approval interface attack
+
+| Case | Attack/failure | Required outcome |
+|---|---|---|
+| ADV-39 | Approval UI displays a harmless summary while the signed artefact contains expanded scope, hidden fields or altered limits | Approval challenge binds exact digest; summary generated from same immutable artefact; critical diff shown; ambiguous/truncated/mismatched presentation denied |
+
+A valid authenticator assertion is not proof of informed consent if the owner was not shown the exact scope and consequences. The approval interface, challenge and verifier are one security protocol and require end-to-end tests.
