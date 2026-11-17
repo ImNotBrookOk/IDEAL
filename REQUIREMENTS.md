@@ -118,3 +118,13 @@ Key purposes must be separated for owner root/recovery, owner approval, policy p
 - High-risk arbitrary code requires evaluation of disposable VM isolation and host-enforced egress filtering. A shared host root/kernel compromise is a trust failure.
 - Restored backups MUST NOT restore active authority. Invalidate all ephemeral permits/identities, advance generation, validate latest revocation state against an independent anchor and enter RECOVERY_HOLD if current trust cannot be proven.
 - Recovery MUST include clean rebuild/attestation, key and identity rotation, audit validation, authoritative external-state reconciliation and explicit owner approval before reactivation.
+
+
+## Supervisor, policy-root and audit atomicity requirements (checkpoint 069)
+
+- Health supervisor MUST observe critical components independently and have only scoped restrictive-interlock authority. It cannot grant/expand permissions, alter policy/risk limits, approve reservations or initiate financial actions.
+- Supervisor failure, invalid heartbeat or unverifiable status restricts affected risk-increasing actions. A supervisor cannot certify its own security posture. Shared host root/kernel compromise is explicitly outside local process-isolation guarantees.
+- Policy/envelope publication MUST be immutable, versioned, owner-approved against exact digest, separately signed by a delegated policy role, anti-rollback protected and activated through the same serialized authority generation used by revocation/dispatch.
+- Owner root/recovery, owner approval, policy publisher, workload identity, audit checkpoint, encryption and future venue credentials MUST have distinct key purposes and access paths.
+- Canonical action intent, authority evidence, risk reservation, audit event and outbox MUST be durably committed before dispatch. Dispatch-start and its audit event MUST commit before network write.
+- Failure to durably commit pre-dispatch evidence blocks new risk-increasing side effects. A possibly transmitted request with lost acknowledgement remains UNKNOWN; reservations are retained until authoritative reconciliation. No exactly-once remote side-effect claim is permitted.
