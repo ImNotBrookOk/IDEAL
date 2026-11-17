@@ -268,3 +268,6 @@ Created [Perpetual Funding and Mark-Price Semantics Source Refresh](../IDEAL_PHA
 
 
 | [2026-11-18-111-funding-mark-price-integration-and-map-verification.md](2026-11-18-111-funding-mark-price-integration-and-map-verification.md) | Revalidated official perpetual funding/mark-price semantics; added funding, mark and margin event traceability; corrected checkpoint 110 map numbering; fetched all 42 current document-map targets; Phase 02 remains active and not complete |
+
+
+| [2026-11-18-112-funding-api-event-state-and-history-coverage.md](2026-11-18-112-funding-api-event-state-and-history-coverage.md) | Refined funding API event-state typing, historical retention/coverage and linear/inverse denomination requirements; added logical schemas and T-FUND-04–06; no venue or API client selected |
