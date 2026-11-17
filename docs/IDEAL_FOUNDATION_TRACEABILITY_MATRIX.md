@@ -144,3 +144,31 @@ Phase 02 closure is not automatic when the document set exists. Completeness, co
 - D-006 and D-008 remain unchanged; their unresolved semantics are not decided here.
 - No paper/live execution, exchange/account access, credentials, external scans, dependencies, runtime integration, hosting or paid service is authorised.
 - Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 9. Bounded-autonomy traceability (D-023)
+
+The owner has selected bounded, owner-authorised autonomy as the future operating model. The following requirements make that decision testable; they do not authorise an active envelope or execution.
+
+| ID | Foundation | Requirement | Accountable owner | Cross-pillar dependency | Future verification evidence | Status |
+|---|---|---|---|---|---|---|
+| GOV-03 | Governance | Every autonomous capability is constrained by an explicitly owner-approved, versioned, scoped, time-bounded and revocable envelope | Governance/Owner | Security, Risk, Audit | Invalid signature/version, expired scope, revocation, scope mutation and privilege-expansion tests | Partial |
+| GOV-04 | Governance | Individual actions inside an active envelope may proceed without per-action human approval only after every required gate passes; reserved action classes require owner approval | Governance/Owner | Risk, Security, Data, Health | Positive in-envelope tests plus reserved-action and out-of-envelope denial tests | Partial |
+| SEC-09 | Security | Envelope validity and exact action permissions are enforced outside AI/strategy processes at the action boundary | Security | Risk, Audit | Prompt injection, agent self-grant, replay, payload mutation, stale permission and bypass tests | Open |
+| RSK-08 | Risk | Every autonomous risk-increasing action receives a fresh deterministic decision bound to exact payload, envelope version, policy version, evidence and reservation | Risk | Security, Data, Health, Audit | Changed payload, expired/revoked envelope, concurrent reservation, duplicate/replay and partial-fill tests | Partial |
+| HLT-07 | Health | Unknown/degraded critical dependencies trigger predefined restrictive interlocks that cannot expand authority or initiate financial actions | Health | Risk, Security, Data | Supervisor outage, false heartbeat, stale telemetry and attempted authority expansion tests | Partial |
+| AUD-03 | Audit | Owner approvals, envelope versions, autonomous action decisions, reservations, revocations and reserved-action approvals are attributable and tamper-evident | Audit/Security | All foundations | Missing/reordered/altered events, attribution and audit-sink outage tests | Partial |
+
+### Reserved owner-approval classes
+
+At minimum: initial capability activation/reactivation; envelope, policy, hard-limit or permission changes; new accounts, venues and integrations; credential creation and privilege expansion; transfers, withdrawals and payments; safeguard disablement; designated destructive/irreversible operations; and incident recovery/release where policy requires owner approval. The owner may reserve additional classes.
+
+### Enforcement invariants
+
+1. The envelope is a maximum authority boundary, never an obligation or target to consume capacity.
+2. Strategy, AI, model and agent outputs cannot create, edit, sign, approve or expand the envelope.
+3. Every action is checked against current envelope and permission state at the action boundary.
+4. Risk authority is independent: envelope permission is necessary but not sufficient for financial action.
+5. A changed payload, expired/revoked envelope, unknown permission, stale critical evidence or failed interlock denies the affected risk-increasing action.
+6. Emergency controls may reduce authority; they cannot grant financial authority or initiate liquidation.
+7. Owner approval of D-023 is not approval of any actual envelope, account, venue, credential or execution mode.
