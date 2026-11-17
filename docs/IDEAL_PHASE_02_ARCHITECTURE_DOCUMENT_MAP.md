@@ -250,3 +250,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 25. Canonical serialization and digest contract research — checkpoint 109
 
 [Canonical Serialization and Digest Contract Research](IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md) specifies byte-level digest/signature requirements, exact financial number handling, candidate encodings and future conformance tests. No format selected.
+
+
+## 21. Perpetual funding and mark-price semantics — checkpoint 110
+
+[Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) owns the current official-source refinement for effective-dated funding schedules/caps, mark methodology versions, settlement accounting, funding-to-margin effects and additional conformance tests. It extends the margin/liquidation and data-freshness sources. No venue or formula selected.
