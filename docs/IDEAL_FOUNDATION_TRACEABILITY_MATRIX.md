@@ -172,3 +172,19 @@ At minimum: initial capability activation/reactivation; envelope, policy, hard-l
 5. A changed payload, expired/revoked envelope, unknown permission, stale critical evidence or failed interlock denies the affected risk-increasing action.
 6. Emergency controls may reduce authority; they cannot grant financial authority or initiate liquidation.
 7. Owner approval of D-023 is not approval of any actual envelope, account, venue, credential or execution mode.
+
+
+## Autonomy authority and permission traceability additions
+
+| Requirement | Control | Responsible boundary | Required evidence/tests |
+|---|---|---|---|
+| Owner-only envelope creation/change | Strong owner authentication, exact-digest approval, immutable version and signature | Owner approval ceremony / authority registry | Wrong signer, replay, recovery, tamper, schema and semantic validation |
+| No agent self-grant | Distinct workload identities; no policy/key mutation rights; sole action gateway | Security / action boundary | Prompt injection, confused deputy, privilege escalation and alternate-route tests |
+| Exact-action permission | Canonical action digest binds parameters, scope, versions and evidence | Action boundary | Mutate each field; reject changed digest, wrong audience and stale decision |
+| Risk authority remains independent | Risk approval and reservation required after security/owner authorisation | Risk authority | Deny when either gate absent; concurrency and reservation tests |
+| Revocation takes effect | Monotonic epoch, independent propagation and online checks | Authority registry / action boundary | Partition, cache delay, restart and maximum propagation measurement |
+| Safe external side effects | Durable intent/outbox, idempotency, UNKNOWN state and authoritative reconciliation | Risk/action boundary/adapter | Lost acknowledgement, duplicate, partial fill, cancel-unknown and recovery tests |
+| Policy integrity | Signed immutable bundle, anti-rollback and fail-closed diagnostics | Policy registry / evaluator wrapper | Unsigned/invalid bundle, rollback and evaluator-error tests |
+| Audit and recovery | Durable append-only evidence, protected checkpoints and revocation-preserving restore | Audit/security/health | Truncation, reorder, storage outage, backup restore and incident exercise |
+
+See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) for the full contract and adversarial test catalogue. These are proposed traceability requirements, not test results.
