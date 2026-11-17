@@ -191,3 +191,8 @@ The dedicated [Security Control and Threat Traceability Matrix](IDEAL_SECURITY_C
 ## Checkpoint 089 — critical contract schema completeness
 
 Field-level logical schemas are now specified for owner envelopes, security decisions, health interlocks, risk decisions/reservations, action intents/permits, dispatch receipts, reconciliation, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations. See [Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md). No wire format or implementation is selected.
+
+
+## Checkpoint 090 — owner decision consolidation
+
+The 12 grouped owner decisions are consolidated in [IDEAL Phase 02 Owner Decision Register](IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md). Existing accepted decisions are preserved; the register is draft only and does not activate domains or approve implementation. Final presentation remains gated on independent review and the full Phase 02 exit criteria.
