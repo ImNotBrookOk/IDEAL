@@ -96,3 +96,12 @@ The policy registry, signing/root-of-trust, identity enforcement, revocation pro
 A future execution-capable domain must route all consequential operations through a dedicated, non-bypassable action-enforcement boundary outside strategy/AI processes. The boundary separates owner grant, workload authentication, policy authorisation, risk approval/reservation, data trust, health/security interlocks, revocation and audit. It canonicalises the exact action and binds all approvals to its digest, scope, versions, evidence and expiry. Any material change requires fresh decisions.
 
 The action boundary is the only permitted route to a future execution adapter. Durable intent and risk reservation precede dispatch. Ambiguous external outcomes remain UNKNOWN and reserved until authoritative reconciliation; no blind retries or timeout-based reservation release. Policy evaluation, owner approval and risk approval remain separate authorities. Detailed provisional contracts and technology research are in [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). No runtime implementation or execution is authorised.
+
+
+## Revocation, isolation and recovery boundary — checkpoint 068
+
+The authority registry and dispatch boundary serialise revocation against the durable DISPATCH_STARTED transition using a monotonic generation. Revocation-first denies dispatch; dispatch-start-first is in-flight and cannot be recalled. A worker that cannot prove current generation cannot dispatch. Global EFFECTIVE requires acknowledgement from every registered boundary; partitions and uncertain external outcomes remain explicitly unresolved.
+
+AI/strategy/generated-code processes are hostile workloads in a separate trust zone, with no credentials, direct venue egress or privileged host interfaces. Enforce least-privilege OS identities, syscall and filesystem restrictions, namespaces/cgroups, strict IPC and host-level egress controls. Disposable microVMs are a candidate for high-risk code. Shared host root/kernel compromise defeats local process separation and requires a separate trust domain.
+
+Backups restore data, not authority. Recovery quarantines restored permissions, invalidates old capabilities, advances generation, verifies an independent revocation anchor, rebuilds/attests and reconciles external state. If current trust is uncertain, remain in RECOVERY_HOLD. See autonomy architecture §§19–21.
