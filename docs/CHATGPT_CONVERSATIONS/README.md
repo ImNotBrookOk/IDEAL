@@ -155,3 +155,5 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-062-risk-management-research-stage-9-cross-pillar-contracts.md](2026-11-17-062-risk-management-research-stage-9-cross-pillar-contracts.md) | Phase 02 risk research: provisional cross-foundation request/decision contracts, action-bound approvals, reservations, data provenance, health interlocks, security/policy integrity, telemetry, degraded modes and contract verification; no schema freeze or implementation |
 
 | [2026-11-17-063-risk-architecture-reconciliation.md](2026-11-17-063-risk-architecture-reconciliation.md) | Consolidates risk research stages 1–9; records four-pillar boundaries, RM-01–RM-20 traceability, adversarial review, execution-authority wording corrections and unresolved owner decisions |
+
+| [2026-11-17-064-integrated-foundation-traceability.md](2026-11-17-064-integrated-foundation-traceability.md) | System-wide requirements-to-controls-to-components-to-tests matrix for governance, risk, data integrity, health, security, audit and cross-pillar interfaces; records integrated failure scenarios and Phase 02 acceptance criteria |
