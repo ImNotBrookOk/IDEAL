@@ -13,21 +13,21 @@ Deterministic-first, modular, auditable, fail-closed and cost-constrained. AI is
 7. **Research engine** — event-driven backtester, cost/fill models, walk-forward and out-of-sample validation.
 8. **Strategy registry/selector** — eligibility, regime scope, cohort ranking and selection history.
 9. **Risk engine** — sizing, exposure, stop/exit validation, daily loss and cooldown state machine.
-10. **Paper broker** — simulated order lifecycle, fills, fees, funding, positions and reconciliation.
+10. **Future paper-execution simulator (not authorised)** — a proposed isolated simulation capability for order lifecycle, fills, fees, funding, positions and reconciliation. It is not an active runtime component and must not be implemented or used without separate explicit owner approval.
 11. **Learning store** — trade records, lessons, retrieval metadata and immutable history.
 12. **Gate controller** — deterministic promotion/demotion and permission state.
 13. **Orchestrator** — startup, scheduling, health checks, recovery and safe shutdown.
 14. **Mobile dashboard** — Android-first status, controls, audit trail and alerts.
 
 ## Data flow
-Market feeds → validation/normalisation → market state and indicators → contextual evidence → strategy eligibility → risk approval → paper order simulator → reconciliation → trade journal/learning. Gate controller consumes verified performance evidence and independently updates allowed strategy permissions. Every stage emits versioned events and traceable decisions.
+Research flow: authorised public/historical market evidence → validation/normalisation → market state and indicators → contextual evidence → candidate strategy research → backtest and statistical validation → versioned experiment evidence. A future execution flow is only conceptual: proposed action → independent risk decision and reservation → separately authorised execution adapter/simulator → authoritative reconciliation. No paper or live order flow is currently authorised or running. Gate controller consumes verified research evidence but cannot grant execution authority. Every future consequential transition must emit versioned, traceable evidence.
 
 ## Trust boundaries
 - Exchange/API responses, external text, historical datasets and model outputs are untrusted.
 - Secrets remain server-side.
 - Strategy code runs in a constrained environment with resource/time limits.
 - Risk and order validation are separate from strategy generation.
-- A paper order is rejected if required inputs or state are absent or inconsistent.
+- Any future execution adapter must reject actions if required inputs, policy, approval, reservations or state are absent, stale, invalid or inconsistent. This is a design requirement, not current execution authority.
 
 ## Contracts to define in Phase 02
 Instrument and candle schema; timestamp/timezone convention; market-state schema; indicator metadata; strategy manifest; backtest result; order/fill/position ledger; risk decision; gate state; trade lesson; event envelope; error taxonomy.
