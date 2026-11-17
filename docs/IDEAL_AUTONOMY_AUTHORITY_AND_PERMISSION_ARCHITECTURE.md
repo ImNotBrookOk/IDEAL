@@ -363,3 +363,227 @@ Technology selection and implementation remain separate later gates.
 ---
 
 **Current authority state:** D-023 remains the only accepted bounded-autonomy governance decision. This document is a provisional technical design. Phase 02 remains active; Phases 03–19 remain locked. No code, dependencies, runtime, accounts, credentials, exchange connections, paper/live execution, paid services, hosting or external security tests are authorised.
+
+## 19. Adversarial deep review — revocation races and dispatch fencing
+
+### 19.1 Fundamental limit and honest semantics
+
+Revocation cannot recall a request already transmitted to an external venue. IDEAL can prevent queued work, fence dispatchers, invalidate unused admissions, and track/reconcile in-flight work. It cannot guarantee that a request already on a network path will not arrive after revocation is initiated. The system must not claim instantaneous global revocation.
+
+Define the local action linearisation point as the durable transition from ADMITTED to DISPATCH_STARTED at the authoritative dispatch boundary. Revocation and dispatch-start transitions must be serialised against the same authoritative generation:
+
+- If revocation commits first, the action must not transition to DISPATCH_STARTED.
+- If DISPATCH_STARTED commits first, the request is in-flight and cannot be recalled by IDEAL; it enters in-flight accounting and reconciliation.
+- A crash or lost acknowledgement around the boundary is treated as potentially dispatched, never assumed not dispatched.
+
+This defines what IDEAL controls. It does not promise the remote exchange's receipt or processing order.
+
+### 19.2 Revocation state machine
+
+| State | Meaning | Required controls |
+|---|---|---|
+| ACTIVE | Envelope/identity may be used within scope | Normal per-action checks |
+| REVOKE_REQUESTED | Authenticated request durably recorded | Deny new admissions immediately; reserve next generation |
+| FENCING | Action boundaries and dispatch workers being fenced | Invalidate unused capabilities; reject stale generation |
+| DRAINING | Workers acknowledge fence; queued actions invalidated; in-flight requests enumerated | Do not retry uncertain requests; retain risk reservations |
+| EFFECTIVE | Every registered dispatch boundary acknowledges the new generation and no unstarted action can proceed | Report effective only with complete acknowledgements and durable evidence |
+| RECONCILIATION_REQUIRED | Requests may have reached venue or a boundary is unreachable | Remain restricted; reconcile authoritative venue state |
+| RECOVERY_HOLD | Authority store, epoch, key or boundary integrity cannot be established | No automatic reactivation; owner-led recovery |
+
+A revocation request can be accepted and locally fail-closed while global effectiveness remains unconfirmed. Status must distinguish REQUESTED, EFFECTIVE and RECONCILIATION_REQUIRED. Never collapse them into a single green revoked state.
+
+### 19.3 Serialisation and fencing protocol
+
+1. The authority registry maintains a monotonic generation and durable append-only transition record.
+2. Admission and dispatch-start use a linearizable compare-and-swap or serializable transaction against current generation, envelope version, identity state and action digest. Eventual consistency is insufficient.
+3. A dispatcher receives a narrow, one-use permit bound to exact action digest, audience, generation, adapter, account, deadline and unique nonce.
+4. Before the external network write, the boundary atomically consumes the permit and records DISPATCH_STARTED against the current generation. A permit cannot be consumed twice.
+5. Revocation increments generation and fences dispatchers. A dispatcher unable to reach authoritative state or prove its generation is current must not start a new side effect.
+6. Every worker reports acknowledged generation and in-flight request identifiers. Missing acknowledgements prevent global EFFECTIVE.
+7. Queued but unstarted actions are invalidated. DISPATCH_STARTED actions remain in-flight/unknown until authoritative reconciliation.
+8. Repeated revocation is idempotent. Generations never decrease or get reused.
+9. Audit records request, actor, reason, generation before/after, worker acknowledgements, outstanding action IDs, venue reconciliation and final status.
+
+The local store must provide required transactional/linearizable semantics. A distributed deployment must explicitly choose a strong-consistency/consensus design for authority state; an eventually consistent replica cannot authorise dispatch. A single-host design still needs durable commit ordering and crash-consistency tests.
+
+### 19.4 Leases, partitions and time
+
+Short-lived capabilities limit exposure but do not solve revocation. A partitioned dispatcher cannot assume a cached lease remains valid unless a formally bounded lease model, trustworthy monotonic time, bounded clock drift and safe expiry mechanism are proven. Otherwise fail closed.
+
+The maximum revocation propagation objective remains unselected. Phase 02 must specify a measurable maximum for connected boundaries and explicit offline/partition behaviour. No finite network SLO can prove an already transmitted request will not arrive later. EFFECTIVE concerns IDEAL-controlled dispatch boundaries, not remote venue cancellation.
+
+### 19.5 Required race and fault-injection tests
+
+- Revocation wins immediately before dispatch-start: no network write.
+- Dispatch-start wins immediately before revocation: request marked in-flight; no false claim of recall.
+- Revocation between permit issue and consumption: stale generation rejected.
+- Worker paused, partitioned, restarted or clock-shifted: cannot resume on stale state.
+- Crash before/after dispatch-start and socket write: classify as not-started only when proven; otherwise UNKNOWN.
+- Duplicate/reordered revocation: monotonic generation and idempotent result.
+- Authority database failover/rollback: old generation cannot regain validity.
+- Worker registry omits a live worker: no false EFFECTIVE.
+- Audit sink failure: no new admission; possible in-flight side effects reconciled later without rewriting history.
+- Concurrent revocation and policy update: serialised order; no stale-policy dispatch.
+- Venue accepts request after local revocation changes: preserve in-flight semantics and reconcile.
+
+## 20. Adversarial deep review — host, process and network isolation
+
+### 20.1 Threat model and hard boundary
+
+Treat every strategy, research script, model runtime, plugin, agent, generated-code process and downloaded artefact as potentially hostile. Prompt instructions, model alignment, application-level tool allowlists, process names and container labels are not security boundaries.
+
+The authority/action boundary, policy trust anchors, risk authority and future venue credentials must not be available to those workloads. A compromised strategy process must be unable to read credentials, open arbitrary venue sockets, modify policy, signal privileged processes, access owner approval material or write directly to the audit trust anchor.
+
+**Critical limit:** if a workload and action gateway share a host whose kernel or root account is compromised, local process isolation alone cannot guarantee the gateway remains trustworthy. Root/kernel compromise can inspect or alter local processes, memory, files, IPC and firewall state. Stronger assurance requires moving gateway and credentials into a separately protected trust domain (separate VM/host, hardware-backed service or external signing/authorisation device) with independently enforced network policy. No design removes this host trust assumption.
+
+### 20.2 Required trust zones
+
+| Zone | Trust level | Contents | Allowed connectivity |
+|---|---|---|---|
+| Z0 — untrusted workload | Hostile by default | AI/strategy agents, research code, plugins, downloaded data parsers, generated code | No venue network, credentials or host control plane; typed proposal channel only |
+| Z1 — ingestion/normalisation | Constrained | External market-data parsers and normalisers | Explicit data-source egress; no authority keys or execution credentials |
+| Z2 — deterministic research/risk | Trusted only after verification | Backtests, feature computation, deterministic risk evaluation | Narrow authenticated internal APIs; no direct side-effect credentials |
+| Z3 — authority/action gateway | High trust | Owner envelope verifier, policy wrapper, revocation gate, risk reservation coordinator, adapter dispatcher | Minimal typed IPC; narrowly allowlisted outbound venue endpoints only |
+| Z4 — trust anchors/recovery | Highest local trust / separately protected | Owner root/recovery keys, policy signing trust, revocation high-water anchor, independent audit checkpoints | No access from Z0; offline or hardware-protected where practical |
+
+The exact number of physical machines is deployment-dependent; logical separation and forbidden flows are requirements. Process separation on one host is not equivalent to a separate hardware/administrative trust domain.
+
+### 20.3 Layered host containment
+
+For a future Linux host, evaluate a layered baseline:
+
+- dedicated unprivileged Unix identity per service; no shared UID between agent and gateway;
+- no ambient Linux capabilities; drop all not explicitly required;
+- namespaces and cgroups for process, mount, PID, user, IPC, network and resource separation;
+- per-workload seccomp syscall policy;
+- Landlock and/or SELinux/AppArmor object-access policy;
+- read-only runtime image and narrowly scoped writable scratch;
+- no container-runtime socket, KVM device, block/raw device or privileged helper exposed to untrusted workloads;
+- ptrace, process-tree, core-dump and resource-exhaustion controls;
+- explicit network namespaces and host firewall policy; default-deny egress;
+- no inherited environment secrets, SSH agent, cloud metadata access or host service tokens;
+- bounded IPC schema, message size, rate, timeout and queue depth; authenticate peer credentials and reject unexpected file descriptors/ancillary data;
+- patch/kernel/configuration inventory; startup self-test proves controls are active, not merely configured.
+
+Do not silently downgrade when a required control is unsupported. Report actual kernel ABI and enforced control set; if the declared security profile cannot be achieved, the workload cannot receive that trust classification.
+
+Linux Landlock is a useful unprivileged, stackable restriction layer, but kernel/ABI availability and documented limitations must be checked. Namespaces alone are not a complete access-control boundary. seccomp, LSM policy, network isolation and privilege dropping are complementary controls.
+
+### 20.4 Stronger isolation for hostile or generated code
+
+For arbitrary untrusted code, prefer a disposable VM boundary over relying on a conventional container alone where risk warrants the operational cost.
+
+Firecracker is a candidate for Linux/KVM deployments. Its design treats guest vCPU threads as malicious, nests trust zones, recommends production launch through its jailer, and explicitly leaves guest egress filtering to host-level controls. A Firecracker VM is not a complete solution: host kernel/KVM, VMM/jailer, image provenance, host firewall, TAP configuration and lifecycle remain trusted attack surfaces.
+
+gVisor and Kata Containers are comparison candidates, not assumed equivalent boundaries. Selection requires threat-model-specific evaluation, host compatibility, exploit history, maturity, resource cost, observability, patching and independent tests. No sandbox makes arbitrary code safe.
+
+For high-risk workloads, use a fresh disposable environment, no persistent credentials, no shared writable workspace between unrelated tasks, no unrestricted host mounts, no shared agent coordination channel, strict CPU/memory/process/disk/time quotas and deny-by-default egress. Destroy the environment after extracting a small validated result artefact.
+
+### 20.5 Network and credential containment
+
+- Future venue credentials, if separately authorised, exist only in the adapter/gateway zone; never return them to agents, model context, logs or diagnostics.
+- Strategy zone has no route to exchange REST/WebSocket endpoints, arbitrary DNS egress, cloud metadata, loopback admin ports or generic HTTP proxy.
+- Gateway has explicit destination allowlists per venue/environment, TLS validation, DNS controls, private/link-local/loopback denial, redirect restrictions and DNS-rebinding/SSRF protection.
+- Do not expose generic CONNECT proxy or arbitrary URL-fetch endpoint as a route to credentials.
+- Egress policy is enforced outside untrusted process and, for stronger threat models, outside gateway host.
+- Gateway schemas are narrow typed operations; no shell, arbitrary HTTP, arbitrary headers, raw signed payload or unrestricted exchange API passthrough.
+- Inbound agent data is untrusted even over authenticated IPC; validate lengths, types, ranges, enums, identifiers, Unicode, canonicalisation and semantic invariants.
+- Adapter responses and venue metadata are also untrusted; parse in constrained process and validate before changing financial state.
+
+### 20.6 Host isolation failure tests
+
+- Strategy process reads procfs/sysfs, environment, process memory, file descriptors, sockets and neighbouring service paths.
+- Symlink/hardlink/path traversal, TOCTOU, mount namespace, procfs, device node, Unix socket and inherited-FD attacks.
+- Access attempts to container-runtime sockets, KVM, host network namespace, cloud metadata and loopback admin services.
+- DNS rebinding, IPv4/IPv6 alternate forms, redirects, proxy bypass, private/link-local targets and raw socket egress.
+- ptrace, signal injection, shared-memory abuse, resource exhaustion, fork bombs, disk exhaustion and IPC queue flooding.
+- Malicious output with forged IDs, oversized JSON, duplicate keys, noncanonical numbers and Unicode confusables.
+- Compromise sandbox guest and test host containment; compromise one workload identity and test lateral movement.
+- Direct venue connection from Z0 and credential discovery from memory, filesystem, logs, backups and environment.
+- Disable/misconfigure one control at a time; health detects missing enforcement and blocks elevated trust.
+
+## 21. Adversarial deep review — recovery, rollback and authority resurrection
+
+### 21.1 Recovery restores data, not authority
+
+A backup is evidence of past state, not proof of current permission. Restoring an old database, disk image, VM snapshot or configuration can resurrect an expired envelope, revoked key, compromised workload identity, old policy, unused admission token or stale revocation generation.
+
+Therefore:
+- no backup or snapshot alone can reactivate execution authority;
+- ephemeral permits, sessions, workload credentials and one-use tokens are never restored as valid;
+- restored authority records are quarantined until checked against a trust anchor independent of the backup;
+- recovery increments a fresh authority generation and invalidates all pre-recovery capabilities;
+- workload identities are re-attested/reissued or explicitly denied;
+- policy/envelope versions and signing-key status are revalidated;
+- missing, stale or contradictory revocation anchor means RECOVERY_HOLD, not best-effort activation.
+
+### 21.2 Independent anti-rollback anchor
+
+The latest trusted authority generation must be anchored outside ordinary application backup and outside any single restore path. Candidate mechanisms:
+
+1. Hardware-backed monotonic state (TPM/platform secure element) if the target platform exposes a suitable, reliable and recoverable primitive.
+2. Independently administered append-only remote witness/checkpoint service, accepting privacy, availability, connectivity and cost implications.
+3. Owner-held offline signed recovery checkpoint and separate recovery key, with manual verification and no automatic activation while offline.
+4. A combination of hardware anchor plus independently held owner recovery material; remote witness optional.
+
+No mechanism is selected. A TPM/secure element is not automatically a monotonic-counter service; verify APIs, rollback properties, reset behaviour, wear limits, firmware assumptions and recovery support. A remote witness introduces a new dependency and must not become an unchecked authority source. An owner-held checkpoint can be stale; it must not be treated as latest unless reconciled or accompanied by fail-closed manual recovery.
+
+TUF root rotation, threshold signatures, version monotonicity and expiry checks are useful patterns for policy metadata and software artefacts. They do not directly solve runtime revocation or hardware root-of-trust. Secure boot establishes a chain of authorised boot artefacts under its own key/configuration assumptions; it does not prove the restored application database or owner permissions are current.
+
+### 21.3 Separate recovery trust from operational trust
+
+Maintain separate key purposes and access paths:
+
+- offline owner root/recovery key: authorises recovery of trust anchors, not routine dispatch;
+- owner approval credential: authenticates a human approval ceremony bound to exact envelope/policy digest;
+- policy publisher key: signs policy artefacts, cannot unilaterally expand owner authority;
+- workload identity issuer: issues constrained short-lived service identities, cannot sign owner envelopes;
+- audit checkpoint key: signs audit roots, cannot authorise actions;
+- data-encryption keys: protect stored data, cannot grant authority;
+- future venue credentials: confined to adapter boundary, cannot sign policy or owner grants.
+
+WebAuthn can provide scoped, origin-bound user-presence/user-verification assertions, but an assertion is not automatically a general-purpose offline policy signature. If used for owner approval, the challenge binds nonce, exact envelope/policy digest, environment, operation, audience and expiry; verifier enforces origin/RP ID, user verification and credential status. Authenticator backup/sync properties and recovery must be evaluated for root-level approval. A separate hardware-backed signing credential may be required for the signed policy artefact. No ceremony or hardware is selected.
+
+### 21.4 Recovery protocol
+
+1. Disable dispatch egress and put all authority domains in RECOVERY_HOLD.
+2. Preserve compromised host/storage and incident evidence; do not overwrite the only evidence copy.
+3. Rebuild in an isolated clean environment from verified source, pinned dependencies, signed artefacts and known-good OS images.
+4. Verify boot chain, firmware/security configuration, host patch level, kernel, gateway binary, policy evaluator and sandbox profile.
+5. Re-establish owner root/recovery identity using separately protected recovery method; recovered application credential is not proof of trust.
+6. Obtain newest independently trusted revocation generation/checkpoint. Compare with restored state and hardware/remote witness if configured. If latest state cannot be established, remain in RECOVERY_HOLD.
+7. Advance authority generation; revoke all prior workload identities and invalidate old permits, sessions, leases, policy caches and queued actions.
+8. Rotate affected operational keys and credentials. Suspected compromised keys are replaced with new identities, not simply re-enabled.
+9. Verify signed policy/envelope artefacts; require fresh owner approval where integrity or current authority cannot be proven.
+10. Verify audit chain/checkpoints, identify gaps and append incident/correction events without rewriting history.
+11. Reconcile external orders, fills, positions, balances, transfers and venue settings from authoritative venue state; unknowns remain reserved/restricted.
+12. Run independent host-isolation, revocation, key, audit and financial-reconciliation tests.
+13. Require explicit owner approval to reactivate execution capability. If trust, key custody, audit or financial state remains uncertain, capability remains disabled.
+
+### 21.5 Recovery test catalogue
+
+- Restore snapshot from before key/envelope revocation: old grant remains invalid.
+- Restore snapshot with lower epoch: boot into RECOVERY_HOLD.
+- Restore after policy signing-key compromise: reject artefacts signed by revoked key.
+- Roll back system clock/wall-clock metadata: no expired grant becomes valid.
+- Restore old workload certificates/tokens: reject due to identity epoch/revocation.
+- Replay old owner approval assertion/signature: reject nonce, replay and stale digest.
+- Lose primary owner key: use only documented recovery root; no silent admin reset.
+- Lose primary and recovery authority: remain dormant; no backdoor reactivation.
+- Compromise ordinary backup credentials: cannot alter independent trust anchor/checkpoint.
+- Corrupt/truncate audit store: detect mismatch and preserve incident state.
+- Restore VM snapshot with pending order: reconcile venue before retry/release.
+- Restore while disconnected from witness: no automatic execution activation.
+- Rebuild clean binaries with compromised old configuration: verify policy and boot configuration independently.
+- Recover after root compromise: re-attest host, rotate identities; never trust old in-memory/on-disk permits.
+
+## 22. Consolidated adversarial conclusions and remaining gates
+
+1. Revocation is a distributed side-effect control problem, not a Boolean. Define local dispatch linearisation and report in-flight uncertainty honestly.
+2. Action gateway must be outside strategy/AI trust zones. Compromised host root/kernel remains a hard trust-boundary failure; high assurance requires a separate trust domain.
+3. Containers/namespaces alone are insufficient. Layer OS controls; use disposable microVMs for high-risk arbitrary code where supported; filter egress outside the guest.
+4. Strategy/agent environment must never possess venue credentials or a generic network route to exchange APIs.
+5. Recovery must not restore authority from backups. Revocation high-water state must be anchored independently; if current state cannot be proven, remain dormant.
+6. Hardware keys, WebAuthn, TPM, secure boot, remote witness, TUF-style metadata and microVMs are candidate controls, not adopted dependencies.
+7. Exact physical topology depends on future deployment. Phase 02 can define trust invariants and tiered assurance profiles, but cannot claim an Android device, VM, host or cloud platform satisfies them without platform-specific verification.
+8. These findings require updates to the integrated adversarial review, security architecture, risk handshake, requirements, architecture, roadmap and traceability matrix. They do not approve implementation or Phase 03.
