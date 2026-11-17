@@ -236,3 +236,12 @@ Sources:
 - https://kata-containers.github.io/kata-containers/design/architecture/
 - https://github.com/kata-containers/kata-containers/blob/main/docs/threat-model/threat-model.md
 - https://github.com/firecracker-microvm/firecracker/blob/main/docs/design.md
+
+
+## 10. Authorization policy engine review — checkpoint 096 (18 November 2026)
+
+The current official Cedar and OPA documentation and security advisories were rechecked. Cedar 4.15.0 is the current observed release; Cedar's Rust parser memory-exhaustion advisory was fixed in 4.13.0, and 4.15 provides depth-limited parser APIs. Cedar's skip-on-error authorization semantics mean IDEAL must deny if any policy diagnostic is returned, even when the overall decision is Allow. Cedar schema validation is separate from runtime authorization and must be mandatory before activation.
+
+OPA 1.22.4 is the current observed release. Its high-severity bundle signature bypass was fixed in 1.21.3. OPA policy bundles update eventually consistently; undefined decisions may return no result and some evaluation errors become undefined. A future wrapper must require exact Boolean true, reject missing/undefined/error/stale results, require signed snapshots and bind active bundle digest/revision to the action version vector.
+
+CedarJava is a separate binding with a distinct high-severity policy injection advisory (CVE-2026-55773), patched in 2.3.6 / 3.4.1 / 4.9.0. No binding is selected. See [Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md) for the full comparison, sources and unexecuted acceptance plan.
