@@ -139,3 +139,8 @@ Sources: https://nautilustrader.io/docs/latest/concepts/architecture/ ; https://
 Current NautilusTrader installation documentation lists Linux Ubuntu ARM64 as supported. This strengthens platform-compatibility evidence alongside IDEAL's isolated x86_64/ARM64 tests, but does not validate 2.0.0rc9 maturity, a specific OCI A1 instance, throughput, durability or production suitability.
 
 Source: https://nautilustrader.io/docs/latest/getting_started/installation/
+
+
+## Checkpoint 096 — authorization policy engine review (18 November 2026)
+
+Cedar and OPA remain unselected. Cedar is authorization-specific and provides schema validation/default deny/forbid-overrides-permit, but individual policy evaluation errors are skipped; IDEAL must deny if any diagnostic is present. OPA is general-purpose and supports embedded Go evaluation and signed policy bundles, but decision semantics are application-defined, undefined can be returned without a result, some runtime errors become undefined, and bundle updates are eventually consistent. OPA 1.21.3 fixed GHSA-g2pf-6v5v-qcc8; current observed release is 1.22.4. Cedar 4.13 fixed GHSA-m84h-6f26-p3p7; current observed release is 4.15.0. The CedarJava binding has separate advisories and must not be conflated with the Rust engine. Full findings and future tests: [Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md). No engine or binding selected/adopted.
