@@ -107,3 +107,14 @@ Future consequential actions must pass independent owner-authority/security and 
 Permissions default to deny. Missing, stale, malformed, ambiguous, unverifiable or unsupported state denies the affected risk-increasing action. Authentication does not imply authorisation. A policy-engine Allow result is not sufficient authority. AI/strategy cannot create or modify envelopes, policy, hard limits or permissions. Exact action changes invalidate prior authorisation. Financial quantities require decimal/fixed-point semantics. External side effects require idempotency, conservative unknown-state handling and authoritative reconciliation; cancellation requests and timeouts do not release reservations.
 
 Key purposes must be separated for owner root/recovery, owner approval, policy publication, workload identity, audit checkpoints, data encryption and any future venue credentials. Secrets must not enter source control, model context or audit logs. Revocation must be independently propagated and measurable. See [Autonomy Authority and Permission Architecture](docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md). This is a Phase 02 design requirement only; no implementation, dependency or execution capability is authorised.
+
+
+## Additional security requirements — revocation, isolation and recovery (checkpoint 068)
+
+- Revocation and dispatch-start MUST be serialised against one authoritative monotonic generation. The local DISPATCH_STARTED durable transition is the linearisation point; revocation-first denies dispatch, dispatch-start-first is treated as in-flight.
+- Never report revocation EFFECTIVE until every registered dispatch boundary acknowledges the generation and all unstarted actions are fenced. Partitions/missing acknowledgements remain restricted and uncertain. No claim that already transmitted requests are recalled.
+- Untrusted strategy/AI/generated-code workloads MUST have no venue credentials, generic venue egress, host control-plane access or direct adapter route. Enforce trust zones outside application prompts.
+- Host isolation MUST layer least privilege, process identity, syscall restrictions, filesystem/LSM controls, network namespaces/firewall, typed IPC and resource quotas. Containers/namespaces alone are insufficient.
+- High-risk arbitrary code requires evaluation of disposable VM isolation and host-enforced egress filtering. A shared host root/kernel compromise is a trust failure.
+- Restored backups MUST NOT restore active authority. Invalidate all ephemeral permits/identities, advance generation, validate latest revocation state against an independent anchor and enter RECOVERY_HOLD if current trust cannot be proven.
+- Recovery MUST include clean rebuild/attestation, key and identity rotation, audit validation, authoritative external-state reconciliation and explicit owner approval before reactivation.
