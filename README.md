@@ -130,3 +130,8 @@ Risk policies remain specific to each domain. The consolidated portfolio view is
 ## Reconciliation and verified recovery
 
 IDEAL treats reconciliation as a domain-owned evidence comparison, not a generic sync. Unknown venue/account state, provider corrections and restored backups remain explicit until reconciled. A restart or successful reconnect does not prove recovery; restored data and authority stay quarantined until trust, external state and independent pillar attestations are verified. See [Reconciliation, Incident Containment and Verified Recovery Architecture](docs/IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md).
+
+
+## Integrated architecture review
+
+The Phase 02 desk review now challenges the complete system across domain boundaries, data time/provenance, risk/capital, autonomy, security, privacy, reconciliation and recovery. It records adversarial scenarios, residual blockers and deferred owner decisions. It is not independent assurance or implementation approval. See [Phase 02 Integrated Architecture Review](docs/IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md).
