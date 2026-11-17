@@ -22,7 +22,7 @@ Evaluate the explicit Phase 02 exit criteria against the current GitHub main-bra
 | Retention/privacy/licensing policy integrated | Data Classification/Retention/Audit Policy, source/licence research and provider constraints | DESIGN SPECIFIED WITH OPEN LEGAL/RETENTION PARAMETERS | Exact retention periods, legal holds, source rights and NZ legal/tax review |
 | Worked examples and adversarial scenarios cover cross-domain interactions | Cross-Domain Accounting Examples, Integrated Adversarial Review, Final Integrated Challenge | INTERNAL CHALLENGE RECORDED | Independent red-team review; additional platform-specific examples after topology/venue selection |
 | Independent architecture/security/operations/maintainability reviews completed | Internal reviews only; no independent reviewer evidence in repository | NOT COMPLETE | Obtain independent read-only reviews; do not relabel internal review |
-| Changed GitHub content read back and verified | Checkpoints 096–103; targeted fetch-back checks; 34/34 document-map Markdown targets fetched | VERIFIED FOR RECENT CHANGES / PATHS | Final complete pack read-back after all review amendments |
+| Changed GitHub content read back and verified | Checkpoints 096–103; targeted fetch-back checks; 38/38 document-map Markdown targets fetched | VERIFIED FOR RECENT CHANGES / PATHS | Final complete pack read-back after all review amendments |
 | Owner reviews and explicitly accepts complete architecture baseline | ODR-12 remains GATE; register draft and not presented for approval | NOT COMPLETE | Owner must review and explicitly accept/amend baseline and residual risks |
 
 ## 3. Open owner decisions and disposition
@@ -62,7 +62,7 @@ Open decisions are not all blockers to research completion. They must remain vis
 - Re-read current Phase 02 exit criteria and owner decision register.
 - Confirmed Phase 01 CLOSED and Phase 02 ACTIVE from authoritative ROADMAP current-state section.
 - Confirmed Phases 03–19 remain locked.
-- Confirmed 37/37 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
+- Confirmed 38/38 local Markdown targets in the Phase 02 Document Map exist and are fetchable.
 - Checkpoint 099 margin/collateral/liquidation architecture is integrated into requirements, logical schemas, state machines, traceability and integrated challenge.
 - Checkpoint 100 internal challenge findings and checkpoint 101 documentation integrity findings are recorded.
 - Checkpoint 102 document-map section numbering corrected and fetched back.
