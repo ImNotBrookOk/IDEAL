@@ -85,6 +85,6 @@ Quantitative backtests additionally require fees, spread, funding, slippage, lat
 This matrix closes the requirement-to-component-to-control-to-test mapping at design level. It does not demonstrate implementation or test passage. Phase 02 remains active; Phases 03–19 remain locked. No implementation, dependency, account, credentials, paper/live execution, paid infrastructure or phase advancement is authorised.
 
 
-## Checkpoint 089 — critical field-schema traceability
+## Checkpoint 091 — critical field-schema traceability
 
 The field-level schemas for OwnerEnvelope, SecurityAuthorization, HealthInterlock, RiskEvaluation, RiskReservation, ActionIntent, AdmissionPermit, DispatchReceipt, ReconciliationCase, PersonalFinanceImport, JournalPosting, TaxWorkpaper, AuditEvent and RecoveryAttestation are defined in [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md). Future tests must assert exact digest binding, type/unit validity, version-vector consistency, idempotency and forbidden fields such as capital restriction in tax workpapers.
