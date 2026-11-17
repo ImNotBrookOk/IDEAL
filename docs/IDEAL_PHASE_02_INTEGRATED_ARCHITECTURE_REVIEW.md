@@ -201,3 +201,8 @@ The 12 grouped owner decisions are consolidated in [IDEAL Phase 02 Owner Decisio
 ## Checkpoint 089 — final integrated challenge
 
 [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) records ten cross-pillar findings. The shared amount contract now uses canonical fiat/crypto AssetIds, with effective-dated provider mappings and explicit stablecoin/valuation semantics; traceability adds R-CONTRACT-001 and T-ASSET-01–06. Authority/dispatch, health/security, data trust, capital autonomy and recovery remain consistent at design level. Runtime proof, independent review and owner acceptance remain open.
+
+
+## Checkpoint 090 — official source revalidation
+
+[Official Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md) confirms the current Privacy Act section 27 amendment conditions, distinguishes section 11 agent processing from IPP 12, records the CARF own-benefit exclusion and conflicting IRD registration dates, and rechecks NIST and Firecracker references. Legal/tax interpretation, provider role and exact retention scope remain open; no architecture or owner policy is changed.
