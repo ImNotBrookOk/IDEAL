@@ -411,3 +411,8 @@ Design the owner-approved envelope schema and semantics; owner authentication/ap
 ### Phase 02 — adversarial closure gates added (checkpoint 068)
 
 Close the revocation/dispatch linearisation contract, define measurable propagation and worker inventory, prove partition/crash handling; define the logical and physical trust-zone topology and host-root compromise assumptions; specify layered host sandbox and egress profiles including microVM comparison; define independent revocation high-water anchor and restore quarantine; complete recovery/reconciliation protocol; and map adversarial fault-injection tests to requirements. No tool adoption, runtime change, implementation or Phase 03 advancement follows automatically.
+
+
+### Phase 02 — supervisor, policy root and audit atomicity gates (checkpoint 069)
+
+Define supervisor independence/failure-domain profile and one-way restrictive authority; immutable policy publication/activation and separated key hierarchy; transaction boundaries for intent/reservation/audit/outbox/dispatch-start; audit failure and alternate logging behaviour; external UNKNOWN reconciliation; and cross-pillar assurance tests. Resolve remaining deployment-dependent choices before owner review. No runtime work or phase advancement is implied.
