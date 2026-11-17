@@ -155,3 +155,8 @@ IDEAL remains undeployed. The phone is the control surface; no always-on worker 
 ## Integrated state-machine governance
 
 Owner authority, policy, identity, security incident, health, data quality, risk, reservation, action, reconciliation and recovery are separate state machines. Consequential actions require conjunctive gates and bind a version vector that is rechecked at dispatch. See [Integrated State-Machine and Cross-Authority Contract Architecture](docs/IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
+
+
+## System architecture diagrams
+
+Logical diagrams cover domain/evidence flow, trust zones and forbidden flows, action admission/dispatch, recovery and temporal evidence lineage. See [IDEAL System Architecture Diagrams](docs/IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md).
