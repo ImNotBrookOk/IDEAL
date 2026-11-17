@@ -210,3 +210,8 @@ This closes the traceability artefact at design level; tests are not implemented
 ## 17. Final integrated challenge — checkpoint 089
 
 The [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) identified and corrected the missing canonical crypto asset-denomination semantics in the shared contract catalogue. It records cross-pillar consistency findings and residual blockers. The next required gate is independent read-only review across architecture simplicity, security/operations and maintainability/testability; no owner decision pack is final until those reviews are reconciled.
+
+
+## 18. Official source reference revalidation — checkpoint 090
+
+Primary New Zealand privacy/tax and core security/host-hardening references have been rechecked and summarised in [Official Source Reference Revalidation](IDEAL_PHASE_02_SOURCE_REFERENCE_REVALIDATION.md). Before implementation research is converted into a proposed stack, all relevant source versions, provider terms, licence conditions and legal interpretations must be revalidated against the chosen deployment and use case.
