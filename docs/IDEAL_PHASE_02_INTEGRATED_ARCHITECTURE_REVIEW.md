@@ -196,3 +196,8 @@ Field-level logical schemas are now specified for owner envelopes, security deci
 ## Checkpoint 090 — owner decision consolidation
 
 The 12 grouped owner decisions are consolidated in [IDEAL Phase 02 Owner Decision Register](IDEAL_PHASE_02_OWNER_DECISION_REGISTER.md). Existing accepted decisions are preserved; the register is draft only and does not activate domains or approve implementation. Final presentation remains gated on independent review and the full Phase 02 exit criteria.
+
+
+## Checkpoint 089 — final integrated challenge
+
+[Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) records ten cross-pillar findings. The shared amount contract now uses canonical fiat/crypto AssetIds, with effective-dated provider mappings and explicit stablecoin/valuation semantics; traceability adds R-CONTRACT-001 and T-ASSET-01–06. Authority/dispatch, health/security, data trust, capital autonomy and recovery remain consistent at design level. Runtime proof, independent review and owner acceptance remain open.
