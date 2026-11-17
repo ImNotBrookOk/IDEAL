@@ -190,3 +190,8 @@ IDEAL measures source availability, event age, receive/ingest latency, sequence 
 ## Phase 02 architecture document map
 
 The canonical ownership map, source-of-truth precedence and grouped unresolved-decision inventory are maintained in [IDEAL Phase 02 Architecture Document Map](docs/IDEAL_PHASE_02_ARCHITECTURE_DOCUMENT_MAP.md). This is a navigation and planning index, not owner approval or implementation authority.
+
+
+## Critical contract schemas
+
+Field-level logical schemas now define the owner, security, health, risk, action, reconciliation, personal-finance, tax, audit and recovery contracts. They specify semantics without selecting a database or wire format. See [Critical Contract Field Schemas](docs/IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md).
