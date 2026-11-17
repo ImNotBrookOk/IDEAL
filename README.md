@@ -145,3 +145,8 @@ Synthetic worked examples now define how IDEAL should avoid double-counting tran
 ## Data classification, retention and audit
 
 IDEAL's retention model is purpose- and source-specific. Private financial records, market data, security evidence and AI traces have separate classifications and access boundaries. Deletion must account for replicas, derived data and backups; audit minimisation does not override legal or contractual retention/deletion rules. See [Data Classification, Retention, Deletion and Audit Policy Architecture](docs/IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md).
+
+
+## Host trust and deployment boundaries
+
+IDEAL remains undeployed. The phone is the control surface; no always-on worker or cloud host has been selected. WSL2 is not a security sandbox, Hyper-V remains within the host trust domain, and KVM/Firecracker require full host/egress hardening. A separate physical action gateway is only a future option. See [Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md).
