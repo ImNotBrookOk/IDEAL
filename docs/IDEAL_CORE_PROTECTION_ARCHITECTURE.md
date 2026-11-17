@@ -293,3 +293,11 @@ The infrastructure research adds two constraints to the protection model:
 2. **MicroVM isolation is an operated control set, not a product checkbox.** Firecracker's production guidance requires jailer/least privilege, default seccomp, resource limits, host egress filtering, bounded guest-influenced logging, host/guest patching and an external overwatcher. Host root/kernel and hardware remain in the threat model.
 
 These are architecture and future verification requirements only. No database, microVM, host, runtime or dependency was deployed or tested. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## Infrastructure persistence and sandbox assurance refinement — checkpoint 094
+
+1. **Database engine durability is not IDEAL authority durability.** The 2026 SQLite WAL-reset incident (fixed upstream in 3.51.3) requires runtime-version verification and writer/checkpoint/crash/restore tests before SQLite can be accepted. NautilusTrader's documented asynchronous cache persistence may fail without rolling back in-memory state. Neither engine cache nor database backing replaces IDEAL-owned atomic intent, risk reservation, audit and outbox records.
+2. **MicroVM isolation is an operated control set, not a product checkbox.** Firecracker production guidance requires jailer/least privilege, default seccomp, resource limits, host egress filtering, bounded guest-influenced logging, host/guest patching and an external overwatcher. Host root/kernel and hardware remain in the threat model.
+
+These are architecture and future verification requirements only. No database, microVM, host, runtime or dependency was deployed or tested. Phase 02 remains active; Phases 03–19 remain locked.
