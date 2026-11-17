@@ -115,3 +115,8 @@ The bounded-autonomy authority workstream has a consolidated Phase 02 closure as
 ## Integrated system and domain architecture
 
 The provisional bounded-context map now defines state ownership, cross-domain contracts, authority boundaries and failure containment across the active derivatives research domain and proposed future domains. The architecture deliberately keeps domain ledgers separate and treats portfolio aggregation as read-only; tax estimates cannot control capital. See [IDEAL Integrated System and Bounded-Context Architecture](docs/IDEAL_INTEGRATED_SYSTEM_AND_DOMAIN_ARCHITECTURE.md). This is Phase 02 design research, not domain activation or implementation approval.
+
+
+## Data trust and historical evidence
+
+IDEAL's data architecture distinguishes raw observations, validated records, derived evidence, point-in-time datasets and decision evidence. Source event time is not the same as when data became available; late corrections and stale feeds must remain visible. Private financial records, market research data and AI traces have separate access and retention boundaries. See [Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](docs/IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). This is Phase 02 design research only.
