@@ -176,3 +176,10 @@ The sequence remains research/design/documentation only. No runtime, implementat
 [IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md) now maps the security architecture's control families to protected assets, threat paths, owners, enforcement points, evidence status and future tests. It explicitly marks all future controls as design-level and preserves residual host-root, external-side-effect, single-owner and third-party risks.
 
 Independent security/operations review and runtime assurance remain future acceptance gates; no external scan or implementation is authorised.
+
+
+## 14. Complexity and maintainability gate — checkpoint 084
+
+The [Architecture Complexity and Maintainability Review](IDEAL_ARCHITECTURE_COMPLEXITY_AND_MAINTAINABILITY_REVIEW.md) establishes a provisional simplicity constraint: logical bounded contexts and independent authorities must not automatically become separate microservices, databases, agents or infrastructure. The smallest viable future direction is a modular monolith, one authoritative transactional store if durability is proven, deterministic services/scripts, immutable evidence manifests and a phone-first read/control UI.
+
+A canonical document ownership map is proposed. Historical evidence remains intact; any document consolidation/deletion requires explicit owner approval. This is a design recommendation, not a selected implementation stack.
