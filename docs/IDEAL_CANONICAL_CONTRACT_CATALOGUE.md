@@ -75,9 +75,9 @@ The envelope is not a replacement for domain-specific payload semantics or the a
 ## 4. Shared value semantics
 
 The following meanings are required independent of eventual serialization:
-- **Money:** amount, ISO currency, precision/rounding context, source, account/owner and valuation time. Never use binary floating-point as authoritative money representation.
+- **Asset amount (fiat and crypto-denominated):** exact amount bound to a canonical AssetId, precision/scale and rounding context, source, account/owner and valuation time. Fiat uses ISO 4217 where applicable; crypto-native assets and tokens require a canonical identity and versioned venue/provider-symbol mapping, including network and contract address where applicable. Stablecoins are distinct assets and are not assumed to equal USD or be interchangeable. Never use binary floating-point as authoritative amount representation.
 - **Quantity:** unit, contract multiplier, precision/lot step and instrument specification version.
-- **Price:** instrument, quote/base/settlement currency, price type (last/mark/index/bid/ask/mid), source and timestamp.
+- **Price:** instrument plus canonical base, quote and settlement AssetIds, price type (last/mark/index/bid/ask/mid), source and timestamp. Conversion/valuation is an explicit evidence-bearing operation with source, side, time, spread/haircut and completeness; missing or stale conversion remains UNKNOWN/PARTIAL rather than zero.
 - **Time:** event, publication/availability, receive, durable ingest, processing, valid/known, decision-as-of and clock quality remain distinct.
 - **Identity:** principal, owner context, account/legal entity and scope are explicit; display names are not stable identifiers.
 - **Status:** PENDING, POSTED, SETTLED, REVERSED, CANCEL_REQUESTED, CANCELLED, UNKNOWN and similar statuses are not interchangeable.
@@ -178,3 +178,8 @@ See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DAT
 Critical contract field semantics are expanded in [IDEAL Critical Contract Field Schemas](IDEAL_CRITICAL_CONTRACT_FIELD_SCHEMAS.md), including common evidence references, owner envelopes, security authorisation, health interlocks, risk decisions/reservations, action intents/permits, dispatch receipts, reconciliation cases, personal-finance imports/journal postings, tax workpapers, audit events and recovery attestations.
 
 The schemas define logical types and constraints only; no serialization, database or API format is selected.
+
+
+### 4.1 Canonical asset identity requirement — checkpoint 089
+
+Asset identity is not a display ticker or ISO currency string. The logical AssetId must distinguish fiat, native crypto assets and network/contract-specific tokens, with effective-dated mappings from provider/venue symbols. The eventual identifier and registry schema remain open. Instrument multiplier, tick/lot precision and settlement denomination are separate effective-dated instrument metadata. All derived conversions preserve source, side, timestamp, spread/haircut and quality; no stablecoin peg or FX rate is assumed.
