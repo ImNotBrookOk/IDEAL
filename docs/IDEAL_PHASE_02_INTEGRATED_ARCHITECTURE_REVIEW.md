@@ -156,3 +156,8 @@ No implementation, runtime integration, dependency adoption, deployment, account
 The integrated state-machine contract now defines separate state owners, policy/identity/data/health/security/risk/reservation/action/reconciliation/recovery lifecycles, conjunctive admission, version-vector binding and restrictive precedence. It preserves the exact-action dispatch linearisation point and no-exactly-once external-effect semantics.
 
 This closes a logical composition gap at design level, not the platform-specific implementation gaps. See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
+
+
+## Checkpoint 082 — logical diagram coverage
+
+The logical domain/evidence flow, trust zones, forbidden flows, action admission/dispatch, incident/recovery and temporal evidence lineage are now represented in [IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md). Physical deployment/network diagrams remain open until a host topology is approved.
