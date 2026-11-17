@@ -215,3 +215,8 @@ Cedar and Open Policy Agent have been compared against IDEAL's fail-closed autho
 ## Owner authentication and recovery
 
 The owner-authenticator research distinguishes synced and device-bound passkeys, Android hardware-backed keys, dedicated FIDO2 keys, action-bound approval challenges and recovery that cannot restore revoked authority. No authenticator or vendor is selected. See [Owner Authenticator and Recovery Options](docs/IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md).
+
+
+## Audit integrity and external witnessing
+
+IDEAL distinguishes the authoritative local audit journal from tamper-evidence and independent external witnessing. Public transparency logs must not receive financial or personal records. The provisional design is a local journal with minimal batched signed checkpoints retained in a separate trust domain; no witness or provider is selected. See [Audit Integrity and External Witness Options](docs/IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md).
