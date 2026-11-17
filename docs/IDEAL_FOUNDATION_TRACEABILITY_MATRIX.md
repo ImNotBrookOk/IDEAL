@@ -376,3 +376,16 @@ See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_REC
 | Recovery cannot self-release | Quarantine, scoped pillar attestations and owner release where reserved | Missing/stale/contradictory attestation tests |
 
 See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). No runtime tests performed.
+
+
+## Checkpoint 082 — architecture diagram traceability
+
+| Diagram | Requirements represented | Verification/use |
+|---|---|---|
+| Domain and evidence flow | Bounded-context ownership, active/deferred status, shared foundations | Cross-domain forbidden-flow and dependency tests |
+| Trust zones and forbidden flows | Z0–Z4, credential isolation, typed proposals, narrow egress | Workload compromise, egress and host-root threat tests |
+| Action admission/dispatch | Conjunctive gates, risk reservation, one-use permit, DISPATCH_STARTED | Gate-denial, revocation race and crash-point tests |
+| Incident/recovery | Quarantine, reconciliation, scoped attestations, owner release | Missing attestation, restore and incident release tests |
+| Evidence/temporal lifecycle | Immutable raw evidence, corrections, point-in-time snapshots | Late-arrival, correction and historical replay tests |
+
+See [IDEAL System Architecture Diagrams](IDEAL_SYSTEM_ARCHITECTURE_DIAGRAMS.md). Diagrams are logical only; no runtime topology was deployed or tested.
