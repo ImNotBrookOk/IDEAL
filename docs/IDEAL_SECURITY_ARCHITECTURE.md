@@ -306,3 +306,10 @@ See [Data Classification, Retention, Deletion and Audit Policy Architecture](IDE
 The deployment threat model must distinguish guest/workload isolation from host trust. WSL2 is explicitly not a sandbox for untrusted code; Hyper-V improves VM separation but does not survive compromise of the host administrator. KVM/Firecracker requires jailer, seccomp, cgroups/namespaces and host-enforced egress controls; host kernel/hardware and microcode remain in scope. A separate physical gateway/recovery trust domain is the future candidate where host-root compromise must not grant dispatch authority.
 
 No host or isolation technology is selected. See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md).
+
+
+## Security control-to-threat traceability — checkpoint 083
+
+The detailed control catalogue SEC-01–SEC-14 maps owner approval, identity, root/key lifecycle, secrets, network/workload containment, application/input validation, supply chain, AI/agent security, privacy/retention, audit, health/security separation, vulnerability/incident lifecycle, backup/recovery and external-side-effect fencing to adversarial threats and future verification.
+
+See [IDEAL Security Control and Threat Traceability Matrix](IDEAL_SECURITY_CONTROL_AND_THREAT_TRACEABILITY_MATRIX.md). All controls remain design-level; no runtime security certification or penetration test is claimed.
