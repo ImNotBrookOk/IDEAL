@@ -591,3 +591,8 @@ Created [Official Source Reference Revalidation](docs/IDEAL_PHASE_02_SOURCE_REFE
 Revalidated infrastructure assumptions against current primary engineering/vendor documentation. Added a SQLite WAL-reset durability gate (runtime SQLite >=3.51.3 plus actual linked-library verification and writer/checkpoint/crash/restore tests); documented NautilusTrader's asynchronous cache-persistence boundary so it cannot be IDEAL's authoritative ledger/audit/outbox; expanded Firecracker's required production controls (jailer, default seccomp, resource limits, host egress, bounded logs, overwatcher and patching); and recorded conflicting official Oracle A1 free-quota figures, using the lower allowance conservatively.
 
 These findings refine future acceptance tests only. No component, host, provider, runtime or dependency is selected; no implementation, account, provisioning, exchange access or spend. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+### Phase 02 workload isolation comparison — checkpoint 095 (17 November 2026)
+
+Compared official gVisor, Kata Containers and Firecracker security/architecture models. gVisor's userspace Sentry reduces direct host syscall exposure but still relies on host kernel/platform and cgroups; Kata provides a guest-kernel VM boundary through a larger container runtime/VMM/agent/IPC stack; Firecracker offers a minimal KVM microVM but requires jailer/seccomp/resource controls/host egress/monitoring. No runtime is selected. Future selection requires an explicit threat model and bounded compatibility, egress, exhaustion, observability and recovery tests. No deployment or implementation.
