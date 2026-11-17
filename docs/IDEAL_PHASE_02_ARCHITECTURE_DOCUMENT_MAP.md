@@ -163,7 +163,7 @@ The audit index now contains checkpoints through 093. The checkpoint 088 and 089
 The architecture pack remains design-level. Independent architecture/security/operations and maintainability/testability reviews, finding disposition, owner acceptance and separate implementation approval remain outstanding. Phase 02 active; Phases 03–19 locked.
 
 
-## 12. Infrastructure revalidation — checkpoint 094
+## 11. Infrastructure revalidation — checkpoint 094
 
 The infrastructure evidence pack now includes a dated revalidation of SQLite WAL durability, NautilusTrader persistence boundaries, Firecracker production host controls and OCI Always Free quota/capacity caveats:
 
@@ -175,7 +175,7 @@ The infrastructure evidence pack now includes a dated revalidation of SQLite WAL
 Checkpoint 094 changes no owner-approved component disposition. SQLite, NautilusTrader, Firecracker and OCI A1 remain candidates with explicit gates; no host or runtime is selected. Phase 02 remains active.
 
 
-## 11. Infrastructure revalidation — checkpoint 094
+## 12. Infrastructure revalidation — checkpoint 094
 
 The infrastructure evidence pack now includes dated revalidation of SQLite WAL durability, NautilusTrader persistence boundaries, Firecracker production host controls and OCI Always Free quota/capacity caveats:
 
