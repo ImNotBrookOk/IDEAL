@@ -44,7 +44,7 @@ Historical dated status statements remain historical. Do not silently rewrite th
 | Data classification, privacy, retention and deletion | [Data Classification, Retention and Audit Policy](IDEAL_DATA_CLASSIFICATION_RETENTION_AND_AUDIT_POLICY.md) | Security Architecture |
 | Owner authority, policy and bounded autonomy | [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md) | [Autonomy Authority Closure Assessment](IDEAL_AUTONOMY_AUTHORITY_CLOSURE_ASSESSMENT.md) |
 | Cross-authority state machines and admission | [Integrated State-Machine and Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md) | Autonomy, risk, security and reconciliation sources |
-| Cross-domain interface semantics | [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) | Bounded-context and state-machine architecture |
+| Cross-domain interface semantics | [Canonical Contract Catalogue](IDEAL_CANONICAL_CONTRACT_CATALOGUE.md) | Bounded-context and state-machine architecture; checkpoint 089 adds canonical fiat/crypto AssetId semantics |
 | Reconciliation, incident containment and recovery | [Reconciliation and Verified Recovery Architecture](IDEAL_RECONCILIATION_AND_VERIFIED_RECOVERY_ARCHITECTURE.md) | Data Integrity and Health, Security, Risk |
 | Host trust, topology and recovery options | [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) | `INFRASTRUCTURE_RESEARCH.md`; no host is selected |
 | Worked accounting and valuation examples | [Cross-Domain Accounting and Valuation Examples](IDEAL_CROSS_DOMAIN_ACCOUNTING_AND_VALUATION_EXAMPLES.md) | Personal Finance Research; examples are design fixtures, not advice or executed tests |
@@ -132,3 +132,8 @@ This is an inventory for eventual grouped owner review, not a request for decisi
 The next task is a final integrated architecture challenge against this map, the current requirements, canonical contracts, four foundations, threat matrix, failure/recovery paths and unresolved-decision inventory. The challenge must identify contradictions, unowned responsibilities, ambiguous authority, missing negative tests and residual risks. It must not silently close open decisions.
 
 Only after that challenge and independent review are complete should the grouped owner decision pack be presented. Phase 02 remains active; Phases 03–19 remain locked.
+
+
+## 8. Final integrated challenge — checkpoint 089
+
+[Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) records the cross-pillar challenge and the corrected asset-denomination gap. It distinguishes design consistency from runtime proof and lists remaining blockers. Independent review and owner acceptance remain outstanding.
