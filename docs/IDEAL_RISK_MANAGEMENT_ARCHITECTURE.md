@@ -1966,3 +1966,8 @@ See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_I
 A risk approval is valid only for its declared interval and the exact source/account/policy snapshot. It expires on the earliest of decision expiry, required data staleness, policy/authority/identity/security change, risk reservation change, account/position reconciliation change, instrument metadata change, interlock change, material source correction or clock uncertainty breach. The action boundary rechecks invalidation-sensitive versions immediately before dispatch; cached approval is not reusable permission.
 
 See [Data Freshness, Clock Quality and Decision-Validity Requirements](IDEAL_DATA_FRESHNESS_AND_CLOCK_REQUIREMENTS.md). Numeric thresholds remain open.
+
+
+## 23. Margin, collateral and liquidation contract — checkpoint 099
+
+The dedicated [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md) specifies the provisional venue-neutral model. Requirements: distinguish risk-adjusted equity from venue margin equity; use versioned tiered IM/MM rules; price collateral with eligibility, separate IM/MM haircuts, concentration and stale-price handling; preserve native-currency ledgers; reserve risk for active/conditional/uncertain orders; model liquidation as a venue-evidenced state machine with partial fills and uncertain outcomes; never treat insurance funds as guaranteed protection or a liquidation price as an executable fill. No venue/margin mode/haircut/formula selected. D-006/D-008 unchanged.
