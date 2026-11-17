@@ -435,3 +435,17 @@ Created [IDEAL Integrated System and Bounded-Context Architecture](docs/IDEAL_IN
 Key architecture constraints: D-001 remains the only active market domain; all future spot/equities/commodities/hedging, personal-finance, tax, archive/learning and local-AI capabilities remain proposed/deferred as recorded. Cross-domain views are read-only projections; native ledgers remain authoritative; no implicit currency netting, collateral fungibility, tax equivalence or hedge credit. Personal finance imports require reconciliation before journal posting. Tax estimates cannot restrict capital (D-018). Risk, data, health and security retain separate authority.
 
 This is a logical architecture, not a frozen module/process/database/deployment design. No schema, provider, technology, domain activation or implementation is approved. Phase 02 remains active; Phase 03–19 remain locked. Next: canonical evidence/time/point-in-time contracts, domain-specific risk and portfolio semantics, failure/recovery topology and whole-system adversarial challenge.
+
+
+### Phase 02 research checkpoint — data trust, temporal semantics and point-in-time evidence (checkpoint 073)
+
+Created [IDEAL Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](docs/IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). It specifies immutable raw observations, linked corrections, source provenance, bitemporal valid/known-time semantics, source-specific market/bank/tax timestamps, consumer-specific quality vectors, point-in-time dataset manifests, privacy/retention planes and future verification.
+
+Fresh official-source research clarified three important matters:
+- Akahu Personal App is a free one-user path with account-information access, daily refresh, no webhooks/payments and a one-hour manual-refresh rest period; full enduring apps have a separate accreditation path with privacy, security, MFA, revocation, penetration-test and review requirements. No path is selected or authorised.
+- NZ Privacy Act section 27 has a conditional personal/domestic-affairs exception for individuals; this does not automatically exempt third-party providers/processors. The architecture retains strong privacy controls regardless.
+- IRD CARF reporting for relevant providers begins 1 April 2026; user reporting obligations and tax liability are distinct. Cryptoasset spot guidance does not settle crypto futures/perpetual tax treatment. The 2026–27 Taxation Bill remains proposed/select-committee-stage in the cited IRD status snapshot; rule packs must distinguish proposed from enacted law.
+
+Updated [Personal Finance Research](docs/PERSONAL_FINANCE_RESEARCH.md) §22 and [Data Integrity and Health](docs/DATA_INTEGRITY_AND_HEALTH.md). W3C PROV, Apache Iceberg and MLflow remain references/candidates only. No implementation, real data, provider credentials, bank connection, subscription, tax filing/payment, model training or phase advancement. Phase 02 active; Phase 03–19 locked.
+
+Next: reconcile evidence/time semantics with risk decision validity, account and portfolio reconciliation, audit retention and recovery; then define domain-specific risk and capital aggregation contracts.
