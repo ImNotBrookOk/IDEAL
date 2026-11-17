@@ -506,3 +506,10 @@ No universal retention periods, processor, storage, backup or deletion technolog
 Created [IDEAL Host Trust Topology and Recovery Options](docs/IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) and updated infrastructure/component-selection research. Findings: WSL2 is explicitly not a security sandbox; Hyper-V provides a VM boundary but remains dependent on the host; KVM/Firecracker requires a carefully hardened host/jailer/seccomp/cgroups/namespaces and host egress filtering; Android background restrictions and mobile-data limits make the phone unsuitable as a persistent core worker; a separate physical action gateway is a future option if host-root compromise must be survived.
 
 The lowest-cost current choice remains no deployment. If a later requirement demands a persistent research worker, inspect the existing Windows PC first; do not assume it is a suitable trust root. No host, cloud provider, hardware, tunnel or isolation stack is selected or authorised. Phase 02 active; Phases 03–19 locked.
+
+
+### Phase 02 integrated state-machine and cross-authority contract (checkpoint 081)
+
+Created [IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](docs/IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md). It composes owner/policy, workload identity, security incident, health, data evidence, risk, reservation, action, reconciliation and recovery lifecycles; defines conjunctive admission, action version-vector binding, restrictive precedence, transition invariants and future verification.
+
+The existing policy lifecycle DRAFT → VALIDATED → OWNER_APPROVED → SIGNED → PUBLISHED → ACTIVE is preserved. The action gateway rechecks authority generation and all relevant version-vector elements immediately before dispatch. No pass in one state machine implies a pass in another. Exact schemas, numeric thresholds, state storage and topology remain open. Phase 02 active; Phases 03–19 locked.
