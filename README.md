@@ -120,3 +120,8 @@ The provisional bounded-context map now defines state ownership, cross-domain co
 ## Data trust and historical evidence
 
 IDEAL's data architecture distinguishes raw observations, validated records, derived evidence, point-in-time datasets and decision evidence. Source event time is not the same as when data became available; late corrections and stale feeds must remain visible. Private financial records, market research data and AI traces have separate access and retention boundaries. See [Data Trust, Temporal Semantics and Point-in-Time Evidence Architecture](docs/IDEAL_DATA_TRUST_TEMPORAL_AND_POINT_IN_TIME_ARCHITECTURE.md). This is Phase 02 design research only.
+
+
+## Domain risk and capital integrity
+
+Risk policies remain specific to each domain. The consolidated portfolio view is read-only by default and does not infer collateral portability, legal netting, hedge credit or authority to reallocate capital. Ledger balances, available cash, investment value, derivatives equity, margin, collateral and tax estimates remain distinct. See [Domain Risk and Capital Architecture](docs/IDEAL_DOMAIN_RISK_AND_CAPITAL_ARCHITECTURE.md).
