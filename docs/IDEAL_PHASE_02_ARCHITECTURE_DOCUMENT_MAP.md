@@ -163,7 +163,7 @@ The audit index now contains checkpoints through 093. The checkpoint 088 and 089
 The architecture pack remains design-level. Independent architecture/security/operations and maintainability/testability reviews, finding disposition, owner acceptance and separate implementation approval remain outstanding. Phase 02 active; Phases 03–19 locked.
 
 
-## 11. Infrastructure revalidation — checkpoint 094
+## 12. Infrastructure revalidation — checkpoint 094
 
 The infrastructure evidence pack now includes a dated revalidation of SQLite WAL durability, NautilusTrader persistence boundaries, Firecracker production host controls and OCI Always Free quota/capacity caveats:
 
@@ -187,36 +187,36 @@ The infrastructure evidence pack now includes dated revalidation of SQLite WAL d
 Checkpoint 094 changes no owner-approved component disposition. SQLite, NautilusTrader, Firecracker and OCI A1 remain candidates with explicit gates; no host or runtime is selected. Phase 02 remains active.
 
 
-## 12. Workload isolation comparison — checkpoint 095
+## 13. Workload isolation comparison — checkpoint 095
 
 [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md) and [Infrastructure Research](INFRASTRUCTURE_RESEARCH.md) now compare gVisor, Kata Containers and Firecracker from their official security/architecture documentation. No runtime is selected; the decision remains dependent on the actual threat model, host platform, workload compatibility and ability to operate the controls.
 
 
-## 13. Authorization policy engine evidence — checkpoint 096
+## 14. Authorization policy engine evidence — checkpoint 096
 
 [Policy Engine Evaluation](IDEAL_POLICY_ENGINE_EVALUATION.md) owns the Cedar vs OPA comparison, current release/advisory revalidation, fail-closed wrapper requirements, signed policy publication and future acceptance tests. No engine or binding is selected; the decision is deferred under ODR-13 until the trusted-core runtime and deployment topology are known.
 
 
-## 14. Owner authenticator and recovery evidence — checkpoint 097
+## 15. Owner authenticator and recovery evidence — checkpoint 097
 
 [Owner Authenticator and Recovery Options](IDEAL_OWNER_AUTHENTICATOR_AND_RECOVERY_OPTIONS.md) owns the WebAuthn BE/BS and origin-binding model, Android Keystore/StrongBox constraints, device-bound versus synced credential trade-offs, action-digest-bound approval ceremony, key-role separation and recovery lifecycle. ODR-10 remains open; no authenticator or vendor selected.
 
 
-## 15. Audit integrity and external witness evidence — checkpoint 098
+## 16. Audit integrity and external witness evidence — checkpoint 098
 
 [Audit Integrity and External Witness Options](IDEAL_AUDIT_INTEGRITY_AND_EXTERNAL_WITNESS_OPTIONS.md) owns the local hash/Merkle versus independent checkpoint distinction, Rekor/Tessera/Trillian/immudb comparison, privacy implications, witness trust boundary and recovery verification requirements. ODR-11 remains open; no database, log or witness selected.
 
 
-## 16. Margin, collateral and liquidation — checkpoint 099
+## 17. Margin, collateral and liquidation — checkpoint 099
 
 [Margin, Collateral and Liquidation Architecture](IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_ARCHITECTURE.md) owns the canonical margin/collateral model, tiered IM/MM, mark/index/last separation, collateral eligibility/haircuts, multi-currency valuation, portfolio stress/hedge-credit boundaries, order reservations, liquidation lifecycle, failure behaviour and verification plan. It extends [Risk Management Architecture](IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md) §27. ODR-02/03 remain open; ODR-04 remains deferred; no venue or margin mode selected.
 
 
-## 17. Integrated challenge refresh — checkpoint 100
+## 18. Integrated challenge refresh — checkpoint 100
 
 [Final Integrated Architecture Challenge](IDEAL_PHASE_02_FINAL_INTEGRATED_ARCHITECTURE_CHALLENGE.md) was reopened after checkpoints 096–099. Checkpoint 100 corrected a section-numbering defect and integrated margin/collateral logical schemas, liquidation/reservation state composition and requirement-to-test traceability. Eight findings are recorded. Independent review remains outstanding; this is not Phase 02 closure.
 
 
-## 18. Documentation integrity and review status — checkpoint 101
+## 19. Documentation integrity and review status — checkpoint 101
 
 The Phase 02 map contains 34 distinct local Markdown links; all 34 targets were fetched successfully from GitHub main. This confirms target-path existence only. Semantic consistency, fragment anchors, external-source freshness and independent review are separate assurance activities. The integrated review and adversarial review were refreshed at checkpoint 101; independent review remains outstanding.
