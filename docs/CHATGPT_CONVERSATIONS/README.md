@@ -208,3 +208,5 @@ A conversation record is complete when the available transcript, operational evi
 
 
 | [2026-11-17-088-architecture-document-map.md](2026-11-17-088-architecture-document-map.md) | Phase 02 canonical document ownership and source precedence formalised; architecture pack indexed; grouped unresolved decisions inventoried without approval; README/roadmap/plan/review updated; scoped local read-back only, no runtime or phase changes |
+
+| [2026-11-17-089-critical-contract-schemas.md](2026-11-17-089-critical-contract-schemas.md) | Phase 02 logical field schemas for owner/security/health/risk/action/reconciliation/personal-finance/tax/audit/recovery contracts; digest/version-vector/idempotency and value semantics; no wire format, API or database selected |
