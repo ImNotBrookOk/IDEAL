@@ -81,7 +81,7 @@ If OCI A1 is available without a paid upgrade:
 - Single-writer journal queue; periodic snapshots and WAL checkpoints.
 - Encrypted off-host backups and externally signed hash anchors before any production use.
 - GitHub Actions remains CI; Android remains the control plane.
-- No direct exchange credentials until separately approved; paper mode only after Phase 01/02 gates.
+- No exchange credentials, paper or live execution are authorised. Any future paper simulator requires separate explicit owner approval after the architecture and legal/security/risk gates.
 
 If A1 capacity is unavailable, remain in GitHub Actions/manual research mode. No paid VM, PAYG upgrade or alternative provider with expiring credits.
 
@@ -94,7 +94,7 @@ If A1 capacity is unavailable, remain in GitHub Actions/manual research mode. No
 5. Run the POC and 100k/1M event benchmarks on the actual A1 VM.
 6. Measure CPU, memory, disk IOPS, disk growth, egress, restart time and idle-reclamation risk over a representative period.
 7. Verify backups, restore and off-host hash anchoring.
-8. No implementation/runtime deployment until Phase 01 exit and separate owner approval.
+8. Phase 01 is closed, but Phase 02 architecture remains active. No implementation/runtime deployment until Phase 02 architecture acceptance and separate explicit owner approval.
 
 **Decision:** Oracle A1 remains a candidate only. No cloud resources have been provisioned, and $0 operation has not been proven.
 
@@ -107,3 +107,27 @@ The 71-test compatibility run above is an earlier checkpoint. The isolated POC w
 - 84 tests: [CI #43762099188](https://github.com/ImNotBrookOk/IDEAL/actions/runs/43762099188).
 
 The additional tests cover FX freshness/fail-closed conversion and a BTC-collateral/USDT-settled liquidation boundary. They do not prove consolidated reporting equity, cross-collateral accounting, exchange-equivalent liquidation or actual Oracle A1 performance. NautilusTrader remains a POC candidate, not an adopted runtime.
+
+
+## 7. Host trust topology research — checkpoint 080
+
+The host options have been re-evaluated against the current owner preference and threat model. Phone-first control remains the UX direction; the existing Windows PC is a fallback only if required; mobile phone data is a material bandwidth/availability constraint.
+
+Key conclusions:
+- Android remains the presentation/approval device, not a persistent high-frequency worker or independent supervisor.
+- GitHub Actions remains ephemeral research CI, not a persistent runtime.
+- WSL2 is a developer convenience, not a security sandbox or trust boundary from the Windows user.
+- A full Hyper-V VM is a better explicit research isolation boundary than WSL2, but remains vulnerable to compromise of the physical host/administrator.
+- A dedicated Linux/KVM host is a future self-hosted candidate; Firecracker requires KVM, jailer/cgroups/namespaces/seccomp and host-enforced egress filtering. It does not eliminate host-root or hardware risks.
+- A separate physical action gateway/recovery trust domain is the strongest practical future option if host-root compromise is outside the accepted threat model; it adds cost and operational complexity.
+- No current deployment is recommended. Inspect actual PC hardware/security posture only if a concrete later requirement justifies it.
+
+See [IDEAL Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_RECOVERY_OPTIONS.md). No device inspection, configuration, account, purchase, hosting or security scan was performed.
+
+Sources:
+- https://github.com/microsoft/WSL/blob/master/doc/docs/technical-documentation/security.md
+- https://learn.microsoft.com/en-us/windows/wsl/faq
+- https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/plan/plan-hyper-v-security-in-windows-server
+- https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/
+- https://developer.android.com/develop/background-work/background-tasks/bg-work-restrictions
+- https://github.com/firecracker-microvm/firecracker/blob/main/docs/prod-host-setup.md
