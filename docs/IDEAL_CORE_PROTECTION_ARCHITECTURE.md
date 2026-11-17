@@ -283,3 +283,13 @@ See [Host Trust Topology and Recovery Options](IDEAL_HOST_TRUST_TOPOLOGY_AND_REC
 The four foundations do not share a universal status flag. Risk, Data Integrity, Health and Security each own distinct states and attest only to their scope. The action boundary requires their applicable approvals conjunctively, binds the exact evidence/policy/identity/reservation/interlock version vector and rechecks immediately before dispatch. A restrictive interlock can reduce capability but never grant authority.
 
 See [Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md).
+
+
+## Infrastructure persistence and sandbox assurance refinement — checkpoint 094
+
+The infrastructure research adds two constraints to the protection model:
+
+1. **Database engine durability is not the same as IDEAL authority durability.** The 2026 SQLite WAL-reset incident (fixed upstream in 3.51.3) requires runtime-version verification and writer/checkpoint/crash/restore tests before SQLite can be accepted. NautilusTrader's documented asynchronous cache persistence may fail without rolling back in-memory state. Neither database backing nor engine cache may replace IDEAL-owned atomic intent, risk reservation, audit and outbox records.
+2. **MicroVM isolation is an operated control set, not a product checkbox.** Firecracker's production guidance requires jailer/least privilege, default seccomp, resource limits, host egress filtering, bounded guest-influenced logging, host/guest patching and an external overwatcher. Host root/kernel and hardware remain in the threat model.
+
+These are architecture and future verification requirements only. No database, microVM, host, runtime or dependency was deployed or tested. Phase 02 remains active; Phases 03–19 remain locked.
