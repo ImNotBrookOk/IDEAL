@@ -166,7 +166,7 @@ This catalogue defines semantic ownership and interface expectations, not a fina
 Phase 02 remains active; Phases 03–19 remain locked. No implementation, schema, database, broker, API, credentials, external integration, paper/live execution or phase advancement is authorised.
 
 
-## Freshness and clock contract reference — checkpoint 088
+## Freshness and clock contract reference — checkpoint 090
 
 CT-01/02/03/05/09/14 require source event/publication/availability/receive/ingest times, sequence/cursor, clock quality and consumer fitness rules where relevant. Freshness thresholds are per consumer and versioned; they are not a shared global TTL. Decision validity is invalidated by bound source age, clock uncertainty, correction, account or policy state change.
 
