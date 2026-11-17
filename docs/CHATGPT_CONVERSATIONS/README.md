@@ -222,3 +222,6 @@ A conversation record is complete when the available transcript, operational evi
 | [2026-11-17-093-owner-decision-register.md](2026-11-17-093-owner-decision-register.md) | Draft consolidated Phase 02 owner decision register: 12 groups covering scope, D-006/D-008, portfolio/risk, bank/tax/data, host trust/recovery, audit and final architecture acceptance; not presented for approval |
 
 | [2026-11-17-090-official-source-revalidation.md](2026-11-17-090-official-source-revalidation.md) | Revalidated current NZ Privacy Act section 27/11 and IPP 12, IRD cryptoasset records/CARF/tax-bill status, NIST key management/crypto agility and Firecracker host hardening; documented CARF registration date conflict; updated canonical privacy/data/security sources; no legal conclusion or implementation |
+
+
+| [2026-11-17-094-infrastructure-revalidation.md](2026-11-17-094-infrastructure-revalidation.md) | Revalidated SQLite WAL durability, NautilusTrader persistence semantics/ARM64 support, Firecracker production controls and OCI A1 free-tier conflicts; refined future acceptance gates; no component adoption or host selection |
