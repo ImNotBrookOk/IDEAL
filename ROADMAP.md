@@ -646,3 +646,8 @@ Fetched all 36 distinct local Markdown targets in the Phase 02 Architecture Docu
 ### Phase 02 — infrastructure security source refresh (checkpoint 107, 18 November 2026)
 
 Updated official Linux kernel and Firecracker evidence, including supported release lifecycle, two upstream Firecracker security advisories, and production host requirements for jailer, seccomp, egress, resource/log limits, watchdog and patching. See [Infrastructure Security Source Refresh](docs/IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md). No platform selected or runtime tested. Phase 02 ACTIVE; Phases 03–19 LOCKED.
+
+
+### Phase 02 — canonical serialization contract research (checkpoint 109, 18 November 2026)
+
+Specified the missing byte-level canonicalization requirements for exact financial values, digests, signatures, idempotency and replay. RFC 8785 JCS and RFC 8949 deterministic CBOR remain candidates; neither is selected. TST-105-01 remains open pending an owner-approved profile and cross-implementation vectors. See [Canonical Serialization and Digest Contract Research](docs/IDEAL_PHASE_02_CANONICAL_SERIALIZATION_AND_DIGEST_CONTRACT_RESEARCH.md). Phase 02 ACTIVE; Phases 03–19 LOCKED.
