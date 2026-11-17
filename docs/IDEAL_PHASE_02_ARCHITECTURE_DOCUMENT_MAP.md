@@ -270,3 +270,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 27. Funding/mark-price integration and document-map verification — checkpoint 111
 
 [Checkpoint 111 audit](CHATGPT_CONVERSATIONS/2026-11-18-111-funding-mark-price-integration-and-map-verification.md) verifies all 41 local Markdown targets present before the audit entry was added, confirms checkpoint 110 source/schema/margin integration, adds funding/mark/margin test traceability and corrects the checkpoint 110 section numbering. The audit entry itself is also a local target and must be included in the next complete link check. Phase 02 remains active.
+
+
+## 28. Funding API event-state and historical coverage — checkpoint 112
+
+The funding/mark-price source refresh now includes venue API event-state distinctions, funding-history retention/coverage limits, mark-series provenance and denomination-specific linear/inverse accounting. Logical records are in Critical Contract Field Schemas §20; future tests R-FUND-004–006 / T-FUND-04–06 are in the traceability matrix. See [checkpoint 112 audit](CHATGPT_CONVERSATIONS/2026-11-18-112-funding-api-event-state-and-history-coverage.md). No API client or venue is selected.
