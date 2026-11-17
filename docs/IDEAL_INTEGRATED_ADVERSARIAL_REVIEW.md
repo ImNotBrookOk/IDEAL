@@ -317,3 +317,8 @@ Workstream closure is not Phase 02 closure. Explicit owner acceptance and other 
 The prior adversarial assessment concentrated on autonomy, host trust, revocation and dispatch. The new [Phase 02 Integrated Architecture Review](IDEAL_PHASE_02_INTEGRATED_ARCHITECTURE_REVIEW.md) extends the threat analysis across bounded contexts, point-in-time data, personal-finance imports, tax/CARF semantics, cross-domain netting, capital autonomy, privacy, retention and recovery. It records 24 scenarios, residual blockers and deferred owner decisions.
 
 The current paper-execution wording conflict noted in earlier risk reconciliation has been corrected at checkpoint 075. This does not close Phase 02 or replace an independent review.
+
+
+## Checkpoint 081 — state-machine composition challenge
+
+[IDEAL Integrated State-Machine and Cross-Authority Contract Architecture](IDEAL_INTEGRATED_STATE_MACHINE_AND_CONTRACT_ARCHITECTURE.md) now composes owner authority, policy publication, workload identity, security incident, health, data quality, risk, reservation, action, reconciliation and recovery state machines. It specifies conjunctive admission, version-vector binding, restrictive precedence and transition invariants. Numeric thresholds, exact schemas, topology and independent verification remain open.
