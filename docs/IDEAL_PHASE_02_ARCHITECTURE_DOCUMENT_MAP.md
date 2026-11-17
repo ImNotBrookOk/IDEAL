@@ -235,3 +235,8 @@ The Phase 02 map contains 34 distinct local Markdown links; all 34 targets were 
 ## 22. Final document-map link read-back — checkpoint 106
 
 The current map contains 37 distinct local Markdown targets; all 37 were fetched successfully from GitHub main. See [checkpoint 106 audit](CHATGPT_CONVERSATIONS/2026-11-18-106-final-phase-02-document-map-link-audit.md). This is path-existence verification only, not anchor, semantic, source-freshness or independent assurance.
+
+
+## 23. Infrastructure security source refresh — checkpoint 107
+
+[Infrastructure Security Source Refresh](IDEAL_PHASE_02_INFRASTRUCTURE_SECURITY_SOURCE_REFRESH.md) records current Linux/Firecracker lifecycle evidence, upstream advisories and future host acceptance requirements.
