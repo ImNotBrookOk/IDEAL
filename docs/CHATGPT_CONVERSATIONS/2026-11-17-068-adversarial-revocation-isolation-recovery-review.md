@@ -85,3 +85,43 @@ No external sandbox escape, penetration test, kernel test, security scan, recove
 ## Next autonomous work
 
 Continue the Phase 02 plan by integrating these findings with the authority state machine, trust-anchor/key lifecycle, policy publication, risk reservation/outbox, health supervisor independence and audit atomicity. Then perform a second cross-document consistency and adversarial closure review. Do not ask the owner for input until the planned work is complete; at that point provide a concise evidence-based review and clearly separate completed research from unresolved owner decisions.
+
+
+## GitHub commit and read-back evidence
+
+All twelve affected/new files were fetched from the repository default branch after writes. Required-content checks passed for all twelve. Read-back blob SHAs:
+
+| File | Read-back blob SHA |
+|---|---|
+| docs/IDEAL_AUTONOMY_AUTHORITY_AND_PERMISSION_ARCHITECTURE.md | ce687aae1ad4bc4cbf43ebe3820b4b8022f49897 |
+| docs/IDEAL_INTEGRATED_ADVERSARIAL_REVIEW.md | d17f831e3ca1a24b932ce0a4fa9354bdf24574cc |
+| docs/IDEAL_SECURITY_ARCHITECTURE.md | bc37fd4172ea972e515a650e668b397fef3ec65c |
+| docs/IDEAL_RISK_MANAGEMENT_ARCHITECTURE.md | be7903795881f1b000fb3c6accc416a1bc11bd2f |
+| docs/IDEAL_CORE_PROTECTION_ARCHITECTURE.md | cd1300e4b7c4408515db955647121161484daaa8 |
+| REQUIREMENTS.md | 554008cc84398eac24f98668d24828dd62a02934 |
+| ARCHITECTURE.md | 4e024a48c73383d944510e7ed2afd81c89a804fc |
+| ROADMAP.md | 9dfdf7f77e286b0ee180b01adb67bb085f9cfac1 |
+| docs/IDEAL_FOUNDATION_TRACEABILITY_MATRIX.md | a9df5c1e43a669a279abaafa0d42009724de9b72 |
+| docs/CHATGPT_CONVERSATIONS/2026-11-17-068-adversarial-revocation-isolation-recovery-review.md (before evidence addendum) | 04b7055536b89d4a662978decfd1a66940e0db34 |
+| docs/CHATGPT_CONVERSATIONS/README.md | bbbc25b84cb9d20858c33d82b26fd3cad4170129 |
+| README.md | 37987d6ad45534d10525f96b88e01a30549454f9 |
+
+Commit ledger:
+
+| Change | Commit SHA |
+|---|---|
+| Autonomy architecture §§19–22 | 09f8872011b17b790173a4586949e83bb03c2cef |
+| Add primary sources to autonomy architecture | 699c9620dd8ed35050f03e78847d5ff636d8452b |
+| Integrated adversarial review | 135271597e86a2f544ca9b948054cf1e17fc1acc |
+| Security architecture | 2f948900c605cca5cb17ac992375675d6d833c80 |
+| Risk architecture | 554e2ed35f57b91e86df0db0c0e594aa629df8db |
+| Core protection architecture | bf36b2d27e4b67e95cf0303d42f7dc02842d397f |
+| Requirements | 3a958e3986d0dd1f14c46b77b84297c4a413b22c |
+| Architecture | 1579d46dac98d7fbab288485bf7cacb2fb18d0a2 |
+| Roadmap | 7d9f31ba2140b6dba3d765efc17d661e4e009ad6 |
+| Foundation traceability matrix | be904f409239b89411827b627d95d072bce62041 |
+| Create checkpoint 068 audit | 832e8969ac090c86bf0c111206af59218ae89658 |
+| Index checkpoint 068 | aac5541d04240009ae90b022e9749a7106257ee5 |
+| README Phase 02 security focus | 5f05d2d4edce8d2e2cd659ba994b712ee2643b88 |
+
+Audit evidence addendum commit is recorded after its read-back below. No runtime test or security exercise is represented by this documentation verification.
