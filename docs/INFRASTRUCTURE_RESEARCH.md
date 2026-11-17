@@ -211,3 +211,28 @@ Current upstream installation docs list Ubuntu Linux ARM64 as supported. This al
 Current architecture docs describe asynchronous database persistence from an in-memory cache. Synchronous persistence/enqueue errors may be logged without preventing cache insertion/publication, and later asynchronous database errors do not roll back in-memory state. IDEAL must own its durable ledger, audit, intent, reservation, outbox and reconciliation semantics outside the engine cache. The engine is a component, not the system-of-record for financial authority or accounting.
 
 Sources: https://nautilustrader.io/docs/latest/getting_started/installation/ ; https://nautilustrader.io/docs/latest/concepts/architecture/ ; https://nautilustrader.io/docs/latest/concepts/overview/
+
+
+## 9. Workload sandbox comparison — checkpoint 095 (17 November 2026)
+
+Official project documentation supports three distinct isolation models:
+
+| Runtime | Model | Main trust assumptions | Operational profile |
+|---|---|---|---|
+| gVisor/runsc | Userspace Sentry implements Linux system API; guest application syscalls are not passed directly through | Host kernel/platform and cgroups remain trusted; Sentry and Gofer are part of trusted computing base; host-network/passthrough modes expand host API exposure | Potentially less infrastructure than a VM; compatibility/performance trade-offs; still requires host egress/resource policy |
+| Kata Containers | Containerd/CRI-managed VM with guest kernel, guest agent and hypervisor/VMM | Host kernel, VMM, virtual devices, guest agent, host/guest control channel and configuration are in the trust boundary | Integrates VM isolation into container orchestration but adds runtime/shim, guest image/kernel, VMM and IPC lifecycle complexity |
+| Firecracker | KVM microVM; one VM per Firecracker process, minimal VirtIO device model | Host kernel/KVM, Firecracker VMM, jailer, TAP/network policy, host resource controls and monitoring remain trusted | More direct microVM control and smaller device model, but substantial host-specific setup and operations |
+
+### IDEAL disposition
+
+No runtime is selected. For a future single-host research worker, gVisor is a reasonable first compatibility experiment if untrusted strategy/agent code must be run and the threat model does not require a separate guest kernel. It is not a substitute for VM isolation against host-root/kernel compromise. If a guest-kernel boundary is required, compare Firecracker and Kata on the actual host rather than selecting by general marketing or assumed performance.
+
+A decision requires a bounded benchmark and negative-test plan covering filesystem/IPC exposure, network egress allowlists, metadata/loopback reachability, process/resource exhaustion, kernel attack surface, host/guest compromise assumptions, startup/throughput overhead, observability and recovery. No sandbox receives credentials or unrestricted egress.
+
+Sources:
+- https://gvisor.dev/docs/architecture_guide/security/
+- https://gvisor.dev/docs/architecture_guide/networking/
+- https://gvisor.dev/blog/2020/04/02/gvisor-networking-security/
+- https://kata-containers.github.io/kata-containers/design/architecture/
+- https://github.com/kata-containers/kata-containers/blob/main/docs/threat-model/threat-model.md
+- https://github.com/firecracker-microvm/firecracker/blob/main/docs/design.md
