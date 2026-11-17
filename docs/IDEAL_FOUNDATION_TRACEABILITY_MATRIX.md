@@ -204,3 +204,17 @@ See [Autonomy Authority and Permission Architecture](IDEAL_AUTONOMY_AUTHORITY_AN
 | Recovery re-establishes trust | Clean rebuild, re-attestation, key rotation, audit validation and owner release | Security / owner | Full recovery drill and independent evidence review |
 
 These are proposed controls and tests; no runtime tests have been performed.
+
+
+## Checkpoint 069 — supervisor, policy and audit traceability
+
+| Requirement | Control | Boundary | Required evidence |
+|---|---|---|---|
+| Supervisor cannot grant authority | Read-only observer plus scoped restrictive interlock channel | Health supervisor / action gateway | Forged healthy state, forged restriction, privilege and host-compromise tests |
+| Supervisor failure is safe | Heartbeat and independent probes; scoped fail-closed interlock | Health / security | Kill, pause, partition, stale heartbeat and false-positive tests |
+| Policy change is owner-authorised | Immutable artefact; owner digest approval; separate publisher signature; monotonic activation | Owner approval / policy registry | Wrong digest, role confusion, rollback, key compromise and update/dispatch race |
+| No key-purpose confusion | Distinct owner, approval, publisher, workload, audit, encryption and venue key roles | Security / key registry | Cross-purpose signature and privilege tests |
+| Pre-dispatch audit is durable | Atomic intent + reservation + audit + outbox transaction | Authority/risk/audit store | Disk full, fsync failure, DB crash and outbox atomicity tests |
+| Dispatch-start is auditable | Atomic one-use permit consumption + generation check + DISPATCH_STARTED event before network write | Action gateway | Crash injection around commit/socket write |
+| External side effect ambiguity is safe | UNKNOWN state, retained reservation and authoritative reconciliation | Adapter / risk authority | Lost ACK, duplicate delivery, venue late acceptance and restore tests |
+| Audit sink compromise is detected | Separate privileges, append-only events, signed independent checkpoints | Audit/security | Truncation, rewrite, checkpoint substitution and sink outage |
