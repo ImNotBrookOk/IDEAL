@@ -180,3 +180,48 @@ The [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_P
 ## 12. Funding and mark-price source refresh — checkpoint 110
 
 The [Perpetual Funding and Mark-Price Semantics Source Refresh](IDEAL_PHASE_02_PERPETUAL_FUNDING_AND_MARK_PRICE_SEMANTICS_REFRESH.md) records current official-source evidence that funding intervals/caps may vary by contract and change, and that mark-price methods are more specific than generic help-page summaries. Treat funding schedules, mark methodology and tier tables as effective-dated, instrument-specific evidence. Funding forecasts are not realised ledger events; funding settlement may affect available balance or position margin. Missing/stale configuration or settlement evidence invalidates dependent calculations. Added conformance cases cover interval changes, funding boundary ordering, corrections, mark-method revisions and mode-specific tier changes. No venue, formula or runtime is selected.
+
+
+## 16. Account-mode-specific liquidation pathways — checkpoint 113
+
+The generic lifecycle in §9 is an event vocabulary, not a universal ordered liquidation sequence. Official Bybit UTA rules (updated 15 October 2026) demonstrate material differences by account mode:
+
+- **Isolated:** liquidation is position-scoped and mark-triggered. At the lowest risk tier, risk-increasing orders are cancelled before full closure if maintenance remains breached. Above the lowest tier, the venue may first submit an IOC partial reduction to move the position into a lower risk tier, then close if still deficient.
+- **Cross:** liquidation is account-scoped. The documented UTA sequence includes restrictions on additional margin borrowing, risk-increasing order cancellation, liability auto-repayment, cancellation of remaining orders, treatment of fully hedged positions, then unhedged position reduction ordered by venue liquidity. Its displayed liquidation price is dynamic and depends on account equity, unrealised PnL, positions, maintenance requirements and available margin.
+- **Portfolio margin:** the account is assessed as a portfolio. Bybit documents cancellation of all orders (including closing orders and TP/SL), auto-repayment, staged asset/position liquidation, and a takeover threshold distinct from the initial liquidation threshold. It may simulate partial closes and select the position with greatest MMR reduction. This is not equivalent to a simple position-level liquidation-price formula.
+
+These are Bybit-specific current examples, not rules for IDEAL or another venue. They prove the need for a versioned state-transition policy keyed by venue, product, account mode, position mode, settlement currency, risk tier and effective time. The architecture must not encode one global ordered list of liquidation actions. An observed action can be absent, reordered, repeated or venue-specific; reconcile actual event evidence rather than forcing it through an assumed sequence.
+
+### Required design controls
+
+1. Split the generic lifecycle into a common event vocabulary plus venue/account-mode transition graphs. Each graph has a source rule revision and effective interval.
+2. Represent the liquidation scope explicitly: position, settlement-currency pool, cross-margin account or portfolio netting set.
+3. Distinguish cancellation of risk-increasing orders from cancellation of all orders; do not assume reduce-only or closing orders survive every mode.
+4. Model auto-repayment, asset conversion, hedge settlement, partial IOC reduction, liquidation, bankruptcy-price closure, venue takeover and ADL as separate event types. Do not infer that one occurred from another.
+5. Preserve venue action priority, liquidity ordering, tier transitions and stopping thresholds as effective-dated rule data; no generic 100% MMR threshold is assumed across products.
+6. Liquidation-price display is an estimate with explicit scope/time/mode; for cross/portfolio margin it can change with unrelated positions, collateral, liabilities, orders and haircuts. Never treat it as a fixed stop or guaranteed exit.
+7. Unknown account mode, incomplete portfolio state, stale rule revision or conflicting liquidation events blocks risk increases and enters RECONCILIATION_REQUIRED.
+
+## 17. Session settlement and margin-state discontinuities — checkpoint 113
+
+Bybit's official UTA liquidation documentation describes a USDC perpetual session-settlement mechanism: at settlement, average entry price may be reset to the settlement-time mark price, while session realised PnL is transferred into initial margin and the displayed initial-margin basis may remain anchored to the original position value. Fee-to-close and maintenance-margin calculations are recomputed using the updated entry/mark basis. This means a naive replay based only on fills plus current average entry can misattribute PnL or calculate an incorrect liquidation threshold.
+
+IDEAL must represent session settlement as an explicit, ordered account/position event with prior and new entry basis, settlement mark and method, session realised PnL, margin adjustments, fee-to-close basis, event timestamp and source revision. It must reconcile before/after position and wallet snapshots. Do not synthesise settlement from a daily candle or funding timestamp. Venue/product support and applicable terms must be verified before using this pattern.
+
+### Additional future conformance tests
+
+- Same exposure under isolated, cross and portfolio modes must produce different risk scope and transition graph where venue rules specify it.
+- Cross/portfolio liquidation must react to an unrelated position, collateral haircut, liability or order change without a price move.
+- Verify mode-specific cancellation scope, including closing orders and TP/SL; uncertain cancel results retain worst-case reservations.
+- Verify tier-down partial IOC size and stopping conditions at exact tier boundaries; distinguish partial reduction from final liquidation.
+- Verify venue-specific takeover thresholds and action sequence; unknown transition remains unresolved rather than coerced into a generic state.
+- Replay USDC session settlement around boundary with before/after average entry, realised PnL, initial margin, fee-to-close and maintenance margin reconciliation.
+- Verify displayed liquidation-price movement after external account state changes; reject treating it as a static risk limit.
+
+**Sources (reviewed 19 November 2026):**
+- Bybit UTA Trading Rules: Liquidation Process, updated 15 October 2026: https://www.bybit.com/en/help-center/article/UTA-Trading-Rules-Liquidation-Process
+- Bybit UTA introduction and margin-mode scope: https://www.bybit.com/en/help-center/article/Introduction-to-Bybit-Unified-Trading-Account/
+- OKX API V5 account fields for account IMR/MMR, equity and forced liquidation: https://www.okx.com/docs-v5/en/
+- Binance USDⓈ-M margin tier update, 12 September 2026 (demonstrates live tier revisions): https://www.binance.com/en/support/announcement/detail/2adc4f459022496db814a96b93215a1e
+
+No venue or mode selected. These findings are architecture requirements only.
