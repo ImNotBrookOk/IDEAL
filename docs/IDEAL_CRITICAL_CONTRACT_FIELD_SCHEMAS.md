@@ -426,3 +426,13 @@ FundingObservation fields are venue-normalised logical concepts, not a claim tha
 | SessionSettlementEvent | venue, product, instrument_id, position_id, settlement_id, settlement_time, old_entry_basis, new_entry_basis, settlement_mark_ref, session_realised_pnl, pnl_currency, initial_margin_before, initial_margin_after, maintenance_margin_before, maintenance_margin_after, fee_to_close_before, fee_to_close_after, wallet_snapshot_before, wallet_snapshot_after, position_snapshot_before, position_snapshot_after, rule_revision, source_refs, payload_digest | Settlement is an explicit event; entry reset, PnL and margin changes reconcile once and cannot be inferred from candles or funding estimates |
 
 These are venue-neutral logical contracts. Fields not exposed by a venue remain absent/unknown; no synthetic event or universal action sequence is permitted.
+
+
+## 22. Complete risk-tier snapshot and portfolio stress records — checkpoint 114
+
+| Logical record | Required fields | Invariant |
+|---|---|---|
+| RiskTierSnapshot | venue, product, instrument_id, account_mode, position_mode, aggregation_key, settlement_currency, tier_revision, effective_from, effective_to, source_api_revision, source_observed_at, received_at, page_count, cursor_chain, expected_page_completion, completeness_state, volatility_delay_flag, raw_payload_refs, payload_digest | No risk calculation may use a partial, delayed, stale or scope-ambiguous tier table as current |
+| RiskTierRow | snapshot_ref, tier_id, lower_bound, upper_bound, notional_currency, position_limit, initial_margin_rate, maintenance_margin_rate, maintenance_deduction, max_leverage, aggregation_scope, source_row_digest | Bounds, rates, deduction and denomination are exact decimals/typed units; preserve source tier identity |
+| PortfolioStressPolicy | venue, product, account_mode, policy_revision, effective_from, effective_to, scenario_set_ref, shock_method, correlation_method, netting_set, liquidity_assumptions, collateral_haircut_revision, source_refs, payload_digest | Portfolio MMR/stress result cannot be inferred from a position-tier sum unless exact venue rules define that method |
+| PortfolioStressResult | account_scope, policy_ref, position_snapshot_refs, collateral_snapshot_refs, market_evidence_refs, scenario_results, worst_loss, denomination, calculated_at, input_digest, completeness_state | Result is reproducible from immutable inputs and scenario revision; missing inputs produce UNKNOWN, not optimistic defaults |
