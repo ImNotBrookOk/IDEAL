@@ -146,3 +146,6 @@ Phase 02 remains NOT COMPLETE. ODR-02/03 remain open, ODR-12 remains owner gate,
 ## Checkpoint 114 — risk-tier completeness and portfolio margin
 
 Bybit V5 risk-limit data is paginated and may be delayed during extreme volatility; a partial or stale tier set cannot be used as a complete current schedule. OKX documents account-mode-specific aggregation, including cross-mode aggregation across directions/expiries, while portfolio margin uses stress losses rather than a simple tier sum. Added complete tier snapshot and portfolio stress contracts in Critical Contract Field Schemas §22 and R-MARGIN-011–014 / T-MARGIN-11–14 in traceability. Fetch-back verification is pending for this checkpoint; do not count it as verified until all changed paths and the audit are fetched from GitHub.
+
+
+Checkpoint 114 fetch-back is complete. All changed documents and the checkpoint 114 audit were fetched from GitHub main. The current Phase 02 architecture document map contains 46 unique local Markdown targets, all 46 fetched successfully. This verifies path existence and expected checkpoint sections, not complete semantic consistency, execution behaviour or independent assurance.
