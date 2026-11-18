@@ -132,3 +132,12 @@ The funding contract now distinguishes predicted, assessed, realised and settled
 The map now contains 43 unique local Markdown targets. The 42 targets verified at checkpoint 111 remain unchanged; checkpoint 112's audit is the new 43rd target and has been fetched back successfully. This is path-existence verification, not semantic or independent assurance.
 
 Phase 02 remains NOT COMPLETE. ODR-02/03 remain open, ODR-12 remains owner gate, and TST-105-01 remains open. Phase 03 remains locked.
+
+
+## Checkpoint 113 — liquidation account-mode and session-settlement requirements
+
+Official Bybit documentation confirms distinct isolated, cross and portfolio liquidation processes, including different cancellation scopes, partial tier reduction, auto-repayment, liquidity ordering and takeover behaviour. These are venue-specific; the architecture now requires a policy/transition graph keyed by venue, product, account mode, position mode, risk tier and effective revision. Cross/portfolio liquidation estimates are account-state dependent, not static position stop prices. Session settlement can reset average entry basis and alter realised PnL, margin and fee-to-close calculations; it must be represented and reconciled as an explicit event.
+
+Added logical records in Critical Contract Field Schemas §21 and R-LIQ-001–004 / T-LIQ-01–04 plus R-MARGIN-010 / T-MARGIN-10 in traceability. Documentation fetch-back verification is pending at the time of this readiness entry; do not count this checkpoint as verified until all changed paths and the audit are fetched from GitHub.
+
+Phase 02 remains NOT COMPLETE. ODR-02/03 remain open, ODR-12 remains owner gate, and TST-105-01 remains open. Phase 03 remains locked.
