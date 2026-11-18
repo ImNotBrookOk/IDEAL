@@ -414,3 +414,15 @@ The checkpoint 110 records remain the base logical schema. This refinement preve
 | MarkSeriesEvidence | venue, instrument_id, price_type, interval, first_event_at, last_event_at, observed_at, source_revision, known_gaps, payload_digest, source_ref, completeness_state | Mark candles and trade candles are distinct; incomplete series cannot silently stand in for point-in-time mark inputs |
 
 FundingObservation fields are venue-normalised logical concepts, not a claim that every venue publishes every field. Missing fields remain explicitly absent/unknown; do not synthesise them. FundingHistoryCoverage records public API retention constraints and local permitted archive coverage separately. Linear/inverse PnL and funding amounts remain denomination-specific and use exact signed decimal values.
+
+
+## 21. Mode-specific liquidation policy and session settlement records — checkpoint 113
+
+| Logical record | Required fields | Invariant |
+|---|---|---|
+| LiquidationPolicySnapshot | venue, product, account_mode, position_mode, liquidation_scope, settlement_pool, risk_tier_revision, transition_graph_revision, effective_from, effective_to, action_priority, cancellation_scope, repayment_policy, asset_conversion_policy, hedge_treatment, partial_reduction_policy, liquidity_order, trigger_thresholds, takeover_thresholds, source_refs, payload_digest, observed_at | A policy is bound to one exact venue/product/mode and effective interval; unknown or stale policy cannot drive a transition |
+| LiquidationActionEvent | action_id, action_type, scope_id, trigger_event_ref, requested_at, acknowledged_at, effective_at, outcome_state, requested_quantity, executed_quantity, order_refs, venue_event_ref, policy_revision, source_payload_digest | Request, acknowledgement, execution and final reconciliation are distinct; uncertain actions retain exposure reservations |
+| LiquidationEstimate | scope_id, scope_type, mark_evidence_ref, account_snapshot_ref, policy_revision, calculated_at, input_digest, threshold_value, denomination, estimate_state | An estimate is time- and scope-bound; cross/portfolio estimates are not fixed position stops |
+| SessionSettlementEvent | venue, product, instrument_id, position_id, settlement_id, settlement_time, old_entry_basis, new_entry_basis, settlement_mark_ref, session_realised_pnl, pnl_currency, initial_margin_before, initial_margin_after, maintenance_margin_before, maintenance_margin_after, fee_to_close_before, fee_to_close_after, wallet_snapshot_before, wallet_snapshot_after, position_snapshot_before, position_snapshot_after, rule_revision, source_refs, payload_digest | Settlement is an explicit event; entry reset, PnL and margin changes reconcile once and cannot be inferred from candles or funding estimates |
+
+These are venue-neutral logical contracts. Fields not exposed by a venue remain absent/unknown; no synthetic event or universal action sequence is permitted.
