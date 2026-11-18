@@ -274,3 +274,6 @@ Created [Perpetual Funding and Mark-Price Semantics Source Refresh](../IDEAL_PHA
 
 
 | [2026-11-19-113-liquidation-account-mode-and-session-settlement-review.md](2026-11-19-113-liquidation-account-mode-and-session-settlement-review.md) | Distinguished isolated/cross/portfolio liquidation pathways, added session-settlement event model and risk/test traceability; no venue or account mode selected |
+
+
+| [2026-11-19-114-risk-tier-completeness-and-portfolio-margin-review.md](2026-11-19-114-risk-tier-completeness-and-portfolio-margin-review.md) | Added pagination-complete risk tier snapshots, account-mode aggregation rules and scenario-based portfolio margin contracts; added R-MARGIN-011–014 / T-MARGIN-11–14 |
