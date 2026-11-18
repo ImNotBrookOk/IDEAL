@@ -271,3 +271,6 @@ Created [Perpetual Funding and Mark-Price Semantics Source Refresh](../IDEAL_PHA
 
 
 | [2026-11-18-112-funding-api-event-state-and-history-coverage.md](2026-11-18-112-funding-api-event-state-and-history-coverage.md) | Refined funding API event-state typing, historical retention/coverage and linear/inverse denomination requirements; added logical schemas and T-FUND-04–06; no venue or API client selected |
+
+
+| [2026-11-19-113-liquidation-account-mode-and-session-settlement-review.md](2026-11-19-113-liquidation-account-mode-and-session-settlement-review.md) | Distinguished isolated/cross/portfolio liquidation pathways, added session-settlement event model and risk/test traceability; no venue or account mode selected |
