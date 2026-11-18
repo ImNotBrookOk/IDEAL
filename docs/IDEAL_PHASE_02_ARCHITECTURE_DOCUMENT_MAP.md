@@ -275,3 +275,8 @@ The current map contains 37 distinct local Markdown targets; all 37 were fetched
 ## 28. Funding API event-state and historical coverage — checkpoint 112
 
 The funding/mark-price source refresh now includes venue API event-state distinctions, funding-history retention/coverage limits, mark-series provenance and denomination-specific linear/inverse accounting. Logical records are in Critical Contract Field Schemas §20; future tests R-FUND-004–006 / T-FUND-04–06 are in the traceability matrix. See [checkpoint 112 audit](CHATGPT_CONVERSATIONS/2026-11-18-112-funding-api-event-state-and-history-coverage.md). No API client or venue is selected.
+
+
+## 29. Liquidation account-mode and session-settlement review — checkpoint 113
+
+The liquidation architecture now distinguishes isolated, cross and portfolio liquidation scopes and their venue-specific transition graphs. Session settlement is an explicit accounting/risk event. Logical records are in Critical Contract Field Schemas §21; requirements R-LIQ-001–004 / T-LIQ-01–04 and R-MARGIN-010 / T-MARGIN-10 are in the traceability matrix. See [checkpoint 113 audit](CHATGPT_CONVERSATIONS/2026-11-19-113-liquidation-account-mode-and-session-settlement-review.md). No venue or account mode selected.
