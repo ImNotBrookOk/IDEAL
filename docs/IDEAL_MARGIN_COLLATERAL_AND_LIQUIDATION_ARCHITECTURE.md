@@ -225,3 +225,39 @@ IDEAL must represent session settlement as an explicit, ordered account/position
 - Binance USDⓈ-M margin tier update, 12 September 2026 (demonstrates live tier revisions): https://www.binance.com/en/support/announcement/detail/2adc4f459022496db814a96b93215a1e
 
 No venue or mode selected. These findings are architecture requirements only.
+
+
+## 18. Risk-tier data acquisition, aggregation and portfolio margin — checkpoint 114
+
+Official API/rule review adds three requirements that are not satisfied by a static tier table:
+
+- Bybit V5 `GET /v5/market/risk-limit` returns symbol-scoped tier IDs, position limit, maintenance and initial margin rates, maximum leverage and `mmDeduction`. Linear results are paginated (15 symbols per response); consumers must follow `nextPageCursor`. The documentation warns that extreme volatility may increase latency or temporarily delay delivery. A partial page set or delayed response is not a complete current tier snapshot.
+- OKX's tiered maintenance-margin rules (updated 11 August 2026) state that isolated and cross modes can aggregate positions differently. In the described cross futures mode, positions in all directions of a contract are counted together for tier determination; contracts with different expiries on the same underlying may also be aggregated. Portfolio margin maintenance is determined from losses under extreme stress scenarios, not simply by summing position-level tier maintenance amounts.
+- OKX explicitly states that position tiers may be adjusted. Its dated tier-change notices demonstrate that tier values and effective windows can change. The published tier schedule and its effective timestamp are therefore first-class risk inputs, not static instrument metadata.
+
+### Additional architecture controls
+
+1. A risk-tier snapshot is not valid until all required pages/cursors are consumed, the response is internally consistent, the instrument/account-mode scope is known and its observation age is within the approved freshness bound.
+2. Record source response time, local receive time, pagination cursor chain, page count, completeness state, API version, source payload digest and any delivery-delay/volatility warning.
+3. Store raw venue tier rows and the normalized derived tier table separately. Preserve tier ID, notional/position limit, initial margin rate, maintenance rate, deduction, maximum leverage, aggregation key, settlement denomination, effective interval and revision.
+4. Aggregation scope is an explicit function of venue/product/account mode/position mode/underlying/expiry/settlement currency. Do not assume long and short positions, expiries or instruments aggregate the same way across modes.
+5. Portfolio margin requires a separately versioned scenario set, shock methodology, correlation/netting assumptions, valuation inputs and risk-result provenance. It must not be approximated by a piecewise per-position MMR formula unless the venue's exact rules explicitly require that calculation.
+6. If a page is missing, cursor chain is broken, data is delayed/stale, or the venue announces a tier change whose effective state is not yet known, block risk increases and invalidate any risk permit based on the prior snapshot.
+7. A tier schedule change can change maintenance margin and liquidation proximity without any market-price movement. Recompute affected account and position risk, reservations and stress results at the effective boundary.
+
+### Future tests
+
+- Cursor pagination with missing, repeated, reordered and stale pages; verify no partial tier set is marked complete.
+- API delay under extreme volatility and rule announcement/effective-time mismatch; stale tier state blocks risk increase.
+- Cross-mode long/short aggregation and multi-expiry aggregation exactly as the selected venue specifies; isolated positions remain separate where rules require.
+- Tier boundary and mmDeduction continuity tests using independent exact-decimal oracle.
+- Portfolio margin stress loss vs simple tier-sum counterexample; ensure no accidental fallback to per-position MMR.
+- Tier revision at unchanged price invalidates permits and recomputes margin/liquidation state.
+
+**Sources (reviewed 19 November 2026):**
+- Bybit V5 Get Risk Limit API: https://bybit-exchange.github.io/docs/v5/market/risk-limit
+- OKX Tiered maintenance margin ratio rules, updated 11 August 2026: https://www.okx.com/help/v-tiered-maintenance-margin-ratio-rules
+- OKX API V5 guide: https://www.okx.com/docs-v5/en/
+- Binance USDⓈ-M margin-tier update, 12 September 2026: https://www.binance.com/en/support/announcement/detail/2adc4f459022496db814a96b93215a1e
+
+No venue or tier schedule selected. This is architecture research only.
