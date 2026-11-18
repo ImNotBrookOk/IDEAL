@@ -32,8 +32,9 @@ Re-examined the liquidation model in `IDEAL_MARGIN_COLLATERAL_AND_LIQUIDATION_AR
 
 ## Verification status
 
-- Documentation changes committed through GitHub contents API.
-- Fetch-back verification is pending in this checkpoint and must be completed before this checkpoint is considered verified.
+- Documentation changes committed through GitHub contents API and fetched back from GitHub main.
+- All six changed architecture/traceability/schema/map/readiness/roadmap files plus this audit were fetched back and their expected sections checked.
+- The current architecture document map contains 45 unique local Markdown targets. All 45 were fetched successfully in four bounded batches; no missing targets were returned.
 - No tests, runtime code, API clients or exchange connections were run or created.
 - No venue, account mode, formula, risk tier, or liquidation policy selected.
 
