@@ -141,3 +141,8 @@ Official Bybit documentation confirms distinct isolated, cross and portfolio liq
 Added logical records in Critical Contract Field Schemas §21 and R-LIQ-001–004 / T-LIQ-01–04 plus R-MARGIN-010 / T-MARGIN-10 in traceability. Checkpoint 113 fetch-back verification is complete: all changed documents and its audit were fetched from GitHub main, and all 45 unique local Markdown targets in the current document map were fetched successfully. This verifies path existence and expected sections, not full semantic consistency or independent assurance.
 
 Phase 02 remains NOT COMPLETE. ODR-02/03 remain open, ODR-12 remains owner gate, and TST-105-01 remains open. Phase 03 remains locked.
+
+
+## Checkpoint 114 — risk-tier completeness and portfolio margin
+
+Bybit V5 risk-limit data is paginated and may be delayed during extreme volatility; a partial or stale tier set cannot be used as a complete current schedule. OKX documents account-mode-specific aggregation, including cross-mode aggregation across directions/expiries, while portfolio margin uses stress losses rather than a simple tier sum. Added complete tier snapshot and portfolio stress contracts in Critical Contract Field Schemas §22 and R-MARGIN-011–014 / T-MARGIN-11–14 in traceability. Fetch-back verification is pending for this checkpoint; do not count it as verified until all changed paths and the audit are fetched from GitHub.
