@@ -280,3 +280,8 @@ The funding/mark-price source refresh now includes venue API event-state distinc
 ## 29. Liquidation account-mode and session-settlement review — checkpoint 113
 
 The liquidation architecture now distinguishes isolated, cross and portfolio liquidation scopes and their venue-specific transition graphs. Session settlement is an explicit accounting/risk event. Logical records are in Critical Contract Field Schemas §21; requirements R-LIQ-001–004 / T-LIQ-01–04 and R-MARGIN-010 / T-MARGIN-10 are in the traceability matrix. See [checkpoint 113 audit](CHATGPT_CONVERSATIONS/2026-11-19-113-liquidation-account-mode-and-session-settlement-review.md). No venue or account mode selected.
+
+
+## 30. Risk-tier completeness and portfolio margin — checkpoint 114
+
+Risk-tier snapshots now require complete pagination, effective revision, freshness and explicit aggregation scope. Portfolio margin is a scenario-based stress result, not a generic position-tier sum. Logical records are in Critical Contract Field Schemas §22; requirements R-MARGIN-011–014 / T-MARGIN-11–14 are in traceability. See [checkpoint 114 audit](CHATGPT_CONVERSATIONS/2026-11-19-114-risk-tier-completeness-and-portfolio-margin-review.md).
